@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0d1117">
+  <title>YKS Defterim · Koç Kaydı</title>
+  <link rel="stylesheet" href="./styles.css?v=1.0.0">
+</head>
+<body>
+  <section class="auth-page">
+    <main class="auth-card">
+      <div class="kicker">YKS Defterim · Koç Paneli</div>
+      <h1>Koç hesabını oluştur</h1>
+      <p>Bu hesap yalnızca koç paneli için kullanılır. Öğrenci verilerine erişim, öğrencinin paylaştığı 12 karakterlik <b>Koç Kodum</b> koduyla verilir.</p>
+      <form class="form" id="registerForm" style="margin-top:20px">
+        <label>Ad Soyad<input class="field" id="coachName" maxlength="80" autocomplete="name" placeholder="Adın ve soyadın" required></label>
+        <label>Koçluk unvanı<input class="field" id="coachTitle" maxlength="100" placeholder="Örn. YKS Eğitim Koçu"></label>
+        <label>Uzmanlık<input class="field" id="specialization" maxlength="160" placeholder="Örn. Sayısal · Program ve deneme takibi"></label>
+        <button class="btn primary" id="registerBtn" type="submit">Google ile koç hesabı oluştur</button>
+      </form>
+      <div class="status" id="registerStatus">Doğrulanmış bir Google hesabıyla kayıt olabilirsin.</div>
+      <p style="margin-bottom:0"><a class="link" href="./">← Koç paneline dön</a></p>
+    </main>
+  </section>
+  <script type="module" src="./register.js?v=1.0.0"></script>
+</body>
+</html>
