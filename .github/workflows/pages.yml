@@ -23,10 +23,8 @@ jobs:
     steps:
       - name: Kaynak kodu al
         uses: actions/checkout@v4
-      - name: GitHub Pages'i hazırla
+      - name: GitHub Pages yapılandırmasını oku
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Statik paneli paketle
         uses: actions/upload-pages-artifact@v3
         with:
