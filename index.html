@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="YKS Defterim bağımsız koç paneli">
+  <title>YKS Defterim · Koç Paneli</title>
+  <link rel="stylesheet" href="./styles.css?v=1.0.0">
+</head>
+<body>
+  <section id="authView" class="auth-page">
+    <main class="auth-card">
+      <div class="kicker">YKS Defterim</div>
+      <h1>Koç Paneli</h1>
+      <p>Öğrencilerini tek bir panelden takip et. Öğrenci eklemek için YKS Defterim içindeki <b>Koç Kodum</b> kodu yeterli.</p>
+      <div class="status" id="authStatus">Koç hesabınla giriş yap.</div>
+      <div class="auth-actions">
+        <button class="btn primary" id="signInBtn" type="button">Google ile giriş yap</button>
+        <a class="btn" style="display:grid;place-items:center;text-decoration:none" href="./register.html">Yeni koç hesabı oluştur</a>
+      </div>
+    </main>
+  </section>
+
+  <div id="appView" class="shell hidden">
+    <div class="overlay" id="overlay"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">YK</div>
+        <div class="brand-copy"><b>YKS Koç Paneli</b><span>YKS Defterim ile bağlı</span></div>
+      </div>
+      <section class="profile">
+        <b id="coachName">Koç</b>
+        <span id="coachMeta">Profil yükleniyor…</span>
+      </section>
+      <section>
+        <h3>Öğrenci ekle</h3>
+        <form class="add-student" id="addStudentForm" style="margin-top:9px">
+          <input class="field" id="studentCode" maxlength="14" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Öğrenci kodu" required>
+          <button class="btn primary" type="submit">Öğrenci ekle</button>
+        </form>
+        <div class="status hidden" id="addStatus"></div>
+      </section>
+      <section style="display:grid;gap:9px;min-height:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3>Öğrencilerim</h3><button class="btn ghost" id="refreshBtn" type="button" style="min-height:32px;padding:5px 9px">Yenile</button></div>
+        <div class="students" id="studentList"><div class="empty">Öğrenciler yükleniyor…</div></div>
+      </section>
+      <div class="sidebar-footer">
+        <a class="btn ghost" style="display:grid;place-items:center;text-decoration:none" href="https://furkansel-ops.github.io/YKS-DEFTER-M-/" target="_blank" rel="noreferrer">YKS Defterim'i aç</a>
+        <button class="btn danger" id="signOutBtn" type="button">Çıkış yap</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <button class="btn mobile-only" id="menuBtn" type="button" style="margin-bottom:10px">☰ Öğrenciler</button>
+          <h1>Koçluk Merkezi</h1>
+          <p>Önemli veriler önde, ayrıntılar ayrı sekmelerde.</p>
+        </div>
+        <span class="pill" id="syncPill">● Firebase bağlı</span>
+      </div>
+      <section id="emptyState" class="card">
+        <h3>Bir öğrenci seç</h3>
+        <p class="muted">Soldaki listeden bir öğrenci seçtiğinde özet ve ayrıntılar burada görünecek.</p>
+      </section>
+      <section id="studentView" class="hidden">
+        <div class="hero">
+          <div><div class="kicker">Öğrenci görünümü</div><h2 id="studentName">Öğrenci</h2><div class="muted" id="studentMeta">YKS</div></div>
+          <span class="pill" id="shareState">Paylaşım aktif</span>
+        </div>
+        <nav class="tabs" id="tabs" aria-label="Öğrenci detayları"></nav>
+        <div class="content" id="content"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js?v=1.0.0"></script>
+</body>
+</html>
