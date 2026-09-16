@@ -31,6 +31,24 @@ test('ana görünüm özet ve ayrı detay sekmeleri içerir',()=>{
   assert.match(app,/En çok hata yapılan konu/);
 });
 
+test('Program sekmesi YKS Defterim haftalık programını tam aynalar',()=>{
+  const app=read('app.js');
+  for(const token of ['rowLabels','weeks','done','dn','mv','Rutinler','Ders Programım','Bu hafta'])assert.ok(app.includes(token),token);
+  for(const day of ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'])assert.ok(app.includes(day),day);
+  assert.match(app,/programGrid\(model,week,"r","Rutinler"\)/);
+  assert.match(app,/programGrid\(model,week,"s","Ders Programım"\)/);
+  assert.match(app,/Haftalık ilerleme/);
+  assert.match(app,/Tamamlanan gün/);
+});
+
+test('seçili öğrencinin coachingShares belgesi canlı eşitlenir',()=>{
+  const app=read('app.js');
+  assert.match(app,/onSnapshot\(doc\(db,COLLECTIONS\.shares,uid\)/);
+  assert.match(app,/watchSelectedShare/);
+  assert.match(app,/Canlı eşitlendi/);
+  assert.match(app,/renderSelected\(\)/);
+});
+
 test('koç yalnız paylaşılan veri modeliyle çalışır',()=>{
   const app=read('app.js');
   assert.match(app,/COLLECTIONS\.shares/);
@@ -52,18 +70,22 @@ test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
   assert.match(register,/emailVerified/);
 });
 
-test('GitHub Pages ana sayfası yeni iki sütunlu paneli yükler',()=>{
+test('GitHub Pages canlı program arayüzünü cache kırarak yükler',()=>{
   const html=read('index.html');
   const css=read('styles.css');
   const studentCss=read('ui-v11.css');
+  const programCss=read('program-v12.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
-  assert.match(html,/app\.js\?v=1\.1\.0/);
-  assert.match(html,/styles\.css\?v=1\.1\.0/);
-  assert.match(html,/ui-v11\.css\?v=1\.1\.0/);
+  assert.match(html,/app\.js\?v=1\.2\.0/);
+  assert.match(html,/styles\.css\?v=1\.2\.0/);
+  assert.match(html,/ui-v11\.css\?v=1\.2\.0/);
+  assert.match(html,/program-v12\.css\?v=1\.2\.0/);
   assert.match(html,/Koçluk Merkezi/);
   assert.match(html,/Öğrencilerim/);
   assert.match(css,/grid-template-columns:320px minmax\(0,1fr\)/);
   assert.match(css,/welcome-card/);
   assert.match(css,/student-workspace/);
   assert.match(studentCss,/\.student\.on/);
+  assert.match(programCss,/\.program-table/);
+  assert.match(programCss,/\.program-cell\.is-done/);
 });
