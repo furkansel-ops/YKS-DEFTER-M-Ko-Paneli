@@ -52,10 +52,18 @@ test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
   assert.match(register,/emailVerified/);
 });
 
-test('GitHub Pages ana sayfası bağımsız paneli yükler',()=>{
+test('GitHub Pages ana sayfası yeni iki sütunlu paneli yükler',()=>{
   const html=read('index.html');
+  const css=read('styles.css');
+  const studentCss=read('ui-v11.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
-  assert.match(html,/app\.js\?v=1\.0\.0/);
-  assert.match(html,/Öğrenci ekle/);
+  assert.match(html,/app\.js\?v=1\.1\.0/);
+  assert.match(html,/styles\.css\?v=1\.1\.0/);
+  assert.match(html,/ui-v11\.css\?v=1\.1\.0/);
   assert.match(html,/Koçluk Merkezi/);
+  assert.match(html,/Öğrencilerim/);
+  assert.match(css,/grid-template-columns:320px minmax\(0,1fr\)/);
+  assert.match(css,/welcome-card/);
+  assert.match(css,/student-workspace/);
+  assert.match(studentCss,/\.student\.on/);
 });
