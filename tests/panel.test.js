@@ -31,6 +31,33 @@ test('ana görünüm özet ve ayrı detay sekmeleri içerir',()=>{
   assert.match(app,/En çok hata yapılan konu/);
 });
 
+test('Özet v1.5 canlı metrikleri ve dört çalışma panelini güçlendirir',()=>{
+  const summary=read('summary-live-v15.js');
+  const css=read('summary-live-v15.css');
+  for(const token of ['7 gün çalışma','7 gün soru','Son deneme','Geciken konu','Dikkat edilmesi gerekenler','Programdan son görevler','Son denemeler','Hızlı işlemler'])assert.ok(summary.includes(token),token);
+  for(const token of ['Canlı öğrenci özeti','Kritik uyarı görünmüyor','Tamamlandı','Bekliyor','Programı aç','Denemeleri aç','Konulara git'])assert.ok(summary.includes(token),token);
+  assert.match(summary,/MutationObserver/);
+  assert.match(summary,/summary-dashboard-v15/);
+  assert.match(summary,/__YKS_COACH_SUMMARY_V15__/);
+  assert.doesNotMatch(summary,/initializeApp|getFirestore|setDoc|updateDoc/);
+  assert.match(css,/\.summary-metric/);
+  assert.match(css,/\.summary-attention/);
+  assert.match(css,/\.summary-program/);
+  assert.match(css,/\.summary-exams/);
+  assert.match(css,/\.summary-actions/);
+  assert.doesNotThrow(()=>new Function(summary));
+});
+
+test('Özet v1.5 mevcut güvenli action formlarını korur',()=>{
+  const app=read('app.js');
+  const summary=read('summary-live-v15.js');
+  assert.match(app,/data-action="program_task"/);
+  assert.match(app,/data-action="coach_note"/);
+  assert.match(summary,/summary-action-form/);
+  assert.match(summary,/data-summary-tab/);
+  assert.doesNotMatch(summary,/coachingActions|COLLECTIONS\.actions/);
+});
+
 test('Program sekmesi YKS Defterim haftalık program veri sözleşmesini aynalar',()=>{
   const app=read('app.js');
   for(const token of ['rowLabels','weeks','done','dn','mv','Rutinler','Ders Programım','Bu hafta'])assert.ok(app.includes(token),token);
@@ -109,19 +136,22 @@ test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
   assert.match(register,/emailVerified/);
 });
 
-test('GitHub Pages Programım v1.4 arayüzünü cache kırarak yükler',()=>{
+test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yükler',()=>{
   const html=read('index.html');
   const css=read('styles.css');
   const studentCss=read('ui-v11.css');
   const programCss=read('program-v12.css');
   const liveCss=read('program-live-v14.css');
+  const summaryCss=read('summary-live-v15.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
-  assert.match(html,/app\.js\?v=1\.4\.0/);
-  assert.match(html,/styles\.css\?v=1\.4\.0/);
-  assert.match(html,/ui-v11\.css\?v=1\.4\.0/);
-  assert.match(html,/program-v12\.css\?v=1\.4\.0/);
-  assert.match(html,/program-live-v14\.css\?v=1\.4\.0/);
-  assert.match(html,/program-mirror-v14\.js\?v=1\.4\.0/);
+  assert.match(html,/app\.js\?v=1\.5\.0/);
+  assert.match(html,/styles\.css\?v=1\.5\.0/);
+  assert.match(html,/ui-v11\.css\?v=1\.5\.0/);
+  assert.match(html,/program-v12\.css\?v=1\.5\.0/);
+  assert.match(html,/program-live-v14\.css\?v=1\.5\.0/);
+  assert.match(html,/program-mirror-v14\.js\?v=1\.5\.0/);
+  assert.match(html,/summary-live-v15\.css\?v=1\.5\.0/);
+  assert.match(html,/summary-live-v15\.js\?v=1\.5\.0/);
   assert.match(html,/Koçluk Merkezi/);
   assert.match(html,/Öğrencilerim/);
   assert.match(css,/grid-template-columns:320px minmax\(0,1fr\)/);
@@ -133,4 +163,5 @@ test('GitHub Pages Programım v1.4 arayüzünü cache kırarak yükler',()=>{
   assert.match(programCss,/\.student-program-day-done/);
   assert.match(liveCss,/\.student-program-live-strip/);
   assert.match(liveCss,/\.student-program-summary/);
+  assert.match(summaryCss,/\.summary-dashboard-v15/);
 });
