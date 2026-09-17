@@ -52,6 +52,7 @@ test('Programım v1.3 öğrenci görünümünü koç panelinde birebir kurar',()
   assert.match(mirror,/MutationObserver/);
   assert.match(mirror,/canlı ve salt okunur olarak aynalar/);
   assert.match(mirror,/__YKS_COACH_PROGRAM_MIRROR__/);
+  assert.doesNotThrow(()=>new Function(mirror));
 });
 
 test('Programım aynası mevcut canlı Firestore akışını bozmadan çalışır',()=>{
