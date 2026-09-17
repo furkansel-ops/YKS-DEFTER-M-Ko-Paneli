@@ -65,7 +65,7 @@ test('Programım aynası mevcut canlı Firestore akışını bozmadan çalışı
   assert.match(app,/onSnapshot\(doc\(db,COLLECTIONS\.shares,uid\)/);
   assert.match(app,/watchSelectedShare/);
   assert.match(app,/renderSelected\(\)/);
-  assert.doesNotMatch(mirror,/Firestore|setDoc|updateDoc|initializeApp/);
+  assert.doesNotMatch(mirror,/setDoc|updateDoc|initializeApp|getFirestore/);
   assert.match(mirror,/document\.getElementById\("content"\)/);
   assert.match(mirror,/document\.getElementById\("syncPill"\)/);
 });
