@@ -1,6 +1,6 @@
 const DAYS_FULL=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
 const DAYS_SHORT=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
-const MIRROR_VERSION="1.3.0";
+const MIRROR_VERSION="1.4.0";
 
 const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[char]));
 
@@ -16,6 +16,10 @@ function selectedWeekKey(host){
   return raw.match(/\d{4}-\d{2}-\d{2}/)?.[0]||"";
 }
 function selectedWeekIsCurrent(host){return selectedWeekKey(host)===mondayKeyLocal()}
+function syncText(){
+  const raw=document.getElementById("syncPill")?.textContent?.replace(/\s+/g," ").trim()||"Canlı bağlantı";
+  return raw.replace(/^●\s*/,"");
+}
 
 function readProgramTable(card){
   const table=card?.querySelector(".program-table");if(!table)return null;
@@ -37,21 +41,24 @@ function readProgramTable(card){
 }
 function dayStats(routines,study){
   return Array.from({length:7},(_,d)=>{
-    let filled=0,done=0;
-    for(const model of[routines,study])for(const row of model?.rows||[]){const cell=row.cells[d];if(!cell?.task)continue;filled++;if(cell.done)done++}
-    return{filled,done,pct:filled?Math.round(done/filled*100):0};
+    let filled=0,done=0,moved=0;
+    for(const model of[routines,study])for(const row of model?.rows||[]){
+      const cell=row.cells[d];if(!cell?.task)continue;
+      filled++;if(cell.done)done++;if(cell.moved)moved++;
+    }
+    return{filled,done,moved,pct:filled?Math.round(done/filled*100):0};
   });
 }
 function weekStats(days){
-  const filled=days.reduce((sum,item)=>sum+item.filled,0),done=days.reduce((sum,item)=>sum+item.done,0);
-  return{filled,done,pct:filled?Math.round(done/filled*100):0};
+  const filled=days.reduce((sum,item)=>sum+item.filled,0),done=days.reduce((sum,item)=>sum+item.done,0),moved=days.reduce((sum,item)=>sum+item.moved,0);
+  return{filled,done,moved,pct:filled?Math.round(done/filled*100):0};
 }
-function weekOverview(days,isCurrent){
-  const total=weekStats(days),today=isCurrent?((new Date().getDay()+6)%7):-1;
+function weekOverview(days,isCurrent,dayDone){
+  const total=weekStats(days),today=isCurrent?((new Date().getDay()+6)%7):-1,completedDays=dayDone.filter(Boolean).length;
   let message=total.filled?`${total.done}/${total.filled} görev tamamlandı · %${total.pct}`:"Bu hafta henüz görev yok";
   if(total.filled&&total.done===total.filled)message="Haftanın tüm görevleri tamamlandı ✓";
-  const chips=days.map((item,d)=>`<div class="student-program-day-chip ${d===today?"today":""} ${item.filled&&item.done===item.filled?"all-done":""}"><span>${DAYS_SHORT[d]}</span><b>${item.filled?`${item.done}/${item.filled}`:"—"}</b><i><em style="width:${item.pct}%"></em></i></div>`).join("");
-  return`<section class="student-program-week-overview" aria-label="Haftalık ilerleme"><div class="student-program-week-top"><div><span>Haftalık ilerleme</span><b>${escapeHtml(message)}</b></div><strong>${total.pct}%</strong></div><div class="student-program-week-bar"><i style="width:${total.pct}%"></i></div><div class="student-program-day-chips">${chips}</div></section>`;
+  const chips=days.map((item,d)=>`<div class="student-program-day-chip ${d===today?"today":""} ${item.filled&&item.done===item.filled?"all-done":""} ${dayDone[d]?"day-marked":""}"><span>${DAYS_SHORT[d]}</span><b>${item.filled?`${item.done}/${item.filled}`:"—"}</b>${item.moved?`<small>${item.moved} taşındı</small>`:""}<i><em style="width:${item.pct}%"></em></i></div>`).join("");
+  return`<section class="student-program-week-overview" aria-label="Haftalık ilerleme"><div class="student-program-week-top"><div><span>Haftalık ilerleme</span><b>${escapeHtml(message)}</b></div><strong>${total.pct}%</strong></div><div class="student-program-week-bar"><i style="width:${total.pct}%"></i></div><div class="student-program-summary"><span><b>${total.filled}</b> planlanan</span><span><b>${total.done}</b> tamamlanan</span><span><b>${total.moved}</b> taşınan</span><span><b>${completedDays}/7</b> tamamlanan gün</span></div><div class="student-program-day-chips">${chips}</div></section>`;
 }
 function headHtml(d,days,isCurrent){
   const today=isCurrent&&d===((new Date().getDay()+6)%7),item=days[d];
@@ -90,15 +97,22 @@ function adaptWeekNavigation(host,isCurrent){
   prev.textContent="‹";prev.setAttribute("aria-label","Önceki hafta");next.textContent="›";next.setAttribute("aria-label","Sonraki hafta");
   current.classList.add("student-program-week-center");current.innerHTML=`<span>${escapeHtml(range)}</span><small>${isCurrent?"bu hafta":escapeHtml(meta.replace(/^\d{4}-\d{2}-\d{2}\s*·?\s*/,""))}</small>`;
 }
+function liveStrip(isCurrent){
+  return`<section class="student-program-live-strip" aria-live="polite"><div><i></i><span><b>Öğrenci Programım canlı</b><small>${escapeHtml(syncText())}</small></span></div><span class="student-program-view-state">${isCurrent?"Bu hafta":"Geçmiş hafta"}</span></section>`;
+}
+function legend(){
+  return`<div class="student-program-legend" aria-label="Program durumları"><span><i class="planned"></i>Planlandı</span><span><i class="done"></i>Tamamlandı</span><span><i class="moved"></i>Taşındı</span></div>`;
+}
 function enhanceProgram(){
   const host=document.getElementById("content");if(!host||host.querySelector(".program-student-shell"))return;
   const cards=[...host.querySelectorAll(".program-card")];if(cards.length<2)return;
   const routines=readProgramTable(cards[0]),study=readProgramTable(cards[1]);if(!routines||!study)return;
   const isCurrent=selectedWeekIsCurrent(host),days=dayStats(routines,study),main=host.querySelector(".program-main");if(!main)return;
+  const dayDone=Array.from({length:7},(_,d)=>Boolean(routines.dayDone[d]||study.dayDone[d]));
   adaptWeekNavigation(host,isCurrent);
   host.querySelector(".program-metrics")?.remove();
-  const shell=document.createElement("div");shell.className="program-student-shell";shell.dataset.mirrorVersion=MIRROR_VERSION;shell.setAttribute("aria-label","YKS Defterim Programım aynası");
-  shell.innerHTML=`<div class="student-program-title">Haftalık plan · Klasik+</div>${weekOverview(days,isCurrent)}${routineGrid(routines,days,isCurrent)}${studyGrid(study,days,isCurrent)}<p class="student-program-hint">Bu görünüm öğrencinin YKS Defterim → Programım ekranını canlı ve salt okunur olarak aynalar. Tamamlanan görevler, taşınan görevler ve gün durumu öğrenci uygulamasındaki kayıtla birlikte güncellenir.</p>`;
+  const shell=document.createElement("div");shell.className="program-student-shell";shell.dataset.mirrorVersion=MIRROR_VERSION;shell.setAttribute("aria-label","YKS Defterim Programım canlı aynası");
+  shell.innerHTML=`${liveStrip(isCurrent)}<div class="student-program-title">Haftalık plan · Klasik+</div>${weekOverview(days,isCurrent,dayDone)}${legend()}${routineGrid(routines,days,isCurrent)}${studyGrid(study,days,isCurrent)}<p class="student-program-hint">Bu görünüm öğrencinin YKS Defterim → Programım ekranını canlı ve salt okunur olarak aynalar. Öğrenci görev eklediğinde, tamamladığında veya taşıdığında koç ekranı Firestore paylaşımıyla otomatik yenilenir.</p>`;
   main.replaceChildren(shell);
 }
 
@@ -106,4 +120,6 @@ let scheduled=false;
 function scheduleEnhance(){if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;enhanceProgram()})}
 const content=document.getElementById("content");
 if(content){new MutationObserver(scheduleEnhance).observe(content,{childList:true,subtree:true});scheduleEnhance()}
+const syncPill=document.getElementById("syncPill");
+if(syncPill){new MutationObserver(scheduleEnhance).observe(syncPill,{childList:true,subtree:true,characterData:true})}
 window.__YKS_COACH_PROGRAM_MIRROR__={version:MIRROR_VERSION,refresh:scheduleEnhance};
