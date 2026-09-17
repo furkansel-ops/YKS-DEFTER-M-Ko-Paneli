@@ -31,7 +31,7 @@ test('ana görünüm özet ve ayrı detay sekmeleri içerir',()=>{
   assert.match(app,/En çok hata yapılan konu/);
 });
 
-test('Program sekmesi YKS Defterim haftalık programını tam aynalar',()=>{
+test('Program sekmesi YKS Defterim haftalık program veri sözleşmesini aynalar',()=>{
   const app=read('app.js');
   for(const token of ['rowLabels','weeks','done','dn','mv','Rutinler','Ders Programım','Bu hafta'])assert.ok(app.includes(token),token);
   for(const day of ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'])assert.ok(app.includes(day),day);
@@ -39,6 +39,30 @@ test('Program sekmesi YKS Defterim haftalık programını tam aynalar',()=>{
   assert.match(app,/programGrid\(model,week,"s","Ders Programım"\)/);
   assert.match(app,/Haftalık ilerleme/);
   assert.match(app,/Tamamlanan gün/);
+});
+
+test('Programım v1.3 öğrenci görünümünü koç panelinde birebir kurar',()=>{
+  const mirror=read('program-mirror-v13.js');
+  for(const token of ['Haftalık plan · Klasik+','RUTİNLER','DERS PROGRAMIM','Günü tamamladım','Haftalık ilerleme','Önceki günden taşındı'])assert.ok(mirror.includes(token),token);
+  for(const day of ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'])assert.ok(mirror.includes(day),day);
+  assert.match(mirror,/student-program-day-chip/);
+  assert.match(mirror,/student-program-week-overview/);
+  assert.match(mirror,/student-program-moved/);
+  assert.match(mirror,/student-program-day-done/);
+  assert.match(mirror,/MutationObserver/);
+  assert.match(mirror,/canlı ve salt okunur olarak aynalar/);
+  assert.match(mirror,/__YKS_COACH_PROGRAM_MIRROR__/);
+  assert.doesNotThrow(()=>new Function(mirror));
+});
+
+test('Programım aynası mevcut canlı Firestore akışını bozmadan çalışır',()=>{
+  const app=read('app.js');
+  const mirror=read('program-mirror-v13.js');
+  assert.match(app,/onSnapshot\(doc\(db,COLLECTIONS\.shares,uid\)/);
+  assert.match(app,/watchSelectedShare/);
+  assert.match(app,/renderSelected\(\)/);
+  assert.doesNotMatch(mirror,/firebase|Firestore|setDoc|updateDoc/);
+  assert.match(mirror,/document\.getElementById\("content"\)/);
 });
 
 test('seçili öğrencinin coachingShares belgesi canlı eşitlenir',()=>{
@@ -70,22 +94,24 @@ test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
   assert.match(register,/emailVerified/);
 });
 
-test('GitHub Pages canlı program arayüzünü cache kırarak yükler',()=>{
+test('GitHub Pages Programım v1.3 arayüzünü cache kırarak yükler',()=>{
   const html=read('index.html');
   const css=read('styles.css');
   const studentCss=read('ui-v11.css');
   const programCss=read('program-v12.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
-  assert.match(html,/app\.js\?v=1\.2\.0/);
-  assert.match(html,/styles\.css\?v=1\.2\.0/);
-  assert.match(html,/ui-v11\.css\?v=1\.2\.0/);
-  assert.match(html,/program-v12\.css\?v=1\.2\.0/);
+  assert.match(html,/app\.js\?v=1\.3\.0/);
+  assert.match(html,/styles\.css\?v=1\.3\.0/);
+  assert.match(html,/ui-v11\.css\?v=1\.3\.0/);
+  assert.match(html,/program-v12\.css\?v=1\.3\.0/);
+  assert.match(html,/program-mirror-v13\.js\?v=1\.3\.0/);
   assert.match(html,/Koçluk Merkezi/);
   assert.match(html,/Öğrencilerim/);
   assert.match(css,/grid-template-columns:320px minmax\(0,1fr\)/);
   assert.match(css,/welcome-card/);
   assert.match(css,/student-workspace/);
   assert.match(studentCss,/\.student\.on/);
-  assert.match(programCss,/\.program-table/);
-  assert.match(programCss,/\.program-cell\.is-done/);
+  assert.match(programCss,/\.student-program-grid/);
+  assert.match(programCss,/\.student-program-task\.is-done/);
+  assert.match(programCss,/\.student-program-day-done/);
 });
