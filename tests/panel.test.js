@@ -126,7 +126,8 @@ test('koç görevleri kontrollü action kuyruğuna gönderilir',()=>{
   const app=read('app.js');
   assert.match(app,/COLLECTIONS\.actions/);
   assert.match(app,/status:"pending"/);
-  for(const type of ['program_task','coach_note','post_exam_task','topic_deadline'])assert.ok(app.includes(type));
+  const topics=read('topics-live-v18.mjs');
+  for(const type of ['program_task','coach_note','post_exam_task','topic_deadline'])assert.ok((app+topics).includes(type));
 });
 
 test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
@@ -144,7 +145,7 @@ test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yü
   const liveCss=read('program-live-v14.css');
   const summaryCss=read('summary-live-v15.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
-  assert.match(html,/app\.js\?v=1\.5\.0/);
+  assert.match(html,/app\.js\?v=1\.8\.0/);
   assert.match(html,/styles\.css\?v=1\.5\.0/);
   assert.match(html,/ui-v11\.css\?v=1\.5\.0/);
   assert.match(html,/program-v12\.css\?v=1\.5\.0/);

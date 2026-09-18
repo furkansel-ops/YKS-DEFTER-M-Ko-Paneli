@@ -2,6 +2,7 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-ap
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import{getFirestore,collection,doc,getDoc,getDocs,onSnapshot,query,where,setDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
+import{renderTopicDashboard,syncTopicStudent}from"./topics-live-v18.mjs?v=1.8.0";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG);
 const auth=getAuth(firebaseApp);
@@ -36,6 +37,7 @@ function friendlyError(error){
 }
 function showAuth(message="Koç hesabınla giriş yap.",type=""){
   stopSelectedShare();
+  syncTopicStudent($("content"),null);
   $("authView").classList.remove("hidden");
   $("appView").classList.add("hidden");
   setStatus($("authStatus"),message,type);
@@ -166,7 +168,7 @@ function renderStudentList(){
     host.append(button);
   }
 }
-function showNoStudent(){stopSelectedShare();$("emptyState").classList.remove("hidden");$("studentView").classList.add("hidden")}
+function showNoStudent(){stopSelectedShare();syncTopicStudent($("content"),null);$("emptyState").classList.remove("hidden");$("studentView").classList.add("hidden")}
 function selectedEntry(){return state.students.find(s=>s.link.studentUid===state.selectedUid)||null}
 function renderTabs(){
   const host=$("tabs");host.innerHTML="";
@@ -181,9 +183,9 @@ function renderSelected(){
 function metric(label,value,note){return`<div class="metric"><span>${esc(label)}</span><b>${esc(value)}</b><small>${esc(note)}</small></div>`}
 function rows(items,render){return items.length?items.map(render).join(""):'<div class="empty">Henüz veri yok.</div>'}
 
-async function sendAction(studentUid,type,payload,button){
+async function sendAction(studentUid,type,payload,button,notify=true){
   if(!state.user)throw new Error("Koç oturumu gerekli");if(button)button.disabled=true;
-  try{await setDoc(doc(collection(db,COLLECTIONS.actions)),{studentUid,coachUid:state.user.uid,type,payload,status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});alert("Gönderildi ✓")}finally{if(button)button.disabled=false}
+  try{await setDoc(doc(collection(db,COLLECTIONS.actions)),{studentUid,coachUid:state.user.uid,type,payload,status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});if(notify)alert("Gönderildi ✓")}finally{if(button)button.disabled=false}
 }
 function wireActionForms(host,entry){
   host.querySelectorAll("[data-action]").forEach(form=>form.onsubmit=async event=>{
@@ -245,12 +247,14 @@ function renderProgress(host,entry){
   host.innerHTML=`<div class="metrics">${metric("7 gün çalışma",`${(num(share.progress?.minutes7)/60).toFixed(1)} sa`,"Odak süresi")}${metric("7 gün soru",String(num(share.progress?.questions7)),"Çözülen soru")}${metric("Son net",String(net),info.delta==null?"Karşılaştırma yok":`${info.delta>=0?"+":""}${info.delta.toFixed(1)} değişim`)}${metric("Konu ilerleme",`${topics.complete.length}/${topics.items.length}`,`${topics.active.length} çalışılıyor`)}</div><section class="card"><h3>İlerleme özeti</h3><div class="row"><span>Tamamlanan konu</span><b>${topics.complete.length}</b></div><div class="row"><span>Aktif konu</span><b>${topics.active.length}</b></div><div class="row"><span>Geciken konu</span><b>${topics.overdue.length}</b></div><div class="row"><span>Kayıtlı deneme</span><b>${info.exams.length}</b></div></section>`;
 }
 function renderTopics(host,entry){
-  const stats=topicStats(entry.share),sorted=[...stats.items].sort((a,b)=>Number(!!b.deadline)-Number(!!a.deadline)||num(a.st)-num(b.st));
-  host.innerHTML=`<div class="grid"><section class="card"><h3>Konu durumu</h3><div class="stack">${rows(sorted.slice(0,80),item=>`<div class="item"><b>${esc(subjectName(item))} · ${esc(topicName(item))}</b><small>${esc(statusName(item.st))}${item.deadline?` · Hedef ${esc(item.deadline)}`:""}</small></div>`)}</div></section><section class="card"><h3>Konu bitiş hedefi gönder</h3><form class="form" data-action="topic_deadline"><input class="field" name="text" maxlength="220" required placeholder="Ders · Konu"><input class="field" name="date" type="date" value="${today()}"><button class="btn primary" type="submit">Hedef gönder</button></form></section></div>`;wireActionForms(host,entry);
+  renderTopicDashboard(host,entry,{sendAction:(uid,type,payload)=>sendAction(uid,type,payload,null,false),friendlyError});
 }
 function renderErrors(host,entry){const errors=topErrors(entry.share);host.innerHTML=`<section class="card"><h3>Hata Defteri özeti</h3><div class="stack">${rows(errors.slice(0,50),item=>`<div class="row"><span>${esc(item.subject)} · ${esc(item.topic)}</span><b>${item.count} hata</b></div>`)}</div></section>`}
 function renderContent(entry){
-  const host=$("content");host.innerHTML="";if(!entry)return;
+  const host=$("content");
+  syncTopicStudent(host,entry?.link?.studentUid||null);
+  if(state.tab==="topics"&&entry?.share){renderTopics(host,entry);return}
+  host.innerHTML="";if(!entry)return;
   if(!entry.share&&state.tab!=="summary"){host.innerHTML='<div class="empty">Öğrenci paylaşımı henüz hazır değil.</div>';return}
   ({summary:renderSummary,program:renderProgram,exams:renderExams,progress:renderProgress,topics:renderTopics,errors:renderErrors}[state.tab]||renderSummary)(host,entry);
 }
@@ -283,6 +287,7 @@ $("addStudentForm").onsubmit=async event=>{
 $("studentCode").addEventListener("input",event=>{const cursor=event.target.selectionStart;event.target.value=formatCode(event.target.value);try{event.target.setSelectionRange(cursor,cursor)}catch{}});
 
 onAuthStateChanged(auth,async user=>{
+  syncTopicStudent($("content"),null);
   stopSelectedShare();state.user=user||null;state.coach=null;state.students=[];state.selectedUid="";state.tab="summary";state.programWeek="";
   if(!user){showAuth();return}
   try{

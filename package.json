@@ -1,11 +1,16 @@
 {
-  "name":"yks-defterim-koc-paneli",
-  "version":"1.0.0",
-  "private":true,
-  "type":"commonjs",
-  "scripts":{
-    "test":"node --test",
-    "check":"node --test"
+  "name": "yks-defterim-koc-paneli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --test"
   },
-  "engines":{"node":">=22 <25"}
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.0"
+  }
 }
