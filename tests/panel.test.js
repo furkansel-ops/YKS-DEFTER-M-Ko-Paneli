@@ -166,3 +166,17 @@ test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yü
   assert.match(liveCss,/\.student-program-summary/);
   assert.match(summaryCss,/\.summary-dashboard-v15/);
 });
+
+
+test('Program v1.9 koç takvimini ve günlük plan detayını yükler',()=>{
+  const html=read('index.html');
+  const js=read('program-calendar-v19.js');
+  const css=read('program-calendar-v19.css');
+  assert.match(html,/program-calendar-v19\.css\?v=1\.9\.0/);
+  assert.match(html,/program-calendar-v19\.js\?v=1\.9\.0/);
+  for(const token of ['Haftalık plan','Takvim','Günün planı','Plan sadakati','Erteleme analizi'])assert.ok(js.includes(token),token);
+  assert.match(js,/program-card/);
+  assert.match(js,/data-cal-date/);
+  assert.match(css,/\.coach-calendar-grid/);
+  assert.doesNotThrow(()=>new Function(js));
+});
