@@ -192,6 +192,42 @@
     if(!list.length)return empty("Henüz canlı öğrenci hareketi yok.");
     return`<div class="coach-mini-list">${list.map(({student})=>`<div class="coach-mini-row"><span class="coach-avatar">${esc(initials(studentName(student)))}</span><div><b>${esc(studentName(student))}</b><small>YKS Defterim verileri eşitlendi.</small></div><span>${esc(relativeTime(studentShare(student).updatedAt))}</span></div>`).join("")}</div>`;
   }
+  function pendingItems(limit=5){
+    const items=[];
+    for(const student of snapshot.students||[]){
+      const name=studentName(student),t=topicInfo(student),e=examInfo(student),w=weekInfo(student);
+      if(t.overdue>0)items.push({icon:"⌛",title:"Geciken konu kontrolü",name,note:`${t.overdue} konu`,tone:"red",uid:student.studentUid,tab:"topics"});
+      if(e.delta!==null&&e.delta<0)items.push({icon:"▥",title:"Deneme analizi",name,note:`${fmt(Math.abs(e.delta))} net düşüş`,tone:"blue",uid:student.studentUid,tab:"exams"});
+      if(w.filled&&w.pct<65)items.push({icon:"▣",title:"Program kontrolü",name,note:`%${w.pct} uyum`,tone:"orange",uid:student.studentUid,tab:"program"});
+      if(errorCount(student)>=6)items.push({icon:"✎",title:"Hata defteri kontrolü",name,note:`${errorCount(student)} hata`,tone:"purple",uid:student.studentUid,tab:"errors"});
+    }
+    return items.slice(0,limit);
+  }
+  function pendingList(limit=5){
+    const items=pendingItems(limit);
+    if(!items.length)return empty("Şu anda bekleyen kritik işlem yok.");
+    return`<div class="coach-pending-list">${items.map(item=>`<button class="coach-pending-row" type="button" data-student-detail="${esc(item.uid)}" data-detail-tab="${esc(item.tab)}"><span class="coach-pending-icon ${item.tone}">${item.icon}</span><div><b>${esc(item.title)}</b><small>${esc(item.name)}</small></div><em>${esc(item.note)}</em></button>`).join("")}</div>`;
+  }
+  function quickActions(){
+    return`<div class="coach-quick-grid"><button type="button" data-page-action="students"><span>♟</span><b>Öğrenci Ekle</b><small>Yeni bağlantı oluştur</small></button><button type="button" data-page-action="programs"><span>▣</span><b>Program Görüntüle</b><small>Haftalık planları aç</small></button><button type="button" data-page-action="exams"><span>▥</span><b>Deneme Analizi</b><small>Sonuçları karşılaştır</small></button><button type="button" data-page-action="reports"><span>▤</span><b>Rapor Oluştur</b><small>Genel ilerlemeyi incele</small></button></div>`;
+  }
+  function recentExamTable(limit=5){
+    const list=(snapshot.students||[]).flatMap(student=>exams(student).map(exam=>({student,exam}))).sort((a,b)=>String(b.exam.date||"").localeCompare(String(a.exam.date||""))).slice(0,limit);
+    if(!list.length)return empty("Henüz deneme sonucu yok.");
+    return`<div class="coach-table-wrap"><table class="coach-table coach-compact-table"><thead><tr><th>Öğrenci</th><th>Deneme</th><th>Net</th><th>Tarih</th></tr></thead><tbody>${list.map(({student,exam})=>`<tr><td><div class="coach-person"><span class="coach-avatar">${esc(initials(studentName(student)))}</span><b>${esc(studentName(student))}</b></div></td><td>${esc(exam.name||exam.type||"Deneme")}</td><td><b>${fmt(num(exam.totalNet))}</b></td><td>${esc(exam.date||"—")}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+  function gradeDistribution(){
+    const map=new Map();
+    for(const student of snapshot.students||[]){
+      const grade=studentGrade(student)||"Belirtilmemiş";
+      map.set(grade,(map.get(grade)||0)+1);
+    }
+    const list=[...map.entries()].sort((a,b)=>b[1]-a[1]);
+    if(!list.length)return empty("Sınıf bilgisi bulunmuyor.");
+    const total=list.reduce((s,x)=>s+x[1],0);
+    return`<div class="coach-grade-dist"><div class="coach-grade-donut"><strong>${total}<small>Öğrenci</small></strong></div><div class="coach-grade-list">${list.slice(0,5).map(([grade,count],i)=>`<div><i style="--grade-i:${i}"></i><span>${esc(grade)}</span><b>${count} · %${Math.round(count/total*100)}</b></div>`).join("")}</div></div>`;
+  }
+
   function selectedSummary(student){
     if(!student)return empty("Öğrenci seç.");
     const p=weekInfo(student),e=examInfo(student),t=topicInfo(student),name=studentName(student);
@@ -201,10 +237,28 @@
   function homePage(){
     const a=aggregate(),name=text(snapshot.coach?.displayName||snapshot.user?.displayName,80)||"Koç";
     const risk=(snapshot.students||[]).filter(s=>studentSignal(s).key==="risk").length;
-    return`${pageHead(`Merhaba ${name} 👋`,`${a.shared} öğrencinin canlı verisi bağlı. Genel durumu buradan izleyebilirsin.`,`<button class="coach-secondary" data-page-action="reports">Rapor Gör</button><button class="coach-primary" data-page-action="students">+ Öğrenci Ekle</button>`)}
+    const pending=pendingItems(99).length;
+    return`${pageHead(`Merhaba ${name} 👋`,`${a.shared} öğrencinin canlı verisi bağlı. Genel durumu buradan izleyebilirsin.`,`<button class="coach-secondary" data-page-action="reports">Rapor Oluştur</button><button class="coach-secondary" data-page-action="programs">Programlar</button><button class="coach-primary" data-connect-student>+ Öğrenci Ekle</button>`)}
       <section class="coach-kpis">${kpi("Toplam Öğrenci",String(a.students),`${a.shared} canlı paylaşım`,"♟","blue","up")}${kpi("Program Uyumu",`%${a.programPct}`,"Haftalık ortalama","◎","green","up")}${kpi("Ortalama Çalışma",`${fmt(a.hours)} sa`,"Son 7 gün","◷","blue","up")}${kpi("Deneme Ortalaması",a.latestNet?fmt(a.latestNet):"—","Son denemeler","▥","red","up")}${kpi("Konu Tamamlama",`%${a.topicPct}`,risk?`${risk} öğrenci risk sinyali`:"Kritik risk yok","▤","purple",risk?"down":"up")}</section>
-      <section class="coach-grid two"><article class="coach-card">${cardHeader("Öğrenci Listesi","Canlı verisi bağlı öğrenciler","Tümünü gör","students")}${studentTable()}</article><div class="coach-grid"><article class="coach-card">${cardHeader("Haftalık Genel Durum","Program tamamlanma hareketi")}${weeklyBars()}</article><article class="coach-card">${cardHeader("Konu İlerleme Durumu","Ders bazlı tamamlanma","Konulara git","topics")}${subjectList(5)}</article></div></section>
-      <section class="coach-grid three"><article class="coach-card">${cardHeader("Deneme Performansı","Öğrencilerin son deneme trendi","Tümünü gör","exams")}${lineSvg(lineSeriesValues())}</article><article class="coach-card">${cardHeader("Hata Defteri Özeti","Paylaşılan hata kayıtları","Tümünü gör","errors")}<div class="coach-selected-metrics"><div class="coach-selected-metric"><span>Toplam hata</span><b>${a.errors}</b></div><div class="coach-selected-metric"><span>Riskli öğrenci</span><b>${risk}</b></div><div class="coach-selected-metric"><span>Bağlı öğrenci</span><b>${a.shared}</b></div></div><div class="coach-insight">Hata kayıtları öğrencinin paylaştığı Hata Defteri verilerinden hesaplanır.</div></article><article class="coach-card">${cardHeader("Son Aktiviteler","Canlı paylaşım güncellemeleri","Tümünü gör","students")}${recentActivities(5)}</article></section>`;
+
+      <section class="coach-home-main-grid">
+        <article class="coach-card coach-home-students">${cardHeader("Öğrenci Listesi","Canlı verisi bağlı öğrenciler","Tümünü gör","students")}${studentTable()}</article>
+        <div class="coach-home-center">
+          <article class="coach-card">${cardHeader("Haftalık Genel Durum","Program tamamlanma hareketi")}${weeklyBars()}</article>
+          <article class="coach-card">${cardHeader("Konu İlerleme Durumu","Ders bazlı tamamlanma","Konulara git","topics")}${subjectList(5)}</article>
+        </div>
+        <aside class="coach-home-right">
+          <article class="coach-card">${cardHeader("Bekleyen İşlemler",pending?`${pending} takip sinyali`:"Kritik işlem yok","Tümünü gör","reports")}${pendingList(5)}</article>
+          <article class="coach-card">${cardHeader("Hızlı İşlemler")}${quickActions()}</article>
+        </aside>
+      </section>
+
+      <section class="coach-home-lower-grid">
+        <article class="coach-card">${cardHeader("Son Deneme Sonuçları","En güncel paylaşılan denemeler","Tümünü gör","exams")}${recentExamTable(5)}</article>
+        <article class="coach-card">${cardHeader("Program Uyumu Trendi","Öğrencilerin haftalık uyum görünümü")}${lineSvg((snapshot.students||[]).map(s=>weekInfo(s).pct).filter(Number.isFinite))}</article>
+        <article class="coach-card">${cardHeader("Sınıf Dağılımı","Bağlı öğrencilerin sınıf bilgisi")}${gradeDistribution()}</article>
+        <article class="coach-card">${cardHeader("Son Aktiviteler","Canlı paylaşım güncellemeleri","Tümünü gör","students")}${recentActivities(5)}</article>
+      </section>`;
   }
 
   function studentsPage(){
