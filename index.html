@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./errors-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -463,9 +464,103 @@
           </section>
         </div>
       </section>
+      <section class="errors-page hidden" id="errorsPage">
+        <header class="errors-head">
+          <div>
+            <span class="dashboard-eyebrow">HATA DEFTERİ</span>
+            <h1>Hata Defteri</h1>
+            <p>Öğrencilerin tekrar eden yanlışlarını, ders ve konu yoğunluklarını gerçek hata kayıtları üzerinden takip et.</p>
+          </div>
+          <button class="error-refresh" id="errorRefreshBtn" type="button">↻ Verileri yenile</button>
+        </header>
+
+        <section class="error-control-card">
+          <div class="error-control-copy">
+            <span>HATA GÖRÜNÜMÜ</span>
+            <b id="errorScopeTitle">Tüm öğrenciler</b>
+            <small id="errorScopeMeta">Genel yanlış analizi</small>
+          </div>
+          <div class="error-control-fields">
+            <label>
+              <span>Öğrenci</span>
+              <select id="errorStudentSelect"><option value="all">Tüm öğrenciler</option></select>
+            </label>
+            <label>
+              <span>Ders</span>
+              <select id="errorSubjectSelect"><option value="all">Tüm dersler</option></select>
+            </label>
+          </div>
+        </section>
+
+        <div id="errorLoading" class="error-state">
+          <span>↻</span><div><b>Hata kayıtları hazırlanıyor</b><p>Öğrencilerin güncel yanlış kayıtları alınıyor.</p></div>
+        </div>
+        <div id="errorEmpty" class="error-state hidden">
+          <span>✎</span><div><b>Henüz hata kaydı yok</b><p>Öğrenciler Hata Defteri'ne yanlış ekledikçe analiz burada otomatik oluşacak.</p></div>
+        </div>
+
+        <div id="errorOverview" class="hidden">
+          <section class="error-kpis" id="errorOverviewKpis"></section>
+          <section class="error-overview-grid">
+            <article class="error-card error-students-card">
+              <div class="error-card-head">
+                <div><span>ÖĞRENCİ TAKİBİ</span><h2>Yanlış yoğunluğu</h2><p>Hangi öğrencide hangi seviyede hata biriktiğini hızlıca gör.</p></div>
+              </div>
+              <div class="error-table-head"><span>Öğrenci</span><span>Kayıt</span><span>Toplam yanlış</span><span>En çok hata</span><span>Son kayıt</span></div>
+              <div id="errorStudentList" class="error-student-list"></div>
+            </article>
+
+            <aside class="error-side-stack">
+              <article class="error-card">
+                <div class="error-card-head compact"><div><span>DERS YOĞUNLUĞU</span><h2>En çok yanlış yapılan dersler</h2></div></div>
+                <div id="errorSubjectOverview" class="error-subject-overview"></div>
+              </article>
+              <article class="error-card">
+                <div class="error-card-head compact"><div><span>TEKRAR EDEN</span><h2>Öne çıkan konular</h2></div></div>
+                <div id="errorTopicOverview" class="error-topic-overview"></div>
+              </article>
+            </aside>
+          </section>
+        </div>
+
+        <div id="errorStudentDetail" class="hidden">
+          <section class="error-student-hero">
+            <div class="error-avatar" id="errorStudentAvatar">Ö</div>
+            <div class="error-student-copy">
+              <span>ÖĞRENCİ HATA RAPORU</span>
+              <h2 id="errorStudentName">Öğrenci</h2>
+              <p id="errorStudentTarget">Hedef bilgisi yok</p>
+            </div>
+            <div class="error-count-pill" id="errorStudentCount">—</div>
+          </section>
+
+          <section class="error-kpis" id="errorStudentKpis"></section>
+
+          <section class="error-detail-grid">
+            <article class="error-card error-log-card">
+              <div class="error-card-head">
+                <div><span>HATA KAYITLARI</span><h2>Son yanlışlar</h2><p>Ders, konu, tarih ve tekrar sayısı ile detaylı görünüm.</p></div>
+              </div>
+              <div class="error-log-head"><span>Konu</span><span>Ders</span><span>Tarih</span><span>Yanlış</span></div>
+              <div id="errorLogList" class="error-log-list"></div>
+            </article>
+
+            <aside class="error-side-stack">
+              <article class="error-card">
+                <div class="error-card-head compact"><div><span>DERS BAZLI</span><h2>Yanlış dağılımı</h2></div></div>
+                <div id="errorStudentSubjects" class="error-subject-progress"></div>
+              </article>
+              <article class="error-card">
+                <div class="error-card-head compact"><div><span>KOÇ ODAĞI</span><h2>Tekrar eden konular</h2></div></div>
+                <div id="errorRepeatedTopics" class="error-repeated-list"></div>
+              </article>
+            </aside>
+          </section>
+        </div>
+      </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.7"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.8"></script>
 </body>
 </html>
