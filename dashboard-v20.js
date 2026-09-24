@@ -13,7 +13,7 @@
     settings:["Ayarlar","Koç paneli tercihlerini, bağlantıları ve hesap durumunu yönet."]
   };
   const DAYS=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
-  const ui={page:"home",detail:false,returnPage:"home",search:"",studentFilter:"all",selectedUid:"",messageUid:"",sessionMessages:new Map()};
+  const ui={page:"home",detail:false,returnPage:"home",search:"",studentFilter:"all",selectedUid:"",messageUid:"",sessionMessages:new Map(),programWeekByStudent:new Map()};
   let snapshot={user:null,coach:null,students:[],selectedUid:"",tab:"summary"};
 
   const $=id=>document.getElementById(id);
@@ -65,7 +65,29 @@
   function errorCount(student){return errors(student).reduce((sum,item)=>sum+Math.max(1,num(item?.n||item?.count||1)),0)}
   function programModel(student){
     const p=studentShare(student).program||{},weeks=(Array.isArray(p.weeks)?p.weeks:[]).filter(w=>/^\d{4}-\d{2}-\d{2}$/.test(String(w?.week||""))).slice().sort((a,b)=>String(a.week).localeCompare(String(b.week)));
-    return{p,weeks,week:weeks.at(-1)||null};
+    const maxRows=kind=>Math.max(1,...weeks.map(w=>Array.isArray(w?.data?.[kind])?w.data[kind].length:0));
+    const rowCount={
+      r:Math.max(1,num(p?.rows?.r)||maxRows("r")),
+      s:Math.max(1,num(p?.rows?.s)||maxRows("s"))
+    };
+    const labels={
+      r:Array.from({length:rowCount.r},(_,i)=>text(p?.rowLabels?.r?.[i],80)||`Rutin ${i+1}`),
+      s:Array.from({length:rowCount.s},(_,i)=>text(p?.rowLabels?.s?.[i],80)||`Ders ${i+1}`)
+    };
+    return{p,weeks,rowCount,labels,week:weeks.at(-1)||null};
+  }
+  function mondayKeyLocal(date=new Date()){
+    const d=new Date(date);d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  }
+  function selectedProgramWeek(student){
+    const model=programModel(student);if(!model.weeks.length)return{model,week:null,index:-1};
+    const uid=student?.studentUid||"",saved=ui.programWeekByStudent.get(uid);
+    let index=model.weeks.findIndex(w=>w.week===saved);
+    if(index<0)index=model.weeks.findIndex(w=>w.week===mondayKeyLocal());
+    if(index<0)index=model.weeks.length-1;
+    const week=model.weeks[index];if(uid)ui.programWeekByStudent.set(uid,week.week);
+    return{model,week,index};
   }
   function weekInfo(student){
     const {week}=programModel(student);const byDay=Array.from({length:7},()=>({filled:0,done:0}));let filled=0,done=0;
@@ -274,33 +296,47 @@
   }
 
   function programsPage(){
-    const students=filteredStudents(),programmed=students.filter(s=>programModel(s).weeks.length),selected=selectedStudent(),week=weekInfo(selected);
+    const students=filteredStudents(),programmed=students.filter(s=>programModel(s).weeks.length),selected=(snapshot.students||[]).find(s=>s.studentUid===ui.selectedUid)||students[0]||null;
+    if(selected&&!ui.selectedUid)ui.selectedUid=selected.studentUid;
+    const current=selected?selectedProgramWeek(selected):{model:{weeks:[],rowCount:{r:0,s:0},labels:{r:[],s:[]}},week:null,index:-1},week=current.week,model=current.model;
     const totalPlanned=students.reduce((sum,s)=>sum+weekInfo(s).filled,0),totalDone=students.reduce((sum,s)=>sum+weekInfo(s).done,0),avgPct=programmed.length?Math.round(avg(programmed.map(s=>weekInfo(s).pct))):0;
-    const rows=students.map(student=>{const w=weekInfo(student),m=programModel(student),name=studentName(student);return`<tr><td><div class="coach-person"><span class="coach-avatar">${esc(initials(name))}</span><b>${esc(name)}</b></div></td><td>${esc(studentTrack(student))}</td><td>${m.weeks.length}</td><td>${progressHtml(w.pct)}</td><td>${w.done}/${w.filled}</td><td><button class="coach-detail-link" data-student-detail="${esc(student.studentUid)}" data-detail-tab="program">Programı aç ›</button></td></tr>`}).join("");
-    return`<div class="coach-page coach-page-programs">${pageHead("Programlar","Öğrencilerin haftalık çalışma akışını takvim üzerinden yönet.",`<button class="coach-primary" data-program-task>+ Programa Görev Gönder</button>`)}
+    const rows=students.map(student=>{const w=weekInfo(student),m=programModel(student),name=studentName(student),on=selected?.studentUid===student.studentUid;return`<tr class="${on?"program-row-selected":""}"><td><button class="program-student-pick" type="button" data-program-select="${esc(student.studentUid)}"><span class="coach-avatar">${esc(initials(name))}</span><b>${esc(name)}</b></button></td><td>${esc(studentTrack(student))}</td><td>${m.weeks.length}</td><td>${progressHtml(w.pct)}</td><td>${w.done}/${w.filled}</td><td><button class="coach-detail-link" data-student-detail="${esc(student.studentUid)}" data-detail-tab="program">Tam ekran ›</button></td></tr>`}).join("");
+    return`<div class="coach-page coach-page-programs">${pageHead("Programlar","Öğrencinin YKS Defterim → Programım tablosunu koç ekranında birebir görüntüle.",`<button class="coach-primary" data-program-task>+ Programa Görev Gönder</button>`)}
       <section class="programs-overview-band">
-        <div class="programs-selected"><span class="eyebrow">Aktif görünüm</span><h3>${selected?esc(studentName(selected)):"Öğrenci seç"}</h3><p>${selected?`${esc(studentTrack(selected))} · ${programModel(selected).weeks.length} kayıtlı hafta`:"Programı görüntülemek için öğrenci seç."}</p></div>
+        <div class="programs-selected"><span class="eyebrow">Seçili öğrenci</span><h3>${selected?esc(studentName(selected)):"Öğrenci seç"}</h3><p>${selected?`${esc(studentTrack(selected))} · ${model.weeks.length} kayıtlı hafta`:"Programı görüntülemek için öğrenci seç."}</p></div>
         <div class="programs-band-stat"><span>Programı olan</span><b>${programmed.length}/${students.length}</b></div>
         <div class="programs-band-stat"><span>Haftalık uyum</span><b>%${avgPct}</b></div>
         <div class="programs-band-stat"><span>Görev ilerleme</span><b>${totalDone}/${totalPlanned}</b></div>
-        <button class="coach-secondary" type="button" data-student-detail="${selected?esc(selected.studentUid):""}" data-detail-tab="program" ${selected?"":"disabled"}>Tam programı aç</button>
+        <button class="coach-secondary" type="button" data-student-detail="${selected?esc(selected.studentUid):""}" data-detail-tab="program" ${selected?"":"disabled"}>Tam ekran program</button>
       </section>
       <section class="programs-calendar-stage coach-card">
-        ${cardHeader("Haftalık Program Takvimi","Bu ekranın ana odağı öğrencinin haftalık planı")}
-        ${week.week?programPreview(week.week):empty("Seçili öğrencide program haftası yok.")}
+        ${cardHeader("Öğrencinin Gerçek Haftalık Programı","Satır adları, görevler, tamamlanan ve taşınan hücreler öğrenci verisinden birebir okunur")}
+        ${week?canonicalProgramMirror(selected,current):empty("Seçili öğrencide kayıtlı haftalık program yok.")}
       </section>
       <section class="programs-bottom-grid">
-        <article class="coach-card programs-list-card">${cardHeader("Öğrenci Programları","Programı ve uyumu karşılaştır")}<div class="coach-table-wrap"><table class="coach-table"><thead><tr><th>Öğrenci</th><th>Alan</th><th>Hafta</th><th>Uyum</th><th>Görev</th><th></th></tr></thead><tbody>${rows||`<tr><td colspan="6">${empty("Program verisi yok.")}</td></tr>`}</tbody></table></div></article>
+        <article class="coach-card programs-list-card">${cardHeader("Öğrenci Programları","Öğrenciye tıklayarak yukarıdaki programı değiştir")}<div class="coach-table-wrap"><table class="coach-table"><thead><tr><th>Öğrenci</th><th>Alan</th><th>Hafta</th><th>Uyum</th><th>Görev</th><th></th></tr></thead><tbody>${rows||`<tr><td colspan="6">${empty("Program verisi yok.")}</td></tr>`}</tbody></table></div></article>
         <aside class="programs-side-stack"><article class="coach-card">${cardHeader("Seçili Program")}${selectedSummary(selected)}</article><article class="coach-card">${cardHeader("Son Güncellemeler")}${recentActivities(5)}</article></aside>
       </section></div>`;
   }
 
-  function programPreview(week){
-    const lessons=new Map();
-    for(const kind of["r","s"])(week?.data?.[kind]||[]).forEach((row,r)=>{for(let d=0;d<7;d++){const task=text(row?.[d],80);if(!task)continue;const key=task.split(/[·:-]/)[0].trim()||`Görev ${r+1}`;if(!lessons.has(key))lessons.set(key,Array(7).fill(""));lessons.get(key)[d]=task}});
-    const entries=[...lessons.entries()].slice(0,5);if(!entries.length)return empty("Bu haftada planlanmış görev yok.");
-    return`<div class="coach-table-wrap"><div class="coach-program-week"><div class="head">Ders</div>${DAYS.map(d=>`<div class="head">${d}</div>`).join("")}${entries.map(([name,days],row)=>`<div class="head">${esc(name)}</div>${days.map((task,d)=>`<div class="${task?`lesson c${(row+d)%5+1}`:""}" title="${esc(task)}">${task?esc(text(task,16)):""}</div>`).join("")}`).join("")}</div></div>`;
+  function canonicalProgramMirror(student,current){
+    const{model,week,index}=current,days=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"],dn=week?.data?.dn||{},mv=week?.data?.mv||{},dayDone=week?.data?.done||[];
+    const stats=weekInfo(student),uid=student.studentUid;
+    const section=(kind,title)=>{
+      const rows=model.rowCount[kind],labels=model.labels[kind],matrix=week?.data?.[kind]||[];
+      let body="";
+      for(let r=0;r<rows;r++){
+        body+=`<div class="canonical-program-label">${esc(labels[r]||`${title} ${r+1}`)}</div>`;
+        for(let d=0;d<7;d++){
+          const cid=`${kind}-${r}-${d}`,task=text(matrix?.[r]?.[d],220),done=Boolean(dn[cid]),moved=Object.prototype.hasOwnProperty.call(mv,cid);
+          body+=`<div class="canonical-program-cell ${task?"has-task":""} ${done?"is-done":""} ${moved?"is-moved":""}">${task?`<span>${esc(task)}</span><small>${done?"✓ Tamamlandı":moved?"↪ Taşındı":"Planlandı"}</small>`:'<span class="canonical-program-empty">—</span>'}</div>`;
+        }
+      }
+      return`<section class="canonical-program-section"><div class="canonical-program-section-head"><div><span>${kind==="r"?"Rutin":"Ders"}</span><h4>${esc(title)}</h4></div><b>${rows} satır</b></div><div class="canonical-program-scroll"><div class="canonical-program-grid"><div class="canonical-program-corner">Satır</div>${days.map((day,d)=>`<div class="canonical-program-day ${dayDone[d]?"day-done":""}"><b>${esc(day)}</b><small>${dayDone[d]?"Gün tamam ✓":""}</small></div>`).join("")}${body}</div></div></section>`;
+    };
+    return`<div class="canonical-program-shell"><div class="canonical-program-toolbar"><button type="button" data-program-week-shift="-1" ${index<=0?"disabled":""}>‹</button><div><b>${esc(week.week)}</b><span>${index+1} / ${model.weeks.length}. hafta</span></div><button type="button" data-program-week-current>Bu hafta</button><button type="button" data-program-week-shift="1" ${index>=model.weeks.length-1?"disabled":""}>›</button></div><div class="canonical-program-summary"><span><b>${stats.filled}</b> planlanan</span><span><b>${stats.done}</b> tamamlanan</span><span><b>%${stats.pct}</b> uyum</span></div>${section("r","Rutinler")}${section("s","Ders Programım")}</div>`;
   }
+
 
   function reportsPage(){
     const a=aggregate(),students=filteredStudents(),deltas=students.map(s=>examInfo(s).delta).filter(Number.isFinite),netGain=deltas.length?avg(deltas):0;
@@ -439,6 +475,10 @@
     document.querySelector("[data-message-search]")?.addEventListener("input",event=>{ui.search=event.target.value;renderPage()});
     document.querySelector("[data-connect-student]")?.addEventListener("click",openConnectModal);
     document.querySelector("[data-program-task]")?.addEventListener("click",()=>{const s=selectedStudent();if(s)openDetail(s.studentUid,"program");else setPage("students")});
+    document.querySelectorAll("[data-program-select]").forEach(btn=>btn.addEventListener("click",()=>{ui.selectedUid=btn.dataset.programSelect||"";renderPage()}));
+    document.querySelectorAll("[data-program-week-shift]").forEach(btn=>btn.addEventListener("click",()=>{const s=selectedStudent();if(!s)return;const current=selectedProgramWeek(s),next=current.index+Number(btn.dataset.programWeekShift);if(next>=0&&next<current.model.weeks.length){ui.programWeekByStudent.set(s.studentUid,current.model.weeks[next].week);renderPage()}}));
+    document.querySelector("[data-program-week-current]")?.addEventListener("click",()=>{const s=selectedStudent();if(!s)return;const m=programModel(s),found=m.weeks.find(w=>w.week===mondayKeyLocal())||m.weeks.at(-1);if(found){ui.programWeekByStudent.set(s.studentUid,found.week);renderPage()}});
+
     document.querySelectorAll("[data-print-report]").forEach(btn=>btn.addEventListener("click",()=>window.print()));
     document.querySelector("[data-refresh-data]")?.addEventListener("click",async event=>{event.currentTarget.disabled=true;try{await core()?.refresh?.()}finally{event.currentTarget.disabled=false}});
     document.querySelectorAll("[data-pref-toggle]").forEach(btn=>btn.addEventListener("click",()=>{const prefs=loadPrefs(),key=btn.dataset.prefToggle;prefs[key]=!prefs[key];savePrefs(prefs);renderPage()}));
