@@ -8,7 +8,8 @@ const exists=file=>fs.existsSync(path.join(root,file));
 
 test('panel yalnız sol menü ve boş çalışma alanı ile açılır',()=>{
   const html=read('index.html');
-  for(const label of ['Ana Sayfa','Öğrenciler','Programlar','Deneme Analizi','Konular','Hata Defteri','Mesajlar','Ayarlar'])assert.ok(html.includes(label),label);\n  assert.match(html,/Takip &amp; Rapor/);
+  for(const label of ['Ana Sayfa','Öğrenciler','Programlar','Deneme Analizi','Konular','Hata Defteri','Mesajlar','Ayarlar'])assert.ok(html.includes(label),label);
+  assert.match(html,/Takip &amp; Rapor/);
   assert.match(html,/class="sidebar coach-sidebar-v20"/);
   assert.match(html,/class="coach-reset-canvas"/);
   assert.doesNotMatch(html,/coach-topbar-v20|dashboardView|studentView|coachPageTitle|coachGlobalSearch|syncPill|coachNotifyCount/);
