@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -153,9 +154,44 @@
           </section>
         </section>
       </section>
+      <section class="reports-page hidden" id="reportsPage">
+        <header class="reports-head">
+          <div><span class="dashboard-eyebrow">TAKİP & RAPOR</span><h1>Takip & Rapor</h1><p>Öğrencilerin çalışma düzenini, görev tamamlama oranını ve haftalık performansını tek ekranda incele.</p></div>
+          <div class="reports-actions"><button type="button" class="reports-range">Bu Hafta⌄</button><button type="button" class="reports-export">Raporu Dışa Aktar</button></div>
+        </header>
+        <section class="reports-kpis">
+          <article><span>✓</span><div><small>Görev Tamamlama</small><strong>—</strong><em>Genel oran</em></div></article>
+          <article><span>◷</span><div><small>Çalışma Süresi</small><strong>—</strong><em>Bu hafta</em></div></article>
+          <article><span>↗</span><div><small>Aktif Gün</small><strong>—</strong><em>Son 7 gün</em></div></article>
+          <article><span>!</span><div><small>Takip Gereken</small><strong>—</strong><em>Öğrenci</em></div></article>
+        </section>
+        <section class="reports-grid">
+          <article class="report-panel report-progress">
+            <div class="report-title"><div><h2>Haftalık çalışma görünümü</h2><p>Öğrencilerin gün bazında çalışma yoğunluğu</p></div><button type="button">Öğrenci seç</button></div>
+            <div class="report-chart-empty">
+              <div class="chart-bars"><i style="height:34%"></i><i style="height:58%"></i><i style="height:46%"></i><i style="height:72%"></i><i style="height:52%"></i><i style="height:66%"></i><i style="height:40%"></i></div>
+              <div class="chart-days"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>
+              <p>Gerçek çalışma verileri geldiğinde grafik otomatik dolacak.</p>
+            </div>
+          </article>
+          <article class="report-panel report-alerts">
+            <div class="report-title"><div><h2>Dikkat Gerekenler</h2><p>Koç müdahalesi gerekebilecek durumlar</p></div></div>
+            <div class="report-empty"><span>◎</span><b>Şimdilik uyarı yok</b><p>Eksik program, düşük görev tamamlama veya uzun süreli pasiflik burada gösterilecek.</p></div>
+          </article>
+          <article class="report-panel report-students">
+            <div class="report-title"><div><h2>Öğrenci Performansı</h2><p>Haftalık genel durum karşılaştırması</p></div><label class="report-search"><span>⌕</span><input type="search" placeholder="Öğrenci ara..."></label></div>
+            <div class="report-table-head"><span>Öğrenci</span><span>Tamamlanma</span><span>Çalışma</span><span>Aktif gün</span><span>Durum</span></div>
+            <div class="report-table-empty"><span>♟</span><div><b>Henüz rapor verisi yok</b><p>Bağlı öğrencilerin çalışma verileri geldikçe karşılaştırmalı görünüm burada oluşacak.</p></div></div>
+          </article>
+          <article class="report-panel report-summary">
+            <div class="report-title"><div><h2>Koç Özeti</h2><p>Haftanın kısa değerlendirmesi</p></div></div>
+            <div class="summary-lines"><div><span>Program uyumu</span><strong>—</strong></div><div><span>Ortalama çalışma</span><strong>—</strong></div><div><span>En aktif gün</span><strong>—</strong></div></div>
+          </article>
+        </section>
+      </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.3"></script>
 </body>
 </html>
