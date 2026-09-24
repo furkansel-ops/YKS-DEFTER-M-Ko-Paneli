@@ -4,85 +4,62 @@ const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
+const exists=file=>fs.existsSync(path.join(root,file));
 
-test('panel bağımsız Firebase projesine bağlanır',()=>{
-  const config=read('firebase-config.js');
-  assert.match(config,/projectId:"yks-uygulamam"/);
-  assert.match(config,/studentCoachCodes/);
-  assert.match(config,/coachingShares/);
-  assert.match(config,/coachingActions/);
-});
-
-test('koç paneli öğrenci koduyla güvenli bağlantı kurar',()=>{
-  const app=read('app.js');
-  assert.match(app,/\^\[A-Z2-9\]\{12\}\$/);
-  assert.match(app,/COLLECTIONS\.studentCodes/);
-  assert.match(app,/where\("coachUid","==",state\.user\.uid\)/);
-  assert.match(app,/accessCode,active:true/);
-});
-
-test('öğrenci detay sekmeleri yeni core üzerinden render edilir',()=>{
-  const app=read('app.js');
-  const css=read('dashboard-v20.css');
-  for(const label of ['Özet','Program','Deneme','İlerleme','Konular','Hata Defteri'])assert.ok(app.includes(label),label);
-  for(const fn of ['renderSummary','renderProgram','renderExams','renderProgress','renderTopics','renderErrors'])assert.match(app,new RegExp('function '+fn));
-  assert.doesNotMatch(app,/topics-live-v18/);
-  assert.match(css,/v3\.1 · Tamamen yeni öğrenci detay sayfası/);
-  assert.match(css,/\.student-detail-page-v3/);
-  assert.match(css,/\.student-detail-hero-v3/);
-  assert.match(css,/\.student-detail-nav-v3/);
-});
-
-test('Program detay görünümü gerçek öğrenci Programım sözleşmesini korur',()=>{
-  const app=read('app.js');
-  for(const token of ['rowLabels','weeks','done','dn','mv','Rutinler','Ders Programım','Bu hafta'])assert.ok(app.includes(token),token);
-  for(const day of ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'])assert.ok(app.includes(day),day);
-  assert.match(app,/programGrid\(model,week,"r","Rutinler"\)/);
-  assert.match(app,/programGrid\(model,week,"s","Ders Programım"\)/);
-  assert.match(app,/onSnapshot\(doc\(db,COLLECTIONS\.shares,uid\)/);
-});
-
-test('koç görevleri kontrollü action kuyruğuna gönderilir',()=>{
-  const app=read('app.js');
-  assert.match(app,/COLLECTIONS\.actions/);
-  assert.match(app,/status:"pending"/);
-  for(const type of ['program_task','coach_note','post_exam_task'])assert.ok(app.includes(type),type);
-});
-
-test('eski detay tema ve enhancer assetleri artık yüklenmez',()=>{
+test('panel yalnız sol menü ve boş çalışma alanı ile açılır',()=>{
   const html=read('index.html');
-  const forbidden=[
-    'program-v12.css','program-live-v14.css','program-calendar-v19.css','program-calendar-v19.js',
-    'program-mirror-v14.js','summary-live-v15.css','summary-live-v15.js',
-    'exam-live-v16.css','exam-live-v16.js','progress-live-v17.css','progress-live-v17.js',
-    'topics-live-v18.css','topics-live-v18.mjs'
-  ];
-  for(const file of forbidden)assert.ok(!html.includes(file),file);
-  assert.match(html,/core-v20\.css\?v=2\.3\.0/);
-  assert.match(html,/dashboard-v20\.css\?v=3\.1\.0/);
-  assert.match(html,/app\.js\?v=3\.1\.0/);
-  assert.match(html,/dashboard-v20\.js\?v=3\.1\.0/);
+  for(const label of ['Ana Sayfa','Öğrenciler','Programlar','Deneme Analizi','Konular','Hata Defteri','Mesajlar','Ayarlar'])assert.ok(html.includes(label),label);
+  assert.match(html,/Takip &amp; Rapor/);
+  assert.match(html,/class="sidebar coach-sidebar-v20"/);
+  assert.match(html,/class="coach-reset-canvas"/);
+  assert.doesNotMatch(html,/coach-topbar-v20|dashboardView|studentView|coachPageTitle|coachGlobalSearch|syncPill|coachNotifyCount/);
 });
 
-test('yeni detay programı dashboard v3.1 canonical stillerini kullanır',()=>{
-  const css=read('dashboard-v20.css');
-  for(const token of ['.canonical-program-shell','.canonical-program-grid','.canonical-program-cell.is-done','.canonical-program-cell.is-moved','.student-detail-workspace-v3'])assert.ok(css.includes(token),token);
-  assert.doesNotMatch(css,/\.program-live-note|\.coach-student-detail-v20/);
+test('eski sağ taraf dashboard dosyaları repodan silinmiştir',()=>{
+  for(const file of ['app.js','dashboard-v20.js','dashboard-v20.css','core-v20.css'])assert.equal(exists(file),false,file);
+  assert.equal(exists('app-reset.js'),true);
+  assert.equal(exists('sidebar-v20.css'),true);
+  assert.equal(exists('base-reset.css'),true);
 });
 
-test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
+test('index sadece reset runtime ve sidebar stillerini yükler',()=>{
+  const html=read('index.html');
+  assert.match(html,/base-reset\.css\?v=1\.0\.0/);
+  assert.match(html,/sidebar-v20\.css\?v=1\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.0/);
+  assert.doesNotMatch(html,/dashboard-v20|app\.js\?|core-v20/);
+});
+
+test('sol menü görünümü ve mobil açılışı korunur',()=>{
+  const css=read('sidebar-v20.css');
+  const js=read('app-reset.js');
+  assert.match(css,/\.coach-sidebar-v20/);
+  assert.match(css,/\.coach-nav-item\.on/);
+  assert.match(css,/\.coach-profile-v20/);
+  assert.match(css,/@media\(max-width:1000px\)/);
+  assert.match(js,/openSidebar/);
+  assert.match(js,/closeSidebar/);
+  assert.match(js,/data-coach-page/);
+  assert.doesNotThrow(()=>new Function(js.replace(/^import[^\n]+\n/gm,'')));
+});
+
+test('koç girişi ve profil bilgisi reset runtime içinde korunur',()=>{
+  const js=read('app-reset.js');
+  assert.match(js,/initializeApp/);
+  assert.match(js,/getAuth/);
+  assert.match(js,/loadCoachProfile/);
+  assert.match(js,/profile\?\.role==="coach"/);
+  assert.match(js,/coachSidebarName/);
+  assert.match(js,/coachSidebarAvatar/);
+  assert.match(js,/signOut/);
+});
+
+test('kayıt ekranı minimal reset stilini kullanır',()=>{
+  const html=read('register.html');
   const register=read('register.js');
+  assert.match(html,/base-reset\.css\?v=1\.0\.0/);
+  assert.doesNotMatch(html,/core-v20|dashboard-v20/);
   assert.match(register,/existing\.role==="coach"/);
   assert.match(register,/öğrenci hesabı olarak kayıtlı/);
   assert.match(register,/emailVerified/);
-});
-
-
-test('eski studentView tamamen DOMdan kaldırılmıştır',()=>{
-  const html=read('index.html');
-  const js=read('dashboard-v20.js');
-  assert.doesNotMatch(html,/id="studentView"|id="tabs"|id="content"|id="studentName"|id="shareState"/);
-  assert.match(js,/studentDetailPage/);
-  assert.match(js,/student-detail-page-v3/);
-  assert.match(js,/data-detail-section/);
 });

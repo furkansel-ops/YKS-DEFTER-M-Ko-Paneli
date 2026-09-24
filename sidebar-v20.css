@@ -1,0 +1,126 @@
+/* YKS Defterim Koç Paneli · Sidebar-only reset */
+.coach-shell-reset{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:220px minmax(0,1fr);
+  background:#f4f7fb;
+}
+.coach-sidebar-v20{
+  width:auto;
+  height:100vh;
+  padding:18px 12px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:sticky;
+  top:0;
+  overflow:auto;
+  background:linear-gradient(180deg,#0d1829 0%,#0b1524 100%);
+  border-right:1px solid #17243a;
+  color:#edf4ff;
+  z-index:20;
+}
+.coach-brand-v20{display:flex;align-items:center;gap:12px;padding:0 8px 8px}
+.coach-brand-v20 .brand-mark{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#72b7ff,#2f79eb);
+  color:#061323;font-weight:900;
+  box-shadow:0 9px 22px rgba(47,121,235,.24)
+}
+.coach-brand-v20 .brand-copy b,.coach-brand-v20 .brand-copy span{display:block}
+.coach-brand-v20 .brand-copy b{font-size:16px;color:#fff}
+.coach-brand-v20 .brand-copy span{font-size:10px;color:#86a7d2;margin-top:2px}
+
+.coach-nav-v20{display:grid;gap:5px;margin-top:3px}
+.coach-nav-item{
+  width:100%;
+  min-height:42px;
+  padding:0 12px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#c9d5e7;
+  display:grid;
+  grid-template-columns:24px 1fr;
+  align-items:center;
+  gap:8px;
+  text-align:left;
+  cursor:pointer;
+}
+.coach-nav-item>span{font-size:16px;color:#b4c6dd;text-align:center}
+.coach-nav-item>b{font-size:12px;font-weight:650}
+.coach-nav-item:hover{background:#15243b;color:#fff}
+.coach-nav-item.on{
+  background:linear-gradient(90deg,#17365c,#162c4b);
+  color:#fff;
+  box-shadow:inset 3px 0 #31a7ff
+}
+.coach-nav-item.on>span{color:#58c5ff}
+
+.coach-sidebar-spacer{flex:1}
+.coach-profile-v20{
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:10px;
+  align-items:center;
+  padding:11px;
+  border:1px solid #1b2a40;
+  border-radius:13px;
+  background:#111e31
+}
+.coach-profile-avatar{
+  width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#416ee6,#6e55d9);
+  color:#fff;font-weight:800
+}
+.coach-profile-v20 span,.coach-profile-v20 b{display:block}
+.coach-profile-v20 span{font-size:9px;color:#7f91aa}
+.coach-profile-v20 b{font-size:11px;color:#fff;margin-top:2px}
+.sidebar-footer{display:grid;gap:8px}
+.coach-signout-v20{
+  width:100%;height:40px;
+  border:0;border-radius:10px;
+  background:transparent;
+  color:#9eb0c8;
+  text-align:left;
+  padding:0 12px;
+  cursor:pointer
+}
+.coach-signout-v20:hover{background:#15243b;color:#fff}
+
+.coach-reset-canvas{
+  min-width:0;
+  min-height:100vh;
+  position:relative;
+  background:#f4f7fb;
+}
+.coach-mobile-menu-reset{
+  position:fixed;
+  left:12px;
+  top:12px;
+  width:40px;
+  height:40px;
+  border:1px solid #dbe3ee;
+  border-radius:10px;
+  background:#fff;
+  color:#1c2b40;
+  box-shadow:0 8px 22px rgba(30,46,72,.1);
+  z-index:12;
+  cursor:pointer
+}
+
+@media(max-width:1000px){
+  .coach-shell-reset{display:block}
+  .coach-sidebar-v20{
+    position:fixed;
+    left:0;top:0;
+    width:min(86vw,240px);
+    transform:translateX(-105%);
+    transition:transform .22s ease;
+    box-shadow:0 20px 60px rgba(7,16,29,.25)
+  }
+  .coach-sidebar-v20.open{transform:translateX(0)}
+  .mobile-only{display:inline-flex!important;align-items:center;justify-content:center}
+}
