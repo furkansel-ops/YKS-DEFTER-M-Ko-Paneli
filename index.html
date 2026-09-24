@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.2.0">
-  <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./programs-v21.css?v=2.2.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
@@ -186,39 +186,92 @@
       </div>
       <section class="programs-page hidden" id="programsPage">
         <header class="programs-head">
-          <div><span class="dashboard-eyebrow">PROGRAM YÖNETİMİ</span><h1>Programlar</h1><p>Öğrencinin kendi hazırladığı haftalık programı görüntüle, günleri incele ve ilerlemeyi takip et.</p></div>
-          <div class="program-head-actions"><button type="button" class="program-secondary">Şablonlar</button><button type="button" class="program-primary">＋ Program Oluştur</button></div>
+          <div>
+            <span class="dashboard-eyebrow">PROGRAM YÖNETİMİ</span>
+            <h1>Programlar</h1>
+            <p>Öğrencinin YKS Defterim'de hazırladığı haftalık programı gerçek zamanlı görüntüle ve koç görevi ekle.</p>
+          </div>
+          <div class="program-head-actions">
+            <button type="button" class="program-secondary" id="programTemplatesBtn">Şablonlar</button>
+            <button type="button" class="program-primary" id="programAddTaskBtn">＋ Görev Ekle</button>
+          </div>
         </header>
+
         <section class="program-layout">
           <aside class="program-students">
-            <div class="program-side-title"><div><b>Öğrenciler</b><small>Programını görmek istediğin öğrenciyi seç</small></div></div>
-            <label class="program-search"><span>⌕</span><input type="search" placeholder="Öğrenci ara..."></label>
-            <div class="program-student-empty"><span>♟</span><b>Bağlı öğrenci yok</b><p>Öğrenciler bağlandığında burada listelenecek.</p></div>
+            <div class="program-side-title">
+              <div><b>Öğrenciler</b><small>Programını görmek istediğin öğrenciyi seç</small></div>
+              <span id="programStudentCount">0</span>
+            </div>
+            <label class="program-search"><span>⌕</span><input id="programStudentSearch" type="search" placeholder="Öğrenci ara..."></label>
+            <div class="program-student-empty" id="programStudentEmpty">
+              <span>♟</span><b>Bağlı öğrenci yok</b><p>Öğrenci eklediğinde burada otomatik görünecek.</p>
+            </div>
+            <div class="program-student-list hidden" id="programStudentList"></div>
           </aside>
+
           <section class="program-workspace">
             <div class="program-toolbar">
-              <div><span class="program-week-label">HAFTALIK PROGRAM</span><h2>Öğrenci programı</h2></div>
-              <div class="week-nav"><button type="button">‹</button><strong>Bu Hafta</strong><button type="button">›</button></div>
+              <div>
+                <span class="program-week-label">HAFTALIK PROGRAM</span>
+                <h2 id="programWorkspaceTitle">Bir öğrenci seç</h2>
+                <small id="programWorkspaceMeta">Öğrencinin programı burada açılacak.</small>
+              </div>
+              <div class="week-nav">
+                <button type="button" id="programPrevWeek" aria-label="Önceki hafta">‹</button>
+                <strong id="programWeekLabel">—</strong>
+                <button type="button" id="programNextWeek" aria-label="Sonraki hafta">›</button>
+              </div>
             </div>
+
             <div class="program-summary">
-              <article><small>Haftalık görev</small><strong>—</strong><span>Planlanan</span></article>
-              <article><small>Tamamlanan</small><strong>—</strong><span>Görev</span></article>
-              <article><small>Çalışma süresi</small><strong>—</strong><span>Toplam</span></article>
-              <article><small>İlerleme</small><strong>—</strong><span>Haftalık</span></article>
+              <article><small>Haftalık görev</small><strong id="programTaskCount">—</strong><span>Planlanan</span></article>
+              <article><small>Tamamlanan gün</small><strong id="programDoneDays">—</strong><span id="programDoneMeta">Haftalık</span></article>
+              <article><small>Çalışma süresi</small><strong id="programStudyTime">—</strong><span>Son 7 gün</span></article>
+              <article><small>Program uyumu</small><strong id="programProgress">—</strong><span>Haftalık</span></article>
             </div>
-            <div class="week-board">
-              <div class="day-column"><header><b>Pzt</b><small>Pazartesi</small></header><div class="day-empty">Program yok</div></div>
-              <div class="day-column"><header><b>Sal</b><small>Salı</small></header><div class="day-empty">Program yok</div></div>
-              <div class="day-column"><header><b>Çar</b><small>Çarşamba</small></header><div class="day-empty">Program yok</div></div>
-              <div class="day-column"><header><b>Per</b><small>Perşembe</small></header><div class="day-empty">Program yok</div></div>
-              <div class="day-column"><header><b>Cum</b><small>Cuma</small></header><div class="day-empty">Program yok</div></div>
-              <div class="day-column"><header><b>Cmt</b><small>Cumartesi</small></header><div class="day-empty">Program yok</div></div>
-              <div class="day-column"><header><b>Paz</b><small>Pazar</small></header><div class="day-empty">Program yok</div></div>
+
+            <div class="week-board" id="programWeekBoard"></div>
+
+            <div class="program-main-empty" id="programMainEmpty">
+              <span>▣</span><div><b>Bir öğrenci seç</b><p>Soldaki listeden öğrenciyi seçtiğinde kendi hazırladığı program gün gün burada açılacak.</p></div>
             </div>
-            <div class="program-main-empty"><span>▣</span><div><b>Bir öğrenci seç</b><p>Öğrencinin YKS Defterim'de hazırladığı program burada gün gün görüntülenecek.</p></div></div>
           </section>
         </section>
+
+        <div class="program-template-popover hidden" id="programTemplatePopover">
+          <div class="program-template-head">
+            <div><span>HAZIR ŞABLONLAR</span><b>Hızlı görev ekle</b></div>
+            <button type="button" id="programTemplateClose">×</button>
+          </div>
+          <div class="program-template-list">
+            <button type="button" data-program-template="Bugünkü eksik konularını tamamla ve gün sonunda kısa tekrar yap."><b>Günlük tamamlama</b><small>Eksik konu + tekrar</small></button>
+            <button type="button" data-program-template="40 soru paragraf çöz ve yanlışlarını Hata Defteri'ne ekle."><b>Paragraf çalışması</b><small>40 soru + yanlış analizi</small></button>
+            <button type="button" data-program-template="Son denemendeki yanlış yaptığın konulardan 30 soru çöz."><b>Deneme sonrası</b><small>Yanlış konu odaklı</small></button>
+            <button type="button" data-program-template="Bu haftanın eksik kalan görevlerini tamamla ve bitenleri işaretle."><b>Hafta toparlama</b><small>Eksik görev kontrolü</small></button>
+          </div>
+        </div>
+
+        <div class="program-task-backdrop hidden" id="programTaskBackdrop" aria-hidden="true">
+          <section class="program-task-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
+            <header>
+              <div><span>KOÇ GÖREVİ</span><h2 id="programTaskTitle">Programa görev ekle</h2><p id="programTaskStudentName">Önce bir öğrenci seç.</p></div>
+              <button type="button" id="programTaskClose">×</button>
+            </header>
+            <div class="program-task-body">
+              <label><span>Tarih</span><input id="programTaskDate" type="date"></label>
+              <label><span>Görev</span><textarea id="programTaskText" maxlength="220" placeholder="Örn. Matematik Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/220</small></label>
+              <div class="program-task-info">Görev öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle eklenecek.</div>
+              <div class="program-task-status hidden" id="programTaskStatus"></div>
+            </div>
+            <footer>
+              <button type="button" class="program-task-cancel" id="programTaskCancel">Vazgeç</button>
+              <button type="button" class="program-task-send" id="programTaskSend">Görevi gönder</button>
+            </footer>
+          </section>
+        </div>
       </section>
+</section>
       <section class="reports-page hidden" id="reportsPage">
         <header class="reports-head">
           <div>
@@ -970,6 +1023,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.16"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.17"></script>
 </body>
 </html>
