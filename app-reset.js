@@ -159,13 +159,17 @@ async function loadCoachReports(coachUid){
       select.innerHTML='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
       select.value="all";
     }
-    renderReport("all");
-    hydrateExamStudentSelect();
-    renderExamAnalysis("all");
-    hydrateTopicControls();
-    renderTopicAnalysis("all");
-    hydrateErrorControls();
-    renderErrorAnalysis("all");
+    try{renderReport("all")}catch(error){console.error("Takip & Rapor render",error);setReportState("reportError")}
+    try{hydrateExamStudentSelect();renderExamAnalysis("all")}catch(error){console.error("Deneme Analizi render",error);setExamState("examEmpty")}
+    try{hydrateTopicControls();renderTopicAnalysis("all")}catch(error){console.error("Konular render",error);setTopicState("topicEmpty")}
+    try{
+      hydrateErrorControls();
+      renderErrorAnalysis("all");
+    }catch(error){
+      console.error("Hata Defteri render",error);
+      if($("errorLoadErrorText"))$("errorLoadErrorText").textContent=String(error?.message||"Hata kayıtları görüntülenemedi.");
+      setErrorState("errorLoadError");
+    }
   }catch(error){
     console.error("Takip raporları",error);
     if($("reportErrorText"))$("reportErrorText").textContent=String(error?.message||"Rapor verileri alınamadı.");
@@ -500,7 +504,7 @@ function hydrateErrorControls(){
   }
 }
 function setErrorState(name){
-  ["errorLoading","errorEmpty","errorOverview","errorStudentDetail"].forEach(id=>$(id)?.classList.add("hidden"));
+  ["errorLoading","errorEmpty","errorLoadError","errorOverview","errorStudentDetail"].forEach(id=>$(id)?.classList.add("hidden"));
   $(name)?.classList.remove("hidden");
 }
 function errorKpi(label,value,note,tone=""){
@@ -560,6 +564,19 @@ function renderErrorStudent(row){
   $("errorRepeatedTopics").innerHTML=repeated.length?repeated.slice(0,8).map(item=>'<div><span><b>'+escHtml(item.topic)+'</b><small>'+escHtml(item.subject)+' · '+escHtml(item.last||"Tarih yok")+'</small></span><strong>'+item.total+' yanlış</strong></div>').join(""):'<div class="error-mini-empty">Tekrar eden konu görünmüyor.</div>';
   setErrorState("errorStudentDetail");
 }
-$("errorStudentSelect")?.addEventListener("change",event=>renderErrorAnalysis(event.currentTarget.value));
-$("errorSubjectSelect")?.addEventListener("change",()=>renderErrorAnalysis($("errorStudentSelect")?.value||"all"));
+function safeRenderErrors(scope){
+  try{
+    hydrateErrorControls();
+    renderErrorAnalysis(scope);
+  }catch(error){
+    console.error("Hata Defteri",error);
+    if($("errorLoadErrorText"))$("errorLoadErrorText").textContent=String(error?.message||"Hata kayıtları görüntülenemedi.");
+    setErrorState("errorLoadError");
+  }
+}
+$("errorStudentSelect")?.addEventListener("change",event=>safeRenderErrors(event.currentTarget.value));
+$("errorSubjectSelect")?.addEventListener("change",()=>safeRenderErrors($("errorStudentSelect")?.value||"all"));
 $("errorRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setErrorState("errorLoading");void loadCoachReports(user.uid)}});
+document.querySelector('[data-coach-page="errors"]')?.addEventListener("click",()=>{
+  if(coachReportRows.length)safeRenderErrors($("errorStudentSelect")?.value||"all");
+});
