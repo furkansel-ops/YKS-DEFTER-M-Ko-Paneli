@@ -57,7 +57,7 @@ $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
 function showCoachPage(page){
-  const availablePages={home:"homePage",students:"studentsPage"};
+  const availablePages={home:"homePage",students:"studentsPage",programs:"programsPage"};
   const targetId=availablePages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
