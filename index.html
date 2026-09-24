@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
+  <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -258,9 +259,108 @@
           </section>
         </div>
       </section>
+      <section class="exams-page hidden" id="examsPage">
+        <header class="exams-head">
+          <div>
+            <span class="dashboard-eyebrow">DENEME ANALİZİ</span>
+            <h1>Deneme Analizi</h1>
+            <p>Öğrencilerin deneme gelişimini, son netlerini ve ders bazlı dağılımını gerçek verilerle incele.</p>
+          </div>
+          <button class="exam-refresh" id="examRefreshBtn" type="button">↻ Verileri yenile</button>
+        </header>
+
+        <section class="exam-control-card">
+          <div class="exam-control-copy">
+            <span>ANALİZ GÖRÜNÜMÜ</span>
+            <b id="examScopeTitle">Tüm öğrenciler</b>
+            <small id="examScopeMeta">Deneme performans özeti</small>
+          </div>
+          <div class="exam-control-fields">
+            <label>
+              <span>Öğrenci</span>
+              <select id="examStudentSelect"><option value="all">Tüm öğrenciler</option></select>
+            </label>
+            <label>
+              <span>Deneme türü</span>
+              <select id="examTypeSelect"><option value="all">Tümü</option><option value="TYT">TYT</option><option value="AYT">AYT</option></select>
+            </label>
+          </div>
+        </section>
+
+        <div id="examLoading" class="exam-state">
+          <span>↻</span><div><b>Denemeler hazırlanıyor</b><p>Öğrencilerin güncel deneme verileri alınıyor.</p></div>
+        </div>
+        <div id="examEmpty" class="exam-state hidden">
+          <span>▤</span><div><b>Henüz deneme verisi yok</b><p>Öğrenciler deneme eklediğinde sonuçları burada otomatik görünecek.</p></div>
+        </div>
+
+        <div id="examOverview" class="hidden">
+          <section class="exam-kpis" id="examOverviewKpis"></section>
+          <section class="exam-overview-grid">
+            <article class="exam-card exam-recent-card">
+              <div class="exam-card-head">
+                <div><span>SON DENEMELER</span><h2>Güncel sonuçlar</h2><p>Bağlı öğrencilerden gelen en yeni denemeler.</p></div>
+              </div>
+              <div class="exam-table-head"><span>Öğrenci</span><span>Deneme</span><span>Tür</span><span>Tarih</span><span>Net</span></div>
+              <div id="examRecentList" class="exam-recent-list"></div>
+            </article>
+            <article class="exam-card exam-comparison-card">
+              <div class="exam-card-head compact">
+                <div><span>ÖĞRENCİ KARŞILAŞTIRMA</span><h2>Son netler</h2><p>Her öğrencinin son deneme sonucu.</p></div>
+              </div>
+              <div id="examComparisonList" class="exam-comparison-list"></div>
+            </article>
+          </section>
+        </div>
+
+        <div id="examStudentDetail" class="hidden">
+          <section class="exam-student-hero">
+            <div class="exam-avatar" id="examStudentAvatar">Ö</div>
+            <div class="exam-student-copy">
+              <span>ÖĞRENCİ DENEME RAPORU</span>
+              <h2 id="examStudentName">Öğrenci</h2>
+              <p id="examStudentTarget">Hedef bilgisi yok</p>
+            </div>
+            <div class="exam-latest-pill" id="examLatestPill">—</div>
+          </section>
+
+          <section class="exam-kpis" id="examStudentKpis"></section>
+
+          <section class="exam-detail-grid">
+            <article class="exam-card exam-trend-card">
+              <div class="exam-card-head">
+                <div><span>NET GELİŞİMİ</span><h2>Deneme trendi</h2><p>Seçili türdeki son denemelerin toplam net gelişimi.</p></div>
+              </div>
+              <div class="exam-trend-chart" id="examTrendChart"></div>
+            </article>
+
+            <article class="exam-card exam-subject-card">
+              <div class="exam-card-head compact">
+                <div><span>DERS DAĞILIMI</span><h2>Son deneme</h2><p>Ders bazında net görünümü.</p></div>
+              </div>
+              <div class="exam-subject-list" id="examSubjectList"></div>
+            </article>
+
+            <article class="exam-card exam-history-card">
+              <div class="exam-card-head">
+                <div><span>DENEME GEÇMİŞİ</span><h2>Tüm sonuçlar</h2><p>En yeniden eskiye öğrenci denemeleri.</p></div>
+              </div>
+              <div class="exam-history-head"><span>Deneme</span><span>Tür</span><span>Tarih</span><span>Toplam net</span><span>Değişim</span></div>
+              <div id="examHistoryList" class="exam-history-list"></div>
+            </article>
+
+            <article class="exam-card exam-insight-card">
+              <div class="exam-card-head compact">
+                <div><span>HIZLI OKUMA</span><h2>Koç için özet</h2></div>
+              </div>
+              <div id="examInsight" class="exam-insight"></div>
+            </article>
+          </section>
+        </div>
+      </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.5"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.6"></script>
 </body>
 </html>
