@@ -1,6 +1,6 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG);
@@ -32,6 +32,7 @@ function showApp(profile,user){
   const dashName=$("dashboardCoachName");if(dashName)dashName.textContent=name.split(/\\s+/)[0]||"Koç";
   const dashDate=$("dashboardDate");if(dashDate)dashDate.textContent=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
   void loadCoachReports(user.uid);
+  void loadCoachMessages(user.uid);
 }
 async function loadCoachProfile(user){
   const snap=await getDoc(doc(db,COLLECTIONS.profiles,user.uid));
@@ -57,12 +58,12 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
-const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage"};
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage"};
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage").forEach(section=>section.classList.add("hidden"));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
   closeSidebar();
 }
@@ -579,4 +580,126 @@ $("errorSubjectSelect")?.addEventListener("change",()=>safeRenderErrors($("error
 $("errorRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setErrorState("errorLoading");void loadCoachReports(user.uid)}});
 document.querySelector('[data-coach-page="errors"]')?.addEventListener("click",()=>{
   if(coachReportRows.length)safeRenderErrors($("errorStudentSelect")?.value||"all");
+});
+
+
+let coachMessageActions=[];
+let selectedMessageStudent="";
+function messageTimestamp(value){
+  try{
+    const d=value?.toDate?.()||new Date(value);
+    if(!d||Number.isNaN(d.getTime()))return"—";
+    return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d);
+  }catch{return"—"}
+}
+function messageStatusText(status){
+  return status==="applied"?"Uygulandı":status==="rejected"?"Başarısız":status==="cancelled"?"İptal":status==="pending"?"Bekliyor":"Gönderildi";
+}
+function messageStatusClass(status){
+  return status==="applied"?"applied":status==="rejected"?"failed":status==="cancelled"?"cancelled":"pending";
+}
+async function loadCoachMessages(coachUid){
+  if(!coachUid)return;
+  try{
+    const snap=await getDocs(query(collection(db,"coachingActions"),where("coachUid","==",coachUid)));
+    coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type==="coach_note").sort((a,b)=>{
+      const av=a?.createdAt?.toMillis?.()||0,bv=b?.createdAt?.toMillis?.()||0;return av-bv;
+    });
+  }catch(error){
+    console.error("Mesajlar",error);
+    coachMessageActions=[];
+  }
+  renderMessageStudents();
+  if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
+}
+function messageRows(){
+  return coachReportRows.filter(row=>row?.link?.active===true);
+}
+function renderMessageStudents(){
+  const rows=messageRows(),list=$("messageStudentList");
+  if($("messageStudentCount"))$("messageStudentCount").textContent=String(rows.length);
+  if(!list)return;
+  if(!rows.length){
+    list.innerHTML='<div class="message-side-empty">Henüz bağlı öğrenci yok.</div>';
+    $("messageNoStudent")?.classList.remove("hidden");
+    $("messageConversation")?.classList.add("hidden");
+    $("messageInfoEmpty")?.classList.remove("hidden");
+    $("messageInfoPanel")?.classList.add("hidden");
+    return;
+  }
+  list.innerHTML=rows.map(row=>{
+    const name=studentName(row),actions=coachMessageActions.filter(x=>x.studentUid===row.studentUid),last=actions.at(-1);
+    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.payload?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small>'+(last?'<i class="'+messageStatusClass(last.status)+'"></i>':'')+'</span></button>';
+  }).join("");
+  document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{
+    selectedMessageStudent=btn.dataset.messageStudent;
+    renderMessageStudents();
+    renderMessageConversation(selectedMessageStudent);
+  }));
+  if(!selectedMessageStudent&&rows.length){
+    selectedMessageStudent=rows[0].studentUid;
+    renderMessageStudents();
+    renderMessageConversation(selectedMessageStudent);
+  }
+}
+function renderMessageConversation(studentUid){
+  const row=coachReportRows.find(x=>x.studentUid===studentUid);
+  if(!row)return;
+  const name=studentName(row),profile=row.share?.profile||{},actions=coachMessageActions.filter(x=>x.studentUid===studentUid);
+  $("messageNoStudent")?.classList.add("hidden");
+  $("messageConversation")?.classList.remove("hidden");
+  $("messageInfoEmpty")?.classList.add("hidden");
+  $("messageInfoPanel")?.classList.remove("hidden");
+  $("messageChatAvatar").textContent=reportInitial(name);
+  $("messageChatName").textContent=name;
+  $("messageChatMeta").textContent=[profile.track,profile.targetDepartment].filter(Boolean).join(" · ")||"Bağlı öğrenci";
+  $("messageInfoAvatar").textContent=reportInitial(name);
+  $("messageInfoName").textContent=name;
+  $("messageInfoTarget").textContent=[profile.track,profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ")||"YKS öğrencisi";
+  $("messageSentCount").textContent=String(actions.length);
+  $("messageAppliedCount").textContent=String(actions.filter(x=>x.status==="applied").length);
+  $("messagePendingCount").textContent=String(actions.filter(x=>x.status==="pending").length);
+  const thread=$("messageThread");
+  if(thread){
+    thread.innerHTML=actions.length?actions.map(action=>'<div class="message-bubble-row outgoing"><div class="message-bubble"><p>'+escHtml(action?.payload?.text||"")+'</p><div><span>'+escHtml(messageTimestamp(action.createdAt))+'</span><strong class="'+messageStatusClass(action.status)+'">'+escHtml(messageStatusText(action.status))+'</strong></div></div></div>').join(""):'<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>Bu öğrenciye ilk koç mesajını aşağıdan gönderebilirsin.</p></div>';
+    thread.scrollTop=thread.scrollHeight;
+  }
+}
+async function sendCoachMessage(){
+  const studentUid=selectedMessageStudent,input=$("messageInput"),button=$("messageSendBtn"),user=auth.currentUser;
+  const value=String(input?.value||"").trim().slice(0,500);
+  if(!user||!studentUid||!value)return;
+  const row=coachReportRows.find(x=>x.studentUid===studentUid);
+  if(!row?.link?.active){alert("Bu öğrenciyle aktif koç bağlantısı bulunamadı.");return}
+  if(button)button.disabled=true;
+  try{
+    await addDoc(collection(db,"coachingActions"),{
+      studentUid,
+      coachUid:user.uid,
+      type:"coach_note",
+      payload:{text:value},
+      status:"pending",
+      createdAt:serverTimestamp(),
+      updatedAt:serverTimestamp()
+    });
+    if(input)input.value="";
+    if($("messageCharCount"))$("messageCharCount").textContent="0";
+    await loadCoachMessages(user.uid);
+  }catch(error){
+    console.error("Mesaj gönderilemedi",error);
+    alert("Mesaj gönderilemedi: "+String(error?.message||"Bilinmeyen hata"));
+  }finally{
+    if(button)button.disabled=false;
+  }
+}
+$("messageComposeForm")?.addEventListener("submit",event=>{event.preventDefault();void sendCoachMessage()});
+$("messageInput")?.addEventListener("input",event=>{if($("messageCharCount"))$("messageCharCount").textContent=String(event.currentTarget.value.length)});
+$("messageRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user)void loadCoachMessages(user.uid)});
+$("messageStudentSearch")?.addEventListener("input",event=>{
+  const q=String(event.currentTarget.value||"").trim().toLocaleLowerCase("tr-TR");
+  document.querySelectorAll("[data-message-name]").forEach(item=>item.classList.toggle("hidden",q&&!String(item.dataset.messageName||"").includes(q)));
+});
+document.querySelector('[data-coach-page="messages"]')?.addEventListener("click",()=>{
+  const user=auth.currentUser;
+  if(user){renderMessageStudents();void loadCoachMessages(user.uid)}
 });
