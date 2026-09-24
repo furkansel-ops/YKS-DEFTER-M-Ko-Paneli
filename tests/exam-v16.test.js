@@ -41,5 +41,5 @@ test('GitHub Pages Deneme v1.6 assetlerini yükler',()=>{
   assert.match(html,/exam-live-v16\.css\?v=1\.6\.0/);
   assert.match(html,/exam-live-v16\.js\?v=1\.6\.0/);
   assert.match(html,/summary-live-v15\.js\?v=1\.5\.0/);
-  assert.match(html,/program-mirror-v14\.js\?v=1\.5\.0/);
+  assert.match(html,/program-mirror-v14\.js\?v=1\.6\.0/);
 });

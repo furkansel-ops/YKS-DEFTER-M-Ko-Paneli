@@ -148,9 +148,9 @@ test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yü
   assert.match(html,/app\.js\?v=1\.8\.0/);
   assert.match(html,/styles\.css\?v=1\.5\.0/);
   assert.match(html,/ui-v11\.css\?v=1\.5\.0/);
-  assert.match(html,/program-v12\.css\?v=1\.5\.0/);
+  assert.match(html,/program-v12\.css\?v=1\.6\.0/);
   assert.match(html,/program-live-v14\.css\?v=1\.5\.0/);
-  assert.match(html,/program-mirror-v14\.js\?v=1\.5\.0/);
+  assert.match(html,/program-mirror-v14\.js\?v=1\.6\.0/);
   assert.match(html,/summary-live-v15\.css\?v=1\.5\.0/);
   assert.match(html,/summary-live-v15\.js\?v=1\.5\.0/);
   assert.match(html,/Koçluk Merkezi/);
@@ -179,4 +179,15 @@ test('Program v1.9 koç takvimini ve günlük plan detayını yükler',()=>{
   assert.match(js,/data-cal-date/);
   assert.match(css,/\.coach-calendar-grid/);
   assert.doesNotThrow(()=>new Function(js));
+});
+
+
+test('Programım koç aynası V2 ders renklerini yalnız görünüm katmanında uygular',()=>{
+  const mirror=read('program-mirror-v14.js');
+  const css=read('program-v12.css');
+  assert.match(mirror,/function toneClass/);
+  for(const tone of ['tone-math','tone-physics','tone-chemistry','tone-biology','tone-turkish','tone-review'])assert.ok((mirror+css).includes(tone),tone);
+  assert.match(mirror,/student-program-v2/);
+  assert.doesNotMatch(mirror,/setDoc|updateDoc|initializeApp|getFirestore/);
+  assert.match(css,/\.student-program-v2 \.student-program-task\.tone-math/);
 });
