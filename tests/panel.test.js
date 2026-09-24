@@ -145,7 +145,7 @@ test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yü
   const liveCss=read('program-live-v14.css');
   const summaryCss=read('summary-live-v15.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
-  assert.match(html,/app\.js\?v=1\.8\.0/);
+  assert.match(html,/app\.js\?v=2\.0\.0/);
   assert.match(html,/styles\.css\?v=1\.5\.0/);
   assert.match(html,/ui-v11\.css\?v=1\.5\.0/);
   assert.match(html,/program-v12\.css\?v=1\.5\.0/);
