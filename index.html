@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=2.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -156,42 +156,136 @@
       </section>
       <section class="reports-page hidden" id="reportsPage">
         <header class="reports-head">
-          <div><span class="dashboard-eyebrow">TAKİP & RAPOR</span><h1>Takip & Rapor</h1><p>Öğrencilerin çalışma düzenini, görev tamamlama oranını ve haftalık performansını tek ekranda incele.</p></div>
-          <div class="reports-actions"><button type="button" class="reports-range">Bu Hafta⌄</button><button type="button" class="reports-export">Raporu Dışa Aktar</button></div>
+          <div>
+            <span class="dashboard-eyebrow">TAKİP & RAPOR</span>
+            <h1>Takip & Rapor</h1>
+            <p>Öğrencilerin plan, çalışma ve süreklilik verilerini koç gözüyle tek ekranda değerlendir.</p>
+          </div>
+          <div class="reports-actions">
+            <button type="button" class="reports-export">⇩ Raporu Dışa Aktar</button>
+          </div>
         </header>
-        <section class="reports-kpis">
-          <article><span>✓</span><div><small>Görev Tamamlama</small><strong>—</strong><em>Genel oran</em></div></article>
-          <article><span>◷</span><div><small>Çalışma Süresi</small><strong>—</strong><em>Bu hafta</em></div></article>
-          <article><span>↗</span><div><small>Aktif Gün</small><strong>—</strong><em>Son 7 gün</em></div></article>
-          <article><span>!</span><div><small>Takip Gereken</small><strong>—</strong><em>Öğrenci</em></div></article>
+
+        <section class="reports-controlbar">
+          <div class="report-tabs" role="tablist" aria-label="Rapor görünümü">
+            <button class="active" type="button" data-report-view="overview">Genel Bakış</button>
+            <button type="button" data-report-view="student">Öğrenci Detayı</button>
+            <button type="button" data-report-view="compliance">Program Uyumu</button>
+          </div>
+          <div class="report-filters">
+            <label class="report-student-select">
+              <span>Öğrenci</span>
+              <select id="reportStudentSelect"><option>Tüm öğrenciler</option></select>
+            </label>
+            <label class="report-period-select">
+              <span>Dönem</span>
+              <select id="reportPeriodSelect"><option>Bu hafta</option><option>Geçen hafta</option><option>Son 30 gün</option></select>
+            </label>
+          </div>
         </section>
-        <section class="reports-grid">
-          <article class="report-panel report-progress">
-            <div class="report-title"><div><h2>Haftalık çalışma görünümü</h2><p>Öğrencilerin gün bazında çalışma yoğunluğu</p></div><button type="button">Öğrenci seç</button></div>
-            <div class="report-chart-empty">
-              <div class="chart-bars"><i style="height:34%"></i><i style="height:58%"></i><i style="height:46%"></i><i style="height:72%"></i><i style="height:52%"></i><i style="height:66%"></i><i style="height:40%"></i></div>
-              <div class="chart-days"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>
-              <p>Gerçek çalışma verileri geldiğinde grafik otomatik dolacak.</p>
+
+        <div class="report-view" data-report-panel="overview">
+          <section class="reports-kpis">
+            <article class="report-kpi">
+              <div class="kpi-top"><span class="kpi-icon">✓</span><small>PROGRAM UYUMU</small></div>
+              <strong>—</strong><p>Planlanan görevlerin tamamlanma oranı</p>
+            </article>
+            <article class="report-kpi">
+              <div class="kpi-top"><span class="kpi-icon">◷</span><small>ÇALIŞMA SÜRESİ</small></div>
+              <strong>—</strong><p>Seçili dönemde toplam çalışma</p>
+            </article>
+            <article class="report-kpi">
+              <div class="kpi-top"><span class="kpi-icon">▦</span><small>AKTİF GÜN</small></div>
+              <strong>—</strong><p>Düzenli çalışma yapılan gün sayısı</p>
+            </article>
+            <article class="report-kpi report-kpi-alert">
+              <div class="kpi-top"><span class="kpi-icon">!</span><small>TAKİP GEREKEN</small></div>
+              <strong>—</strong><p>Koç kontrolü bekleyen öğrenci</p>
+            </article>
+          </section>
+
+          <section class="reports-main-grid">
+            <article class="report-panel report-trend">
+              <div class="report-panel-head">
+                <div><span class="report-label">ÇALIŞMA TRENDİ</span><h2>Haftalık çalışma düzeni</h2><p>Günlük çalışma sürelerini ve sürekliliği karşılaştır.</p></div>
+                <div class="report-legend"><span><i></i> Çalışma süresi</span></div>
+              </div>
+              <div class="report-chart">
+                <div class="chart-y"><span>4s</span><span>3s</span><span>2s</span><span>1s</span><span>0</span></div>
+                <div class="chart-area">
+                  <div class="chart-grid"><i></i><i></i><i></i><i></i><i></i></div>
+                  <div class="chart-bars"><b style="height:18%"></b><b style="height:33%"></b><b style="height:24%"></b><b style="height:48%"></b><b style="height:28%"></b><b style="height:39%"></b><b style="height:20%"></b></div>
+                  <div class="chart-days"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>
+                </div>
+              </div>
+              <div class="report-data-note">Gerçek öğrenci verileri bağlandığında grafik otomatik güncellenecek.</div>
+            </article>
+
+            <article class="report-panel report-attention">
+              <div class="report-panel-head compact">
+                <div><span class="report-label">KOÇ ODAĞI</span><h2>Dikkat Gerekenler</h2><p>Öncelikli kontrol listesi</p></div>
+                <span class="report-count">0</span>
+              </div>
+              <div class="attention-empty">
+                <span class="attention-icon">✓</span>
+                <b>Şu an kritik durum yok</b>
+                <p>Düşük program uyumu, uzun süre pasiflik veya eksik görevler burada önceliklendirilecek.</p>
+              </div>
+            </article>
+
+            <article class="report-panel report-subjects">
+              <div class="report-panel-head">
+                <div><span class="report-label">DERS DAĞILIMI</span><h2>Çalışma dengesi</h2><p>Hangi derslere ne kadar zaman ayrıldığını gör.</p></div>
+              </div>
+              <div class="subject-report-list">
+                <div><span><i class="subject-dot"></i>Matematik</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
+                <div><span><i class="subject-dot"></i>Fizik</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
+                <div><span><i class="subject-dot"></i>Kimya</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
+                <div><span><i class="subject-dot"></i>Biyoloji</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
+              </div>
+            </article>
+
+            <article class="report-panel report-consistency">
+              <div class="report-panel-head">
+                <div><span class="report-label">SÜREKLİLİK</span><h2>Son 7 gün</h2><p>Günlük çalışma alışkanlığı</p></div>
+              </div>
+              <div class="consistency-week">
+                <div><span>P</span><b></b></div><div><span>S</span><b></b></div><div><span>Ç</span><b></b></div><div><span>P</span><b></b></div><div><span>C</span><b></b></div><div><span>C</span><b></b></div><div><span>P</span><b></b></div>
+              </div>
+              <div class="consistency-foot"><span>Aktif gün</span><strong>— / 7</strong></div>
+            </article>
+          </section>
+
+          <section class="report-panel report-student-table">
+            <div class="report-panel-head table-head">
+              <div><span class="report-label">ÖĞRENCİLER</span><h2>Performans özeti</h2><p>Öğrencileri aynı kriterlerle hızlıca karşılaştır.</p></div>
+              <label class="report-search"><span>⌕</span><input id="reportSearch" type="search" placeholder="Öğrenci ara..."></label>
             </div>
-          </article>
-          <article class="report-panel report-alerts">
-            <div class="report-title"><div><h2>Dikkat Gerekenler</h2><p>Koç müdahalesi gerekebilecek durumlar</p></div></div>
-            <div class="report-empty"><span>◎</span><b>Şimdilik uyarı yok</b><p>Eksik program, düşük görev tamamlama veya uzun süreli pasiflik burada gösterilecek.</p></div>
-          </article>
-          <article class="report-panel report-students">
-            <div class="report-title"><div><h2>Öğrenci Performansı</h2><p>Haftalık genel durum karşılaştırması</p></div><label class="report-search"><span>⌕</span><input type="search" placeholder="Öğrenci ara..."></label></div>
-            <div class="report-table-head"><span>Öğrenci</span><span>Tamamlanma</span><span>Çalışma</span><span>Aktif gün</span><span>Durum</span></div>
-            <div class="report-table-empty"><span>♟</span><div><b>Henüz rapor verisi yok</b><p>Bağlı öğrencilerin çalışma verileri geldikçe karşılaştırmalı görünüm burada oluşacak.</p></div></div>
-          </article>
-          <article class="report-panel report-summary">
-            <div class="report-title"><div><h2>Koç Özeti</h2><p>Haftanın kısa değerlendirmesi</p></div></div>
-            <div class="summary-lines"><div><span>Program uyumu</span><strong>—</strong></div><div><span>Ortalama çalışma</span><strong>—</strong></div><div><span>En aktif gün</span><strong>—</strong></div></div>
-          </article>
-        </section>
+            <div class="report-table">
+              <div class="report-table-header"><span>Öğrenci</span><span>Program uyumu</span><span>Çalışma</span><span>Aktif gün</span><span>Son aktivite</span><span>Durum</span></div>
+              <div class="report-table-empty">
+                <span>♟</span>
+                <div><b>Henüz öğrenci raporu oluşmadı</b><p>Bağlı öğrencilerin çalışma ve program verileri geldikçe satırlar otomatik oluşacak.</p></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="report-view hidden" data-report-panel="student">
+          <section class="report-detail-empty">
+            <span>♟</span><h2>Öğrenci detayı</h2><p>Üstteki öğrenci filtresinden bir öğrenci seçtiğinde günlük çalışma, görev tamamlama, ders dağılımı ve son aktivitelerini burada ayrıntılı göreceksin.</p>
+          </section>
+        </div>
+
+        <div class="report-view hidden" data-report-panel="compliance">
+          <section class="report-detail-empty">
+            <span>▣</span><h2>Program uyumu</h2><p>Planlanan ve tamamlanan görevler, geciken çalışmalar ve gün bazlı uyum verileri burada karşılaştırılacak.</p>
+          </section>
+        </div>
       </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.3"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.4"></script>
 </body>
 </html>
