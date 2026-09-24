@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
   <link rel="stylesheet" href="./messages-v21.css?v=2.0.0">
-  <link rel="stylesheet" href="./settings-v21.css?v=2.0.0">
+  <link rel="stylesheet" href="./settings-v21.css?v=2.1.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -809,21 +809,70 @@
 
             <section class="settings-section hidden" data-settings-panel="appearance">
               <div class="settings-section-head">
-                <div><span>GÖRÜNÜM</span><h2>Arayüz ayarları</h2><p>Panelin hareket ve yoğunluk tercihlerini bu cihaz için ayarla.</p></div>
+                <div><span>GÖRÜNÜM</span><h2>Panel görünümü</h2><p>İçerik yoğunluğunu ve hareket davranışını kendi kullanımına göre ayarla.</p></div>
               </div>
 
-              <div class="settings-group">
-                <label class="settings-toggle-row">
-                  <div><b>Azaltılmış hareket</b><small>Geçiş ve animasyon efektlerini kapatır.</small></div>
+              <div class="appearance-block">
+                <div class="appearance-block-head">
+                  <div><h3>Ekran yoğunluğu</h3><p>Panelde aynı anda ne kadar içerik görmek istediğini seç.</p></div>
+                  <span id="appearanceDensityLabel">Standart</span>
+                </div>
+
+                <div class="appearance-density-grid">
+                  <button class="appearance-density-card active" type="button" data-density="standard">
+                    <div class="density-preview standard">
+                      <aside><i></i><i></i><i></i></aside>
+                      <main><b></b><span></span><span></span><span></span></main>
+                    </div>
+                    <div class="density-copy">
+                      <span class="density-radio"></span>
+                      <div><b>Standart</b><small>Daha ferah, günlük kullanım için önerilen görünüm.</small></div>
+                    </div>
+                  </button>
+
+                  <button class="appearance-density-card" type="button" data-density="compact">
+                    <div class="density-preview compact">
+                      <aside><i></i><i></i><i></i><i></i></aside>
+                      <main><b></b><span></span><span></span><span></span><span></span></main>
+                    </div>
+                    <div class="density-copy">
+                      <span class="density-radio"></span>
+                      <div><b>Kompakt</b><small>Daha fazla bilgiyi aynı ekrana sığdırır.</small></div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div class="appearance-block">
+                <div class="appearance-block-head">
+                  <div><h3>Hareket ve geçişler</h3><p>Arayüz animasyonlarını istediğin seviyede tut.</p></div>
+                </div>
+
+                <label class="appearance-toggle-card">
+                  <div class="appearance-toggle-icon">↝</div>
+                  <div class="appearance-toggle-copy">
+                    <b>Azaltılmış hareket</b>
+                    <small>Sayfa ve kontrol geçişlerini minimuma indirir.</small>
+                  </div>
                   <span class="settings-switch"><input id="settingsReduceMotion" type="checkbox"><i></i></span>
                 </label>
               </div>
 
-              <div class="settings-preview">
-                <div class="settings-preview-top"><span>ÖNİZLEME</span><small>Panel düzeni</small></div>
-                <div class="settings-preview-app">
-                  <aside><i></i><i></i><i></i><i></i></aside>
-                  <main><b></b><div><i></i><i></i><i></i></div><span></span></main>
+              <div class="appearance-live-card">
+                <div class="appearance-live-head">
+                  <div><span>CANLI ÖNİZLEME</span><h3 id="appearancePreviewTitle">Standart panel</h3></div>
+                  <small>Değişiklikler anında uygulanır</small>
+                </div>
+                <div class="appearance-live-preview" id="appearanceLivePreview">
+                  <aside>
+                    <div class="preview-brand"></div>
+                    <i class="on"></i><i></i><i></i><i></i><i></i>
+                  </aside>
+                  <main>
+                    <div class="preview-heading"><b></b><span></span></div>
+                    <div class="preview-kpis"><i></i><i></i><i></i><i></i></div>
+                    <div class="preview-content"><span></span><span></span></div>
+                  </main>
                 </div>
               </div>
             </section>
@@ -861,6 +910,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.14"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.15"></script>
 </body>
 </html>
