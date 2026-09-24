@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
-  <link rel="stylesheet" href="./errors-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -498,6 +498,9 @@
         <div id="errorEmpty" class="error-state hidden">
           <span>✎</span><div><b>Henüz hata kaydı yok</b><p>Öğrenciler Hata Defteri'ne yanlış ekledikçe analiz burada otomatik oluşacak.</p></div>
         </div>
+        <div id="errorLoadError" class="error-state error-state-failed hidden">
+          <span>!</span><div><b>Hata Defteri yüklenemedi</b><p id="errorLoadErrorText">Veriler okunurken bir sorun oluştu. Yenile düğmesiyle tekrar deneyebilirsin.</p></div>
+        </div>
 
         <div id="errorOverview" class="hidden">
           <section class="error-kpis" id="errorOverviewKpis"></section>
@@ -561,6 +564,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.8"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.9"></script>
 </body>
 </html>
