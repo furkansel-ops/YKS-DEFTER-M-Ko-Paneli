@@ -783,6 +783,10 @@ function applyCoachUiPrefs(){
   document.body.classList.toggle("coach-hide-quick-messages",prefs.quickMessages===false);
   if($("settingsCompactMode"))$("settingsCompactMode").checked=prefs.compact===true;
   if($("settingsReduceMotion"))$("settingsReduceMotion").checked=prefs.reduceMotion===true;
+  document.querySelectorAll("[data-density]").forEach(button=>button.classList.toggle("active",(button.dataset.density==="compact")===Boolean(prefs.compact)));
+  if($("appearanceDensityLabel"))$("appearanceDensityLabel").textContent=prefs.compact===true?"Kompakt":"Standart";
+  if($("appearancePreviewTitle"))$("appearancePreviewTitle").textContent=prefs.compact===true?"Kompakt panel":"Standart panel";
+  $("appearanceLivePreview")?.classList.toggle("compact",prefs.compact===true);
   if($("settingsCtrlEnter"))$("settingsCtrlEnter").checked=prefs.ctrlEnter!==false;
   if($("settingsQuickMessages"))$("settingsQuickMessages").checked=prefs.quickMessages!==false;
   if($("settingsDefaultPage"))$("settingsDefaultPage").value=prefs.defaultPage||"home";
@@ -862,6 +866,7 @@ function saveLocalPreference(key,value){
 }
 $("settingsDefaultPage")?.addEventListener("change",event=>saveLocalPreference("defaultPage",event.currentTarget.value));
 $("settingsCompactMode")?.addEventListener("change",event=>saveLocalPreference("compact",event.currentTarget.checked));
+document.querySelectorAll("[data-density]").forEach(button=>button.addEventListener("click",()=>saveLocalPreference("compact",button.dataset.density==="compact")));
 $("settingsReduceMotion")?.addEventListener("change",event=>saveLocalPreference("reduceMotion",event.currentTarget.checked));
 $("settingsCtrlEnter")?.addEventListener("change",event=>saveLocalPreference("ctrlEnter",event.currentTarget.checked));
 $("settingsQuickMessages")?.addEventListener("change",event=>saveLocalPreference("quickMessages",event.currentTarget.checked));
