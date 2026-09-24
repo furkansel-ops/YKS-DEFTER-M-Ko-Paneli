@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
   <link rel="stylesheet" href="./messages-v21.css?v=2.0.0">
+  <link rel="stylesheet" href="./settings-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -682,9 +683,115 @@
           </aside>
         </section>
       </section>
+      <section class="settings-page hidden" id="settingsPage">
+        <header class="settings-head">
+          <div>
+            <span class="dashboard-eyebrow">AYARLAR</span>
+            <h1>Ayarlar</h1>
+            <p>Koç profilini, panel görünümünü ve hesap oturumunu tek yerden yönet.</p>
+          </div>
+          <div class="settings-save-state" id="settingsSaveState">Değişiklik yok</div>
+        </header>
+
+        <section class="settings-layout">
+          <aside class="settings-nav-card">
+            <div class="settings-profile-mini">
+              <span id="settingsMiniAvatar">K</span>
+              <div><b id="settingsMiniName">Koç</b><small id="settingsMiniTitle">YKS Defterim</small></div>
+            </div>
+            <nav class="settings-nav">
+              <button class="active" type="button" data-settings-tab="profile"><span>◉</span><div><b>Profil</b><small>Ad ve koçluk bilgileri</small></div></button>
+              <button type="button" data-settings-tab="appearance"><span>◫</span><div><b>Görünüm</b><small>Panel tercihleri</small></div></button>
+              <button type="button" data-settings-tab="account"><span>⌁</span><div><b>Hesap & Oturum</b><small>Google hesabı ve çıkış</small></div></button>
+            </nav>
+          </aside>
+
+          <div class="settings-content">
+            <section class="settings-panel" data-settings-panel="profile">
+              <div class="settings-panel-head">
+                <div><span>KOÇ PROFİLİ</span><h2>Profil bilgileri</h2><p>Öğrencilerin ve panelin kullandığı temel koç bilgilerini düzenle.</p></div>
+              </div>
+              <form id="coachSettingsForm" class="settings-form">
+                <div class="settings-avatar-row">
+                  <span class="settings-avatar-large" id="settingsAvatarLarge">K</span>
+                  <div><b id="settingsProfileNamePreview">Koç</b><small>Profil görseli Google hesabından alınır.</small></div>
+                </div>
+                <div class="settings-form-grid">
+                  <label class="settings-field">
+                    <span>Ad soyad</span>
+                    <input id="settingsDisplayName" maxlength="80" autocomplete="name" placeholder="Ad soyad">
+                    <small>Panelde ve öğrenci bağlantılarında görünen ad.</small>
+                  </label>
+                  <label class="settings-field">
+                    <span>Koç unvanı</span>
+                    <input id="settingsCoachTitle" maxlength="100" placeholder="Örn. YKS Koçu">
+                    <small>Kısa ve profesyonel bir unvan kullan.</small>
+                  </label>
+                  <label class="settings-field settings-field-wide">
+                    <span>Uzmanlık alanı</span>
+                    <textarea id="settingsSpecialization" maxlength="160" placeholder="Örn. TYT-AYT çalışma planı, deneme analizi ve öğrenci takibi"></textarea>
+                    <small><b id="settingsSpecializationCount">0</b>/160 karakter</small>
+                  </label>
+                </div>
+                <div class="settings-form-actions">
+                  <span id="settingsProfileStatus"></span>
+                  <button type="submit" id="settingsSaveProfile">Değişiklikleri kaydet</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="settings-panel hidden" data-settings-panel="appearance">
+              <div class="settings-panel-head">
+                <div><span>PANEL GÖRÜNÜMÜ</span><h2>Arayüz tercihleri</h2><p>Bu tarayıcıda panelin nasıl davranacağını seç.</p></div>
+              </div>
+              <div class="settings-option-list">
+                <label class="settings-toggle-row">
+                  <div><b>Kompakt görünüm</b><small>Kartlar ve ekran boşlukları daha sıkı kullanılır.</small></div>
+                  <span class="settings-switch"><input id="settingsCompactMode" type="checkbox"><i></i></span>
+                </label>
+                <label class="settings-toggle-row">
+                  <div><b>Azaltılmış hareket</b><small>Arayüz geçiş ve animasyonlarını minimuma indirir.</small></div>
+                  <span class="settings-switch"><input id="settingsReduceMotion" type="checkbox"><i></i></span>
+                </label>
+              </div>
+              <div class="settings-preview-card">
+                <span>ÖNİZLEME</span>
+                <div class="settings-preview-shell">
+                  <i></i><div><b></b><b></b><b></b></div>
+                </div>
+                <p>Görünüm tercihleri yalnız bu cihazdaki tarayıcıda saklanır.</p>
+              </div>
+            </section>
+
+            <section class="settings-panel hidden" data-settings-panel="account">
+              <div class="settings-panel-head">
+                <div><span>HESAP & OTURUM</span><h2>Google hesabı</h2><p>Koç panelinde açık olan hesap ve oturum bilgileri.</p></div>
+              </div>
+              <div class="settings-account-card">
+                <div class="settings-account-avatar" id="settingsAccountAvatar">K</div>
+                <div class="settings-account-main">
+                  <b id="settingsAccountName">Koç</b>
+                  <span id="settingsAccountEmail">—</span>
+                  <small>Doğrulanmış Google hesabı</small>
+                </div>
+                <span class="settings-account-badge">AKTİF</span>
+              </div>
+              <div class="settings-security-list">
+                <div><span>Giriş yöntemi</span><strong>Google</strong></div>
+                <div><span>Hesap türü</span><strong>Koç hesabı</strong></div>
+                <div><span>Profil verisi</span><strong>Firebase ile senkron</strong></div>
+              </div>
+              <div class="settings-danger-zone">
+                <div><span>OTURUM</span><h3>Bu cihazdaki oturumu kapat</h3><p>Tekrar giriş yapmak için Google hesabını kullanman gerekir.</p></div>
+                <button id="settingsSignOutBtn" type="button">Oturumu kapat</button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.12"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.13"></script>
 </body>
 </html>
