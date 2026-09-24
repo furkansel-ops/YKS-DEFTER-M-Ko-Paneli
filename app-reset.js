@@ -56,11 +56,14 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
+function showCoachPage(page){
+  document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
+  $("homePage")?.classList.toggle("hidden",page!=="home");
+  $("studentsPage")?.classList.toggle("hidden",page!=="students");
+  closeSidebar();
+}
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item===button));
-    closeSidebar();
-  });
+  button.addEventListener("click",()=>showCoachPage(button.dataset.coachPage));
 });
 
 onAuthStateChanged(auth,async user=>{
@@ -84,3 +87,9 @@ document.querySelectorAll("[data-go-page]").forEach(button=>button.addEventListe
   const page=button.dataset.goPage;
   document.querySelector('[data-coach-page="'+page+'"]')?.click();
 }));
+
+
+document.querySelectorAll("[data-student-filter]").forEach(button=>button.addEventListener("click",()=>{
+  document.querySelectorAll("[data-student-filter]").forEach(x=>x.classList.toggle("active",x===button));
+}));
+$("addStudentBtn")?.addEventListener("click",()=>alert("Öğrenci bağlantı akışını sonraki adımda gerçek sisteme bağlayacağız."));
