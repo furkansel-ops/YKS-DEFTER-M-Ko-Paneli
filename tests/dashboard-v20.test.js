@@ -12,8 +12,8 @@ test('Dashboard v2 dokuz koç ekranını ve ortak navigasyonu yükler',()=>{
     assert.ok(html.includes(label),label);
     assert.ok(js.includes(label),label);
   }
-  assert.match(html,/dashboard-v20\.css\?v=2\.2\.0/);
-  assert.match(html,/dashboard-v20\.js\?v=2\.2\.0/);
+  assert.match(html,/dashboard-v20\.css\?v=3\.0\.0/);
+  assert.match(html,/dashboard-v20\.js\?v=3\.0\.0/);
   assert.match(js,/PAGE_META/);
   assert.match(js,/homePage/);
   assert.match(js,/studentsPage/);
