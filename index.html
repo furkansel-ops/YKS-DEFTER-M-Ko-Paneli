@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./base-reset.css?v=1.0.0">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -94,6 +95,26 @@
             <div class="panel-title"><div><h2>Koç Notları</h2><p>Bugün gözden geçir</p></div></div>
             <div class="coach-note"><span>✦</span><p>Panel sade tutuldu. Gerçek öğrenci verileri geldikçe kartlar otomatik olarak anlam kazanacak.</p></div>
           </article>
+        </section>
+      </section>
+      <section class="students-page hidden" id="studentsPage">
+        <header class="students-head">
+          <div><span class="dashboard-eyebrow">ÖĞRENCİ YÖNETİMİ</span><h1>Öğrenciler</h1><p>Öğrencilerini, çalışma durumlarını ve koçluk sürecini tek yerden takip et.</p></div>
+          <button class="students-add" type="button" id="addStudentBtn">＋ Öğrenci Ekle</button>
+        </header>
+        <section class="students-summary">
+          <div><small>Toplam Öğrenci</small><strong id="studentsTotal">—</strong></div>
+          <div><small>Bugün Aktif</small><strong id="studentsActive">—</strong></div>
+          <div><small>Takip Gereken</small><strong id="studentsAttention">—</strong></div>
+        </section>
+        <section class="students-card">
+          <div class="students-toolbar">
+            <label class="student-search"><span>⌕</span><input id="studentSearch" type="search" placeholder="Öğrenci ara..."></label>
+            <div class="student-filters"><button class="active" type="button" data-student-filter="all">Tümü</button><button type="button" data-student-filter="active">Aktif</button><button type="button" data-student-filter="attention">Takip gereken</button></div>
+          </div>
+          <div class="students-table-head"><span>Öğrenci</span><span>Bugünkü durum</span><span>Program</span><span>Son aktivite</span><span></span></div>
+          <div class="students-empty" id="studentsEmpty"><span>♟</span><h2>Henüz bağlı öğrenci yok</h2><p>Bir öğrenci koç hesabına bağlandığında burada görünecek. Program, çalışma ve deneme durumunu bu ekrandan takip edebileceksin.</p><button type="button">＋ İlk öğrenciyi ekle</button></div>
+          <div class="students-list hidden" id="studentsList"></div>
         </section>
       </section>
     </main>
