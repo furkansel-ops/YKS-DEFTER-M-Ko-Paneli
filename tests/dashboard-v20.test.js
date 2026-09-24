@@ -12,8 +12,8 @@ test('Dashboard v2 dokuz koç ekranını ve ortak navigasyonu yükler',()=>{
     assert.ok(html.includes(label),label);
     assert.ok(js.includes(label),label);
   }
-  assert.match(html,/dashboard-v20\.css\?v=2\.0\.0/);
-  assert.match(html,/dashboard-v20\.js\?v=2\.0\.0/);
+  assert.match(html,/dashboard-v20\.css\?v=2\.2\.0/);
+  assert.match(html,/dashboard-v20\.js\?v=2\.2\.0/);
   assert.match(js,/PAGE_META/);
   assert.match(js,/homePage/);
   assert.match(js,/studentsPage/);
@@ -82,7 +82,7 @@ test('Dashboard v2.1 görsel taslaklardaki ana içerik bloklarını tamamlar',()
   const js=read('dashboard-v20.js');
   for(const token of [
     'Bekleyen İşlemler','Hızlı İşlemler','Son Deneme Sonuçları','Sınıf Dağılımı',
-    'Son Öğrenci Hareketleri','Haftalık Program Takvimi','Son Güncellemeler',
+    'Son Öğrenci Hareketleri','Öğrencinin Gerçek Haftalık Programı','Son Güncellemeler',
     'Konu Gezgini','Konu Detayı','Hata Kayıt Defteri','Kritik Hata Kuyruğu',
     'Güvenlik','Entegrasyonlar'
   ])assert.ok(js.includes(token),token);
@@ -111,9 +111,27 @@ test('Her ana bölüm kendine özgü sayfa kompozisyonu kullanır',()=>{
   const css=read('dashboard-v20.css');
   for(const token of ['coach-page-programs','coach-page-reports','coach-page-exams','coach-page-topics','coach-page-errors'])assert.ok(js.includes(token),token);
   for(const token of ['.programs-calendar-stage','.reports-hero-grid','.exam-lab-grid','.topics-workspace','.errors-workspace'])assert.ok(css.includes(token),token);
-  assert.match(js,/Haftalık Program Takvimi/);
+  assert.match(js,/Öğrencinin Gerçek Haftalık Programı/);
   assert.match(js,/Genel Performans Trendi/);
   assert.match(js,/Öğrenci Sıralaması/);
   assert.match(js,/Konu Gezgini/);
   assert.match(js,/Kritik Hata Kuyruğu/);
+});
+
+
+test('Programlar ana görünümü öğrencinin canonical Programım modelini birebir kullanır',()=>{
+  const js=read('dashboard-v20.js');
+  const css=read('dashboard-v20.css');
+  assert.match(js,/rowLabels/);
+  assert.match(js,/rowCount/);
+  assert.match(js,/week\?\.data\?\.dn/);
+  assert.match(js,/week\?\.data\?\.mv/);
+  assert.match(js,/week\?\.data\?\.done/);
+  assert.match(js,/canonicalProgramMirror/);
+  assert.match(js,/data-program-week-shift/);
+  assert.match(js,/data-program-select/);
+  assert.doesNotMatch(js,/function programPreview\(/);
+  assert.match(css,/\.canonical-program-grid/);
+  assert.match(css,/\.canonical-program-cell\.is-done/);
+  assert.match(css,/\.canonical-program-cell\.is-moved/);
 });
