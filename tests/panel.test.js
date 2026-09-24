@@ -139,15 +139,14 @@ test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
 
 test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yükler',()=>{
   const html=read('index.html');
-  const css=read('styles.css');
-  const studentCss=read('ui-v11.css');
+  const coreCss=read('core-v20.css');
   const programCss=read('program-v12.css');
   const liveCss=read('program-live-v14.css');
   const summaryCss=read('summary-live-v15.css');
   assert.match(html,/YKS Defterim · Koç Paneli/);
   assert.match(html,/app\.js\?v=2\.0\.0/);
-  assert.match(html,/styles\.css\?v=1\.5\.0/);
-  assert.match(html,/ui-v11\.css\?v=1\.5\.0/);
+  assert.match(html,/core-v20\.css\?v=2\.3\.0/);
+  assert.doesNotMatch(html,/styles\.css|ui-v11\.css/);
   assert.match(html,/program-v12\.css\?v=1\.5\.0/);
   assert.match(html,/program-live-v14\.css\?v=1\.5\.0/);
   assert.match(html,/program-mirror-v14\.js\?v=1\.5\.0/);
@@ -155,10 +154,10 @@ test('GitHub Pages Programım v1.4 ve Özet v1.5 arayüzünü cache kırarak yü
   assert.match(html,/summary-live-v15\.js\?v=1\.5\.0/);
   assert.match(html,/Koçluk Merkezi/);
   assert.match(html,/Öğrencilerim/);
-  assert.match(css,/grid-template-columns:320px minmax\(0,1fr\)/);
-  assert.match(css,/welcome-card/);
-  assert.match(css,/student-workspace/);
-  assert.match(studentCss,/\.student\.on/);
+  assert.match(coreCss,/color-scheme:light/);
+  assert.match(coreCss,/welcome-card/);
+  assert.match(coreCss,/student-workspace/);
+  assert.match(coreCss,/\.student\.on/);
   assert.match(programCss,/\.student-program-grid/);
   assert.match(programCss,/\.student-program-task\.is-done/);
   assert.match(programCss,/\.student-program-day-done/);
@@ -179,4 +178,17 @@ test('Program v1.9 koç takvimini ve günlük plan detayını yükler',()=>{
   assert.match(js,/data-cal-date/);
   assert.match(css,/\.coach-calendar-grid/);
   assert.doesNotThrow(()=>new Function(js));
+});
+
+
+test('eski global tema dosyaları artık panel tarafından kullanılmaz',()=>{
+  const html=read('index.html');
+  const register=read('register.html');
+  const core=read('core-v20.css');
+  assert.doesNotMatch(html,/styles\.css|ui-v11\.css/);
+  assert.doesNotMatch(register,/styles\.css|ui-v11\.css/);
+  assert.match(html,/core-v20\.css\?v=2\.3\.0/);
+  assert.match(register,/core-v20\.css\?v=2\.3\.0/);
+  assert.match(core,/--surface:#ffffff/);
+  assert.match(core,/--sidebar:#0d1829/);
 });
