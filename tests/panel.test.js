@@ -26,7 +26,7 @@ test('index sadece reset runtime ve sidebar stillerini yükler',()=>{
   const html=read('index.html');
   assert.match(html,/base-reset\.css\?v=1\.0\.0/);
   assert.match(html,/sidebar-v20\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.0/);
+  assert.match(html,/app-reset\\.js\\?v=1\\.0\\.\\d+/);
   assert.doesNotMatch(html,/dashboard-v20|app\.js\?|core-v20/);
 });
 
