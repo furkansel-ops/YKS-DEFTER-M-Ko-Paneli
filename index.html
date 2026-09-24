@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -115,6 +116,41 @@
           <div class="students-table-head"><span>Öğrenci</span><span>Bugünkü durum</span><span>Program</span><span>Son aktivite</span><span></span></div>
           <div class="students-empty" id="studentsEmpty"><span>♟</span><h2>Henüz bağlı öğrenci yok</h2><p>Bir öğrenci koç hesabına bağlandığında burada görünecek. Program, çalışma ve deneme durumunu bu ekrandan takip edebileceksin.</p><button type="button">＋ İlk öğrenciyi ekle</button></div>
           <div class="students-list hidden" id="studentsList"></div>
+        </section>
+      </section>
+      <section class="programs-page hidden" id="programsPage">
+        <header class="programs-head">
+          <div><span class="dashboard-eyebrow">PROGRAM YÖNETİMİ</span><h1>Programlar</h1><p>Öğrencinin kendi hazırladığı haftalık programı görüntüle, günleri incele ve ilerlemeyi takip et.</p></div>
+          <div class="program-head-actions"><button type="button" class="program-secondary">Şablonlar</button><button type="button" class="program-primary">＋ Program Oluştur</button></div>
+        </header>
+        <section class="program-layout">
+          <aside class="program-students">
+            <div class="program-side-title"><div><b>Öğrenciler</b><small>Programını görmek istediğin öğrenciyi seç</small></div></div>
+            <label class="program-search"><span>⌕</span><input type="search" placeholder="Öğrenci ara..."></label>
+            <div class="program-student-empty"><span>♟</span><b>Bağlı öğrenci yok</b><p>Öğrenciler bağlandığında burada listelenecek.</p></div>
+          </aside>
+          <section class="program-workspace">
+            <div class="program-toolbar">
+              <div><span class="program-week-label">HAFTALIK PROGRAM</span><h2>Öğrenci programı</h2></div>
+              <div class="week-nav"><button type="button">‹</button><strong>Bu Hafta</strong><button type="button">›</button></div>
+            </div>
+            <div class="program-summary">
+              <article><small>Haftalık görev</small><strong>—</strong><span>Planlanan</span></article>
+              <article><small>Tamamlanan</small><strong>—</strong><span>Görev</span></article>
+              <article><small>Çalışma süresi</small><strong>—</strong><span>Toplam</span></article>
+              <article><small>İlerleme</small><strong>—</strong><span>Haftalık</span></article>
+            </div>
+            <div class="week-board">
+              <div class="day-column"><header><b>Pzt</b><small>Pazartesi</small></header><div class="day-empty">Program yok</div></div>
+              <div class="day-column"><header><b>Sal</b><small>Salı</small></header><div class="day-empty">Program yok</div></div>
+              <div class="day-column"><header><b>Çar</b><small>Çarşamba</small></header><div class="day-empty">Program yok</div></div>
+              <div class="day-column"><header><b>Per</b><small>Perşembe</small></header><div class="day-empty">Program yok</div></div>
+              <div class="day-column"><header><b>Cum</b><small>Cuma</small></header><div class="day-empty">Program yok</div></div>
+              <div class="day-column"><header><b>Cmt</b><small>Cumartesi</small></header><div class="day-empty">Program yok</div></div>
+              <div class="day-column"><header><b>Paz</b><small>Pazar</small></header><div class="day-empty">Program yok</div></div>
+            </div>
+            <div class="program-main-empty"><span>▣</span><div><b>Bir öğrenci seç</b><p>Öğrencinin YKS Defterim'de hazırladığı program burada gün gün görüntülenecek.</p></div></div>
+          </section>
         </section>
       </section>
     </main>
