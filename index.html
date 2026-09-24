@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="./base-reset.css?v=1.0.0">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
-  <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./students-v21.css?v=2.2.0">
   <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
@@ -109,21 +109,82 @@
           <div><span class="dashboard-eyebrow">ÖĞRENCİ YÖNETİMİ</span><h1>Öğrenciler</h1><p>Öğrencilerini, çalışma durumlarını ve koçluk sürecini tek yerden takip et.</p></div>
           <button class="students-add" type="button" id="addStudentBtn">＋ Öğrenci Ekle</button>
         </header>
+
         <section class="students-summary">
-          <div><small>Toplam Öğrenci</small><strong id="studentsTotal">—</strong></div>
-          <div><small>Bugün Aktif</small><strong id="studentsActive">—</strong></div>
-          <div><small>Takip Gereken</small><strong id="studentsAttention">—</strong></div>
+          <div><small>Toplam Öğrenci</small><strong id="studentsTotal">0</strong><span>Aktif bağlantı</span></div>
+          <div><small>Bugün Aktif</small><strong id="studentsActive">0</strong><span>Bugün veri gönderen</span></div>
+          <div><small>Takip Gereken</small><strong id="studentsAttention">0</strong><span>Geciken konusu olan</span></div>
         </section>
+
         <section class="students-card">
           <div class="students-toolbar">
             <label class="student-search"><span>⌕</span><input id="studentSearch" type="search" placeholder="Öğrenci ara..."></label>
-            <div class="student-filters"><button class="active" type="button" data-student-filter="all">Tümü</button><button type="button" data-student-filter="active">Aktif</button><button type="button" data-student-filter="attention">Takip gereken</button></div>
+            <div class="student-filters">
+              <button class="active" type="button" data-student-filter="all">Tümü</button>
+              <button type="button" data-student-filter="active">Bugün aktif</button>
+              <button type="button" data-student-filter="attention">Takip gereken</button>
+            </div>
           </div>
+
           <div class="students-table-head"><span>Öğrenci</span><span>Bugünkü durum</span><span>Program</span><span>Son aktivite</span><span></span></div>
-          <div class="students-empty" id="studentsEmpty"><span>♟</span><h2>Henüz bağlı öğrenci yok</h2><p>Bir öğrenci koç hesabına bağlandığında burada görünecek. Program, çalışma ve deneme durumunu bu ekrandan takip edebileceksin.</p><button type="button">＋ İlk öğrenciyi ekle</button></div>
+
+          <div class="students-empty" id="studentsEmpty">
+            <span>♟</span>
+            <h2>Henüz bağlı öğrenci yok</h2>
+            <p>Öğrencinin YKS Defterim uygulamasındaki <b>Koç Kodum</b> kodunu kullanarak güvenli şekilde bağlantı kurabilirsin.</p>
+            <button type="button" data-add-student>＋ İlk öğrenciyi ekle</button>
+          </div>
+
           <div class="students-list hidden" id="studentsList"></div>
         </section>
       </section>
+
+      <div class="student-connect-backdrop hidden" id="studentConnectBackdrop" aria-hidden="true">
+        <section class="student-connect-modal" role="dialog" aria-modal="true" aria-labelledby="studentConnectTitle">
+          <header class="student-connect-head">
+            <div>
+              <span>ÖĞRENCİ BAĞLANTISI</span>
+              <h2 id="studentConnectTitle">Öğrenci ekle</h2>
+              <p>Öğrencinin YKS Defterim uygulamasındaki 12 haneli <b>Koç Kodum</b> kodunu gir.</p>
+            </div>
+            <button type="button" class="student-connect-close" id="studentConnectClose" aria-label="Kapat">×</button>
+          </header>
+
+          <div class="student-connect-body">
+            <div class="student-connect-guide">
+              <span>1</span>
+              <div><b>Öğrenci kodunu açsın</b><small>YKS Defterim → Ayarlar → Koç Kodum</small></div>
+            </div>
+
+            <label class="student-code-field">
+              <span>KOÇ KODU</span>
+              <div>
+                <input id="studentCoachCodeInput" maxlength="14" autocomplete="off" spellcheck="false" placeholder="ABCD-EFGH-JK23">
+                <button type="button" id="studentCodeCheckBtn">Kodu kontrol et</button>
+              </div>
+              <small id="studentCodeHint">Kod 12 karakterdir. Tireleri yazmak zorunda değilsin.</small>
+            </label>
+
+            <div class="student-code-status hidden" id="studentCodeStatus"></div>
+
+            <div class="student-connect-preview hidden" id="studentConnectPreview">
+              <div class="student-preview-avatar" id="studentPreviewAvatar">Ö</div>
+              <div class="student-preview-main">
+                <span>BAĞLANTI KURULACAK ÖĞRENCİ</span>
+                <b id="studentPreviewName">Öğrenci</b>
+                <small id="studentPreviewMeta">YKS öğrencisi</small>
+              </div>
+              <span class="student-preview-ok">Doğrulandı ✓</span>
+            </div>
+          </div>
+
+          <footer class="student-connect-foot">
+            <button type="button" class="student-connect-secondary" id="studentConnectCancel">Vazgeç</button>
+            <button type="button" class="student-connect-primary" id="studentConnectConfirm" disabled>Öğrenciyi ekle</button>
+          </footer>
+        </section>
+      </div>
+</section>
       <section class="programs-page hidden" id="programsPage">
         <header class="programs-head">
           <div><span class="dashboard-eyebrow">PROGRAM YÖNETİMİ</span><h1>Programlar</h1><p>Öğrencinin kendi hazırladığı haftalık programı görüntüle, günleri incele ve ilerlemeyi takip et.</p></div>
@@ -910,6 +971,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.15"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.16"></script>
 </body>
 </html>
