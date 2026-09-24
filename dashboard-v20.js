@@ -13,7 +13,7 @@
     settings:["Ayarlar","Koç paneli tercihlerini, bağlantıları ve hesap durumunu yönet."]
   };
   const DAYS=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
-  const ui={page:"home",detail:false,returnPage:"home",search:"",studentFilter:"all",selectedUid:"",messageUid:"",sessionMessages:new Map(),programWeekByStudent:new Map()};
+  const ui={page:"home",detail:false,detailTab:"summary",returnPage:"home",search:"",studentFilter:"all",selectedUid:"",messageUid:"",sessionMessages:new Map(),programWeekByStudent:new Map()};
   let snapshot={user:null,coach:null,students:[],selectedUid:"",tab:"summary"};
 
   const $=id=>document.getElementById(id);
@@ -434,17 +434,91 @@
     try{localStorage.setItem("yks-coach-v20-prefs",JSON.stringify(next))}catch{}
   }
 
+  function detailNav(student){
+    const tabs=[["summary","Genel Bakış"],["program","Program"],["exams","Denemeler"],["progress","İlerleme"],["topics","Konular"],["errors","Hata Defteri"]];
+    return`<nav class="student-detail-nav-v3">${tabs.map(([key,label])=>`<button type="button" class="${ui.detailTab===key?"on":""}" data-detail-section="${key}">${label}</button>`).join("")}<button type="button" class="student-detail-message-v3" data-message-student="${esc(student.studentUid)}">Mesaj Gönder</button></nav>`;
+  }
+  function detailHero(student){
+    const p=weekInfo(student),e=examInfo(student),t=topicInfo(student),sig=studentSignal(student),name=studentName(student);
+    return`<section class="student-detail-hero-v3">
+      <button type="button" class="student-detail-back-v3" data-detail-back>← Öğrencilere dön</button>
+      <div class="student-detail-identity-v3"><span class="student-detail-avatar-v3">${esc(initials(name))}</span><div><span>ÖĞRENCİ PROFİLİ</span><h2>${esc(name)}</h2><p>${esc([studentGrade(student),studentTrack(student)].filter(Boolean).join(" · ")||"YKS")}</p></div></div>
+      <div class="student-detail-hero-stats-v3"><div><span>Program</span><b>%${p.pct}</b></div><div><span>Son Net</span><b>${e.latestNet===null?"—":fmt(e.latestNet)}</b></div><div><span>Konu</span><b>%${t.pct}</b></div><div><span>Durum</span><b>${esc(sig.label)}</b></div></div>
+    </section>`;
+  }
+  function detailSummary(student){
+    const p=weekInfo(student),e=examInfo(student),t=topicInfo(student),prog=progressInfo(student),errs=errors(student).slice(0,6);
+    return`<div class="student-summary-v3">
+      <section class="student-summary-primary-v3"><article><span>7 Gün Çalışma</span><b>${fmt(prog.hours)} sa</b><small>Odak süresi</small></article><article><span>7 Gün Soru</span><b>${prog.questions}</b><small>Toplam soru</small></article><article><span>Program Uyumu</span><b>%${p.pct}</b><small>${p.done}/${p.filled} görev</small></article><article><span>Son Deneme</span><b>${e.latestNet===null?"—":fmt(e.latestNet)}</b><small>${e.delta===null?"İlk kayıt":`${e.delta>=0?"+":""}${fmt(e.delta)} değişim`}</small></article></section>
+      <section class="student-summary-grid-v3"><article class="student-panel-v3 student-focus-v3"><div class="student-panel-head-v3"><div><span>KOÇ ODAĞI</span><h3>Dikkat edilmesi gerekenler</h3></div></div>${t.overdue? `<div class="student-alert-v3"><b>${t.overdue} geciken konu</b><small>Konu planında son tarihi geçen kayıtlar var.</small></div>`:""}${e.delta!==null&&e.delta<0?`<div class="student-alert-v3"><b>${fmt(Math.abs(e.delta))} net düşüş</b><small>Son iki deneme arasında gerileme var.</small></div>`:""}${errs.length?`<div class="student-alert-v3"><b>${errorCount(student)} hata kaydı</b><small>Hata Defteri incelemesi öneriliyor.</small></div>`:""}${!t.overdue&&!(e.delta!==null&&e.delta<0)&&!errs.length?empty("Kritik takip sinyali görünmüyor."):""}</article>
+      <article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>SON DENEMELER</span><h3>Performans akışı</h3></div><button data-detail-section="exams">Tümünü aç</button></div>${recentStudentExams(student,5)}</article>
+      <article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>PROGRAM</span><h3>Bu haftanın akışı</h3></div><button data-detail-section="program">Programa git</button></div>${studentProgramPulse(student)}</article>
+      <article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>KONU İLERLEMESİ</span><h3>Ders bazlı durum</h3></div><button data-detail-section="topics">Konuları aç</button></div>${studentSubjectProgress(student)}</article></section>
+    </div>`;
+  }
+  function recentStudentExams(student,limit=5){
+    const list=exams(student).slice(-limit).reverse();
+    if(!list.length)return empty("Henüz deneme kaydı yok.");
+    return`<div class="student-feed-v3">${list.map(exam=>`<div><span><b>${esc(exam.name||exam.type||"Deneme")}</b><small>${esc(exam.date||"Tarih yok")}</small></span><strong>${fmt(num(exam.totalNet))} net</strong></div>`).join("")}</div>`;
+  }
+  function studentProgramPulse(student){
+    const w=weekInfo(student);
+    if(!w.week)return empty("Bu öğrenci için program haftası yok.");
+    return`<div class="student-day-bars-v3">${w.byDay.map((d,i)=>{const pct=d.filled?Math.round(d.done/d.filled*100):0;return`<div><span>${DAYS[i]}</span><i><em style="width:${pct}%"></em></i><b>${d.filled?`${d.done}/${d.filled}`:"—"}</b></div>`}).join("")}</div>`;
+  }
+  function studentSubjectProgress(student){
+    const map=new Map();
+    for(const item of topics(student)){const subject=text(item.subject||item.lesson||item.ders,60)||"Diğer",row=map.get(subject)||{total:0,done:0};row.total++;if(num(item.st)>=3)row.done++;map.set(subject,row)}
+    const list=[...map.entries()].slice(0,7);
+    if(!list.length)return empty("Konu paylaşımı yok.");
+    return`<div class="student-subject-bars-v3">${list.map(([name,row])=>{const pct=row.total?Math.round(row.done/row.total*100):0;return`<div><span>${esc(name)}</span><i><em style="width:${pct}%"></em></i><b>%${pct}</b></div>`}).join("")}</div>`;
+  }
+  function detailProgram(student){
+    const current=selectedProgramWeek(student);
+    if(!current.week)return empty("Öğrencinin kayıtlı programı yok.");
+    return`<section class="student-detail-workspace-v3"><div class="student-panel-head-v3"><div><span>PROGRAMIM</span><h3>Gerçek haftalık program</h3></div><button class="coach-primary" data-detail-action="program_task">Görev gönder</button></div>${canonicalProgramMirror(student,current)}</section>`;
+  }
+  function detailExams(student){
+    const e=examInfo(student),vals=e.list.map(x=>num(x.totalNet));
+    return`<section class="student-detail-workspace-v3"><div class="student-detail-metric-row-v3"><article><span>Deneme Sayısı</span><b>${e.list.length}</b></article><article><span>Son Net</span><b>${e.latestNet===null?"—":fmt(e.latestNet)}</b></article><article><span>Değişim</span><b>${e.delta===null?"—":`${e.delta>=0?"+":""}${fmt(e.delta)}`}</b></article><article><span>En İyi</span><b>${vals.length?fmt(Math.max(...vals)):"—"}</b></article></div><div class="student-detail-two-v3"><article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>NET TRENDİ</span><h3>Deneme gelişimi</h3></div></div>${lineSvg(vals)}</article><article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>GEÇMİŞ</span><h3>Tüm denemeler</h3></div><button data-detail-action="post_exam_task">Görev gönder</button></div>${recentStudentExams(student,20)}</article></div></section>`;
+  }
+  function detailProgress(student){
+    const p=progressInfo(student),w=weekInfo(student),e=examInfo(student),t=topicInfo(student);
+    return`<section class="student-detail-workspace-v3"><div class="student-progress-hero-v3"><div><span>7 GÜNLÜK ODAK</span><b>${fmt(p.hours)} saat</b><small>${p.questions} soru çözüldü</small></div><div class="student-progress-ring-v3"><strong>%${w.pct}</strong><span>program uyumu</span></div></div><div class="student-detail-three-v3"><article class="student-panel-v3"><h3>Program ritmi</h3>${studentProgramPulse(student)}</article><article class="student-panel-v3"><h3>Konu ilerlemesi</h3>${studentSubjectProgress(student)}</article><article class="student-panel-v3"><h3>Deneme özeti</h3><div class="student-big-stat-v3"><b>${e.latestNet===null?"—":fmt(e.latestNet)}</b><span>son net</span><small>${t.complete}/${t.list.length} konu tamamlandı</small></div></article></div></section>`;
+  }
+  function detailTopics(student){
+    const t=topicInfo(student);
+    return`<section class="student-detail-workspace-v3"><div class="student-detail-metric-row-v3"><article><span>Toplam</span><b>${t.list.length}</b></article><article><span>Tamam</span><b>${t.complete}</b></article><article><span>Aktif</span><b>${t.active}</b></article><article><span>Geciken</span><b>${t.overdue}</b></article></div><article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>KONU LİSTESİ</span><h3>Öğrencinin paylaştığı konular</h3></div><button data-detail-action="program_task">Görev gönder</button></div><div class="student-topic-table-v3">${t.list.length?t.list.map(item=>`<div><span>${esc(item.subject||item.lesson||item.ders||"Ders")}</span><b>${esc(item.topic||item.name||item.konu||"Konu")}</b><small>${item.deadline?esc(item.deadline):"Son tarih yok"}</small><i class="${num(item.st)>=3?"done":num(item.st)>0?"active":""}">${num(item.st)>=3?"Tamam":num(item.st)>0?"Devam":"Başlanmadı"}</i></div>`).join(""):empty("Konu kaydı yok.")}</div></article></section>`;
+  }
+  function detailErrors(student){
+    const list=errors(student).slice().sort((a,b)=>num(b.n||b.count||1)-num(a.n||a.count||1));
+    return`<section class="student-detail-workspace-v3"><div class="student-errors-hero-v3"><div><span>HATA DEFTERİ</span><b>${errorCount(student)}</b><small>toplam tekrar</small></div><button class="coach-primary" data-message-student="${esc(student.studentUid)}">Öğrenciye mesaj gönder</button></div><article class="student-panel-v3"><div class="student-panel-head-v3"><div><span>KAYITLAR</span><h3>Hata yoğunluğu</h3></div></div><div class="student-error-list-v3">${list.length?list.map(item=>`<div><span>${esc(item.subject||item.lesson||item.ders||"Ders")}</span><b>${esc(item.topic||item.konu||"Konu")}</b><small>${esc(item.type||item.errorType||"Hata")}</small><strong>${Math.max(1,num(item.n||item.count||1))}×</strong></div>`).join(""):empty("Hata kaydı yok.")}</div></article></section>`;
+  }
+  function studentDetailPage(){
+    const student=(snapshot.students||[]).find(s=>s.studentUid===ui.selectedUid);
+    if(!student)return`<div class="coach-empty">Öğrenci bulunamadı.</div>`;
+    const renderer={summary:detailSummary,program:detailProgram,exams:detailExams,progress:detailProgress,topics:detailTopics,errors:detailErrors}[ui.detailTab]||detailSummary;
+    return`<div class="student-detail-page-v3">${detailHero(student)}${detailNav(student)}${renderer(student)}</div>`;
+  }
+  async function runDetailAction(type){
+    const student=(snapshot.students||[]).find(s=>s.studentUid===ui.selectedUid);if(!student)return;
+    const textValue=prompt(type==="post_exam_task"?"Deneme sonrası görev:":"Öğrenciye gönderilecek görev:");
+    if(!textValue?.trim())return;
+    try{await core()?.sendAction?.(student.studentUid,type,{text:textValue.trim(),date:new Date().toISOString().slice(0,10)});alert("Gönderildi ✓")}catch(error){alert("Gönderilemedi: "+text(error?.message||error,160))}
+  }
+
   function renderPage(){
     const host=$("dashboardView");if(!host)return;
     const page=ui.page in PAGE_META?ui.page:"home",meta=PAGE_META[page];
     $("coachPageTitle").textContent=meta[0];$("coachPageSubtitle").textContent=meta[1];
     document.querySelectorAll("[data-coach-page]").forEach(btn=>btn.classList.toggle("on",btn.dataset.coachPage===page));
     const search=$("coachGlobalSearch");if(search&&search.value!==ui.search)search.value=ui.search;
+    host.classList.remove("hidden");
     if(ui.detail){
-      host.classList.add("hidden");$("emptyState")?.classList.add("hidden");$("studentView")?.classList.remove("hidden");
+      host.innerHTML=studentDetailPage();
+      bindPage();
       return;
     }
-    $("studentView")?.classList.add("hidden");$("emptyState")?.classList.add("hidden");host.classList.remove("hidden");
     host.innerHTML=({home:homePage,students:studentsPage,programs:programsPage,reports:reportsPage,exams:examsPage,topics:topicsPage,errors:errorsPage,messages:messagesPage,settings:settingsPage}[page]||homePage)();
     bindPage();
   }
@@ -456,11 +530,10 @@
     renderPage();closeMobileSidebar();
   }
   function openDetail(uid,tab){
-    ui.detail=true;ui.returnPage=ui.page;ui.selectedUid=uid;
-    const ok=core()?.selectStudent?.(uid,tab||"summary");
+    ui.detail=true;ui.returnPage=ui.page;ui.selectedUid=uid;ui.detailTab=tab||"summary";
+    const ok=core()?.selectStudent?.(uid,ui.detailTab);
     if(ok===false){ui.detail=false;renderPage();return}
-    const labels={summary:"Öğrenci Detayı",program:"Program",exams:"Deneme Analizi",progress:"Takip & Rapor",topics:"Konular",errors:"Hata Defteri"};
-    $("coachPageTitle").textContent=labels[tab]||"Öğrenci Detayı";$("coachPageSubtitle").textContent="Canlı öğrenci paylaşımını ayrıntılı incele.";
+    $("coachPageTitle").textContent="Öğrenci Detayı";$("coachPageSubtitle").textContent="Yeni koç görünümü · canlı öğrenci verileri";
     renderPage();
   }
   function closeDetail(){ui.detail=false;setPage(ui.returnPage||"students")}
@@ -469,6 +542,10 @@
   function bindPage(){
     document.querySelectorAll("[data-page-action]").forEach(btn=>btn.addEventListener("click",()=>setPage(btn.dataset.pageAction)));
     document.querySelectorAll("[data-student-detail]").forEach(btn=>btn.addEventListener("click",()=>openDetail(btn.dataset.studentDetail,btn.dataset.detailTab||"summary")));
+    document.querySelectorAll("[data-detail-section]").forEach(btn=>btn.addEventListener("click",()=>{ui.detailTab=btn.dataset.detailSection||"summary";renderPage()}));
+    document.querySelectorAll("[data-detail-back]").forEach(btn=>btn.addEventListener("click",closeDetail));
+    document.querySelectorAll("[data-detail-action]").forEach(btn=>btn.addEventListener("click",()=>runDetailAction(btn.dataset.detailAction)));
+
     document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{ui.messageUid=btn.dataset.messageStudent;setPage("messages")}));
     document.querySelectorAll("[data-message-contact]").forEach(btn=>btn.addEventListener("click",()=>{ui.messageUid=btn.dataset.messageContact;renderPage()}));
     document.querySelectorAll("[data-student-filter]").forEach(btn=>btn.addEventListener("click",()=>{ui.studentFilter=btn.dataset.studentFilter||"all";renderPage()}));

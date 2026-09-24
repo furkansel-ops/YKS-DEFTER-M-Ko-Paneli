@@ -136,7 +136,7 @@ function watchSelectedShare(){
     entry.share=snap.exists()?snap.data():null;
     if(state.selectedUid!==uid)return;
     const pill=$("syncPill");if(pill)pill.innerHTML=`<i></i> Canlı eşitlendi · ${esc(formatSyncedAt(entry.share?.updatedAt))}`;
-    renderStudentList();renderSelected();emitCoachState();
+    renderStudentList();emitCoachState();
   },error=>{
     console.error("Öğrenci canlı paylaşımı",error);
     const pill=$("syncPill");if(pill)pill.textContent="Eşitleme hatası";
@@ -154,7 +154,7 @@ async function loadStudents(){
   students.sort((a,b)=>studentName(a).localeCompare(studentName(b),"tr"));state.students=students;
   if(state.selectedUid&&!students.some(s=>s.link.studentUid===state.selectedUid)){state.selectedUid="";state.programWeek=""}
   renderStudentList();
-  if(state.selectedUid){watchSelectedShare();renderSelected()}else showNoStudent();
+  if(state.selectedUid)watchSelectedShare();
   emitCoachState();
 }
 function renderStudentList(){
@@ -164,7 +164,7 @@ function renderStudentList(){
   for(const entry of state.students){
     const button=document.createElement("button");button.type="button";button.className=`student ${entry.link.studentUid===state.selectedUid?"on":""}`;
     button.innerHTML=`<b>${esc(studentName(entry))}</b><span>${esc(studentTrack(entry))}${entry.share?" · canlı veri":" · paylaşım bekleniyor"}</span>`;
-    button.onclick=()=>{state.selectedUid=entry.link.studentUid;state.tab="summary";state.programWeek="";renderStudentList();watchSelectedShare();renderSelected();closeSidebar()};
+    button.onclick=()=>{state.selectedUid=entry.link.studentUid;state.tab="summary";state.programWeek="";renderStudentList();watchSelectedShare();emitCoachState();closeSidebar()};
     host.append(button);
   }
 }
@@ -304,7 +304,6 @@ function openDashboardStudent(studentUid,tab="summary"){
   state.programWeek="";
   renderStudentList();
   watchSelectedShare();
-  renderSelected();
   closeSidebar();
   emitCoachState();
   return true;
