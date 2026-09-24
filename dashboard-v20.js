@@ -424,7 +424,15 @@
   function updateHeader(){
     const date=$("coachDate");if(date)date.textContent=new Intl.DateTimeFormat("tr-TR",{day:"2-digit",month:"long",year:"numeric",weekday:"long"}).format(new Date());
     const name=text(snapshot.coach?.displayName||snapshot.user?.displayName,80)||"Koç";
-    const side=$("coachSidebarName"),avatar=$("coachSidebarAvatar");if(side)side.textContent=name;if(avatar)avatar.textContent=initials(name).slice(0,1);
+    const side=$("coachSidebarName"),avatar=$("coachSidebarAvatar"),topAvatar=$("coachTopAvatar"),notify=$("coachNotifyCount");
+    if(side)side.textContent=name;
+    if(avatar)avatar.textContent=initials(name).slice(0,1);
+    if(topAvatar)topAvatar.textContent=initials(name).slice(0,1);
+    if(notify){
+      const count=pendingItems(99).length;
+      notify.textContent=String(Math.min(99,count));
+      notify.classList.toggle("hidden",count===0);
+    }
   }
   function receive(next){
     snapshot=next||core()?.snapshot?.()||snapshot;
