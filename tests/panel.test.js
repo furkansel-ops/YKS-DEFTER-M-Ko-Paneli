@@ -64,9 +64,10 @@ test('eski detay tema ve enhancer assetleri artık yüklenmez',()=>{
   assert.match(html,/dashboard-v20\.js\?v=3\.1\.0/);
 });
 
-test('yeni detay programı eski CSS olmadan kendi stillerine sahiptir',()=>{
+test('yeni detay programı dashboard v3.1 canonical stillerini kullanır',()=>{
   const css=read('dashboard-v20.css');
-  for(const token of ['.program-live-note','.program-toolbar','.program-layout','.program-table','.program-cell.is-done','.program-cell.is-moved'])assert.ok(css.includes(token),token);
+  for(const token of ['.canonical-program-shell','.canonical-program-grid','.canonical-program-cell.is-done','.canonical-program-cell.is-moved','.student-detail-workspace-v3'])assert.ok(css.includes(token),token);
+  assert.doesNotMatch(css,/\.program-live-note|\.coach-student-detail-v20/);
 });
 
 test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
