@@ -56,12 +56,13 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage"};
 function showCoachPage(page){
-  const availablePages={home:"homePage",students:"studentsPage",programs:"programsPage"};
-  const targetId=availablePages[page];
+  const targetId=coachPages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  Object.values(availablePages).forEach(id=>$(id)?.classList.toggle("hidden",id!==targetId));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage").forEach(section=>section.classList.add("hidden"));
+  $(targetId)?.classList.remove("hidden");
   closeSidebar();
 }
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
