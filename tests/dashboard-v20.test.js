@@ -104,3 +104,16 @@ test('Dashboard v2.1 üst bar bildirim ve profil durumunu canlı koç state ile 
   assert.match(css,/\.coach-home-main-grid/);
   assert.match(css,/\.coach-home-lower-grid/);
 });
+
+
+test('Her ana bölüm kendine özgü sayfa kompozisyonu kullanır',()=>{
+  const js=read('dashboard-v20.js');
+  const css=read('dashboard-v20.css');
+  for(const token of ['coach-page-programs','coach-page-reports','coach-page-exams','coach-page-topics','coach-page-errors'])assert.ok(js.includes(token),token);
+  for(const token of ['.programs-calendar-stage','.reports-hero-grid','.exam-lab-grid','.topics-workspace','.errors-workspace'])assert.ok(css.includes(token),token);
+  assert.match(js,/Haftalık Program Takvimi/);
+  assert.match(js,/Genel Performans Trendi/);
+  assert.match(js,/Öğrenci Sıralaması/);
+  assert.match(js,/Konu Gezgini/);
+  assert.match(js,/Kritik Hata Kuyruğu/);
+});
