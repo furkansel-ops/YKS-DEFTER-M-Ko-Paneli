@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./programs-v21.css?v=1.0.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=2.0.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -159,133 +159,108 @@
           <div>
             <span class="dashboard-eyebrow">TAKİP & RAPOR</span>
             <h1>Takip & Rapor</h1>
-            <p>Öğrencilerin plan, çalışma ve süreklilik verilerini koç gözüyle tek ekranda değerlendir.</p>
+            <p>Öğrencinin gerçekten yaptığı çalışmayı, program uyumunu ve aksayan noktaları tek ekranda gör.</p>
           </div>
-          <div class="reports-actions">
-            <button type="button" class="reports-export">⇩ Raporu Dışa Aktar</button>
-          </div>
+          <button class="report-refresh" id="reportRefreshBtn" type="button">↻ Verileri yenile</button>
         </header>
 
-        <section class="reports-controlbar">
-          <div class="report-tabs" role="tablist" aria-label="Rapor görünümü">
-            <button class="active" type="button" data-report-view="overview">Genel Bakış</button>
-            <button type="button" data-report-view="student">Öğrenci Detayı</button>
-            <button type="button" data-report-view="compliance">Program Uyumu</button>
+        <section class="report-selector-card">
+          <div class="report-selector-copy">
+            <span>RAPOR GÖRÜNÜMÜ</span>
+            <b id="reportScopeTitle">Tüm öğrenciler</b>
+            <small id="reportScopeMeta">Son 7 günlük koçluk özeti</small>
           </div>
-          <div class="report-filters">
-            <label class="report-student-select">
-              <span>Öğrenci</span>
-              <select id="reportStudentSelect"><option>Tüm öğrenciler</option></select>
-            </label>
-            <label class="report-period-select">
-              <span>Dönem</span>
-              <select id="reportPeriodSelect"><option>Bu hafta</option><option>Geçen hafta</option><option>Son 30 gün</option></select>
-            </label>
-          </div>
+          <label class="report-select-wrap">
+            <span>Öğrenci seç</span>
+            <select id="reportStudentSelect"><option value="all">Tüm öğrenciler</option></select>
+          </label>
         </section>
 
-        <div class="report-view" data-report-panel="overview">
-          <section class="reports-kpis">
-            <article class="report-kpi">
-              <div class="kpi-top"><span class="kpi-icon">✓</span><small>PROGRAM UYUMU</small></div>
-              <strong>—</strong><p>Planlanan görevlerin tamamlanma oranı</p>
-            </article>
-            <article class="report-kpi">
-              <div class="kpi-top"><span class="kpi-icon">◷</span><small>ÇALIŞMA SÜRESİ</small></div>
-              <strong>—</strong><p>Seçili dönemde toplam çalışma</p>
-            </article>
-            <article class="report-kpi">
-              <div class="kpi-top"><span class="kpi-icon">▦</span><small>AKTİF GÜN</small></div>
-              <strong>—</strong><p>Düzenli çalışma yapılan gün sayısı</p>
-            </article>
-            <article class="report-kpi report-kpi-alert">
-              <div class="kpi-top"><span class="kpi-icon">!</span><small>TAKİP GEREKEN</small></div>
-              <strong>—</strong><p>Koç kontrolü bekleyen öğrenci</p>
-            </article>
-          </section>
+        <div id="reportLoading" class="report-state">
+          <span class="report-state-icon">↻</span>
+          <div><b>Raporlar hazırlanıyor</b><p>Bağlı öğrencilerin güncel verileri alınıyor.</p></div>
+        </div>
 
-          <section class="reports-main-grid">
-            <article class="report-panel report-trend">
-              <div class="report-panel-head">
-                <div><span class="report-label">ÇALIŞMA TRENDİ</span><h2>Haftalık çalışma düzeni</h2><p>Günlük çalışma sürelerini ve sürekliliği karşılaştır.</p></div>
-                <div class="report-legend"><span><i></i> Çalışma süresi</span></div>
-              </div>
-              <div class="report-chart">
-                <div class="chart-y"><span>4s</span><span>3s</span><span>2s</span><span>1s</span><span>0</span></div>
-                <div class="chart-area">
-                  <div class="chart-grid"><i></i><i></i><i></i><i></i><i></i></div>
-                  <div class="chart-bars"><b style="height:18%"></b><b style="height:33%"></b><b style="height:24%"></b><b style="height:48%"></b><b style="height:28%"></b><b style="height:39%"></b><b style="height:20%"></b></div>
-                  <div class="chart-days"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>
-                </div>
-              </div>
-              <div class="report-data-note">Gerçek öğrenci verileri bağlandığında grafik otomatik güncellenecek.</div>
-            </article>
+        <div id="reportEmpty" class="report-state hidden">
+          <span class="report-state-icon">♟</span>
+          <div><b>Henüz raporlanacak öğrenci yok</b><p>Öğrenci bağlantısı kurulduğunda çalışma, program, konu ve deneme verileri burada görünecek.</p></div>
+        </div>
 
-            <article class="report-panel report-attention">
-              <div class="report-panel-head compact">
-                <div><span class="report-label">KOÇ ODAĞI</span><h2>Dikkat Gerekenler</h2><p>Öncelikli kontrol listesi</p></div>
-                <span class="report-count">0</span>
-              </div>
-              <div class="attention-empty">
-                <span class="attention-icon">✓</span>
-                <b>Şu an kritik durum yok</b>
-                <p>Düşük program uyumu, uzun süre pasiflik veya eksik görevler burada önceliklendirilecek.</p>
-              </div>
-            </article>
+        <div id="reportError" class="report-state report-state-error hidden">
+          <span class="report-state-icon">!</span>
+          <div><b>Rapor verileri alınamadı</b><p id="reportErrorText">Bağlantıyı kontrol edip tekrar deneyebilirsin.</p></div>
+        </div>
 
-            <article class="report-panel report-subjects">
-              <div class="report-panel-head">
-                <div><span class="report-label">DERS DAĞILIMI</span><h2>Çalışma dengesi</h2><p>Hangi derslere ne kadar zaman ayrıldığını gör.</p></div>
+        <div id="reportOverview" class="hidden">
+          <section class="report-kpis" id="reportOverviewKpis"></section>
+          <section class="report-overview-grid">
+            <article class="report-card report-student-table-card">
+              <div class="report-card-head">
+                <div><span>ÖĞRENCİ TAKİBİ</span><h2>Haftalık durum</h2><p>Kimin çalıştığını, kimin takibe ihtiyaç duyduğunu hızlıca gör.</p></div>
+                <label class="report-search"><span>⌕</span><input id="reportSearch" type="search" placeholder="Öğrenci ara..."></label>
               </div>
-              <div class="subject-report-list">
-                <div><span><i class="subject-dot"></i>Matematik</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
-                <div><span><i class="subject-dot"></i>Fizik</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
-                <div><span><i class="subject-dot"></i>Kimya</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
-                <div><span><i class="subject-dot"></i>Biyoloji</span><div class="subject-track"><b style="width:0%"></b></div><strong>—</strong></div>
-              </div>
+              <div class="report-table-head"><span>Öğrenci</span><span>Çalışma</span><span>Soru</span><span>Program</span><span>Geciken konu</span><span></span></div>
+              <div class="report-student-list" id="reportStudentList"></div>
             </article>
-
-            <article class="report-panel report-consistency">
-              <div class="report-panel-head">
-                <div><span class="report-label">SÜREKLİLİK</span><h2>Son 7 gün</h2><p>Günlük çalışma alışkanlığı</p></div>
-              </div>
-              <div class="consistency-week">
-                <div><span>P</span><b></b></div><div><span>S</span><b></b></div><div><span>Ç</span><b></b></div><div><span>P</span><b></b></div><div><span>C</span><b></b></div><div><span>C</span><b></b></div><div><span>P</span><b></b></div>
-              </div>
-              <div class="consistency-foot"><span>Aktif gün</span><strong>— / 7</strong></div>
-            </article>
-          </section>
-
-          <section class="report-panel report-student-table">
-            <div class="report-panel-head table-head">
-              <div><span class="report-label">ÖĞRENCİLER</span><h2>Performans özeti</h2><p>Öğrencileri aynı kriterlerle hızlıca karşılaştır.</p></div>
-              <label class="report-search"><span>⌕</span><input id="reportSearch" type="search" placeholder="Öğrenci ara..."></label>
-            </div>
-            <div class="report-table">
-              <div class="report-table-header"><span>Öğrenci</span><span>Program uyumu</span><span>Çalışma</span><span>Aktif gün</span><span>Son aktivite</span><span>Durum</span></div>
-              <div class="report-table-empty">
-                <span>♟</span>
-                <div><b>Henüz öğrenci raporu oluşmadı</b><p>Bağlı öğrencilerin çalışma ve program verileri geldikçe satırlar otomatik oluşacak.</p></div>
-              </div>
-            </div>
+            <aside class="report-side-stack">
+              <article class="report-card">
+                <div class="report-card-head compact"><div><span>GENEL DURUM</span><h2>Koç özeti</h2></div></div>
+                <div class="report-summary-list" id="reportCoachSummary"></div>
+              </article>
+              <article class="report-card">
+                <div class="report-card-head compact"><div><span>SON SENKRONİZASYON</span><h2>Veri güncelliği</h2></div></div>
+                <div class="report-sync-box" id="reportSyncBox">—</div>
+              </article>
+            </aside>
           </section>
         </div>
 
-        <div class="report-view hidden" data-report-panel="student">
-          <section class="report-detail-empty">
-            <span>♟</span><h2>Öğrenci detayı</h2><p>Üstteki öğrenci filtresinden bir öğrenci seçtiğinde günlük çalışma, görev tamamlama, ders dağılımı ve son aktivitelerini burada ayrıntılı göreceksin.</p>
+        <div id="reportStudentDetail" class="hidden">
+          <section class="report-student-hero">
+            <div class="report-avatar" id="reportStudentAvatar">Ö</div>
+            <div class="report-student-copy">
+              <span>ÖĞRENCİ RAPORU</span>
+              <h2 id="reportStudentName">Öğrenci</h2>
+              <p id="reportStudentTarget">Hedef bilgisi yok</p>
+            </div>
+            <div class="report-sync-pill" id="reportStudentSync">—</div>
           </section>
-        </div>
 
-        <div class="report-view hidden" data-report-panel="compliance">
-          <section class="report-detail-empty">
-            <span>▣</span><h2>Program uyumu</h2><p>Planlanan ve tamamlanan görevler, geciken çalışmalar ve gün bazlı uyum verileri burada karşılaştırılacak.</p>
+          <section class="report-kpis" id="reportStudentKpis"></section>
+
+          <section class="report-detail-grid">
+            <article class="report-card report-program-card">
+              <div class="report-card-head">
+                <div><span>PROGRAM UYUMU</span><h2 id="reportProgramTitle">Haftalık program</h2><p>Planlanan günler ve tamamlanma durumu.</p></div>
+                <strong class="report-score" id="reportProgramScore">—</strong>
+              </div>
+              <div class="report-week-days" id="reportWeekDays"></div>
+            </article>
+
+            <article class="report-card report-topics-card">
+              <div class="report-card-head compact"><div><span>KONU TAKİBİ</span><h2>Konu durumu</h2></div></div>
+              <div class="report-topic-stats" id="reportTopicStats"></div>
+            </article>
+
+            <article class="report-card report-exams-card">
+              <div class="report-card-head">
+                <div><span>DENEMELER</span><h2>Son denemeler</h2><p>En güncel deneme sonuçları.</p></div>
+              </div>
+              <div class="report-exam-list" id="reportExamList"></div>
+            </article>
+
+            <article class="report-card report-errors-card">
+              <div class="report-card-head">
+                <div><span>HATA DEFTERİ</span><h2>Son yanlışlar</h2><p>Ders ve konu bazında son kayıtlar.</p></div>
+              </div>
+              <div class="report-error-list" id="reportErrorList"></div>
+            </article>
           </section>
         </div>
       </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.4"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.5"></script>
 </body>
 </html>
