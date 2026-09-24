@@ -1,0 +1,24 @@
+/* YKS Defterim Koç Paneli · Ana Panel v2.1 */
+.dashboard-page{padding:34px clamp(24px,4vw,54px) 48px;max-width:1540px;margin:0 auto}
+.dashboard-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:26px}
+.dashboard-eyebrow{font-size:10px;font-weight:850;letter-spacing:.14em;color:#2873f0}
+.dashboard-head h1{margin:6px 0 5px;font-size:clamp(25px,2.5vw,36px);letter-spacing:-.04em;color:#122036}
+.dashboard-head p{margin:0;color:#71809a;font-size:12px}
+.dashboard-date{padding:10px 13px;border:1px solid #dfe6ef;border-radius:10px;background:#fff;color:#53647b;font-size:11px;font-weight:700;text-transform:capitalize}
+.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.stat-card{min-height:118px;padding:19px;border:1px solid #e0e7f0;border-radius:16px;background:#fff;display:flex;gap:14px;align-items:flex-start;box-shadow:0 8px 25px rgba(28,48,78,.045)}
+.stat-icon{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:#edf5ff;color:#2873f0;display:grid;place-items:center;font-weight:900}
+.stat-card div{display:grid;gap:3px}.stat-card small{font-size:10px;color:#71809a;font-weight:700}.stat-card strong{font-size:25px;line-height:1.05;color:#15243a}.stat-card em{font-style:normal;font-size:9px;color:#9aa6b6}
+.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:16px}
+.dash-panel{min-height:230px;padding:21px;border:1px solid #e0e7f0;border-radius:17px;background:#fff;box-shadow:0 8px 25px rgba(28,48,78,.04)}
+.panel-title{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding-bottom:17px;border-bottom:1px solid #edf1f6}
+.panel-title h2{font-size:14px;margin:0 0 4px;color:#18273d}.panel-title p{font-size:10px;margin:0;color:#8996a8}
+.panel-title button{border:0;background:transparent;color:#2873f0;font-size:10px;font-weight:750;cursor:pointer;padding:3px}
+.empty-state{min-height:155px;display:grid;place-items:center;align-content:center;text-align:center;color:#8a98aa}
+.empty-state span{width:40px;height:40px;border-radius:50%;background:#f0f5fb;display:grid;place-items:center;font-size:18px;margin-bottom:8px}.empty-state b{font-size:11px;color:#53647b}.empty-state p{font-size:9.5px;max-width:330px;line-height:1.55;margin:5px 0 0}
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding-top:15px}.quick-actions button{border:1px solid #e5ebf3;border-radius:12px;background:#f9fbfd;padding:12px;text-align:left;cursor:pointer;display:grid;grid-template-columns:28px 1fr;column-gap:8px}.quick-actions button:hover{border-color:#bad4f8;background:#f3f8ff;transform:translateY(-1px)}.quick-actions span{grid-row:1/3;width:28px;height:28px;border-radius:8px;background:#eaf3ff;color:#2873f0;display:grid;place-items:center}.quick-actions b{font-size:10px;color:#26374e}.quick-actions small{font-size:8px;color:#8b98a9;margin-top:2px}
+.student-placeholder{display:flex;align-items:center;gap:20px;min-height:155px;padding:14px 4px}.student-placeholder b{font-size:11px}.student-placeholder p{font-size:9.5px;color:#8794a6;line-height:1.55;max-width:420px}.placeholder-bars{width:120px;height:70px;display:flex;gap:8px;align-items:flex-end;padding:8px;border-radius:12px;background:#f6f9fc}.placeholder-bars i{flex:1;border-radius:5px 5px 2px 2px;background:#dbe8f8}.placeholder-bars i:nth-child(1){height:35%}.placeholder-bars i:nth-child(2){height:68%}.placeholder-bars i:nth-child(3){height:48%}
+.coach-note{margin-top:16px;padding:14px;border-radius:12px;background:#f5f8fc;display:flex;gap:10px;color:#68778b}.coach-note span{color:#2873f0}.coach-note p{font-size:10px;line-height:1.6;margin:0}
+@media(max-width:1200px){.dashboard-stats{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.dash-panel{min-height:210px}}
+@media(max-width:1000px){.dashboard-page{padding:72px 18px 34px}.dashboard-head{align-items:flex-start}.dashboard-date{display:none}}
+@media(max-width:600px){.dashboard-head h1{font-size:25px}.dashboard-stats{gap:9px}.stat-card{min-height:102px;padding:14px;gap:10px}.stat-icon{width:32px;height:32px;flex-basis:32px}.stat-card strong{font-size:21px}.dashboard-grid{gap:10px}.dash-panel{padding:16px}.quick-actions{grid-template-columns:1fr}.panel-title button{display:none}}
