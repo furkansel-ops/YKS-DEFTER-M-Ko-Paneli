@@ -57,9 +57,11 @@ $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
 function showCoachPage(page){
+  const availablePages={home:"homePage",students:"studentsPage"};
+  const targetId=availablePages[page];
+  if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  $("homePage")?.classList.toggle("hidden",page!=="home");
-  $("studentsPage")?.classList.toggle("hidden",page!=="students");
+  Object.values(availablePages).forEach(id=>$(id)?.classList.toggle("hidden",id!==targetId));
   closeSidebar();
 }
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
