@@ -1,6 +1,6 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG);
@@ -31,6 +31,7 @@ function showApp(profile,user){
   if(avatar)avatar.textContent=initials(name).slice(0,1);
   const dashName=$("dashboardCoachName");if(dashName)dashName.textContent=name.split(/\\s+/)[0]||"Koç";
   const dashDate=$("dashboardDate");if(dashDate)dashDate.textContent=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
+  hydrateCoachSettings(profile,user);
   void loadCoachReports(user.uid);
   void loadCoachMessages(user.uid);
 }
@@ -58,12 +59,12 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
-const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage"};
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage").forEach(section=>section.classList.add("hidden"));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
   closeSidebar();
 }
@@ -761,3 +762,91 @@ document.querySelector('[data-coach-page="messages"]')?.addEventListener("click"
   const user=auth.currentUser;
   if(user){renderMessageStudents();void loadCoachMessages(user.uid)}
 });
+
+
+const COACH_UI_PREFS="yks_coach_ui_preferences_v1";
+let currentCoachProfile=null;
+let currentCoachUser=null;
+
+function readCoachUiPrefs(){
+  try{return JSON.parse(localStorage.getItem(COACH_UI_PREFS)||"{}")||{}}catch{return{}}
+}
+function writeCoachUiPrefs(next){
+  try{localStorage.setItem(COACH_UI_PREFS,JSON.stringify(next))}catch{}
+}
+function applyCoachUiPrefs(){
+  const prefs=readCoachUiPrefs();
+  document.body.classList.toggle("coach-compact",prefs.compact===true);
+  document.body.classList.toggle("coach-reduce-motion",prefs.reduceMotion===true);
+  if($("settingsCompactMode"))$("settingsCompactMode").checked=prefs.compact===true;
+  if($("settingsReduceMotion"))$("settingsReduceMotion").checked=prefs.reduceMotion===true;
+}
+function settingsInitials(name){return initials(name||"Koç")}
+function hydrateCoachSettings(profile,user){
+  currentCoachProfile=profile;
+  currentCoachUser=user;
+  const name=String(profile?.displayName||user?.displayName||"Koç");
+  const title=String(profile?.coachTitle||"YKS Koçu");
+  const specialization=String(profile?.specialization||"");
+  const avatar=settingsInitials(name);
+  ["settingsMiniAvatar","settingsAvatarLarge","settingsAccountAvatar"].forEach(id=>{if($(id))$(id).textContent=avatar});
+  if($("settingsMiniName"))$("settingsMiniName").textContent=name;
+  if($("settingsMiniTitle"))$("settingsMiniTitle").textContent=title;
+  if($("settingsProfileNamePreview"))$("settingsProfileNamePreview").textContent=name;
+  if($("settingsDisplayName"))$("settingsDisplayName").value=name;
+  if($("settingsCoachTitle"))$("settingsCoachTitle").value=profile?.coachTitle||"";
+  if($("settingsSpecialization"))$("settingsSpecialization").value=specialization;
+  if($("settingsSpecializationCount"))$("settingsSpecializationCount").textContent=String(specialization.length);
+  if($("settingsAccountName"))$("settingsAccountName").textContent=name;
+  if($("settingsAccountEmail"))$("settingsAccountEmail").textContent=user?.email||"—";
+  applyCoachUiPrefs();
+}
+function settingsDirty(){
+  const state=$("settingsSaveState");if(!state)return;
+  state.textContent="Kaydedilmemiş değişiklik";
+  state.classList.add("dirty");
+}
+document.querySelectorAll("[data-settings-tab]").forEach(button=>button.addEventListener("click",()=>{
+  const tab=button.dataset.settingsTab;
+  document.querySelectorAll("[data-settings-tab]").forEach(x=>x.classList.toggle("active",x===button));
+  document.querySelectorAll("[data-settings-panel]").forEach(panel=>panel.classList.toggle("hidden",panel.dataset.settingsPanel!==tab));
+}));
+["settingsDisplayName","settingsCoachTitle","settingsSpecialization"].forEach(id=>$(id)?.addEventListener("input",()=>{
+  settingsDirty();
+  if(id==="settingsDisplayName"&&$("settingsProfileNamePreview"))$("settingsProfileNamePreview").textContent=$("settingsDisplayName").value.trim()||"Koç";
+  if(id==="settingsSpecialization"&&$("settingsSpecializationCount"))$("settingsSpecializationCount").textContent=String($("settingsSpecialization").value.length);
+}));
+$("coachSettingsForm")?.addEventListener("submit",async event=>{
+  event.preventDefault();
+  const user=auth.currentUser,button=$("settingsSaveProfile"),status=$("settingsProfileStatus");
+  if(!user)return;
+  const displayName=String($("settingsDisplayName")?.value||"").trim().slice(0,80);
+  const coachTitle=String($("settingsCoachTitle")?.value||"").trim().slice(0,100);
+  const specialization=String($("settingsSpecialization")?.value||"").trim().slice(0,160);
+  if(!displayName){if(status)status.textContent="Ad soyad boş bırakılamaz.";return}
+  if(button)button.disabled=true;
+  if(status)status.textContent="Kaydediliyor…";
+  try{
+    await updateDoc(doc(db,COLLECTIONS.profiles,user.uid),{displayName,coachTitle,specialization,updatedAt:serverTimestamp()});
+    currentCoachProfile={...(currentCoachProfile||{}),displayName,coachTitle,specialization};
+    if($("coachSidebarName"))$("coachSidebarName").textContent=displayName;
+    if($("coachSidebarAvatar"))$("coachSidebarAvatar").textContent=initials(displayName);
+    if($("settingsMiniName"))$("settingsMiniName").textContent=displayName;
+    if($("settingsMiniTitle"))$("settingsMiniTitle").textContent=coachTitle||"YKS Koçu";
+    ["settingsMiniAvatar","settingsAvatarLarge","settingsAccountAvatar"].forEach(id=>{if($(id))$(id).textContent=settingsInitials(displayName)});
+    if($("settingsAccountName"))$("settingsAccountName").textContent=displayName;
+    if(status)status.textContent="Kaydedildi ✓";
+    if($("settingsSaveState")){$("settingsSaveState").textContent="Tüm değişiklikler kaydedildi";$("settingsSaveState").classList.remove("dirty")}
+  }catch(error){
+    console.error("Ayarlar kaydedilemedi",error);
+    if(status)status.textContent="Kaydedilemedi: "+String(error?.message||"Bilinmeyen hata");
+  }finally{if(button)button.disabled=false}
+});
+$("settingsCompactMode")?.addEventListener("change",event=>{
+  const prefs=readCoachUiPrefs();prefs.compact=event.currentTarget.checked;writeCoachUiPrefs(prefs);applyCoachUiPrefs();
+});
+$("settingsReduceMotion")?.addEventListener("change",event=>{
+  const prefs=readCoachUiPrefs();prefs.reduceMotion=event.currentTarget.checked;writeCoachUiPrefs(prefs);applyCoachUiPrefs();
+});
+$("settingsSignOutBtn")?.addEventListener("click",()=>signOut(auth));
+applyCoachUiPrefs();
