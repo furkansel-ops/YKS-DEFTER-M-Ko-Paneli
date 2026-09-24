@@ -1,6 +1,6 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG);
@@ -97,10 +97,12 @@ document.querySelectorAll("[data-go-page]").forEach(button=>button.addEventListe
 }));
 
 
+let studentListFilter="all";
 document.querySelectorAll("[data-student-filter]").forEach(button=>button.addEventListener("click",()=>{
+  studentListFilter=button.dataset.studentFilter||"all";
   document.querySelectorAll("[data-student-filter]").forEach(x=>x.classList.toggle("active",x===button));
+  renderStudentsPage();
 }));
-$("addStudentBtn")?.addEventListener("click",()=>alert("Öğrenci bağlantı akışını sonraki adımda gerçek sisteme bağlayacağız."));
 
 
 
@@ -174,6 +176,7 @@ async function loadCoachReports(coachUid){
       if($("errorLoadErrorText"))$("errorLoadErrorText").textContent=String(error?.message||"Hata kayıtları görüntülenemedi.");
       setErrorState("errorLoadError");
     }
+    try{renderStudentsPage()}catch(error){console.error("Öğrenciler render",error)}
     try{renderMessageStudents()}catch(error){console.error("Mesaj öğrenci listesi",error)}
   }catch(error){
     console.error("Takip raporları",error);
@@ -872,3 +875,172 @@ $("settingsCtrlEnter")?.addEventListener("change",event=>saveLocalPreference("ct
 $("settingsQuickMessages")?.addEventListener("change",event=>saveLocalPreference("quickMessages",event.currentTarget.checked));
 $("settingsSignOutBtn")?.addEventListener("click",()=>signOut(auth));
 applyCoachUiPrefs();
+
+
+let pendingStudentConnection=null;
+const STUDENT_CODE_RE=/^[A-Z2-9]{12}$/;
+function normalizeStudentCoachCode(value){
+  return String(value||"").toUpperCase().replace(/[^A-Z2-9]/g,"").slice(0,12);
+}
+function formatStudentCoachCode(value){
+  return normalizeStudentCoachCode(value).replace(/(.{4})(?=.)/g,"$1-");
+}
+function studentUpdatedDate(row){
+  try{
+    const value=row?.share?.updatedAt;
+    const d=value?.toDate?.()||new Date(value);
+    return d&&!Number.isNaN(d.getTime())?d:null;
+  }catch{return null}
+}
+function studentActiveToday(row){
+  const d=studentUpdatedDate(row);if(!d)return false;
+  const now=new Date();
+  return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()&&d.getDate()===now.getDate();
+}
+function studentNeedsAttention(row){return reportNum(row?.share?.progress?.overdueTopics)>0}
+function studentLastActivity(row){
+  const d=studentUpdatedDate(row);if(!d)return"Veri bekleniyor";
+  const now=new Date(),diff=Math.max(0,now-d);
+  if(diff<60000)return"Az önce";
+  if(diff<3600000)return Math.floor(diff/60000)+" dk önce";
+  if(diff<86400000)return Math.floor(diff/3600000)+" sa önce";
+  return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short"}).format(d);
+}
+function renderStudentsPage(){
+  const total=$("studentsTotal"),active=$("studentsActive"),attention=$("studentsAttention"),list=$("studentsList"),empty=$("studentsEmpty");
+  if(total)total.textContent=String(coachReportRows.length);
+  if(active)active.textContent=String(coachReportRows.filter(studentActiveToday).length);
+  if(attention)attention.textContent=String(coachReportRows.filter(studentNeedsAttention).length);
+  if(!list||!empty)return;
+  if(!coachReportRows.length){
+    empty.classList.remove("hidden");list.classList.add("hidden");list.innerHTML="";return;
+  }
+  empty.classList.add("hidden");list.classList.remove("hidden");
+  const search=String($("studentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR");
+  const rows=coachReportRows.filter(row=>{
+    const name=studentName(row).toLocaleLowerCase("tr-TR");
+    if(search&&!name.includes(search))return false;
+    if(studentListFilter==="active"&&!studentActiveToday(row))return false;
+    if(studentListFilter==="attention"&&!studentNeedsAttention(row))return false;
+    return true;
+  });
+  list.innerHTML=rows.length?rows.map(row=>{
+    const name=studentName(row),program=weekStats(row.share?.program),overdue=Math.round(reportNum(row?.share?.progress?.overdueTopics));
+    const today=studentActiveToday(row);
+    const statusClass=overdue?"attention":today?"active":"idle";
+    const statusText=overdue?overdue+" geciken konu":today?"Bugün aktif":"Aktivite bekleniyor";
+    return '<div class="student-row" data-student-row="'+escHtml(row.studentUid)+'"><span class="student-cell-main"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span></span><span class="student-status '+statusClass+'"><i></i>'+escHtml(statusText)+'</span><span class="student-program"><b>'+(program.plannedDays?program.ratio+"%":"—")+'</b><small>'+(program.plannedDays?program.doneDays+" / "+program.plannedDays+" gün":"Program verisi yok")+'</small></span><span class="student-last">'+escHtml(studentLastActivity(row))+'</span><button type="button" class="student-open" data-open-student="'+escHtml(row.studentUid)+'">İncele ›</button></div>';
+  }).join(""):'<div class="students-filter-empty">Bu filtrede öğrenci bulunamadı.</div>';
+  document.querySelectorAll("[data-open-student]").forEach(button=>button.addEventListener("click",()=>{
+    const uid=button.dataset.openStudent;
+    showCoachPage("reports");
+    if($("reportStudentSelect"))$("reportStudentSelect").value=uid;
+    renderReport(uid);
+  }));
+}
+$("studentSearch")?.addEventListener("input",renderStudentsPage);
+
+function openStudentConnect(){
+  pendingStudentConnection=null;
+  const backdrop=$("studentConnectBackdrop"),input=$("studentCoachCodeInput");
+  backdrop?.classList.remove("hidden");backdrop?.setAttribute("aria-hidden","false");
+  if(input){input.value="";setTimeout(()=>input.focus(),0)}
+  $("studentConnectPreview")?.classList.add("hidden");
+  $("studentCodeStatus")?.classList.add("hidden");
+  if($("studentConnectConfirm"))$("studentConnectConfirm").disabled=true;
+  if($("studentCodeHint"))$("studentCodeHint").textContent="Kod 12 karakterdir. Tireleri yazmak zorunda değilsin.";
+}
+function closeStudentConnect(){
+  $("studentConnectBackdrop")?.classList.add("hidden");
+  $("studentConnectBackdrop")?.setAttribute("aria-hidden","true");
+  pendingStudentConnection=null;
+}
+function setStudentCodeStatus(message,type=""){
+  const node=$("studentCodeStatus");if(!node)return;
+  node.textContent=message;node.className="student-code-status "+type;
+  node.classList.toggle("hidden",!message);
+}
+async function verifyStudentCoachCode(){
+  const input=$("studentCoachCodeInput"),button=$("studentCodeCheckBtn"),confirm=$("studentConnectConfirm");
+  const code=normalizeStudentCoachCode(input?.value);
+  if(input)input.value=formatStudentCoachCode(code);
+  pendingStudentConnection=null;
+  $("studentConnectPreview")?.classList.add("hidden");
+  if(confirm)confirm.disabled=true;
+  if(!STUDENT_CODE_RE.test(code)){setStudentCodeStatus("Kod 12 karakter olmalı.","error");return}
+  if(button)button.disabled=true;
+  setStudentCodeStatus("Kod doğrulanıyor…","loading");
+  try{
+    const codeSnap=await getDoc(doc(db,"studentCoachCodes",code));
+    if(!codeSnap.exists()){setStudentCodeStatus("Bu kodla eşleşen öğrenci bulunamadı. Kodu kontrol et.","error");return}
+    const codeData=codeSnap.data();
+    if(codeData.active!==true||!codeData.studentUid){setStudentCodeStatus("Bu koç kodu artık aktif değil. Öğrenciden yeni kod iste.","error");return}
+    const profileSnap=await getDoc(doc(db,"accountProfiles",codeData.studentUid));
+    if(!profileSnap.exists()||profileSnap.data()?.role!=="student"){setStudentCodeStatus("Kod geçerli bir öğrenci hesabına ait değil.","error");return}
+    const profile=profileSnap.data();
+    const existing=coachReportRows.find(row=>row.studentUid===codeData.studentUid);
+    if(existing){
+      setStudentCodeStatus(studentName(existing)+" zaten öğrencilerin arasında.","success");
+      return;
+    }
+    pendingStudentConnection={code,studentUid:codeData.studentUid,profile};
+    if($("studentPreviewAvatar"))$("studentPreviewAvatar").textContent=reportInitial(profile.displayName||"Öğrenci");
+    if($("studentPreviewName"))$("studentPreviewName").textContent=profile.displayName||"Öğrenci";
+    if($("studentPreviewMeta"))$("studentPreviewMeta").textContent=[profile.coachTitle,profile.specialization].filter(Boolean).join(" · ")||"YKS öğrencisi";
+    $("studentConnectPreview")?.classList.remove("hidden");
+    setStudentCodeStatus("Kod doğrulandı. Bağlantıyı kurabilirsin.","success");
+    if(confirm)confirm.disabled=false;
+  }catch(error){
+    console.error("Öğrenci kodu doğrulama",error);
+    setStudentCodeStatus("Kod doğrulanamadı: "+String(error?.message||"Bilinmeyen hata"),"error");
+  }finally{if(button)button.disabled=false}
+}
+async function connectStudentByCode(){
+  const candidate=pendingStudentConnection,user=auth.currentUser,button=$("studentConnectConfirm");
+  if(!candidate||!user)return;
+  if(button)button.disabled=true;
+  setStudentCodeStatus("Öğrenci bağlanıyor…","loading");
+  try{
+    const linksSnap=await getDocs(query(collection(db,"coachingLinks"),where("coachUid","==",user.uid)));
+    const existing=linksSnap.docs.map(d=>({id:d.id,...d.data()})).find(link=>link.studentUid===candidate.studentUid);
+    if(existing?.active===true){
+      setStudentCodeStatus("Bu öğrenci zaten bağlı.","success");
+    }else if(existing){
+      await updateDoc(doc(db,"coachingLinks",existing.id),{active:true,accessCode:candidate.code,updatedAt:serverTimestamp()});
+    }else{
+      const linkId=candidate.studentUid+"_"+user.uid;
+      await setDoc(doc(db,"coachingLinks",linkId),{
+        studentUid:candidate.studentUid,
+        coachUid:user.uid,
+        accessCode:candidate.code,
+        active:true,
+        createdAt:serverTimestamp(),
+        updatedAt:serverTimestamp()
+      });
+    }
+    setStudentCodeStatus((candidate.profile?.displayName||"Öğrenci")+" başarıyla eklendi ✓","success");
+    await loadCoachReports(user.uid);
+    setTimeout(closeStudentConnect,650);
+  }catch(error){
+    console.error("Öğrenci bağlantısı",error);
+    setStudentCodeStatus("Öğrenci eklenemedi: "+String(error?.message||"Bilinmeyen hata"),"error");
+    if(button)button.disabled=false;
+  }
+}
+$("addStudentBtn")?.addEventListener("click",openStudentConnect);
+document.querySelector("[data-add-student]")?.addEventListener("click",openStudentConnect);
+$("studentConnectClose")?.addEventListener("click",closeStudentConnect);
+$("studentConnectCancel")?.addEventListener("click",closeStudentConnect);
+$("studentConnectBackdrop")?.addEventListener("click",event=>{if(event.target===event.currentTarget)closeStudentConnect()});
+$("studentCoachCodeInput")?.addEventListener("input",event=>{
+  const raw=normalizeStudentCoachCode(event.currentTarget.value);
+  event.currentTarget.value=formatStudentCoachCode(raw);
+  pendingStudentConnection=null;
+  $("studentConnectPreview")?.classList.add("hidden");
+  if($("studentConnectConfirm"))$("studentConnectConfirm").disabled=true;
+  setStudentCodeStatus("");
+});
+$("studentCoachCodeInput")?.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();void verifyStudentCoachCode()}});
+$("studentCodeCheckBtn")?.addEventListener("click",()=>void verifyStudentCoachCode());
+$("studentConnectConfirm")?.addEventListener("click",()=>void connectStudentByCode());
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!$("studentConnectBackdrop")?.classList.contains("hidden"))closeStudentConnect()});
