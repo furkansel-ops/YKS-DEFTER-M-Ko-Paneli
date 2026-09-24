@@ -82,8 +82,8 @@ test('Dashboard v2.1 görsel taslaklardaki ana içerik bloklarını tamamlar',()
   const js=read('dashboard-v20.js');
   for(const token of [
     'Bekleyen İşlemler','Hızlı İşlemler','Son Deneme Sonuçları','Sınıf Dağılımı',
-    'Son Öğrenci Hareketleri','Program Türü Dağılımı','Son Program Güncellemeleri',
-    'Seçili Konu Özeti','Konu Durumu Dağılımı','Seçili Hata Özeti','Hata Türü Dağılımı',
+    'Son Öğrenci Hareketleri','Haftalık Program Takvimi','Son Güncellemeler',
+    'Konu Gezgini','Konu Detayı','Hata Kayıt Defteri','Kritik Hata Kuyruğu',
     'Güvenlik','Entegrasyonlar'
   ])assert.ok(js.includes(token),token);
   assert.match(js,/data-student-filter/);
