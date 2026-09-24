@@ -20,16 +20,6 @@ function syncText(){
   const raw=document.getElementById("syncPill")?.textContent?.replace(/\s+/g," ").trim()||"Canlı bağlantı";
   return raw.replace(/^●\s*/,"");
 }
-function toneClass(text){
-  const value=String(text||"").toLocaleLowerCase("tr-TR");
-  if(value.includes("matematik"))return"tone-math";
-  if(value.includes("fizik"))return"tone-physics";
-  if(value.includes("kimya"))return"tone-chemistry";
-  if(value.includes("biyoloji"))return"tone-biology";
-  if(value.includes("türk"))return"tone-turkish";
-  if(value.includes("tekrar"))return"tone-review";
-  return"tone-other";
-}
 
 function readProgramTable(card){
   const table=card?.querySelector(".program-table");if(!table)return null;
@@ -78,7 +68,7 @@ function taskCellHtml(cell,d,isCurrent){
   const today=isCurrent&&d===((new Date().getDay()+6)%7);
   if(!cell?.task)return`<div class="student-program-cell student-program-task ${today?"today-col":""}"><span class="student-program-empty"> </span></div>`;
   const status=cell.done?"Tamamlandı":cell.moved?"Önceki günden taşındı":"Planlandı";
-  return`<div class="student-program-cell student-program-task ${toneClass(cell.task)} ${cell.done?"is-done":""} ${cell.moved?"is-moved":""} ${today?"today-col":""}" title="${escapeHtml(status)}"><span class="student-program-tick" aria-hidden="true">${cell.done?"✓":""}</span>${cell.moved?'<span class="student-program-moved" aria-hidden="true">→</span>':""}<span class="student-program-text">${escapeHtml(cell.task)}</span></div>`;
+  return`<div class="student-program-cell student-program-task ${cell.done?"is-done":""} ${cell.moved?"is-moved":""} ${today?"today-col":""}" title="${escapeHtml(status)}"><span class="student-program-tick" aria-hidden="true">${cell.done?"✓":""}</span>${cell.moved?'<span class="student-program-moved" aria-hidden="true">→</span>':""}<span class="student-program-text">${escapeHtml(cell.task)}</span></div>`;
 }
 function routineGrid(model,days,isCurrent){
   let html='<div class="student-program-cell student-program-empty-head"></div>'+[0,1,2,3,4].map(d=>headHtml(d,days,isCurrent)).join("")+'<div class="student-program-spacer"></div>'+[5,6].map(d=>headHtml(d,days,isCurrent)).join("");
@@ -121,7 +111,7 @@ function enhanceProgram(){
   const dayDone=Array.from({length:7},(_,d)=>Boolean(routines.dayDone[d]||study.dayDone[d]));
   adaptWeekNavigation(host,isCurrent);
   host.querySelector(".program-metrics")?.remove();
-  const shell=document.createElement("div");shell.className="program-student-shell student-program-v2";shell.dataset.mirrorVersion=MIRROR_VERSION;shell.setAttribute("aria-label","YKS Defterim Programım canlı aynası");
+  const shell=document.createElement("div");shell.className="program-student-shell";shell.dataset.mirrorVersion=MIRROR_VERSION;shell.setAttribute("aria-label","YKS Defterim Programım canlı aynası");
   shell.innerHTML=`${liveStrip(isCurrent)}<div class="student-program-title">Haftalık plan · Klasik+</div>${weekOverview(days,isCurrent,dayDone)}${legend()}${routineGrid(routines,days,isCurrent)}${studyGrid(study,days,isCurrent)}<p class="student-program-hint">Bu görünüm öğrencinin YKS Defterim → Programım ekranını canlı ve salt okunur olarak aynalar. Öğrenci görev eklediğinde, tamamladığında veya taşıdığında koç ekranı Firestore paylaşımıyla otomatik yenilenir.</p>`;
   main.replaceChildren(shell);
 }
