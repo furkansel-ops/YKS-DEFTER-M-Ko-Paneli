@@ -8,6 +8,7 @@
   <title>YKS Defterim · Koç Paneli</title>
   <link rel="stylesheet" href="./base-reset.css?v=1.0.0">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
+  <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -58,8 +59,43 @@
       </div>
     </aside>
 
-    <main class="coach-reset-canvas" aria-label="Yeni koç paneli çalışma alanı">
+    <main class="coach-reset-canvas" aria-label="Koç paneli çalışma alanı">
       <button class="coach-mobile-menu-reset mobile-only" id="menuBtn" type="button" aria-label="Menüyü aç">☰</button>
+      <section class="dashboard-page" id="homePage">
+        <header class="dashboard-head">
+          <div><span class="dashboard-eyebrow">KOÇ PANELİ</span><h1>İyi akşamlar, <span id="dashboardCoachName">Koç</span> 👋</h1><p>Öğrencilerinin bugünkü durumunu tek ekrandan takip et.</p></div>
+          <div class="dashboard-date" id="dashboardDate"></div>
+        </header>
+        <section class="dashboard-stats">
+          <article class="stat-card"><span class="stat-icon">♟</span><div><small>Aktif Öğrenci</small><strong id="statStudents">—</strong><em>Toplam öğrenci</em></div></article>
+          <article class="stat-card"><span class="stat-icon">✓</span><div><small>Bugün Tamamlanan</small><strong id="statCompleted">—</strong><em>Görev</em></div></article>
+          <article class="stat-card"><span class="stat-icon">◷</span><div><small>Bekleyen Kontrol</small><strong id="statPending">—</strong><em>İncelenecek</em></div></article>
+          <article class="stat-card"><span class="stat-icon">↗</span><div><small>Haftalık İlerleme</small><strong id="statProgress">—</strong><em>Genel ortalama</em></div></article>
+        </section>
+        <section class="dashboard-grid">
+          <article class="dash-panel dash-wide">
+            <div class="panel-title"><div><h2>Bugünün Akışı</h2><p>Öğrencilerden gelen son çalışma hareketleri</p></div><button data-go-page="reports">Tümünü gör →</button></div>
+            <div class="empty-state"><span>◎</span><b>Henüz bugünkü hareket yok</b><p>Öğrenciler çalışmaya başladığında aktiviteleri burada göreceksin.</p></div>
+          </article>
+          <article class="dash-panel">
+            <div class="panel-title"><div><h2>Hızlı İşlemler</h2><p>Sık kullandığın alanlara geç</p></div></div>
+            <div class="quick-actions">
+              <button data-go-page="students"><span>♟</span><b>Öğrenciler</b><small>Öğrenci listesini aç</small></button>
+              <button data-go-page="programs"><span>▣</span><b>Programlar</b><small>Programları kontrol et</small></button>
+              <button data-go-page="exams"><span>▤</span><b>Denemeler</b><small>Net gelişimini incele</small></button>
+              <button data-go-page="messages"><span>✉</span><b>Mesajlar</b><small>Öğrencilerle iletişim</small></button>
+            </div>
+          </article>
+          <article class="dash-panel dash-wide">
+            <div class="panel-title"><div><h2>Öğrenci Durumu</h2><p>Takip gerektiren öğrenciler burada öne çıkacak</p></div><button data-go-page="students">Öğrencilere git →</button></div>
+            <div class="student-placeholder"><div class="placeholder-bars"><i></i><i></i><i></i></div><div><b>Öğrenci verileri bekleniyor</b><p>Bağlı öğrencilerin program ve çalışma verileri geldikçe bu alan otomatik dolacak.</p></div></div>
+          </article>
+          <article class="dash-panel">
+            <div class="panel-title"><div><h2>Koç Notları</h2><p>Bugün gözden geçir</p></div></div>
+            <div class="coach-note"><span>✦</span><p>Panel sade tutuldu. Gerçek öğrenci verileri geldikçe kartlar otomatik olarak anlam kazanacak.</p></div>
+          </article>
+        </section>
+      </section>
     </main>
   </div>
 
