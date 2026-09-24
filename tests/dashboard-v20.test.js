@@ -76,3 +76,31 @@ test('Dashboard v2 aydınlık profesyonel görünüm ve responsive kırılımlar
   assert.match(css,/@media\(max-width:460px\)/);
   assert.match(css,/--coach-bg:#f4f7fb/);
 });
+
+
+test('Dashboard v2.1 görsel taslaklardaki ana içerik bloklarını tamamlar',()=>{
+  const js=read('dashboard-v20.js');
+  for(const token of [
+    'Bekleyen İşlemler','Hızlı İşlemler','Son Deneme Sonuçları','Sınıf Dağılımı',
+    'Son Öğrenci Hareketleri','Program Türü Dağılımı','Son Program Güncellemeleri',
+    'Seçili Konu Özeti','Konu Durumu Dağılımı','Seçili Hata Özeti','Hata Türü Dağılımı',
+    'Güvenlik','Entegrasyonlar'
+  ])assert.ok(js.includes(token),token);
+  assert.match(js,/data-student-filter/);
+  assert.match(js,/pendingItems/);
+  assert.match(js,/recentExamTable/);
+  assert.match(js,/gradeDistribution/);
+});
+
+test('Dashboard v2.1 üst bar bildirim ve profil durumunu canlı koç state ile günceller',()=>{
+  const html=read('index.html');
+  const js=read('dashboard-v20.js');
+  const css=read('dashboard-v20.css');
+  assert.match(html,/coachNotifyCount/);
+  assert.match(html,/coachTopAvatar/);
+  assert.match(js,/pendingItems\(99\)/);
+  assert.match(js,/coachNotifyCount/);
+  assert.match(css,/\.coach-notify-v20/);
+  assert.match(css,/\.coach-home-main-grid/);
+  assert.match(css,/\.coach-home-lower-grid/);
+});
