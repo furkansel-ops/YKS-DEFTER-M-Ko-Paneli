@@ -57,12 +57,12 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
-const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage"};
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage"};
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage").forEach(section=>section.classList.add("hidden"));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
   closeSidebar();
 }
@@ -164,6 +164,8 @@ async function loadCoachReports(coachUid){
     renderExamAnalysis("all");
     hydrateTopicControls();
     renderTopicAnalysis("all");
+    hydrateErrorControls();
+    renderErrorAnalysis("all");
   }catch(error){
     console.error("Takip raporları",error);
     if($("reportErrorText"))$("reportErrorText").textContent=String(error?.message||"Rapor verileri alınamadı.");
@@ -453,3 +455,111 @@ $("topicStudentSelect")?.addEventListener("change",event=>renderTopicAnalysis(ev
 $("topicSubjectSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
 $("topicStatusSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
 $("topicRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setTopicState("topicLoading");void loadCoachReports(user.uid)}});
+
+
+function errorItems(row){
+  const items=row?.share?.errorJournal;
+  return Array.isArray(items)?items:[];
+}
+function errorFiltered(items){
+  const subject=$("errorSubjectSelect")?.value||"all";
+  return items.filter(item=>subject==="all"||String(item.subject||"Ders")===subject);
+}
+function errorTotal(items){return items.reduce((sum,item)=>sum+Math.max(1,reportNum(item?.n)||1),0)}
+function errorLatestDate(items){
+  return [...items].map(x=>String(x?.date||"")).filter(Boolean).sort().at(-1)||"—";
+}
+function errorSubjectMap(items){
+  const map=new Map();
+  items.forEach(item=>{
+    const key=String(item?.subject||"Ders"),entry=map.get(key)||{records:0,total:0};
+    entry.records++;entry.total+=Math.max(1,reportNum(item?.n)||1);map.set(key,entry);
+  });
+  return map;
+}
+function errorTopicMap(items){
+  const map=new Map();
+  items.forEach(item=>{
+    const subject=String(item?.subject||"Ders"),topic=String(item?.topic||"Konu"),key=subject+"|"+topic,entry=map.get(key)||{subject,topic,records:0,total:0,last:""};
+    entry.records++;entry.total+=Math.max(1,reportNum(item?.n)||1);if(String(item?.date||"")>entry.last)entry.last=String(item?.date||"");map.set(key,entry);
+  });
+  return map;
+}
+function hydrateErrorControls(){
+  const student=$("errorStudentSelect"),subject=$("errorSubjectSelect");
+  if(student){
+    const current=student.value||"all";
+    student.innerHTML='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
+    student.value=coachReportRows.some(x=>x.studentUid===current)?current:"all";
+  }
+  if(subject){
+    const current=subject.value||"all";
+    const subjects=[...new Set(coachReportRows.flatMap(row=>errorItems(row).map(x=>String(x.subject||"Ders"))))].sort((a,b)=>a.localeCompare(b,"tr"));
+    subject.innerHTML='<option value="all">Tüm dersler</option>'+subjects.map(name=>'<option value="'+escHtml(name)+'">'+escHtml(name)+'</option>').join("");
+    subject.value=subjects.includes(current)?current:"all";
+  }
+}
+function setErrorState(name){
+  ["errorLoading","errorEmpty","errorOverview","errorStudentDetail"].forEach(id=>$(id)?.classList.add("hidden"));
+  $(name)?.classList.remove("hidden");
+}
+function errorKpi(label,value,note,tone=""){
+  return '<article class="error-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
+}
+function renderErrorAnalysis(scope){
+  const all=coachReportRows.flatMap(row=>errorItems(row));
+  if(!coachReportRows.length||!all.length){setErrorState("errorEmpty");return}
+  if(scope==="all"){renderErrorOverview();return}
+  const row=coachReportRows.find(x=>x.studentUid===scope);
+  if(!row){renderErrorOverview();return}
+  renderErrorStudent(row);
+}
+function renderErrorOverview(){
+  const rows=coachReportRows,all=errorFiltered(rows.flatMap(row=>errorItems(row)));
+  if(!all.length){setErrorState("errorEmpty");return}
+  const total=errorTotal(all),subjects=errorSubjectMap(all),topics=errorTopicMap(all);
+  const repeated=[...topics.values()].filter(x=>x.records>1||x.total>1);
+  $("errorScopeTitle").textContent="Tüm öğrenciler";
+  $("errorScopeMeta").textContent="Genel yanlış analizi";
+  $("errorOverviewKpis").innerHTML=
+    errorKpi("HATA KAYDI",String(all.length),"Toplam kayıt")+
+    errorKpi("TOPLAM YANLIŞ",String(total),"Kayıtlardaki toplam")+
+    errorKpi("DERS",String(subjects.size),"Yanlış bulunan")+
+    errorKpi("TEKRAR EDEN KONU",String(repeated.length),"Koç odağı",repeated.length?"warn":"");
+  $("errorStudentList").innerHTML=rows.map(row=>{
+    const items=errorFiltered(errorItems(row));if(!items.length)return"";
+    const subjectEntries=[...errorSubjectMap(items).entries()].sort((a,b)=>b[1].total-a[1].total),top=subjectEntries[0];
+    const name=studentName(row);
+    return '<button type="button" class="error-student-row" data-error-student="'+escHtml(row.studentUid)+'"><span class="error-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+items.length+'</strong><strong>'+errorTotal(items)+'</strong><span>'+escHtml(top?top[0]:"—")+'</span><em>'+escHtml(errorLatestDate(items))+' ›</em></button>';
+  }).join("")||'<div class="error-mini-empty">Seçili derste hata kaydı yok.</div>';
+  const maxSubject=Math.max(1,...[...subjects.values()].map(x=>x.total));
+  $("errorSubjectOverview").innerHTML=[...subjects.entries()].sort((a,b)=>b[1].total-a[1].total).slice(0,8).map(([name,v])=>'<div><div><span>'+escHtml(name)+'</span><strong>'+v.total+'</strong></div><i><b style="width:'+Math.max(4,v.total/maxSubject*100)+'%"></b></i><small>'+v.records+' kayıt</small></div>').join("");
+  $("errorTopicOverview").innerHTML=[...topics.values()].sort((a,b)=>b.total-a.total||b.records-a.records).slice(0,7).map(item=>'<div><span><b>'+escHtml(item.topic)+'</b><small>'+escHtml(item.subject)+'</small></span><strong>'+item.total+' yanlış</strong></div>').join("")||'<div class="error-mini-empty">Konu verisi yok.</div>';
+  document.querySelectorAll("[data-error-student]").forEach(btn=>btn.addEventListener("click",()=>{if($("errorStudentSelect"))$("errorStudentSelect").value=btn.dataset.errorStudent;renderErrorAnalysis(btn.dataset.errorStudent)}));
+  setErrorState("errorOverview");
+}
+function renderErrorStudent(row){
+  const base=errorItems(row),items=errorFiltered(base),name=studentName(row),profile=row.share?.profile||{};
+  if(!base.length){setErrorState("errorEmpty");return}
+  const subjects=errorSubjectMap(base),topics=errorTopicMap(base),repeated=[...topics.values()].filter(x=>x.records>1||x.total>1).sort((a,b)=>b.total-a.total);
+  $("errorScopeTitle").textContent=name;
+  $("errorScopeMeta").textContent="Öğrenci hata detay raporu";
+  $("errorStudentAvatar").textContent=reportInitial(name);
+  $("errorStudentName").textContent=name;
+  const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
+  $("errorStudentTarget").textContent=[profile.track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
+  $("errorStudentCount").textContent=errorTotal(base)+" toplam yanlış";
+  $("errorStudentKpis").innerHTML=
+    errorKpi("HATA KAYDI",String(base.length),"Toplam kayıt")+
+    errorKpi("TOPLAM YANLIŞ",String(errorTotal(base)),"Tüm kayıtlar")+
+    errorKpi("DERS",String(subjects.size),"Yanlış bulunan")+
+    errorKpi("TEKRAR EDEN",String(repeated.length),"Konu",repeated.length?"warn":"");
+  $("errorLogList").innerHTML=items.length?[...items].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(item=>'<div class="error-log-row"><span><b>'+escHtml(item.topic||"Konu belirtilmemiş")+'</b><small>'+escHtml(item.subject||"Ders")+'</small></span><strong>'+escHtml(item.subject||"Ders")+'</strong><em>'+escHtml(item.date||"—")+'</em><i>'+Math.max(1,reportNum(item.n)||1)+' yanlış</i></div>').join(""):'<div class="error-mini-empty">Seçili derste hata kaydı yok.</div>';
+  const max=Math.max(1,...[...subjects.values()].map(x=>x.total));
+  $("errorStudentSubjects").innerHTML=[...subjects.entries()].sort((a,b)=>b[1].total-a[1].total).map(([subject,v])=>'<div><div><span>'+escHtml(subject)+'</span><strong>'+v.total+'</strong></div><i><b style="width:'+Math.max(4,v.total/max*100)+'%"></b></i><small>'+v.records+' kayıt</small></div>').join("");
+  $("errorRepeatedTopics").innerHTML=repeated.length?repeated.slice(0,8).map(item=>'<div><span><b>'+escHtml(item.topic)+'</b><small>'+escHtml(item.subject)+' · '+escHtml(item.last||"Tarih yok")+'</small></span><strong>'+item.total+' yanlış</strong></div>').join(""):'<div class="error-mini-empty">Tekrar eden konu görünmüyor.</div>';
+  setErrorState("errorStudentDetail");
+}
+$("errorStudentSelect")?.addEventListener("change",event=>renderErrorAnalysis(event.currentTarget.value));
+$("errorSubjectSelect")?.addEventListener("change",()=>renderErrorAnalysis($("errorStudentSelect")?.value||"all"));
+$("errorRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setErrorState("errorLoading");void loadCoachReports(user.uid)}});
