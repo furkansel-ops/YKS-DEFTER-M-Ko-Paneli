@@ -177,6 +177,7 @@ async function loadCoachReports(coachUid){
       setErrorState("errorLoadError");
     }
     try{renderStudentsPage()}catch(error){console.error("Öğrenciler render",error)}
+    try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Programlar render",error)}
     try{renderMessageStudents()}catch(error){console.error("Mesaj öğrenci listesi",error)}
   }catch(error){
     console.error("Takip raporları",error);
@@ -1044,3 +1045,163 @@ $("studentCoachCodeInput")?.addEventListener("keydown",event=>{if(event.key==="E
 $("studentCodeCheckBtn")?.addEventListener("click",()=>void verifyStudentCoachCode());
 $("studentConnectConfirm")?.addEventListener("click",()=>void connectStudentByCode());
 document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!$("studentConnectBackdrop")?.classList.contains("hidden"))closeStudentConnect()});
+
+
+let selectedProgramStudentUid="";
+let selectedProgramWeekIndex=-1;
+
+function programWeeks(row){
+  const weeks=Array.isArray(row?.share?.program?.weeks)?row.share.program.weeks:[];
+  return [...weeks].sort((a,b)=>String(a?.week||"").localeCompare(String(b?.week||"")));
+}
+function formatProgramWeek(start){
+  if(!start)return"Program yok";
+  try{
+    const d=new Date(start+"T12:00:00");
+    const end=new Date(d);end.setDate(end.getDate()+6);
+    const f=x=>new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short"}).format(x);
+    return f(d)+" – "+f(end);
+  }catch{return start}
+}
+function programDayDate(weekStart,day){
+  if(!weekStart)return"";
+  const d=new Date(weekStart+"T12:00:00");d.setDate(d.getDate()+day);return d.toISOString().slice(0,10);
+}
+function programDayLabel(weekStart,day){
+  const names=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+  if(!weekStart)return names[day];
+  const d=new Date(programDayDate(weekStart,day)+"T12:00:00");
+  return names[day]+" · "+new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short"}).format(d);
+}
+function collectProgramDayTasks(program,week,day){
+  const data=week?.data||{},out=[];
+  const groups=[["r",data.r||[]],["s",data.s||[]]];
+  groups.forEach(([key,rows])=>{
+    rows.forEach((row,index)=>{
+      const value=String(row?.[day]||"").trim();if(!value)return;
+      const label=String(program?.rowLabels?.[key]?.[index]||"").trim();
+      out.push({text:value,label});
+    });
+  });
+  return out;
+}
+function hydrateProgramStudents(){
+  const list=$("programStudentList"),empty=$("programStudentEmpty"),count=$("programStudentCount");
+  if(count)count.textContent=String(coachReportRows.length);
+  if(!list||!empty)return;
+  if(!coachReportRows.length){
+    empty.classList.remove("hidden");list.classList.add("hidden");list.innerHTML="";
+    selectedProgramStudentUid="";selectedProgramWeekIndex=-1;return;
+  }
+  empty.classList.add("hidden");list.classList.remove("hidden");
+  if(!selectedProgramStudentUid||!coachReportRows.some(x=>x.studentUid===selectedProgramStudentUid))selectedProgramStudentUid=coachReportRows[0].studentUid;
+  const q=String($("programStudentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR");
+  list.innerHTML=coachReportRows.filter(row=>!q||studentName(row).toLocaleLowerCase("tr-TR").includes(q)).map(row=>{
+    const name=studentName(row),weeks=programWeeks(row),stats=weekStats(row.share?.program);
+    return '<button type="button" class="program-student-item '+(row.studentUid===selectedProgramStudentUid?"active":"")+'" data-program-student="'+escHtml(row.studentUid)+'"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+(weeks.length?weeks.length+" hafta · "+stats.ratio+"% uyum":"Program verisi bekleniyor")+'</small></span><em>›</em></button>';
+  }).join("")||'<div class="program-student-filter-empty">Öğrenci bulunamadı.</div>';
+  document.querySelectorAll("[data-program-student]").forEach(button=>button.addEventListener("click",()=>{
+    selectedProgramStudentUid=button.dataset.programStudent;
+    selectedProgramWeekIndex=-1;
+    hydrateProgramStudents();
+    renderProgramWorkspace();
+  }));
+}
+function renderProgramWorkspace(){
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid);
+  const board=$("programWeekBoard"),empty=$("programMainEmpty");
+  if(!row){
+    if($("programWorkspaceTitle"))$("programWorkspaceTitle").textContent="Bir öğrenci seç";
+    if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent="Öğrencinin programı burada açılacak.";
+    if(board)board.innerHTML="";
+    empty?.classList.remove("hidden");
+    ["programTaskCount","programDoneDays","programStudyTime","programProgress"].forEach(id=>{if($(id))$(id).textContent="—"});
+    if($("programWeekLabel"))$("programWeekLabel").textContent="—";
+    return;
+  }
+  const program=row.share?.program||{},weeks=programWeeks(row),name=studentName(row);
+  if($("programWorkspaceTitle"))$("programWorkspaceTitle").textContent=name;
+  if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent=weeks.length?weeks.length+" haftalık program verisi":"Öğrenciden program verisi bekleniyor";
+  if($("programStudyTime"))$("programStudyTime").textContent=reportMinutes(row.share?.progress?.minutes7);
+  if(!weeks.length){
+    if(board)board.innerHTML="";
+    empty?.classList.remove("hidden");
+    empty.innerHTML='<span>▣</span><div><b>Program verisi henüz gelmedi</b><p>'+escHtml(name)+' uygulamasında program oluşturduğunda burada otomatik görünecek.</p></div>';
+    if($("programWeekLabel"))$("programWeekLabel").textContent="Program yok";
+    ["programTaskCount","programDoneDays","programProgress"].forEach(id=>{if($(id))$(id).textContent="0"});
+    return;
+  }
+  if(selectedProgramWeekIndex<0||selectedProgramWeekIndex>=weeks.length)selectedProgramWeekIndex=weeks.length-1;
+  const week=weeks[selectedProgramWeekIndex],data=week.data||{};
+  const tasks=Array.from({length:7},(_,day)=>collectProgramDayTasks(program,week,day));
+  const taskCount=tasks.reduce((s,x)=>s+x.length,0);
+  const plannedDays=tasks.filter(x=>x.length).length;
+  const done=Array.from({length:7},(_,d)=>Boolean(data.done?.[d]));
+  const doneDays=tasks.reduce((sum,x,d)=>sum+(x.length&&done[d]?1:0),0);
+  const ratio=plannedDays?Math.round(doneDays/plannedDays*100):0;
+  if($("programWeekLabel"))$("programWeekLabel").textContent=formatProgramWeek(week.week);
+  if($("programTaskCount"))$("programTaskCount").textContent=String(taskCount);
+  if($("programDoneDays"))$("programDoneDays").textContent=String(doneDays);
+  if($("programDoneMeta"))$("programDoneMeta").textContent=plannedDays+" planlı gün";
+  if($("programProgress"))$("programProgress").textContent=ratio+"%";
+  if($("programPrevWeek"))$("programPrevWeek").disabled=selectedProgramWeekIndex<=0;
+  if($("programNextWeek"))$("programNextWeek").disabled=selectedProgramWeekIndex>=weeks.length-1;
+  empty?.classList.add("hidden");
+  if(board)board.innerHTML=tasks.map((dayTasks,day)=>{
+    const completed=done[day]&&dayTasks.length;
+    return '<section class="day-column '+(completed?"done":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+(completed?'<span>✓ Tamamlandı</span>':'')+'</header><div class="day-tasks">'+(dayTasks.length?dayTasks.map(task=>'<article><span></span><div><b>'+escHtml(task.text)+'</b>'+(task.label?'<small>'+escHtml(task.label)+'</small>':'')+'</div></article>').join(""):'<div class="day-empty">Program yok</div>')+'</div></section>';
+  }).join("");
+}
+$("programStudentSearch")?.addEventListener("input",hydrateProgramStudents);
+$("programPrevWeek")?.addEventListener("click",()=>{if(selectedProgramWeekIndex>0){selectedProgramWeekIndex--;renderProgramWorkspace()}});
+$("programNextWeek")?.addEventListener("click",()=>{
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),weeks=programWeeks(row);
+  if(selectedProgramWeekIndex<weeks.length-1){selectedProgramWeekIndex++;renderProgramWorkspace()}
+});
+document.querySelector('[data-coach-page="programs"]')?.addEventListener("click",()=>{hydrateProgramStudents();renderProgramWorkspace()});
+
+function todayIsoLocal(){
+  const d=new Date(),off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10);
+}
+function openProgramTaskModal(prefill=""){
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid);
+  if(!row){alert("Önce soldan bir öğrenci seç.");return}
+  $("programTaskBackdrop")?.classList.remove("hidden");$("programTaskBackdrop")?.setAttribute("aria-hidden","false");
+  if($("programTaskStudentName"))$("programTaskStudentName").textContent=studentName(row)+" için yeni görev";
+  if($("programTaskDate"))$("programTaskDate").value=todayIsoLocal();
+  if($("programTaskText"))$("programTaskText").value=prefill;
+  if($("programTaskCharCount"))$("programTaskCharCount").textContent=String(prefill.length);
+  if($("programTaskStatus")){$("programTaskStatus").className="program-task-status hidden";$("programTaskStatus").textContent=""}
+  setTimeout(()=>$("programTaskText")?.focus(),0);
+}
+function closeProgramTaskModal(){
+  $("programTaskBackdrop")?.classList.add("hidden");$("programTaskBackdrop")?.setAttribute("aria-hidden","true");
+}
+function setProgramTaskStatus(message,type=""){
+  const node=$("programTaskStatus");if(!node)return;node.textContent=message;node.className="program-task-status "+type;node.classList.toggle("hidden",!message);
+}
+$("programAddTaskBtn")?.addEventListener("click",()=>openProgramTaskModal());
+$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);
+$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);
+$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
+$("programTaskText")?.addEventListener("input",e=>{if($("programTaskCharCount"))$("programTaskCharCount").textContent=String(e.currentTarget.value.length)});
+$("programTemplatesBtn")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.toggle("hidden"));
+$("programTemplateClose")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.add("hidden"));
+document.querySelectorAll("[data-program-template]").forEach(button=>button.addEventListener("click",()=>{
+  $("programTemplatePopover")?.classList.add("hidden");openProgramTaskModal(button.dataset.programTemplate||"");
+}));
+$("programTaskSend")?.addEventListener("click",async()=>{
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser,button=$("programTaskSend");
+  const task=String($("programTaskText")?.value||"").trim().slice(0,220),date=String($("programTaskDate")?.value||"");
+  if(!row||!user)return;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){setProgramTaskStatus("Geçerli bir tarih seç.","error");return}
+  if(!task){setProgramTaskStatus("Görev boş olamaz.","error");return}
+  if(button)button.disabled=true;setProgramTaskStatus("Görev gönderiliyor…","loading");
+  try{
+    await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{text:task,date},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    setProgramTaskStatus("Görev öğrenciye gönderildi ✓","success");
+    setTimeout(closeProgramTaskModal,700);
+  }catch(error){
+    console.error("Program görevi",error);setProgramTaskStatus("Görev gönderilemedi: "+String(error?.message||"Bilinmeyen hata"),"error");
+  }finally{if(button)button.disabled=false}
+});
