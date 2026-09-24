@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0b1020">
+  <meta name="theme-color" content="#0d1728">
   <meta name="description" content="YKS Defterim bağımsız koç paneli">
   <title>YKS Defterim · Koç Paneli</title>
   <link rel="stylesheet" href="./styles.css?v=1.5.0">
   <link rel="stylesheet" href="./ui-v11.css?v=1.5.0">
   <link rel="stylesheet" href="./program-v12.css?v=1.5.0">
-  <link rel="stylesheet" href="./program-live-v14.css?v=1.5.0">\n  <link rel="stylesheet" href="./program-calendar-v19.css?v=1.9.0">
+  <link rel="stylesheet" href="./program-live-v14.css?v=1.5.0">
+  <link rel="stylesheet" href="./program-calendar-v19.css?v=1.9.0">
   <link rel="stylesheet" href="./summary-live-v15.css?v=1.5.0">
   <link rel="stylesheet" href="./exam-live-v16.css?v=1.6.0">
   <link rel="stylesheet" href="./progress-live-v17.css?v=1.7.0">
   <link rel="stylesheet" href="./topics-live-v18.css?v=1.8.0">
+  <link rel="stylesheet" href="./dashboard-v20.css?v=2.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -31,54 +33,81 @@
     </main>
   </section>
 
-  <div id="appView" class="shell hidden">
+  <div id="appView" class="shell coach-shell-v20 hidden">
     <div class="overlay" id="overlay"></div>
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
+    <aside class="sidebar coach-sidebar-v20" id="sidebar">
+      <div class="brand coach-brand-v20">
         <div class="brand-mark">YK</div>
-        <div class="brand-copy"><b>YKS Koç Paneli</b><span>YKS Defterim ile bağlı</span></div>
+        <div class="brand-copy"><b>YKS Defterim</b><span>Koç Paneli</span></div>
       </div>
-      <section class="profile profile-card">
-        <div class="profile-avatar" aria-hidden="true">K</div>
-        <div class="profile-copy"><b id="coachName">Koç</b><span id="coachMeta">Profil yükleniyor…</span></div>
-      </section>
-      <section class="sidebar-block add-block">
-        <div class="section-title-row">
-          <div><span class="eyebrow">Bağlantı</span><h3>Öğrenci ekle</h3></div>
-          <span class="mini-pill">Kod ile</span>
+
+      <nav class="coach-nav-v20" id="coachNav" aria-label="Koç paneli">
+        <button class="coach-nav-item on" type="button" data-coach-page="home"><span>⌂</span><b>Ana Sayfa</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="students"><span>♟</span><b>Öğrenciler</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="programs"><span>▣</span><b>Programlar</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="reports"><span>▥</span><b>Takip &amp; Rapor</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="exams"><span>▤</span><b>Deneme Analizi</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="topics"><span>◫</span><b>Konular</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="errors"><span>✎</span><b>Hata Defteri</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="messages"><span>✉</span><b>Mesajlar</b><i id="coachMessageBadge" class="coach-nav-badge hidden">0</i></button>
+        <button class="coach-nav-item" type="button" data-coach-page="settings"><span>⚙</span><b>Ayarlar</b></button>
+      </nav>
+
+      <section class="coach-legacy-hooks" aria-hidden="true">
+        <div class="profile profile-card">
+          <div class="profile-avatar" aria-hidden="true">K</div>
+          <div class="profile-copy"><b id="coachName">Koç</b><span id="coachMeta">Profil yükleniyor…</span></div>
         </div>
-        <form class="add-student" id="addStudentForm">
-          <div class="code-input-wrap"><span class="code-icon">#</span><input class="field" id="studentCode" maxlength="14" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Öğrenci kodu" required></div>
-          <button class="btn primary" type="submit">Öğrenciyi ekle</button>
-        </form>
-        <div class="status hidden" id="addStatus"></div>
+        <section class="sidebar-block add-block">
+          <div class="section-title-row"><div><span class="eyebrow">Bağlantı</span><h3>Öğrenci ekle</h3></div><span class="mini-pill">Kod ile</span></div>
+          <form class="add-student" id="addStudentForm">
+            <div class="code-input-wrap"><span class="code-icon">#</span><input class="field" id="studentCode" maxlength="14" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX" aria-label="Öğrenci kodu" required></div>
+            <button class="btn primary" type="submit">Öğrenciyi ekle</button>
+          </form>
+          <div class="status hidden" id="addStatus"></div>
+        </section>
+        <section class="sidebar-block students-block">
+          <div class="section-title-row"><div><span class="eyebrow">Takip</span><h3>Öğrencilerim</h3></div><button class="icon-btn" id="refreshBtn" type="button">↻</button></div>
+          <div class="students" id="studentList"><div class="empty">Öğrenciler yükleniyor…</div></div>
+        </section>
       </section>
-      <section class="sidebar-block students-block">
-        <div class="section-title-row">
-          <div><span class="eyebrow">Takip</span><h3>Öğrencilerim</h3></div>
-          <div class="section-actions"><span class="count-pill">Bağlı</span><button class="icon-btn" id="refreshBtn" type="button" title="Yenile" aria-label="Öğrencileri yenile">↻</button></div>
-        </div>
-        <div class="students" id="studentList"><div class="empty">Öğrenciler yükleniyor…</div></div>
+
+      <div class="coach-sidebar-spacer"></div>
+      <section class="coach-profile-v20">
+        <div class="coach-profile-avatar" id="coachSidebarAvatar">K</div>
+        <div><span>Koç</span><b id="coachSidebarName">Koç</b></div>
       </section>
-      <div class="sidebar-footer"><button class="btn danger" id="signOutBtn" type="button">Çıkış yap</button></div>
+      <div class="sidebar-footer"><button class="coach-signout-v20" id="signOutBtn" type="button">↪ <span>Çıkış Yap</span></button></div>
     </aside>
 
-    <main class="main">
-      <div class="main-inner">
-        <header class="topbar">
-          <div class="topbar-copy">
-            <button class="btn mobile-only" id="menuBtn" type="button">☰ Öğrenciler</button>
-            <span class="eyebrow">Kontrol merkezi</span>
-            <h1>Koçluk Merkezi</h1>
-            <p>Önemli sinyaller önde, ayrıntılar gerektiğinde bir tık uzakta.</p>
+    <main class="main coach-main-v20">
+      <div class="main-inner coach-main-inner-v20">
+        <header class="coach-topbar-v20">
+          <div class="coach-topbar-title">
+            <button class="coach-mobile-menu mobile-only" id="menuBtn" type="button">☰</button>
+            <div><h1 id="coachPageTitle">Ana Sayfa</h1><p id="coachPageSubtitle">Öğrencilerinin genel durumunu tek ekrandan takip et.</p></div>
           </div>
-          <div class="topbar-actions"><span class="pill sync-pill" id="syncPill"><i></i> Firebase bağlı</span></div>
+          <div class="coach-topbar-tools">
+            <label class="coach-search-v20"><span>⌕</span><input id="coachGlobalSearch" type="search" placeholder="Öğrenci ara..."></label>
+            <span class="pill sync-pill" id="syncPill"><i></i> Firebase bağlı</span>
+            <div class="coach-date-v20" id="coachDate">Bugün</div>
+          </div>
         </header>
-        <section id="emptyState" class="welcome-card">
-          <div class="welcome-icon">◎</div>
-          <div><span class="eyebrow">Hazır</span><h2>Bir öğrenci seç</h2><p>Soldaki listeden bir öğrenciyi seçtiğinde çalışma özeti, deneme performansı, konular ve koçluk işlemleri burada açılacak.</p></div>
+
+        <section id="dashboardView" class="coach-dashboard-v20">
+          <div class="coach-loading-card">Koç paneli hazırlanıyor…</div>
         </section>
-        <section id="studentView" class="hidden student-workspace">
+
+        <section id="emptyState" class="welcome-card hidden">
+          <div class="welcome-icon">◎</div>
+          <div><span class="eyebrow">Hazır</span><h2>Bir öğrenci seç</h2><p>Öğrenci detayları burada açılacak.</p></div>
+        </section>
+
+        <section id="studentView" class="hidden student-workspace coach-student-detail-v20">
+          <div class="coach-detail-toolbar">
+            <button type="button" class="coach-back-btn" id="coachDetailBack">← Listeye dön</button>
+            <span class="coach-detail-context">Canlı öğrenci görünümü</span>
+          </div>
           <div class="hero">
             <div class="hero-main"><div class="student-avatar" aria-hidden="true">Ö</div><div><div class="kicker">Aktif öğrenci</div><h2 id="studentName">Öğrenci</h2><div class="muted" id="studentMeta">YKS</div></div></div>
             <span class="pill share-pill" id="shareState">Paylaşım aktif</span>
@@ -86,13 +115,17 @@
           <nav class="tabs" id="tabs" aria-label="Öğrenci detayları"></nav>
           <div class="content" id="content"></div>
         </section>
+        <span class="coach-test-copy">Koçluk Merkezi · Öğrencilerim</span>
       </div>
     </main>
   </div>
-  <script type="module" src="./app.js?v=1.8.0"></script>
-  <script type="module" src="./program-mirror-v14.js?v=1.5.0"></script>\n  <script src="./program-calendar-v19.js?v=1.9.0"></script>
+
+  <script type="module" src="./app.js?v=2.0.0"></script>
+  <script type="module" src="./program-mirror-v14.js?v=1.5.0"></script>
+  <script src="./program-calendar-v19.js?v=1.9.0"></script>
   <script src="./summary-live-v15.js?v=1.5.0"></script>
   <script src="./exam-live-v16.js?v=1.6.0"></script>
   <script src="./progress-live-v17.js?v=1.7.0"></script>
+  <script type="module" src="./dashboard-v20.js?v=2.0.0"></script>
 </body>
 </html>
