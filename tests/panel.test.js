@@ -27,10 +27,10 @@ test('öğrenci detay sekmeleri yeni core üzerinden render edilir',()=>{
   for(const label of ['Özet','Program','Deneme','İlerleme','Konular','Hata Defteri'])assert.ok(app.includes(label),label);
   for(const fn of ['renderSummary','renderProgram','renderExams','renderProgress','renderTopics','renderErrors'])assert.match(app,new RegExp('function '+fn));
   assert.doesNotMatch(app,/topics-live-v18/);
-  assert.match(css,/v3 · Yeni öğrenci detay teması/);
-  assert.match(css,/\.coach-student-detail-v20 \.hero/);
-  assert.match(css,/\.coach-student-detail-v20 \.tab\.on/);
-  assert.match(css,/\.detail-v20-split/);
+  assert.match(css,/v3\.1 · Tamamen yeni öğrenci detay sayfası/);
+  assert.match(css,/\.student-detail-page-v3/);
+  assert.match(css,/\.student-detail-hero-v3/);
+  assert.match(css,/\.student-detail-nav-v3/);
 });
 
 test('Program detay görünümü gerçek öğrenci Programım sözleşmesini korur',()=>{
@@ -59,9 +59,9 @@ test('eski detay tema ve enhancer assetleri artık yüklenmez',()=>{
   ];
   for(const file of forbidden)assert.ok(!html.includes(file),file);
   assert.match(html,/core-v20\.css\?v=2\.3\.0/);
-  assert.match(html,/dashboard-v20\.css\?v=3\.0\.0/);
-  assert.match(html,/app\.js\?v=3\.0\.0/);
-  assert.match(html,/dashboard-v20\.js\?v=3\.0\.0/);
+  assert.match(html,/dashboard-v20\.css\?v=3\.1\.0/);
+  assert.match(html,/app\.js\?v=3\.1\.0/);
+  assert.match(html,/dashboard-v20\.js\?v=3\.1\.0/);
 });
 
 test('yeni detay programı eski CSS olmadan kendi stillerine sahiptir',()=>{
@@ -74,4 +74,14 @@ test('kayıt sayfası öğrenci hesabını koça çevirmeyi reddeder',()=>{
   assert.match(register,/existing\.role==="coach"/);
   assert.match(register,/öğrenci hesabı olarak kayıtlı/);
   assert.match(register,/emailVerified/);
+});
+
+
+test('eski studentView tamamen DOMdan kaldırılmıştır',()=>{
+  const html=read('index.html');
+  const js=read('dashboard-v20.js');
+  assert.doesNotMatch(html,/id="studentView"|id="tabs"|id="content"|id="studentName"|id="shareState"/);
+  assert.match(js,/studentDetailPage/);
+  assert.match(js,/student-detail-page-v3/);
+  assert.match(js,/data-detail-section/);
 });
