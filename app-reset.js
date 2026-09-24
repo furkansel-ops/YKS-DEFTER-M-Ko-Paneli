@@ -96,3 +96,10 @@ document.querySelectorAll("[data-student-filter]").forEach(button=>button.addEve
   document.querySelectorAll("[data-student-filter]").forEach(x=>x.classList.toggle("active",x===button));
 }));
 $("addStudentBtn")?.addEventListener("click",()=>alert("Öğrenci bağlantı akışını sonraki adımda gerçek sisteme bağlayacağız."));
+
+
+document.querySelectorAll("[data-report-view]").forEach(button=>button.addEventListener("click",()=>{
+  const view=button.dataset.reportView;
+  document.querySelectorAll("[data-report-view]").forEach(x=>x.classList.toggle("active",x===button));
+  document.querySelectorAll("[data-report-panel]").forEach(panel=>panel.classList.toggle("hidden",panel.dataset.reportPanel!==view));
+}));
