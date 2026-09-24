@@ -56,12 +56,12 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
-const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage"};
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage"};
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  document.querySelectorAll("#homePage,#studentsPage,#programsPage").forEach(section=>section.classList.add("hidden"));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
   closeSidebar();
 }
