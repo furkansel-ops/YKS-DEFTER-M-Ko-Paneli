@@ -137,7 +137,7 @@ function watchSelectedShare(){
     entry.share=snap.exists()?snap.data():null;
     if(state.selectedUid!==uid)return;
     const pill=$("syncPill");if(pill)pill.innerHTML=`<i></i> Canlı eşitlendi · ${esc(formatSyncedAt(entry.share?.updatedAt))}`;
-    renderStudentList();renderSelected();
+    renderStudentList();renderSelected();emitCoachState();
   },error=>{
     console.error("Öğrenci canlı paylaşımı",error);
     const pill=$("syncPill");if(pill)pill.textContent="Eşitleme hatası";
@@ -156,6 +156,7 @@ async function loadStudents(){
   if(state.selectedUid&&!students.some(s=>s.link.studentUid===state.selectedUid)){state.selectedUid="";state.programWeek=""}
   renderStudentList();
   if(state.selectedUid){watchSelectedShare();renderSelected()}else showNoStudent();
+  emitCoachState();
 }
 function renderStudentList(){
   const host=$("studentList");
@@ -273,6 +274,58 @@ async function addStudent(rawCode){
   const now=serverTimestamp();if(existing)await updateDoc(doc(db,COLLECTIONS.links,existing.id),{active:true,accessCode,updatedAt:now});else await setDoc(doc(db,COLLECTIONS.links,`${studentUid}_${state.user.uid}`),{studentUid,coachUid:state.user.uid,accessCode,active:true,createdAt:now,updatedAt:now});
   return{studentUid,already:false};
 }
+function dashboardSnapshot(){
+  return{
+    user:state.user?{uid:state.user.uid,displayName:state.user.displayName||"",email:state.user.email||""}:null,
+    coach:state.coach?{displayName:state.coach.displayName||"",coachTitle:state.coach.coachTitle||"",specialization:state.coach.specialization||""}:null,
+    selectedUid:state.selectedUid,
+    tab:state.tab,
+    students:state.students.map(entry=>({
+      studentUid:entry.link.studentUid,
+      link:{studentUid:entry.link.studentUid,coachUid:entry.link.coachUid||"",active:entry.link.active===true},
+      profile:entry.profile?{displayName:entry.profile.displayName||"",track:entry.profile.track||"",grade:entry.profile.grade||entry.profile.classLevel||""}:null,
+      share:entry.share||null,
+      name:studentName(entry),
+      track:studentTrack(entry)
+    }))
+  };
+}
+function emitCoachState(){
+  if(typeof window==="undefined")return;
+  try{window.dispatchEvent(new CustomEvent("yks:coach-state",{detail:dashboardSnapshot()}))}catch{}
+}
+function openDashboardStudent(studentUid,tab="summary"){
+  const exists=state.students.some(item=>item.link.studentUid===studentUid);
+  if(!exists)return false;
+  state.selectedUid=studentUid;
+  state.tab=["summary","program","exams","progress","topics","errors"].includes(tab)?tab:"summary";
+  state.programWeek="";
+  renderStudentList();
+  watchSelectedShare();
+  renderSelected();
+  closeSidebar();
+  emitCoachState();
+  return true;
+}
+async function connectDashboardStudent(rawCode){
+  const result=await addStudent(rawCode);
+  state.selectedUid=result.studentUid;
+  state.tab="summary";
+  state.programWeek="";
+  await loadStudents();
+  return result;
+}
+if(typeof window!=="undefined"){
+  window.__YKS_COACH_CORE__={
+    snapshot:dashboardSnapshot,
+    selectStudent:openDashboardStudent,
+    sendAction:(studentUid,type,payload)=>sendAction(studentUid,type,payload,null,false),
+    connectStudent:connectDashboardStudent,
+    refresh:loadStudents,
+    formatCode
+  };
+}
+
 function openSidebar(){$("sidebar").classList.add("open");$("overlay").classList.add("show")}
 function closeSidebar(){$("sidebar").classList.remove("open");$("overlay").classList.remove("show")}
 
@@ -289,9 +342,9 @@ $("studentCode").addEventListener("input",event=>{const cursor=event.target.sele
 onAuthStateChanged(auth,async user=>{
   syncTopicStudent($("content"),null);
   stopSelectedShare();state.user=user||null;state.coach=null;state.students=[];state.selectedUid="";state.tab="summary";state.programWeek="";
-  if(!user){showAuth();return}
+  if(!user){showAuth();emitCoachState();return}
   try{
     const profile=await loadCoachProfile(user);if(!profile){await signOut(auth);showAuth("Bu Google hesabında koç profili yok. Yeni koç hesabı oluştur sayfasını kullan.","err");return}
-    state.coach=profile;$("coachName").textContent=profile.displayName||user.displayName||"Koç";$("coachMeta").textContent=[profile.coachTitle,profile.specialization].filter(Boolean).join(" · ")||user.email||"Koç hesabı";showApp();await loadStudents();
+    state.coach=profile;$("coachName").textContent=profile.displayName||user.displayName||"Koç";$("coachMeta").textContent=[profile.coachTitle,profile.specialization].filter(Boolean).join(" · ")||user.email||"Koç hesabı";showApp();await loadStudents();emitCoachState();
   }catch(error){console.error(error);showAuth(friendlyError(error),"err")}
 });
