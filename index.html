@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
+  <link rel="stylesheet" href="./messages-v21.css?v=1.0.0">
 </head>
 <body>
   <section id="authView" class="auth-page">
@@ -561,9 +562,84 @@
           </section>
         </div>
       </section>
+      <section class="messages-page hidden" id="messagesPage">
+        <header class="messages-head">
+          <div>
+            <span class="dashboard-eyebrow">MESAJLAR</span>
+            <h1>Mesajlar</h1>
+            <p>Bağlı öğrencilerine doğrudan koç notu gönder, teslim durumunu takip et ve geçmiş mesajlarını tek yerde gör.</p>
+          </div>
+          <button class="message-refresh" id="messageRefreshBtn" type="button">↻ Mesajları yenile</button>
+        </header>
+
+        <section class="messages-shell">
+          <aside class="message-students">
+            <div class="message-side-head">
+              <div><span>ÖĞRENCİLER</span><h2>Konuşmalar</h2></div>
+              <strong id="messageStudentCount">0</strong>
+            </div>
+            <label class="message-search"><span>⌕</span><input id="messageStudentSearch" type="search" placeholder="Öğrenci ara..."></label>
+            <div id="messageStudentList" class="message-student-list"></div>
+          </aside>
+
+          <section class="message-chat">
+            <div id="messageNoStudent" class="message-empty">
+              <span>✉</span>
+              <h2>Bir öğrenci seç</h2>
+              <p>Sol taraftan bir öğrenciyi seçtiğinde gönderdiğin mesajları ve teslim durumlarını burada göreceksin.</p>
+            </div>
+
+            <div id="messageConversation" class="hidden">
+              <header class="message-chat-head">
+                <div class="message-chat-person">
+                  <span class="message-chat-avatar" id="messageChatAvatar">Ö</span>
+                  <div><b id="messageChatName">Öğrenci</b><small id="messageChatMeta">Bağlı öğrenci</small></div>
+                </div>
+                <span class="message-chat-status" id="messageChatStatus">Koç notları</span>
+              </header>
+
+              <div class="message-thread" id="messageThread"></div>
+
+              <form class="message-compose" id="messageComposeForm">
+                <div class="message-compose-box">
+                  <textarea id="messageInput" maxlength="500" placeholder="Öğrenciye mesajını yaz..."></textarea>
+                  <div class="message-compose-foot">
+                    <span><b id="messageCharCount">0</b>/500</span>
+                    <button type="submit" id="messageSendBtn">Gönder</button>
+                  </div>
+                </div>
+                <p>Mesaj öğrencinin YKS Defterim uygulamasına koç notu olarak iletilir.</p>
+              </form>
+            </div>
+          </section>
+
+          <aside class="message-info">
+            <div id="messageInfoEmpty" class="message-info-empty">
+              <span>i</span>
+              <p>Öğrenci seçildiğinde bağlantı ve mesaj özeti burada görünür.</p>
+            </div>
+            <div id="messageInfoPanel" class="hidden">
+              <div class="message-info-profile">
+                <span id="messageInfoAvatar">Ö</span>
+                <b id="messageInfoName">Öğrenci</b>
+                <small id="messageInfoTarget">YKS</small>
+              </div>
+              <div class="message-info-stats">
+                <div><span>Gönderilen</span><strong id="messageSentCount">0</strong></div>
+                <div><span>Uygulandı</span><strong id="messageAppliedCount">0</strong></div>
+                <div><span>Bekleyen</span><strong id="messagePendingCount">0</strong></div>
+              </div>
+              <div class="message-info-note">
+                <span>MESAJ DURUMU</span>
+                <p><b>Bekliyor</b>: öğrenci uygulaması henüz işlemedi.<br><b>Uygulandı</b>: mesaj öğrencinin uygulamasına ulaştı.<br><b>Başarısız</b>: öğrenci tarafında uygulanamadı.</p>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.9"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.1.0"></script>
 </body>
 </html>
