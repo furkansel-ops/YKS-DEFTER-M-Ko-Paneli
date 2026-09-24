@@ -29,6 +29,8 @@ function showApp(profile,user){
   const nameNode=$("coachSidebarName"),avatar=$("coachSidebarAvatar");
   if(nameNode)nameNode.textContent=name;
   if(avatar)avatar.textContent=initials(name).slice(0,1);
+  const dashName=$("dashboardCoachName");if(dashName)dashName.textContent=name.split(/\\s+/)[0]||"Koç";
+  const dashDate=$("dashboardDate");if(dashDate)dashDate.textContent=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
 }
 async function loadCoachProfile(user){
   const snap=await getDoc(doc(db,COLLECTIONS.profiles,user.uid));
@@ -76,3 +78,9 @@ onAuthStateChanged(auth,async user=>{
     showAuth(text(error?.message||"Koç profili yüklenemedi",180),"err");
   }
 });
+
+
+document.querySelectorAll("[data-go-page]").forEach(button=>button.addEventListener("click",()=>{
+  const page=button.dataset.goPage;
+  document.querySelector('[data-coach-page="'+page+'"]')?.click();
+}));
