@@ -12,8 +12,8 @@ test('Dashboard v2 dokuz koç ekranını ve ortak navigasyonu yükler',()=>{
     assert.ok(html.includes(label),label);
     assert.ok(js.includes(label),label);
   }
-  assert.match(html,/dashboard-v20\.css\?v=3\.0\.0/);
-  assert.match(html,/dashboard-v20\.js\?v=3\.0\.0/);
+  assert.match(html,/dashboard-v20\.css\?v=3\.1\.0/);
+  assert.match(html,/dashboard-v20\.js\?v=3\.1\.0/);
   assert.match(js,/PAGE_META/);
   assert.match(js,/homePage/);
   assert.match(js,/studentsPage/);
@@ -51,14 +51,14 @@ test('Dashboard v2 gerçek paylaşımlardan program deneme konu hata ve ilerleme
   assert.doesNotMatch(js,/Math\.random/);
 });
 
-test('Dashboard v2 öğrenci detayında mevcut güvenli sekmeleri açar',()=>{
+test('Dashboard v3 öğrenci detayını yeni dashboard içinde açar',()=>{
   const js=read('dashboard-v20.js');
   const app=read('app.js');
   for(const tab of ['summary','program','exams','progress','topics','errors'])assert.ok(app.includes(`"${tab}"`),tab);
   assert.match(js,/data-student-detail/);
   assert.match(js,/data-detail-tab/);
   assert.match(js,/core\(\)\?\.selectStudent/);
-  assert.match(js,/coachDetailBack/);
+  assert.match(js,/data-detail-back/);
 });
 
 test('Mesaj ekranı yeni veri koleksiyonu uydurmadan coaching action üzerinden koç notu gönderir',()=>{
@@ -134,4 +134,14 @@ test('Programlar ana görünümü öğrencinin canonical Programım modelini bir
   assert.match(css,/\.canonical-program-grid/);
   assert.match(css,/\.canonical-program-cell\.is-done/);
   assert.match(css,/\.canonical-program-cell\.is-moved/);
+});
+
+
+test('Öğrenci detayı eski studentView yerine yeni dashboard sayfasıdır',()=>{
+  const html=read('index.html');
+  const js=read('dashboard-v20.js');
+  const css=read('dashboard-v20.css');
+  assert.doesNotMatch(html,/studentView|coach-student-detail-v20/);
+  for(const fn of ['studentDetailPage','detailHero','detailSummary','detailProgram','detailExams','detailProgress','detailTopics','detailErrors'])assert.match(js,new RegExp('function '+fn));
+  for(const token of ['.student-detail-page-v3','.student-detail-hero-v3','.student-summary-grid-v3','.student-progress-hero-v3','.student-topic-table-v3','.student-error-list-v3'])assert.ok(css.includes(token),token);
 });
