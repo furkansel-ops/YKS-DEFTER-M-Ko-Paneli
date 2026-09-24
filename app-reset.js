@@ -660,6 +660,8 @@ function renderMessageStudents(){
   }).join("");
   document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{
     selectedMessageStudent=btn.dataset.messageStudent;
+    const input=$("messageInput");if(input)input.value="";
+    if($("messageCharCount"))$("messageCharCount").textContent="0";
     renderMessageStudents();
     renderMessageConversation(selectedMessageStudent);
   }));
@@ -754,6 +756,8 @@ document.querySelectorAll("[data-message-template]").forEach(button=>button.addE
   input.focus();
 }));
 document.querySelector('[data-coach-page="messages"]')?.addEventListener("click",()=>{
+  const input=$("messageInput");if(input)input.value="";
+  if($("messageCharCount"))$("messageCharCount").textContent="0";
   const user=auth.currentUser;
   if(user){renderMessageStudents();void loadCoachMessages(user.uid)}
 });
