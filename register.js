@@ -3,7 +3,7 @@ import{getAuth,GoogleAuthProvider,signInWithPopup,setPersistence,browserLocalPer
 import{getFirestore,doc,runTransaction,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
-const app=initializeApp(FIREBASE_CONFIG);
+const app=initializeApp(FIREBASE_CONFIG,"yks-coach-panel");
 const auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
 provider.setCustomParameters({prompt:"select_account"});
 const form=document.getElementById("registerForm"),button=document.getElementById("registerBtn"),status=document.getElementById("registerStatus");
