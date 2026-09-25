@@ -1059,6 +1059,33 @@ function programWeeks(row){
   const weeks=Array.isArray(row?.share?.program?.weeks)?row.share.program.weeks:[];
   return [...weeks].sort((a,b)=>String(a?.week||"").localeCompare(String(b?.week||"")));
 }
+function programTargetText(row){
+  const p=row?.share?.profile||{},parts=[];
+  if(p.targetUniversity)parts.push(String(p.targetUniversity));
+  if(p.targetDepartment)parts.push(String(p.targetDepartment));
+  if(parts.length)return parts.join(" · ");
+  const nets=[];
+  if(Number(p.targetNetTYT)>0)nets.push("TYT "+Math.round(Number(p.targetNetTYT))+" net");
+  if(Number(p.targetNetAYT)>0)nets.push("AYT "+Math.round(Number(p.targetNetAYT))+" net");
+  return nets.length?nets.join(" · "):String(p.track||"YKS öğrencisi");
+}
+function programSubjectTone(task){
+  const value=(String(task?.label||"")+" "+String(task?.text||"")).toLocaleLowerCase("tr-TR");
+  if(/matematik|problem|geometri/.test(value))return"math";
+  if(/fizik/.test(value))return"physics";
+  if(/kimya/.test(value))return"chemistry";
+  if(/biyoloji/.test(value))return"biology";
+  if(/türkçe|paragraf|dil bilgisi/.test(value))return"turkish";
+  if(/edebiyat/.test(value))return"literature";
+  if(/tarih/.test(value))return"history";
+  if(/coğrafya/.test(value))return"geography";
+  return"general";
+}
+function programCurrentWeekStart(){
+  const d=new Date(),day=(d.getDay()+6)%7;
+  d.setHours(12,0,0,0);d.setDate(d.getDate()-day);
+  return d.toISOString().slice(0,10);
+}
 function formatProgramWeek(start){
   if(!start)return"Program yok";
   try{
@@ -1120,20 +1147,36 @@ function renderProgramWorkspace(){
     if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent="Öğrencinin programı burada açılacak.";
     if(board)board.innerHTML="";
     empty?.classList.remove("hidden");
-    ["programTaskCount","programDoneDays","programStudyTime","programProgress"].forEach(id=>{if($(id))$(id).textContent="—"});
+    ["programTaskCount","programDoneDays","programPendingTasks","programStudyTime","programProgress"].forEach(id=>{if($(id))$(id).textContent="—"});
     if($("programWeekLabel"))$("programWeekLabel").textContent="—";
+    if($("programHeroAvatar"))$("programHeroAvatar").textContent="Ö";
+    if($("programHeroName"))$("programHeroName").textContent="Öğrenci seçilmedi";
+    if($("programHeroStatus"))$("programHeroStatus").textContent="Veri bekleniyor";
+    if($("programHeroTarget"))$("programHeroTarget").textContent="Hedef bilgisi öğrenciden geldiğinde burada görünecek.";
+    if($("programHeroSync"))$("programHeroSync").textContent="Son senkron: —";
+    if($("programHeroWeeks"))$("programHeroWeeks").textContent="0 hafta";
+    if($("programHeroProgress"))$("programHeroProgress").textContent="—";
+    if($("programHeroProgressBar"))$("programHeroProgressBar").style.width="0%";
     return;
   }
   const program=row.share?.program||{},weeks=programWeeks(row),name=studentName(row);
   if($("programWorkspaceTitle"))$("programWorkspaceTitle").textContent=name;
   if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent=weeks.length?weeks.length+" haftalık program verisi":"Öğrenciden program verisi bekleniyor";
   if($("programStudyTime"))$("programStudyTime").textContent=reportMinutes(row.share?.progress?.minutes7);
+  if($("programHeroAvatar"))$("programHeroAvatar").textContent=reportInitial(name);
+  if($("programHeroName"))$("programHeroName").textContent=name;
+  if($("programHeroTarget"))$("programHeroTarget").textContent=programTargetText(row);
+  if($("programHeroSync"))$("programHeroSync").textContent="Son senkron: "+reportTimestamp(row.share?.updatedAt);
+  if($("programHeroWeeks"))$("programHeroWeeks").textContent=weeks.length+" hafta";
+  if($("programHeroStatus"))$("programHeroStatus").textContent=weeks.length?"Program güncel":"Program bekleniyor";
   if(!weeks.length){
     if(board)board.innerHTML="";
     empty?.classList.remove("hidden");
     empty.innerHTML='<span>▣</span><div><b>Program verisi henüz gelmedi</b><p>'+escHtml(name)+' uygulamasında program oluşturduğunda burada otomatik görünecek.</p></div>';
     if($("programWeekLabel"))$("programWeekLabel").textContent="Program yok";
-    ["programTaskCount","programDoneDays","programProgress"].forEach(id=>{if($(id))$(id).textContent="0"});
+    ["programTaskCount","programDoneDays","programPendingTasks","programProgress"].forEach(id=>{if($(id))$(id).textContent="0"});
+    if($("programHeroProgress"))$("programHeroProgress").textContent="0%";
+    if($("programHeroProgressBar"))$("programHeroProgressBar").style.width="0%";
     return;
   }
   if(selectedProgramWeekIndex<0||selectedProgramWeekIndex>=weeks.length)selectedProgramWeekIndex=weeks.length-1;
@@ -1148,13 +1191,23 @@ function renderProgramWorkspace(){
   if($("programTaskCount"))$("programTaskCount").textContent=String(taskCount);
   if($("programDoneDays"))$("programDoneDays").textContent=String(doneDays);
   if($("programDoneMeta"))$("programDoneMeta").textContent=plannedDays+" planlı gün";
+  const completedTaskCount=tasks.reduce((sum,x,d)=>sum+(done[d]?x.length:0),0);
+  const pendingTaskCount=Math.max(0,taskCount-completedTaskCount);
   if($("programProgress"))$("programProgress").textContent=ratio+"%";
+  if($("programPendingTasks"))$("programPendingTasks").textContent=String(pendingTaskCount);
+  if($("programHeroProgress"))$("programHeroProgress").textContent=ratio+"%";
+  if($("programHeroProgressBar"))$("programHeroProgressBar").style.width=Math.max(0,Math.min(100,ratio))+"%";
   if($("programPrevWeek"))$("programPrevWeek").disabled=selectedProgramWeekIndex<=0;
   if($("programNextWeek"))$("programNextWeek").disabled=selectedProgramWeekIndex>=weeks.length-1;
   empty?.classList.add("hidden");
   if(board)board.innerHTML=tasks.map((dayTasks,day)=>{
-    const completed=done[day]&&dayTasks.length;
-    return '<section class="day-column '+(completed?"done":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+(completed?'<span>✓ Tamamlandı</span>':'')+'</header><div class="day-tasks">'+(dayTasks.length?dayTasks.map(task=>'<article><span></span><div><b>'+escHtml(task.text)+'</b>'+(task.label?'<small>'+escHtml(task.label)+'</small>':'')+'</div></article>').join(""):'<div class="day-empty">Program yok</div>')+'</div></section>';
+    const completed=done[day]&&dayTasks.length,isToday=programDayDate(week.week,day)===todayIsoLocal();
+    const stateBadge=completed?'<span class="day-state done">✓ Tamamlandı</span>':isToday?'<span class="day-state today">Bugün</span>':'';
+    return '<section class="day-column '+(completed?"done ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+stateBadge+'</header><div class="day-tasks">'+(dayTasks.length?dayTasks.map(task=>{
+      const tone=programSubjectTone(task),coachTask=/^Koç ·/.test(task.text);
+      const cleanText=task.text.replace(/^Koç ·(?: Deneme sonrası · )?/,"");
+      return '<article class="program-task-card tone-'+tone+'"><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
+    }).join(""):'<div class="day-empty"><i>＋</i><span>Bu gün için görev yok</span></div>')+'</div></section>';
   }).join("");
 }
 $("programStudentSearch")?.addEventListener("input",hydrateProgramStudents);
@@ -1162,6 +1215,13 @@ $("programPrevWeek")?.addEventListener("click",()=>{if(selectedProgramWeekIndex>
 $("programNextWeek")?.addEventListener("click",()=>{
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),weeks=programWeeks(row);
   if(selectedProgramWeekIndex<weeks.length-1){selectedProgramWeekIndex++;renderProgramWorkspace()}
+});
+$("programCurrentWeek")?.addEventListener("click",()=>{
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),weeks=programWeeks(row);
+  if(!weeks.length)return;
+  const current=programCurrentWeekStart(),index=weeks.findIndex(item=>item.week===current);
+  selectedProgramWeekIndex=index>=0?index:weeks.length-1;
+  renderProgramWorkspace();
 });
 document.querySelector('[data-coach-page="programs"]')?.addEventListener("click",async()=>{
   hydrateProgramStudents();renderProgramWorkspace();
