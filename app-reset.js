@@ -1158,7 +1158,14 @@ $("programNextWeek")?.addEventListener("click",()=>{
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),weeks=programWeeks(row);
   if(selectedProgramWeekIndex<weeks.length-1){selectedProgramWeekIndex++;renderProgramWorkspace()}
 });
-document.querySelector('[data-coach-page="programs"]')?.addEventListener("click",()=>{hydrateProgramStudents();renderProgramWorkspace()});
+document.querySelector('[data-coach-page="programs"]')?.addEventListener("click",async()=>{
+  hydrateProgramStudents();renderProgramWorkspace();
+  const user=auth.currentUser;if(!user)return;
+  try{
+    await loadCoachReports(user.uid);
+    hydrateProgramStudents();renderProgramWorkspace();
+  }catch(error){console.error("Programlar güncel veri yenileme",error)}
+});
 
 function todayIsoLocal(){
   const d=new Date(),off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10);
