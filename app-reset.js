@@ -3,7 +3,7 @@ import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,set
 import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
-const firebaseApp=initializeApp(FIREBASE_CONFIG);
+const firebaseApp=initializeApp(FIREBASE_CONFIG,"yks-coach-panel");
 const auth=getAuth(firebaseApp);
 const db=getFirestore(firebaseApp);
 const provider=new GoogleAuthProvider();
