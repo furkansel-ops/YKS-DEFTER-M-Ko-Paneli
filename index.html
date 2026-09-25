@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.2.0">
-  <link rel="stylesheet" href="./programs-v21.css?v=2.2.0">
+  <link rel="stylesheet" href="./programs-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
@@ -219,14 +219,39 @@
               </div>
               <div class="week-nav">
                 <button type="button" id="programPrevWeek" aria-label="Önceki hafta">‹</button>
+                <button type="button" class="week-nav-today" id="programCurrentWeek">Bu hafta</button>
                 <strong id="programWeekLabel">—</strong>
                 <button type="button" id="programNextWeek" aria-label="Sonraki hafta">›</button>
               </div>
             </div>
 
+            <section class="program-student-hero" id="programStudentHero">
+              <div class="program-hero-avatar" id="programHeroAvatar">Ö</div>
+              <div class="program-hero-copy">
+                <div class="program-hero-title-row">
+                  <div>
+                    <span>SEÇİLİ ÖĞRENCİ</span>
+                    <b id="programHeroName">Öğrenci seçilmedi</b>
+                  </div>
+                  <em id="programHeroStatus">Veri bekleniyor</em>
+                </div>
+                <p id="programHeroTarget">Hedef bilgisi öğrenciden geldiğinde burada görünecek.</p>
+                <div class="program-hero-meta">
+                  <span>↻ <b id="programHeroSync">Son senkron: —</b></span>
+                  <span>▦ <b id="programHeroWeeks">0 hafta</b></span>
+                </div>
+              </div>
+              <div class="program-hero-progress">
+                <span>Haftalık uyum</span>
+                <strong id="programHeroProgress">—</strong>
+                <div><i id="programHeroProgressBar"></i></div>
+              </div>
+            </section>
+
             <div class="program-summary">
               <article><small>Haftalık görev</small><strong id="programTaskCount">—</strong><span>Planlanan</span></article>
               <article><small>Tamamlanan gün</small><strong id="programDoneDays">—</strong><span id="programDoneMeta">Haftalık</span></article>
+              <article><small>Bekleyen görev</small><strong id="programPendingTasks">—</strong><span>Bu hafta</span></article>
               <article><small>Çalışma süresi</small><strong id="programStudyTime">—</strong><span>Son 7 gün</span></article>
               <article><small>Program uyumu</small><strong id="programProgress">—</strong><span>Haftalık</span></article>
             </div>
@@ -1022,6 +1047,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.22"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.23"></script>
 </body>
 </html>
