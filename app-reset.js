@@ -154,15 +154,11 @@ async function loadCoachReports(coachUid){
     const linkSnap=await getDocs(query(collection(db,"coachingLinks"),where("coachUid","==",coachUid)));
     const links=linkSnap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active===true);
     coachReportRows=await Promise.all(links.map(async link=>{
-      const [shareSnap,programSnap,profileSnap]=await Promise.all([
+      const [shareSnap,profileSnap]=await Promise.all([
         getDoc(doc(db,"coachingShares",link.studentUid)),
-        getDoc(doc(db,"coachingPrograms",link.studentUid)),
         getDoc(doc(db,"accountProfiles",link.studentUid))
       ]);
-      const share=shareSnap.exists()?shareSnap.data():null;
-      const dedicatedProgram=programSnap.exists()?programSnap.data()?.program:null;
-      const mergedShare=share?{...share,program:dedicatedProgram||share.program}:{program:dedicatedProgram||null};
-      return{link,studentUid:link.studentUid,share:mergedShare,profile:profileSnap.exists()?profileSnap.data():null,programSource:dedicatedProgram?"dedicated":share?.program?"legacy":"none"};
+      return{link,studentUid:link.studentUid,share:shareSnap.exists()?shareSnap.data():null,profile:profileSnap.exists()?profileSnap.data():null};
     }));
     const select=$("reportStudentSelect");
     if(select){
