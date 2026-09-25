@@ -124,12 +124,17 @@ function reportTimestamp(value){
     return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d);
   }catch{return"—"}
 }
+function programRowList(value){
+  if(Array.isArray(value))return value;
+  if(!value||typeof value!=="object")return[];
+  return Object.keys(value).sort((a,b)=>Number(a)-Number(b)).map(key=>Array.isArray(value[key])?value[key]:[]);
+}
 function latestWeek(program){
   const weeks=Array.isArray(program?.weeks)?program.weeks:[];
   return [...weeks].sort((x,y)=>String(x?.week||"").localeCompare(String(y?.week||""))).at(-1)||null;
 }
 function weekStats(program){
-  const item=latestWeek(program),data=item?.data||{},rows=[...(data.r||[]),...(data.s||[])];
+  const item=latestWeek(program),data=item?.data||{},rows=[...programRowList(data.r),...programRowList(data.s)];
   const taskCounts=Array.from({length:7},(_,day)=>rows.reduce((sum,row)=>sum+(String(row?.[day]||"").trim()?1:0),0));
   const done=Array.from({length:7},(_,day)=>Boolean(data?.done?.[day]));
   const plannedDays=taskCounts.filter(Boolean).length;
@@ -1075,7 +1080,7 @@ function programDayLabel(weekStart,day){
 }
 function collectProgramDayTasks(program,week,day){
   const data=week?.data||{},out=[];
-  const groups=[["r",data.r||[]],["s",data.s||[]]];
+  const groups=[["r",programRowList(data.r)],["s",programRowList(data.s)]];
   groups.forEach(([key,rows])=>{
     rows.forEach((row,index)=>{
       const value=String(row?.[day]||"").trim();if(!value)return;
