@@ -1,6 +1,6 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG,"yks-coach-panel");
@@ -597,20 +597,34 @@ document.querySelector('[data-coach-page="errors"]')?.addEventListener("click",(
 
 
 let coachMessageActions=[];
+let coachMessageStop=null;
+let coachMessageUid="";
 let selectedMessageStudent="";
 let messageStudentFilter="all";
 
 function messageTimestamp(value){
   try{const d=value?.toDate?.()||new Date(value);if(!d||Number.isNaN(d.getTime()))return"—";return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d)}catch{return"—"}
 }
-async function loadCoachMessages(coachUid){
-  if(!coachUid)return;
-  try{
-    const snap=await getDocs(query(collection(db,"coachingMessages"),where("coachUid","==",coachUid)));
-    coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a?.createdAt?.toMillis?.()||0)-(b?.createdAt?.toMillis?.()||0));
-  }catch(error){console.error("Mesajlar",error);coachMessageActions=[]}
+function applyCoachMessageSnapshot(snap){
+  coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a?.createdAt?.toMillis?.()||0)-(b?.createdAt?.toMillis?.()||0));
   renderMessageStudents();
   if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
+}
+async function loadCoachMessages(coachUid){
+  if(!coachUid)return;
+  if(coachMessageStop&&coachMessageUid===coachUid)return;
+  if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null}
+  coachMessageUid=coachUid;
+  const q=query(collection(db,"coachingMessages"),where("coachUid","==",coachUid));
+  try{
+    coachMessageStop=onSnapshot(q,applyCoachMessageSnapshot,error=>{
+      console.error("Canlı mesajlar",error);
+      coachMessageStop=null;coachMessageUid="";
+    });
+  }catch(error){
+    console.error("Mesaj dinleyicisi",error);
+    try{applyCoachMessageSnapshot(await getDocs(q))}catch(fetchError){console.error("Mesajlar",fetchError);coachMessageActions=[];renderMessageStudents()}
+  }
 }
 function messageRows(){return coachReportRows.filter(row=>row?.link?.active===true)}
 function messageActionsFor(studentUid){return coachMessageActions.filter(x=>x.studentUid===studentUid)}
@@ -658,7 +672,7 @@ async function sendCoachMessage(){
   if(button)button.disabled=true;
   try{
     await addDoc(collection(db,"coachingMessages"),{studentUid,coachUid:user.uid,senderUid:user.uid,senderRole:"coach",text:value,createdAt:serverTimestamp()});
-    if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";await loadCoachMessages(user.uid);
+    if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";
   }catch(error){console.error("Mesaj gönderilemedi",error);alert("Mesaj gönderilemedi: "+String(error?.message||"Bilinmeyen hata"))}finally{if(button)button.disabled=false}
 }
 $("messageComposeForm")?.addEventListener("submit",event=>{event.preventDefault();void sendCoachMessage()});
