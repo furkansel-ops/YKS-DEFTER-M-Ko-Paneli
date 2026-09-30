@@ -75,7 +75,7 @@ document.querySelectorAll("[data-coach-page]").forEach(button=>{
 });
 
 onAuthStateChanged(auth,async user=>{
-  if(!user){showAuth();return}
+  if(!user){if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
   try{
     const profile=await loadCoachProfile(user);
     if(!profile){
