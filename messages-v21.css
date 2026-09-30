@@ -10,3 +10,6 @@
 @media(max-width:1200px){.messages-shell{grid-template-columns:260px 1fr}.message-info{display:none}}
 @media(max-width:1000px){.messages-page{padding:72px 18px 34px}.messages-shell{height:calc(100vh - 155px)}}
 @media(max-width:760px){.messages-head{align-items:stretch;flex-direction:column}.message-head-actions{justify-content:space-between}.messages-shell{display:block;height:auto;min-height:0}.message-students{border-right:0;border-bottom:1px solid #e8edf3;max-height:310px}.message-chat{min-height:560px}.message-info{display:none}.message-bubble{max-width:90%}.message-quickbar{align-items:flex-start;flex-direction:column}.message-quickbar>div{width:100%}}
+
+/* Two-way student ↔ coach chat */
+.message-bubble-row.incoming{justify-content:flex-start}.message-bubble-row.incoming .message-bubble{background:var(--panel,#fff);border:1px solid var(--line,#e5e7eb);border-bottom-left-radius:6px}.message-bubble-row.incoming .message-bubble-meta strong{color:var(--muted,#64748b)}
