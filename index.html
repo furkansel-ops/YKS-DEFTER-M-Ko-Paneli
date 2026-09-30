@@ -705,10 +705,10 @@
           <div>
             <span class="dashboard-eyebrow">MESAJLAR</span>
             <h1>Mesajlar</h1>
-            <p>Öğrencilerine koç notu gönder, iletim durumunu takip et ve iletişimi tek bir çalışma alanından yönet.</p>
+            <p>Öğrencilerinle iki yönlü mesajlaş ve iletişimi tek bir çalışma alanından yönet.</p>
           </div>
           <div class="message-head-actions">
-            <span class="message-system-pill">Koç → Öğrenci</span>
+            <span class="message-system-pill">Koç ↔ Öğrenci</span>
             <button class="message-refresh" id="messageRefreshBtn" type="button">↻ Yenile</button>
           </div>
         </header>
@@ -724,8 +724,8 @@
 
             <div class="message-list-filters">
               <button class="active" type="button" data-message-filter="all">Tümü</button>
-              <button type="button" data-message-filter="pending">Bekleyen</button>
-              <button type="button" data-message-filter="failed">Sorunlu</button>
+              <button type="button" data-message-filter="student">Öğrenciden</button>
+              <button type="button" data-message-filter="coach">Benden</button>
             </div>
 
             <div id="messageStudentList" class="message-student-list"></div>
@@ -775,7 +775,7 @@
                     <button type="submit" id="messageSendBtn"><span>Gönder</span><b>➜</b></button>
                   </div>
                 </div>
-                <p>Bu alan tek yönlü koç notudur; mesaj öğrencinin YKS Defterim uygulamasına iletilir.</p>
+                <p>Mesaj öğrencinin YKS Defterim uygulamasındaki Koçla Sohbet alanına anında iletilir.</p>
               </form>
             </div>
           </section>
@@ -806,9 +806,9 @@
                 <span class="message-info-title">MESAJLAR</span>
                 <div class="message-info-stats">
                   <div><span>Gönderilen</span><strong id="messageSentCount">0</strong></div>
-                  <div><span>Uygulandı</span><strong id="messageAppliedCount">0</strong></div>
-                  <div><span>Bekleyen</span><strong id="messagePendingCount">0</strong></div>
-                  <div><span>Başarısız</span><strong id="messageFailedCount">0</strong></div>
+                  <div><span>Öğrenciden</span><strong id="messageAppliedCount">0</strong></div>
+                  <div><span>Toplam</span><strong id="messagePendingCount">0</strong></div>
+                  <div><span>Sorunlu</span><strong id="messageFailedCount">0</strong></div>
                 </div>
               </div>
 
@@ -940,7 +940,7 @@
               <div class="settings-info-box">
                 <span>MEVCUT MESAJ SİSTEMİ</span>
                 <h3>Koçtan öğrenciye not gönderimi</h3>
-                <p>Şu an mesajlar koç notu olarak öğrencinin YKS Defterim uygulamasına iletiliyor. Öğrenciden koça cevap sistemi henüz aktif değil.</p>
+                <p>Koç ve öğrenci artık aynı konuşma üzerinden iki yönlü mesajlaşabilir.</p>
               </div>
             </section>
 
