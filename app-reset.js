@@ -601,46 +601,14 @@ let selectedMessageStudent="";
 let messageStudentFilter="all";
 
 function messageTimestamp(value){
-  try{
-    const d=value?.toDate?.()||new Date(value);
-    if(!d||Number.isNaN(d.getTime()))return"—";
-    return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d);
-  }catch{return"—"}
-}
-function messageDayKey(value){
-  try{
-    const d=value?.toDate?.()||new Date(value);
-    if(!d||Number.isNaN(d.getTime()))return"";
-    return d.toISOString().slice(0,10);
-  }catch{return""}
-}
-function messageDayLabel(value){
-  try{
-    const d=value?.toDate?.()||new Date(value),today=new Date(),yesterday=new Date();
-    yesterday.setDate(today.getDate()-1);
-    const key=d.toISOString().slice(0,10),todayKey=today.toISOString().slice(0,10),yesterdayKey=yesterday.toISOString().slice(0,10);
-    if(key===todayKey)return"Bugün";
-    if(key===yesterdayKey)return"Dün";
-    return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long"}).format(d);
-  }catch{return""}
-}
-function messageStatusText(status){
-  return status==="applied"?"Uygulandı":status==="rejected"?"Başarısız":status==="cancelled"?"İptal":status==="pending"?"Bekliyor":"Gönderildi";
-}
-function messageStatusClass(status){
-  return status==="applied"?"applied":status==="rejected"?"failed":status==="cancelled"?"cancelled":"pending";
+  try{const d=value?.toDate?.()||new Date(value);if(!d||Number.isNaN(d.getTime()))return"—";return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d)}catch{return"—"}
 }
 async function loadCoachMessages(coachUid){
   if(!coachUid)return;
   try{
-    const snap=await getDocs(query(collection(db,"coachingActions"),where("coachUid","==",coachUid)));
-    coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type==="coach_note").sort((a,b)=>{
-      const av=a?.createdAt?.toMillis?.()||0,bv=b?.createdAt?.toMillis?.()||0;return av-bv;
-    });
-  }catch(error){
-    console.error("Mesajlar",error);
-    coachMessageActions=[];
-  }
+    const snap=await getDocs(query(collection(db,"coachingMessages"),where("coachUid","==",coachUid)));
+    coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a?.createdAt?.toMillis?.()||0)-(b?.createdAt?.toMillis?.()||0));
+  }catch(error){console.error("Mesajlar",error);coachMessageActions=[]}
   renderMessageStudents();
   if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
 }
@@ -649,8 +617,8 @@ function messageActionsFor(studentUid){return coachMessageActions.filter(x=>x.st
 function rowMatchesMessageFilter(row){
   if(messageStudentFilter==="all")return true;
   const actions=messageActionsFor(row.studentUid);
-  if(messageStudentFilter==="pending")return actions.some(x=>x.status==="pending");
-  if(messageStudentFilter==="failed")return actions.some(x=>x.status==="rejected");
+  if(messageStudentFilter==="student")return actions.some(x=>x.senderRole==="student");
+  if(messageStudentFilter==="coach")return actions.some(x=>x.senderRole==="coach");
   return true;
 }
 function renderMessageStudents(){
@@ -659,121 +627,48 @@ function renderMessageStudents(){
   if(!list)return;
   if(!rows.length){
     list.innerHTML='<div class="message-side-empty"><b>Henüz bağlı öğrenci yok</b><span>Öğrenciler bağlandığında konuşmalar burada açılacak.</span></div>';
-    $("messageNoStudent")?.classList.remove("hidden");
-    $("messageConversation")?.classList.add("hidden");
-    $("messageInfoEmpty")?.classList.remove("hidden");
-    $("messageInfoPanel")?.classList.add("hidden");
-    return;
+    $("messageNoStudent")?.classList.remove("hidden");$("messageConversation")?.classList.add("hidden");$("messageInfoEmpty")?.classList.remove("hidden");$("messageInfoPanel")?.classList.add("hidden");return;
   }
   list.innerHTML=rows.map(row=>{
-    const name=studentName(row),actions=messageActionsFor(row.studentUid),last=actions.at(-1),pending=actions.filter(x=>x.status==="pending").length,failed=actions.filter(x=>x.status==="rejected").length;
+    const name=studentName(row),actions=messageActionsFor(row.studentUid),last=actions.at(-1),incoming=actions.filter(x=>x.senderRole==="student").length;
     const hidden=rowMatchesMessageFilter(row)?"":" hidden";
-    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.payload?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small><span class="message-mini-badges">'+(pending?'<i class="pending">'+pending+'</i>':'')+(failed?'<i class="failed">!</i>':last?'<i class="'+messageStatusClass(last.status)+'"></i>':'')+'</span></span></button>';
+    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small><span class="message-mini-badges">'+(incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
   }).join("");
-  document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{
-    selectedMessageStudent=btn.dataset.messageStudent;
-    const input=$("messageInput");if(input)input.value="";
-    if($("messageCharCount"))$("messageCharCount").textContent="0";
-    renderMessageStudents();
-    renderMessageConversation(selectedMessageStudent);
-  }));
-  if(!selectedMessageStudent&&rows.length){
-    selectedMessageStudent=rows[0].studentUid;
-    renderMessageStudents();
-    renderMessageConversation(selectedMessageStudent);
-  }
+  document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{selectedMessageStudent=btn.dataset.messageStudent;const input=$("messageInput");if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";renderMessageStudents();renderMessageConversation(selectedMessageStudent)}));
+  if(!selectedMessageStudent&&rows.length){selectedMessageStudent=rows[0].studentUid;renderMessageStudents();renderMessageConversation(selectedMessageStudent)}
 }
 function renderMessageConversation(studentUid){
   const row=coachReportRows.find(x=>x.studentUid===studentUid);if(!row)return;
   const name=studentName(row),profile=row.share?.profile||{},progress=row.share?.progress||{},actions=messageActionsFor(studentUid);
-  $("messageNoStudent")?.classList.add("hidden");
-  $("messageConversation")?.classList.remove("hidden");
-  $("messageInfoEmpty")?.classList.add("hidden");
-  $("messageInfoPanel")?.classList.remove("hidden");
-  $("messageChatAvatar").textContent=reportInitial(name);
-  $("messageChatName").textContent=name;
-  $("messageChatMeta").textContent=[profile.track,profile.targetDepartment].filter(Boolean).join(" · ")||"Bağlı öğrenci";
-  $("messageInfoAvatar").textContent=reportInitial(name);
-  $("messageInfoName").textContent=name;
-  $("messageInfoTarget").textContent=[profile.track,profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ")||"YKS öğrencisi";
-  $("messageStudyMinutes").textContent=reportMinutes(progress.minutes7);
-  $("messageStudyQuestions").textContent=String(Math.round(reportNum(progress.questions7)));
-  $("messageOverdueTopics").textContent=String(Math.round(reportNum(progress.overdueTopics)));
-  $("messageSentCount").textContent=String(actions.length);
-  $("messageAppliedCount").textContent=String(actions.filter(x=>x.status==="applied").length);
-  $("messagePendingCount").textContent=String(actions.filter(x=>x.status==="pending").length);
-  $("messageFailedCount").textContent=String(actions.filter(x=>x.status==="rejected").length);
+  $("messageNoStudent")?.classList.add("hidden");$("messageConversation")?.classList.remove("hidden");$("messageInfoEmpty")?.classList.add("hidden");$("messageInfoPanel")?.classList.remove("hidden");
+  $("messageChatAvatar").textContent=reportInitial(name);$("messageChatName").textContent=name;$("messageChatMeta").textContent=[profile.track,profile.targetDepartment].filter(Boolean).join(" · ")||"Bağlı öğrenci";
+  $("messageInfoAvatar").textContent=reportInitial(name);$("messageInfoName").textContent=name;$("messageInfoTarget").textContent=[profile.track,profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ")||"YKS öğrencisi";
+  $("messageStudyMinutes").textContent=reportMinutes(progress.minutes7);$("messageStudyQuestions").textContent=String(Math.round(reportNum(progress.questions7)));$("messageOverdueTopics").textContent=String(Math.round(reportNum(progress.overdueTopics)));
+  $("messageSentCount").textContent=String(actions.filter(x=>x.senderRole==="coach").length);$("messageAppliedCount").textContent=String(actions.filter(x=>x.senderRole==="student").length);$("messagePendingCount").textContent=String(actions.length);$("messageFailedCount").textContent="0";
   const thread=$("messageThread");
   if(thread){
-    if(!actions.length){
-      thread.innerHTML='<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>İlk koç notunu aşağıdan gönderebilir veya hızlı mesajlardan birini seçebilirsin.</p></div>';
-    }else{
-      let lastDay="";
-      thread.innerHTML=actions.map(action=>{
-        const key=messageDayKey(action.createdAt),divider=key&&key!==lastDay?'<div class="message-day-divider"><span>'+escHtml(messageDayLabel(action.createdAt))+'</span></div>':"";
-        lastDay=key||lastDay;
-        const failed=action.status==="rejected";
-        return divider+'<div class="message-bubble-row outgoing"><div class="message-bubble '+(failed?"bubble-failed":"")+'"><p>'+escHtml(action?.payload?.text||"")+'</p><div class="message-bubble-meta"><span>'+escHtml(messageTimestamp(action.createdAt))+'</span><strong class="'+messageStatusClass(action.status)+'">'+escHtml(messageStatusText(action.status))+'</strong></div>'+(failed?'<button type="button" class="message-reuse" data-message-reuse="'+escHtml(action.id)+'">Mesajı düzenleyip tekrar gönder</button>':'')+'</div></div>';
-      }).join("");
-      document.querySelectorAll("[data-message-reuse]").forEach(btn=>btn.addEventListener("click",()=>{
-        const action=coachMessageActions.find(x=>x.id===btn.dataset.messageReuse);
-        const input=$("messageInput");if(!action||!input)return;
-        input.value=String(action?.payload?.text||"").slice(0,500);
-        if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);
-        input.focus();
-      }));
-    }
+    thread.innerHTML=actions.length?actions.map(message=>'<div class="message-bubble-row '+(message.senderRole==="coach"?"outgoing":"incoming")+'"><div class="message-bubble"><p>'+escHtml(message.text||"")+'</p><div class="message-bubble-meta"><span>'+escHtml(messageTimestamp(message.createdAt))+'</span><strong>'+(message.senderRole==="coach"?"Sen":"Öğrenci")+'</strong></div></div></div>').join(""):'<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>İlk mesajı aşağıdan gönderebilirsin.</p></div>';
     requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight});
   }
 }
 async function sendCoachMessage(){
-  const studentUid=selectedMessageStudent,input=$("messageInput"),button=$("messageSendBtn"),user=auth.currentUser;
-  const value=String(input?.value||"").trim().slice(0,500);
+  const studentUid=selectedMessageStudent,input=$("messageInput"),button=$("messageSendBtn"),user=auth.currentUser,value=String(input?.value||"").trim().slice(0,500);
   if(!user||!studentUid||!value)return;
-  const row=coachReportRows.find(x=>x.studentUid===studentUid);
-  if(!row?.link?.active){alert("Bu öğrenciyle aktif koç bağlantısı bulunamadı.");return}
+  const row=coachReportRows.find(x=>x.studentUid===studentUid);if(!row?.link?.active){alert("Bu öğrenciyle aktif koç bağlantısı bulunamadı.");return}
   if(button)button.disabled=true;
   try{
-    await addDoc(collection(db,"coachingActions"),{studentUid,coachUid:user.uid,type:"coach_note",payload:{text:value},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
-    if(input)input.value="";
-    if($("messageCharCount"))$("messageCharCount").textContent="0";
-    await loadCoachMessages(user.uid);
-  }catch(error){
-    console.error("Mesaj gönderilemedi",error);
-    alert("Mesaj gönderilemedi: "+String(error?.message||"Bilinmeyen hata"));
-  }finally{if(button)button.disabled=false}
+    await addDoc(collection(db,"coachingMessages"),{studentUid,coachUid:user.uid,senderUid:user.uid,senderRole:"coach",text:value,createdAt:serverTimestamp()});
+    if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";await loadCoachMessages(user.uid);
+  }catch(error){console.error("Mesaj gönderilemedi",error);alert("Mesaj gönderilemedi: "+String(error?.message||"Bilinmeyen hata"))}finally{if(button)button.disabled=false}
 }
 $("messageComposeForm")?.addEventListener("submit",event=>{event.preventDefault();void sendCoachMessage()});
 $("messageInput")?.addEventListener("input",event=>{if($("messageCharCount"))$("messageCharCount").textContent=String(event.currentTarget.value.length)});
 $("messageInput")?.addEventListener("keydown",event=>{const prefs=readCoachUiPrefs();if(prefs.ctrlEnter!==false&&event.ctrlKey&&event.key==="Enter"){event.preventDefault();void sendCoachMessage()}});
 $("messageRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user)void loadCoachMessages(user.uid)});
-$("messageStudentSearch")?.addEventListener("input",event=>{
-  const q=String(event.currentTarget.value||"").trim().toLocaleLowerCase("tr-TR");
-  document.querySelectorAll("[data-message-name]").forEach(item=>{
-    const searchMatch=!q||String(item.dataset.messageName||"").includes(q);
-    const row=coachReportRows.find(x=>x.studentUid===item.dataset.messageStudent);
-    item.classList.toggle("hidden",!searchMatch||!rowMatchesMessageFilter(row||{}));
-  });
-});
-document.querySelectorAll("[data-message-filter]").forEach(button=>button.addEventListener("click",()=>{
-  messageStudentFilter=button.dataset.messageFilter||"all";
-  document.querySelectorAll("[data-message-filter]").forEach(x=>x.classList.toggle("active",x===button));
-  renderMessageStudents();
-  $("messageStudentSearch")?.dispatchEvent(new Event("input"));
-}));
-document.querySelectorAll("[data-message-template]").forEach(button=>button.addEventListener("click",()=>{
-  const input=$("messageInput");if(!input)return;
-  input.value=button.dataset.messageTemplate||"";
-  if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);
-  input.focus();
-}));
-document.querySelector('[data-coach-page="messages"]')?.addEventListener("click",()=>{
-  const input=$("messageInput");if(input)input.value="";
-  if($("messageCharCount"))$("messageCharCount").textContent="0";
-  const user=auth.currentUser;
-  if(user){renderMessageStudents();void loadCoachMessages(user.uid)}
-});
-
+$("messageStudentSearch")?.addEventListener("input",event=>{const q=String(event.currentTarget.value||"").trim().toLocaleLowerCase("tr-TR");document.querySelectorAll("[data-message-name]").forEach(item=>{const searchMatch=!q||String(item.dataset.messageName||"").includes(q),row=coachReportRows.find(x=>x.studentUid===item.dataset.messageStudent);item.classList.toggle("hidden",!searchMatch||!rowMatchesMessageFilter(row||{}))})});
+document.querySelectorAll("[data-message-filter]").forEach(button=>button.addEventListener("click",()=>{messageStudentFilter=button.dataset.messageFilter||"all";document.querySelectorAll("[data-message-filter]").forEach(x=>x.classList.toggle("active",x===button));renderMessageStudents();$("messageStudentSearch")?.dispatchEvent(new Event("input"))}));
+document.querySelectorAll("[data-message-template]").forEach(button=>button.addEventListener("click",()=>{const input=$("messageInput");if(!input)return;input.value=button.dataset.messageTemplate||"";if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);input.focus()}));
+document.querySelector('[data-coach-page="messages"]')?.addEventListener("click",()=>{const user=auth.currentUser;if(user){renderMessageStudents();void loadCoachMessages(user.uid)}});
 
 const COACH_UI_PREFS="yks_coach_ui_preferences_v2";
 let currentCoachProfile=null;
