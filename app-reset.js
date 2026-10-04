@@ -1064,41 +1064,83 @@ async function saveCoachProgramOrder(weekStart,day,ids){
     console.error("Program sırası",error);if(had)week.data.mv[key]=previous;else delete week.data.mv[key];renderProgramWorkspace();return false;
   }
 }
+async function saveCoachProgramMove(weekStart,taskId,targetDay){
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser;if(!row||!user)return false;
+  const week=programWeeks(row).find(item=>item.week===weekStart),data=week?.data;if(!week||!data)return false;
+  const parts=String(taskId).split("-"),blk=parts[0],sourceRow=Number(parts[1]),sourceDay=Number(parts[2]),rows=programRowList(data[blk]);
+  if(!["r","s"].includes(blk)||!Number.isInteger(sourceRow)||!Number.isInteger(sourceDay)||!Number.isInteger(targetDay)||targetDay<0||targetDay>6||sourceDay===targetDay)return false;
+  const taskText=String(rows[sourceRow]?.[sourceDay]||"").trim();if(!taskText)return false;
+  let targetRow=sourceRow;
+  if(String(rows[targetRow]?.[targetDay]||"").trim())targetRow=rows.findIndex(item=>!String(item?.[targetDay]||"").trim());
+  if(targetRow<0){alert("Hedef günde boş çalışma satırı yok.");return false}
+  const backup=JSON.parse(JSON.stringify(data)),targetId=blk+"-"+targetRow+"-"+targetDay;
+  rows[targetRow][targetDay]=taskText;rows[sourceRow][sourceDay]="";data[blk]=rows;
+  data.dn??={};delete data.dn[taskId];delete data.dn[targetId];
+  data.mv??={};delete data.mv[taskId];data.mv[targetId]={from:programDayDate(weekStart,sourceDay),at:Date.now()};
+  const sourceKey="order-"+sourceDay,targetKey="order-"+targetDay;
+  if(Array.isArray(data.mv[sourceKey])){data.mv[sourceKey]=data.mv[sourceKey].filter(id=>id!==taskId);if(!data.mv[sourceKey].length)delete data.mv[sourceKey]}
+  const targetOrder=Array.isArray(data.mv[targetKey])?data.mv[targetKey].filter(id=>id!==targetId):collectProgramDayTasks(row.share?.program,week,targetDay).map(task=>task.id).filter(id=>id!==targetId);
+  targetOrder.push(targetId);data.mv[targetKey]=targetOrder;
+  renderProgramWorkspace();
+  try{
+    await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{operation:"move",sourceWeek:weekStart,taskId,date:programDayDate(weekStart,targetDay)},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    return true;
+  }catch(error){
+    console.error("Program günü taşıma",error);week.data=backup;renderProgramWorkspace();alert("Görev başka güne taşınamadı.");return false;
+  }
+}
 function bindCoachProgramReorder(weekStart){
+  const board=$("programWeekBoard");if(!board)return;
+  const dropZones=()=>Array.from(board.querySelectorAll("[data-program-drop-day]"));
   document.querySelectorAll("#programWeekBoard [data-program-drag]").forEach(handle=>{
-    const card=handle.closest("[data-program-task-id]"),container=card?.parentElement;if(!card||!container)return;
-    const taskId=card.dataset.programTaskId||"",day=Number(card.dataset.programTaskDay);
+    const card=handle.closest("[data-program-task-id]"),sourceContainer=card?.parentElement;if(!card||!sourceContainer)return;
+    const taskId=card.dataset.programTaskId||"",sourceDay=Number(card.dataset.programTaskDay);
     handle.addEventListener("contextmenu",event=>event.preventDefault());
     handle.addEventListener("keydown",event=>{
       if(event.key!=="ArrowUp"&&event.key!=="ArrowDown")return;event.preventDefault();
-      const cards=Array.from(container.querySelectorAll("[data-program-task-id]")),index=cards.indexOf(card),next=index+(event.key==="ArrowUp"?-1:1);
+      const cards=Array.from(sourceContainer.querySelectorAll("[data-program-task-id]")),index=cards.indexOf(card),next=index+(event.key==="ArrowUp"?-1:1);
       if(index<0||next<0||next>=cards.length)return;
-      if(next<index)container.insertBefore(card,cards[next]);else container.insertBefore(cards[next],card);
-      void saveCoachProgramOrder(weekStart,day,coachProgramOrderIds(container));
+      if(next<index)sourceContainer.insertBefore(card,cards[next]);else sourceContainer.insertBefore(cards[next],card);
+      void saveCoachProgramOrder(weekStart,sourceDay,coachProgramOrderIds(sourceContainer));
     });
     handle.addEventListener("pointerdown",event=>{
       if(event.button!==0||!event.isPrimary)return;event.preventDefault();
-      const pointerId=event.pointerId,startX=event.clientX,startY=event.clientY,initial=coachProgramOrderIds(container).join("|");let active=false,timer=setTimeout(activate,120);
+      const pointerId=event.pointerId,startX=event.clientX,startY=event.clientY,initial=coachProgramOrderIds(sourceContainer).join("|");let active=false,timer=setTimeout(activate,100),activeZone=null;
       try{handle.setPointerCapture(pointerId)}catch{}
-      function activate(){if(active)return;active=true;card.classList.add("is-dragging");container.classList.add("is-reordering")}
+      function activate(){if(active)return;active=true;card.classList.add("is-dragging");board.classList.add("is-program-dragging")}
+      function clearZone(){if(activeZone)activeZone.classList.remove("is-drop-target");activeZone=null}
+      function zoneAt(x,y){
+        const zones=dropZones();let hit=zones.find(zone=>{const r=zone.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom});
+        if(hit)return hit;
+        let best=null,bestDistance=Infinity;
+        zones.forEach(zone=>{const r=zone.getBoundingClientRect(),cx=Math.max(r.left,Math.min(x,r.right)),cy=Math.max(r.top,Math.min(y,r.bottom)),distance=Math.hypot(x-cx,y-cy);if(distance<bestDistance){bestDistance=distance;best=zone}});
+        return bestDistance<55?best:null;
+      }
       function move(moveEvent){
         if(moveEvent.pointerId!==pointerId)return;
-        if(!active&&Math.hypot(moveEvent.clientX-startX,moveEvent.clientY-startY)>4){clearTimeout(timer);activate()}
+        if(!active&&Math.hypot(moveEvent.clientX-startX,moveEvent.clientY-startY)>3){clearTimeout(timer);activate()}
         if(!active)return;moveEvent.preventDefault();
-        const target=document.elementFromPoint(moveEvent.clientX,moveEvent.clientY)?.closest("[data-program-task-id]");
-        if(!target||target===card||target.parentElement!==container)return;
-        const rect=target.getBoundingClientRect(),before=moveEvent.clientY<rect.top+rect.height/2;
-        container.insertBefore(card,before?target:target.nextSibling);
+        const zone=zoneAt(moveEvent.clientX,moveEvent.clientY);if(!zone)return;
+        if(zone!==activeZone){clearZone();activeZone=zone;zone.classList.add("is-drop-target")}
+        zone.querySelector(".day-empty")?.remove();
+        if(card.parentElement!==zone)zone.appendChild(card);
+        const siblings=Array.from(zone.querySelectorAll("[data-program-task-id]:not(.is-dragging)"));
+        const before=siblings.find(node=>moveEvent.clientY<node.getBoundingClientRect().top+node.getBoundingClientRect().height/2);
+        if(before)zone.insertBefore(card,before);else zone.appendChild(card);
       }
       function finish(finishEvent){
         if(finishEvent.pointerId!==pointerId)return;clearTimeout(timer);handle.removeEventListener("pointermove",move);handle.removeEventListener("pointerup",finish);handle.removeEventListener("pointercancel",finish);
-        card.classList.remove("is-dragging");container.classList.remove("is-reordering");try{handle.releasePointerCapture(pointerId)}catch{}
-        const next=coachProgramOrderIds(container);if(active&&next.join("|")!==initial)void saveCoachProgramOrder(weekStart,day,next);
+        const targetContainer=card.parentElement,targetDay=Number(targetContainer?.dataset.programDropDay);
+        clearZone();card.classList.remove("is-dragging");board.classList.remove("is-program-dragging");try{handle.releasePointerCapture(pointerId)}catch{}
+        if(!active||!targetContainer||!Number.isInteger(targetDay)){renderProgramWorkspace();return}
+        if(targetDay!==sourceDay){void saveCoachProgramMove(weekStart,taskId,targetDay);return}
+        const next=coachProgramOrderIds(sourceContainer);if(next.join("|")!==initial)void saveCoachProgramOrder(weekStart,sourceDay,next);else renderProgramWorkspace();
       }
       handle.addEventListener("pointermove",move);handle.addEventListener("pointerup",finish);handle.addEventListener("pointercancel",finish);
     });
   });
 }
+
 function hydrateProgramStudents(){
   const list=$("programStudentList"),empty=$("programStudentEmpty"),count=$("programStudentCount");
   if(count)count.textContent=String(coachReportRows.length);
@@ -1185,7 +1227,7 @@ function renderProgramWorkspace(){
   if(board)board.innerHTML=tasks.map((dayTasks,day)=>{
     const completed=done[day]&&dayTasks.length,isToday=programDayDate(week.week,day)===todayIsoLocal();
     const stateBadge=completed?'<span class="day-state done">✓ Tamamlandı</span>':isToday?'<span class="day-state today">Bugün</span>':'';
-    return '<section class="day-column '+(completed?"done ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+stateBadge+'</header><div class="day-tasks">'+(dayTasks.length?dayTasks.map(task=>{
+    return '<section class="day-column '+(completed?"done ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+stateBadge+'</header><div class="day-tasks" data-program-drop-day="'+day+'">'+(dayTasks.length?dayTasks.map(task=>{
       const tone=programSubjectTone(task),coachTask=/^Koç ·/.test(task.text);
       const cleanText=task.text.replace(/^Koç ·(?: Deneme sonrası · )?/,"");
       return '<article class="program-task-card tone-'+tone+'" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'"><button type="button" class="program-drag-handle" data-program-drag aria-label="Görevin sırasını değiştir">⠿</button><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
