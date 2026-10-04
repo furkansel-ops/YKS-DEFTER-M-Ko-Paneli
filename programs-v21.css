@@ -93,3 +93,8 @@
 .program-task-card{transition:transform .16s ease,box-shadow .16s ease,opacity .16s ease,border-color .16s ease}
 @media(pointer:coarse){.program-drag-handle{width:38px;height:44px;font-size:20px}}
 @media(prefers-reduced-motion:reduce){.program-task-card{transition:none!important}}
+
+/* v2.7 — reliable drag target */
+.day-tasks .program-task-card{padding-right:42px}
+.program-drag-handle{position:absolute;right:6px;top:6px;z-index:3;display:grid;place-items:center;min-width:34px;min-height:38px}
+.day-tasks.is-reordering{user-select:none;-webkit-user-select:none;cursor:grabbing}
