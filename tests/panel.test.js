@@ -103,5 +103,18 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.30/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.31/);
+});
+
+
+test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
+  const js=read('app-reset.js'),html=read('index.html');
+  assert.match(js,/let selectedProgramWeekStart=""/);
+  assert.match(js,/function shiftProgramWeek/);
+  assert.match(js,/return weeks\.find\(item=>item\?\.week===selectedProgramWeekStart\)\|\|\{week:selectedProgramWeekStart,data:\{\}\}/);
+  assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,-1\)/);
+  assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
+  assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
+  assert.doesNotMatch(js,/selectedProgramWeekIndex/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.31/);
 });
