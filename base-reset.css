@@ -31,3 +31,10 @@ a{color:var(--accent)}
 .status{margin-top:10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#f8fafd;color:var(--muted);font-size:10.5px}.status.ok{color:#187f61;background:#eefaf6;border-color:#cdeade}.status.err{color:#bd4650;background:#fff3f4;border-color:#ffdadd}
 .link{color:var(--accent);text-decoration:none;font-weight:700}
 @media(max-width:560px){.auth-card{padding:22px}.auth-card h1{font-size:27px}}
+
+/* Auth boot gate v1.0.1 — prevents login flash on refresh */
+.coach-boot{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;gap:13px;background:var(--bg);color:var(--text)}
+.coach-boot-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#76b7ff,#347beb);color:#07111f;font-size:14px;font-weight:950;box-shadow:0 10px 26px rgba(40,115,240,.16)}
+.coach-boot>div:last-child{display:grid;gap:3px}
+.coach-boot b{font-size:14px;letter-spacing:-.01em}
+.coach-boot span{font-size:10px;color:var(--muted)}
