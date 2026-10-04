@@ -865,7 +865,7 @@ function renderStudentsPage(){
     const today=studentActiveToday(row);
     const statusClass=overdue?"attention":today?"active":"idle";
     const statusText=overdue?overdue+" geciken konu":today?"Bugün aktif":"Aktivite bekleniyor";
-    return '<div class="student-row" data-student-row="'+escHtml(row.studentUid)+'"><span class="student-cell-main"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span></span><span class="student-status '+statusClass+'"><i></i>'+escHtml(statusText)+'</span><span class="student-program"><b>'+(program.plannedDays?program.ratio+"%":"—")+'</b><small>'+(program.plannedDays?program.doneDays+" / "+program.plannedDays+" gün":"Program verisi yok")+'</small></span><span class="student-last">'+escHtml(studentLastActivity(row))+'</span><button type="button" class="student-open" data-open-student="'+escHtml(row.studentUid)+'">İncele ›</button></div>';
+    return '<div class="student-row" data-student-row="'+escHtml(row.studentUid)+'"><span class="student-cell-main"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span></span><span class="student-status '+statusClass+'"><i></i>'+escHtml(statusText)+'</span><span class="student-program"><b>'+(program.plannedDays?program.ratio+"%":"—")+'</b><small>'+(program.plannedDays?program.doneDays+" / "+program.plannedDays+" gün":"Program verisi yok")+'</small></span><span class="student-last">'+escHtml(studentLastActivity(row))+'</span><span class="student-actions"><button type="button" class="student-open" data-open-student="'+escHtml(row.studentUid)+'">İncele</button><button type="button" class="student-remove" data-remove-student="'+escHtml(row.studentUid)+'" aria-label="'+escHtml(name)+' öğrencisini panelden sil">Sil</button></span></div>';
   }).join(""):'<div class="students-filter-empty">Bu filtrede öğrenci bulunamadı.</div>';
   document.querySelectorAll("[data-open-student]").forEach(button=>button.addEventListener("click",()=>{
     const uid=button.dataset.openStudent;
@@ -873,6 +873,25 @@ function renderStudentsPage(){
     if($("reportStudentSelect"))$("reportStudentSelect").value=uid;
     renderReport(uid);
   }));
+  document.querySelectorAll("[data-remove-student]").forEach(button=>button.addEventListener("click",()=>void removeCoachStudent(button.dataset.removeStudent,button)));
+}
+async function removeCoachStudent(studentUid,button){
+  const row=coachReportRows.find(item=>item.studentUid===studentUid),user=auth.currentUser;if(!row||!user)return;
+  const name=studentName(row),linkId=String(row.link?.id||"");
+  if(!linkId||row.link?.coachUid!==user.uid){alert("Bu öğrenci bağlantısı doğrulanamadı.");return}
+  const approved=confirm(name+" öğrencisini koç panelinden silmek istediğine emin misin?\n\nÖğrencinin YKS Defterim hesabı ve verileri silinmez; sadece koç bağlantısı kaldırılır.");
+  if(!approved)return;
+  const previous=button?.textContent;if(button){button.disabled=true;button.textContent="Siliniyor…"}
+  try{
+    await updateDoc(doc(db,"coachingLinks",linkId),{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    if(selectedProgramStudentUid===studentUid){selectedProgramStudentUid="";selectedProgramWeekStart=""}
+    if(selectedMessageStudent===studentUid)selectedMessageStudent="";
+    await loadCoachReports(user.uid);
+  }catch(error){
+    console.error("Öğrenci silme",error);
+    alert("Öğrenci panelden kaldırılamadı: "+String(error?.message||"Bilinmeyen hata"));
+    if(button){button.disabled=false;button.textContent=previous||"Sil"}
+  }
 }
 $("studentSearch")?.addEventListener("input",renderStudentsPage);
 
