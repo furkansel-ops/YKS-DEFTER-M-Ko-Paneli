@@ -82,3 +82,14 @@
 .program-builder-modal .program-task-send{background:#1268f5}
 @media(min-width:800px){#programQuickBuilder{grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:end}.coach-builder-presets{grid-column:1/-1}}
 @media(max-width:520px){.program-builder-modal{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}.program-builder-modal .program-task-body{padding:15px}.coach-builder-grid{grid-template-columns:1fr;gap:12px}.coach-builder-tabs button{padding:8px;font-size:13px}.program-builder-modal footer{padding:12px 15px 15px}.coach-builder-day-options{grid-template-columns:repeat(7,minmax(44px,1fr))}}
+
+/* v2.6 — drag reorder for daily program cards */
+.program-task-card{position:relative}
+.program-drag-handle{flex:none;width:30px;height:38px;border:0;border-radius:9px;background:transparent;color:#8a98ab;font:800 18px/1 system-ui;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.program-drag-handle:hover,.program-drag-handle:focus-visible{background:#eef4fd;color:#2873f0;outline:none}
+.program-drag-handle:active{cursor:grabbing}
+.day-tasks.is-reordering{touch-action:none}
+.program-task-card.is-dragging{opacity:.82;border-color:#2873f0;box-shadow:0 18px 42px rgba(24,63,112,.16);transform:scale(1.015);z-index:8}
+.program-task-card{transition:transform .16s ease,box-shadow .16s ease,opacity .16s ease,border-color .16s ease}
+@media(pointer:coarse){.program-drag-handle{width:38px;height:44px;font-size:20px}}
+@media(prefers-reduced-motion:reduce){.program-task-card{transition:none!important}}
