@@ -95,7 +95,7 @@ test('koç günlük program kartları sürüklenerek sıralanır',()=>{
   assert.match(js,/pointerdown/);
   assert.match(js,/ArrowUp/);
   assert.match(css,/program-drag-handle/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.27/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.28/);
 });
 
 
