@@ -21,3 +21,24 @@
 .program-student-item{border:1px solid transparent;transition:background .16s ease,border-color .16s ease,transform .16s ease}.program-student-item:hover{transform:translateX(2px);border-color:#e3eaf3}.program-student-item.active{border-color:#d5e5fb;box-shadow:inset 3px 0 0 #2873f0}
 @media(max-width:1180px){.program-student-hero{grid-template-columns:auto minmax(0,1fr)}.program-hero-progress{grid-column:1/-1;border-left:0;border-top:1px solid #e6edf6;padding:10px 0 0;display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:10px}.program-hero-progress>strong{margin:0}.program-summary{grid-template-columns:repeat(3,1fr)}.program-summary article:nth-child(3){border-right:0}.program-summary article:nth-child(-n+3){border-bottom:1px solid #edf1f6}}
 @media(max-width:650px){.program-student-hero{margin:12px 12px 0;padding:14px;grid-template-columns:auto minmax(0,1fr)}.program-hero-progress{grid-template-columns:auto auto;}.program-hero-progress>div{grid-column:1/-1}.program-hero-title-row{display:block}.program-hero-title-row em{display:inline-block;margin-top:6px}.program-hero-copy>p{white-space:normal}.program-summary{grid-template-columns:1fr 1fr;margin-top:12px}.program-summary article:nth-child(3){border-right:1px solid #edf1f6}.program-summary article:nth-child(2n){border-right:0}.program-summary article:nth-child(-n+4){border-bottom:1px solid #edf1f6}.program-summary article:last-child{grid-column:1/-1}.week-nav{flex-wrap:wrap}.week-nav strong{order:4;width:100%;min-width:0}.week-nav-today{flex:1}.day-column{min-height:280px}}
+
+/* v2.4 — YKS Defterim program oluşturucusunun koç paneli karşılığı */
+.program-builder-modal{width:min(760px,calc(100vw - 28px));max-height:min(900px,calc(100vh - 28px));overflow:auto}
+.program-builder-modal .program-task-body{display:grid;gap:18px}
+.coach-builder-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5eaf2}
+.coach-builder-tabs button{border:0;background:transparent;padding:14px 10px;font:700 14px/1.2 inherit;color:#64748b;border-bottom:2px solid transparent;cursor:pointer}
+.coach-builder-tabs button.active{color:#1769e0;border-bottom-color:#2f7df4;background:#f7faff}
+.coach-builder-presets{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.coach-builder-presets button,.coach-builder-shortcuts button{border:1px solid #e1e7f0;background:#f4f7fb;color:#52627a;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}
+.coach-builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.program-builder-modal label{display:grid;gap:7px;color:#52627a;font-size:13px;font-weight:700}
+.program-builder-modal input,.program-builder-modal select,.program-builder-modal textarea{width:100%;box-sizing:border-box;border:1px solid #dbe2ec;border-radius:12px;background:#fff;padding:13px 14px;color:#172033;font:500 15px/1.35 inherit;outline:none}
+.program-builder-modal input:focus,.program-builder-modal select:focus,.program-builder-modal textarea:focus{border-color:#6aa5f8;box-shadow:0 0 0 3px rgba(47,125,244,.1)}
+.program-builder-modal textarea{min-height:96px;resize:vertical}
+.program-builder-modal label small{font-size:11px;font-weight:500;color:#7b8799}
+.coach-builder-days{border:0;padding:0;margin:0;display:grid;gap:10px}.coach-builder-days legend{font-size:13px;font-weight:800;color:#39485e;margin-bottom:8px}
+.coach-builder-day-options{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.coach-builder-day-options button{border:1px solid #dfe6ef;background:#fff;border-radius:12px;padding:12px 4px;color:#5d6b7f;font-weight:800;cursor:pointer}
+.coach-builder-day-options button.active{border-color:#2f7df4;background:#edf5ff;color:#1769e0;box-shadow:inset 0 0 0 1px #2f7df4}
+.coach-builder-shortcuts{display:flex;gap:14px;flex-wrap:wrap}.coach-builder-shortcuts button{padding:4px 0;border:0;background:transparent;color:#1769e0}
+.coach-builder-preview{border-left:3px solid #2f7df4;background:#f2f6ff;border-radius:0 12px 12px 0;padding:14px 16px;display:grid;gap:5px}.coach-builder-preview b{color:#1f2d43;font-size:14px}.coach-builder-preview span{color:#69778b;font-size:12px}
+@media(max-width:680px){.coach-builder-grid{grid-template-columns:1fr}.coach-builder-day-options{grid-template-columns:repeat(4,1fr)}.program-builder-modal{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}}
