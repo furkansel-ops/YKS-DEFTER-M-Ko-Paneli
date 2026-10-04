@@ -24,7 +24,7 @@ test('eski sağ taraf dashboard dosyaları repodan silinmiştir',()=>{
 
 test('index sadece reset runtime ve sidebar stillerini yükler',()=>{
   const html=read('index.html');
-  assert.match(html,/base-reset\.css\?v=1\.0\.0/);
+  assert.match(html,/base-reset\.css\?v=1\.0\.1/);
   assert.match(html,/sidebar-v20\.css\?v=1\.0\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.\d+/);
   assert.doesNotMatch(html,/dashboard-v20|app\.js\?|core-v20/);
@@ -57,7 +57,7 @@ test('koç girişi ve profil bilgisi reset runtime içinde korunur',()=>{
 test('kayıt ekranı minimal reset stilini kullanır',()=>{
   const html=read('register.html');
   const register=read('register.js');
-  assert.match(html,/base-reset\.css\?v=1\.0\.0/);
+  assert.match(html,/base-reset\.css\?v=1\.0\.1/);
   assert.doesNotMatch(html,/core-v20|dashboard-v20/);
   assert.match(register,/existing\.role==="coach"/);
   assert.match(register,/öğrenci hesabı olarak kayıtlı/);
@@ -103,7 +103,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.32/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
 });
 
 
@@ -116,7 +116,7 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.32/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
 });
 
 
@@ -129,5 +129,18 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.32/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
+});
+
+
+test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
+  const html=read('index.html'),js=read('app-reset.js'),css=read('base-reset.css');
+  assert.match(html,/id="bootView" class="coach-boot"/);
+  assert.match(html,/id="authView" class="auth-page hidden"/);
+  assert.match(js,/function finishBoot/);
+  assert.match(js,/function showAuth[\s\S]*finishBoot\(\)/);
+  assert.match(js,/function showApp[\s\S]*finishBoot\(\)/);
+  assert.match(css,/\.coach-boot/);
+  assert.match(html,/base-reset\.css\?v=1\.0\.1/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
 });
