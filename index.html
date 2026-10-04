@@ -8,10 +8,10 @@
   <title>YKS Defterim · Koç Paneli</title>
   <link rel="stylesheet" href="./base-reset.css?v=1.0.1">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
-  <link rel="stylesheet" href="./dashboard-v21.css?v=1.1.0">
+  <link rel="stylesheet" href="./dashboard-v21.css?v=1.2.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=2.9.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
@@ -104,6 +104,7 @@
           </article>
           <article class="dash-panel dash-wide day-review-panel">
             <div class="panel-title"><div><h2>Gün Sonu Notları</h2><p>Öğrencilerin bugünkü kısa değerlendirmeleri</p></div><button data-go-page="students">Öğrencilere git →</button></div>
+            <div class="dashboard-day-review-summary" id="dashboardDayReviewSummary"></div>
             <div class="dashboard-day-reviews" id="dashboardDayReviews">
               <div class="dashboard-day-review-empty"><span>☾</span><div><b>Bugün henüz not yok</b><p>Öğrenciler gün sonu değerlendirmesini kaydettiğinde burada canlı görünecek.</p></div></div>
             </div>
@@ -413,6 +414,14 @@
                 <strong class="report-score" id="reportProgramScore">—</strong>
               </div>
               <div class="report-week-days" id="reportWeekDays"></div>
+            </article>
+
+            <article class="report-card report-day-review-card">
+              <div class="report-card-head">
+                <div><span>GÜN SONU</span><h2>Öğrencinin kısa notları</h2><p>Son günlerde öğrencinin günü nasıl kapattığını gör.</p></div>
+                <strong class="report-day-review-latest" id="reportDayReviewLatest">—</strong>
+              </div>
+              <div class="report-day-review-history" id="reportDayReviewHistory"></div>
             </article>
 
             <article class="report-card report-topics-card">
@@ -1083,6 +1092,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.34"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.35"></script>
 </body>
 </html>
