@@ -42,3 +42,43 @@
 .coach-builder-shortcuts{display:flex;gap:14px;flex-wrap:wrap}.coach-builder-shortcuts button{padding:4px 0;border:0;background:transparent;color:#1769e0}
 .coach-builder-preview{border-left:3px solid #2f7df4;background:#f2f6ff;border-radius:0 12px 12px 0;padding:14px 16px;display:grid;gap:5px}.coach-builder-preview b{color:#1f2d43;font-size:14px}.coach-builder-preview span{color:#69778b;font-size:12px}
 @media(max-width:680px){.coach-builder-grid{grid-template-columns:1fr}.coach-builder-day-options{grid-template-columns:repeat(4,1fr)}.program-builder-modal{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}}
+
+/* v2.5 — student Programım form parity */
+.program-builder-modal{width:min(760px,calc(100vw - 28px));border-radius:16px}
+.program-builder-modal header{padding:18px 20px 15px}
+.program-builder-modal header span{font-size:10px;letter-spacing:.08em}
+.program-builder-modal header h2{font-size:20px;letter-spacing:-.02em}
+.program-builder-modal header p{font-size:12px;line-height:1.5}
+.program-builder-modal .program-task-body{padding:20px;gap:0}
+.coach-builder-tabs{display:flex;gap:6px;margin:0 0 18px;padding:0 0 12px;border-bottom:1px solid #dde6f3}
+.coach-builder-tabs button{flex:1;min-width:0;min-height:44px;padding:8px 12px;border:1px solid transparent;border-radius:10px;background:transparent;color:#61728d;font-size:14px;font-weight:600;line-height:1.4}
+.coach-builder-tabs button.active{border-color:#cbdcf5;background:#e9f2ff;color:#1268f5}
+#programQuickBuilder{display:grid;gap:16px;min-width:0}
+.coach-builder-presets{display:flex;flex-wrap:wrap;gap:7px;min-width:0;margin:0}
+.coach-builder-presets button{min-height:38px;padding:7px 12px;border:1px solid #dde6f3;border-radius:10px;background:#f1f5fb;color:#61728d;font-size:12px;font-weight:600}
+.coach-builder-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0;min-width:0}
+.program-builder-modal label{display:grid;gap:7px;min-width:0;color:#10213e;font-size:13px;font-weight:600;line-height:1.5}
+.program-builder-modal input,.program-builder-modal select,.program-builder-modal textarea{display:block;width:100%;max-width:100%;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #dde6f3;border-radius:10px;background:#fff;color:#10213e;font:450 16px/1.5 inherit;box-sizing:border-box}
+.program-builder-modal input::placeholder,.program-builder-modal textarea::placeholder{color:#61728d;opacity:.85}
+.program-builder-modal select:disabled{opacity:.65;cursor:not-allowed;background:#f1f5fb}
+.program-builder-modal textarea{min-height:104px;max-height:280px;resize:vertical}
+.program-builder-modal label small{font-size:12px;line-height:1.5;font-weight:400;color:#61728d;text-align:left}
+#programCustomBuilder{margin:0 0 16px}
+#programTaskVideo{margin-top:0}
+.coach-builder-days{min-width:0;margin:20px 0 0;padding:0;border:0;display:block}
+.coach-builder-days legend{padding:0;margin:0 0 9px;font-size:13px;font-weight:600;color:#10213e}
+.coach-builder-day-options{display:grid;grid-template-columns:repeat(7,minmax(44px,1fr));gap:6px;max-width:100%;padding:3px 2px 6px;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin}
+.coach-builder-day-options button{min-width:44px;min-height:44px;padding:8px 5px;border:1px solid #dde6f3;border-radius:10px;background:#fff;color:#61728d;font-size:12px;font-weight:650}
+.coach-builder-day-options button.active{border-color:#1268f5;background:#e9f2ff;color:#1268f5;box-shadow:none}
+.coach-builder-shortcuts{display:flex;flex-wrap:wrap;gap:4px 12px;margin:3px 0 0}
+.coach-builder-shortcuts button{min-height:34px;border:0;padding:5px 1px;background:transparent;color:#1268f5;font-size:12px;font-weight:600}
+.coach-builder-preview{display:grid;gap:5px;margin:16px 0 0;padding:13px 14px;border-left:3px solid #1268f5;border-radius:0 10px 10px 0;background:#f1f5fb;overflow-wrap:anywhere}
+.coach-builder-preview b{font-size:14px;font-weight:650;line-height:1.5;color:#10213e}
+.coach-builder-preview span{font-size:12px;line-height:1.5;color:#61728d}
+.program-builder-modal .program-task-info{margin-top:12px;padding:12px 14px;border:1px solid #dde6f3;border-radius:11px;background:#e9f2ff;color:#61728d;font-size:12px;line-height:1.55}
+.program-builder-modal .program-task-status{margin-top:10px;font-size:12px;line-height:1.5}
+.program-builder-modal footer{padding:14px 20px 18px;background:#fff}
+.program-builder-modal footer button{min-height:44px;height:auto;padding:9px 16px;border-radius:11px;font-size:14px;font-weight:600}
+.program-builder-modal .program-task-send{background:#1268f5}
+@media(min-width:800px){#programQuickBuilder{grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:end}.coach-builder-presets{grid-column:1/-1}}
+@media(max-width:520px){.program-builder-modal{width:calc(100vw - 16px);max-height:calc(100vh - 16px)}.program-builder-modal .program-task-body{padding:15px}.coach-builder-grid{grid-template-columns:1fr;gap:12px}.coach-builder-tabs button{padding:8px;font-size:13px}.program-builder-modal footer{padding:12px 15px 15px}.coach-builder-day-options{grid-template-columns:repeat(7,minmax(44px,1fr))}}
