@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0d1728">
   <meta name="description" content="YKS Defterim bağımsız koç paneli">
   <title>YKS Defterim · Koç Paneli</title>
-  <link rel="stylesheet" href="./base-reset.css?v=1.0.0">
+  <link rel="stylesheet" href="./base-reset.css?v=1.0.1">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
@@ -19,7 +19,11 @@
   <link rel="stylesheet" href="./settings-v21.css?v=2.1.0">
 </head>
 <body>
-  <section id="authView" class="auth-page">
+  <section id="bootView" class="coach-boot" aria-live="polite">
+    <div class="coach-boot-mark">YK</div>
+    <div><b>YKS Defterim</b><span>Koç Paneli hazırlanıyor…</span></div>
+  </section>
+  <section id="authView" class="auth-page hidden">
     <main class="auth-card">
       <div class="auth-brand">
         <div class="brand-mark">YK</div>
@@ -1073,6 +1077,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.32"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.33"></script>
 </body>
 </html>
