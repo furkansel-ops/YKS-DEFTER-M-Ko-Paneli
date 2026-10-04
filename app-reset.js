@@ -1229,9 +1229,3 @@ $("programTaskSend")?.addEventListener("click",async()=>{
     setProgramTaskStatus(days.length===1?"Çalışma öğrenci programına gönderildi ✓":days.length+" güne çalışma gönderildi ✓","success");setTimeout(closeProgramTaskModal,850);
   }catch(error){console.error("Program görevi",error);setProgramTaskStatus("Çalışma gönderilemedi: "+String(error?.message||"Bilinmeyen hata"),"error")}finally{if(button)button.disabled=false}
 });
-    setProgramTaskStatus("Görev öğrenciye gönderildi ✓","success");
-    setTimeout(closeProgramTaskModal,700);
-  }catch(error){
-    console.error("Program görevi",error);setProgramTaskStatus("Görev gönderilemedi: "+String(error?.message||"Bilinmeyen hata"),"error");
-  }finally{if(button)button.disabled=false}
-});
