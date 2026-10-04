@@ -103,7 +103,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.35/);
 });
 
 
@@ -116,7 +116,7 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.35/);
 });
 
 
@@ -129,7 +129,7 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.35/);
 });
 
 
@@ -142,7 +142,7 @@ test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
   assert.match(js,/function showApp[\s\S]*finishBoot\(\)/);
   assert.match(css,/\.coach-boot/);
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.35/);
 });
 
 
@@ -156,6 +156,23 @@ test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()
   assert.match(js,/dayReviewMoodMeta/);
   assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderDashboardDayReviews/);
   assert.match(css,/dashboard-day-review-row/);
-  assert.match(html,/dashboard-v21\.css\?v=1\.1\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
+  assert.match(html,/dashboard-v21\.css\?v=1\.2\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.35/);
+});
+
+
+test('gün sonu entegrasyonu ana özet ve öğrenci geçmişi içerir',()=>{
+  const html=read('index.html'),js=read('app-reset.js'),dash=read('dashboard-v21.css'),reports=read('reports-v21.css');
+  assert.match(html,/id="dashboardDayReviewSummary"/);
+  assert.match(html,/id="reportDayReviewHistory"/);
+  assert.match(js,/function studentDayReviews/);
+  assert.match(js,/data-day-review-student/);
+  assert.match(js,/showCoachPage\("reports"\)/);
+  assert.match(js,/studentDayReviews\(row\)\.slice\(0,7\)/);
+  assert.match(js,/reportDayReviewLatest/);
+  assert.match(dash,/dashboard-day-review-summary/);
+  assert.match(reports,/report-day-review-history/);
+  assert.match(html,/dashboard-v21\.css\?v=1\.2\.0/);
+  assert.match(html,/reports-v21\.css\?v=3\.1\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.35/);
 });
