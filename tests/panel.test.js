@@ -105,7 +105,7 @@ test('pointer capture sürükleme başında alınır',()=>{
   const capture=js.indexOf('handle.setPointerCapture(pointerId)',start);
   const activate=js.indexOf('function activate()',start);
   assert.ok(start>=0&&capture>start&&capture<activate);
-  assert.match(js,/document\.elementFromPoint/);
+  assert.match(js,/getBoundingClientRect/);
   assert.match(html,/app-reset\.js\?v=1\.0\.29/);
 });
 
