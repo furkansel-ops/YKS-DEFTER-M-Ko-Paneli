@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.2.0">
-  <link rel="stylesheet" href="./programs-v21.css?v=2.3.0">
+  <link rel="stylesheet" href="./programs-v21.css?v=2.4.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
@@ -278,20 +278,46 @@
         </div>
 
         <div class="program-task-backdrop hidden" id="programTaskBackdrop" aria-hidden="true">
-          <section class="program-task-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
+          <section class="program-task-modal program-builder-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
             <header>
-              <div><span>KOÇ GÖREVİ</span><h2 id="programTaskTitle">Programa görev ekle</h2><p id="programTaskStudentName">Önce bir öğrenci seç.</p></div>
-              <button type="button" id="programTaskClose">×</button>
+              <div><span>PROGRAM HAZIRLA</span><h2 id="programTaskTitle">Çalışma ekle</h2><p id="programTaskStudentName">Önce bir öğrenci seç.</p></div>
+              <button type="button" id="programTaskClose" aria-label="Kapat">×</button>
             </header>
             <div class="program-task-body">
-              <label><span>Tarih</span><input id="programTaskDate" type="date"></label>
-              <label><span>Görev</span><textarea id="programTaskText" maxlength="220" placeholder="Örn. Matematik Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/220</small></label>
-              <div class="program-task-info">Görev öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle eklenecek.</div>
+              <div class="coach-builder-tabs" role="group" aria-label="Çalışma ekleme yöntemi">
+                <button type="button" class="active" id="programQuickTab">Ders ve konu seç</button>
+                <button type="button" id="programCustomTab">Kendim yazayım</button>
+              </div>
+              <div id="programQuickBuilder">
+                <div class="coach-builder-presets">
+                  <button type="button" data-coach-preset="paragraph">Paragraf · 20 soru</button>
+                  <button type="button" data-coach-preset="problems">Problemler · 30 soru</button>
+                </div>
+                <div class="coach-builder-grid">
+                  <label><span>Ders</span><select id="programTaskSubject"><option value="">Ders seç</option></select></label>
+                  <label><span>Konu</span><select id="programTaskTopic" disabled><option value="">Genel çalışma</option></select></label>
+                </div>
+                <div class="coach-builder-grid">
+                  <label><span>Soru hedefi · isteğe bağlı</span><input id="programTaskQuestions" type="number" min="1" max="1000" inputmode="numeric" placeholder="Örn. 30"></label>
+                  <label><span>Süre (dk) · isteğe bağlı</span><input id="programTaskMinutes" type="number" min="1" max="1440" inputmode="numeric" placeholder="Örn. 45"></label>
+                </div>
+              </div>
+              <label class="coach-builder-custom hidden" id="programCustomBuilder"><span>Ne çalışacak?</span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Deneme analizi · Yanlış soruların tekrarı"></textarea></label>
+              <label><span>Video URL · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://youtu.be/... veya video bağlantısı"><small>YouTube videosu, oynatma listesi veya başka bir web video bağlantısı ekleyebilirsin.</small></label>
+              <fieldset class="coach-builder-days">
+                <legend>Hangi günlere eklensin?</legend>
+                <div class="coach-builder-day-options">
+                  <button type="button" data-program-day="0">Pzt</button><button type="button" data-program-day="1">Sal</button><button type="button" data-program-day="2">Çar</button><button type="button" data-program-day="3">Per</button><button type="button" data-program-day="4">Cum</button><button type="button" data-program-day="5">Cts</button><button type="button" data-program-day="6">Paz</button>
+                </div>
+                <div class="coach-builder-shortcuts"><button type="button" data-program-days="selected">Seçili gün</button><button type="button" data-program-days="weekdays">Hafta içi</button><button type="button" data-program-days="all">Her gün</button></div>
+              </fieldset>
+              <div class="coach-builder-preview"><b id="programTaskPreview">Çalışmanı seç; eklenecek plan burada görünsün.</b><span id="programTaskDestination">—</span></div>
+              <div class="program-task-info">Çalışmalar öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle eklenecek.</div>
               <div class="program-task-status hidden" id="programTaskStatus"></div>
             </div>
             <footer>
               <button type="button" class="program-task-cancel" id="programTaskCancel">Vazgeç</button>
-              <button type="button" class="program-task-send" id="programTaskSend">Görevi gönder</button>
+              <button type="button" class="program-task-send" id="programTaskSend">Programa ekle</button>
             </footer>
           </section>
         </div>
@@ -1047,6 +1073,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.23"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.24"></script>
 </body>
 </html>
