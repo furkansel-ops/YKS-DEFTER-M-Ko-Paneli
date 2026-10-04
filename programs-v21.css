@@ -106,3 +106,21 @@
 .week-board.is-program-dragging .day-tasks.is-drop-target{border-color:#2873f0;background:#eef5ff}
 .week-board.is-program-dragging .program-task-card:not(.is-dragging){transition:none!important}
 .program-task-card.is-dragging{pointer-events:none;transform:none!important;box-shadow:0 16px 34px rgba(24,63,112,.18)}
+
+/* v2.9 — selection move + edit, drag removed */
+.program-drag-handle{display:none!important}
+.day-column:hover{transform:none!important}
+.program-task-card{padding:42px 9px 10px 13px!important;overflow:visible!important}
+.program-select-task,.program-edit-task{position:absolute;top:7px;z-index:4;height:27px;border:1px solid #dfe7f1;border-radius:8px;background:#fff;display:grid;place-items:center;font-weight:850;cursor:pointer}
+.program-select-task{left:7px;width:29px;color:#7b8ca2}
+.program-edit-task{right:7px;width:32px;color:#2873f0}
+.program-task-card[data-selected]{border-color:#2873f0!important;box-shadow:0 0 0 2px rgba(40,115,240,.1)}
+.program-task-card[data-selected] .program-select-task{background:#edf5ff;border-color:#2873f0;color:#2873f0}
+.program-move-menu{position:fixed;z-index:12000;width:min(330px,calc(100vw - 20px));padding:12px;border:1px solid #dfe7f1;border-radius:13px;background:#fff;box-shadow:0 18px 50px rgba(22,45,78,.18)}
+.program-move-menu>b{display:block;margin-bottom:9px;font-size:12px;color:#263a53}
+.program-move-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.program-move-days button,.program-move-cancel{min-height:34px;border:1px solid #dfe7f1;border-radius:8px;background:#f7f9fc;color:#53647a;font-size:11px;font-weight:750;cursor:pointer}
+.program-move-days button:not(:disabled):hover{border-color:#2873f0;background:#edf5ff;color:#2873f0}
+.program-move-days button:disabled{opacity:.35;cursor:default}
+.program-move-cancel{width:100%;margin-top:8px;background:#fff}
+.week-board.is-program-dragging,.day-tasks.is-reordering{cursor:default!important}
