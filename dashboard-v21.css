@@ -22,3 +22,22 @@
 @media(max-width:1200px){.dashboard-stats{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.dash-panel{min-height:210px}}
 @media(max-width:1000px){.dashboard-page{padding:72px 18px 34px}.dashboard-head{align-items:flex-start}.dashboard-date{display:none}}
 @media(max-width:600px){.dashboard-head h1{font-size:25px}.dashboard-stats{gap:9px}.stat-card{min-height:102px;padding:14px;gap:10px}.stat-icon{width:32px;height:32px;flex-basis:32px}.stat-card strong{font-size:21px}.dashboard-grid{gap:10px}.dash-panel{padding:16px}.quick-actions{grid-template-columns:1fr}.panel-title button{display:none}}
+/* Dashboard v1.1 — student day-end reviews */
+.dashboard-day-reviews{display:grid;gap:8px}
+.dashboard-day-review-empty{min-height:110px;display:flex;align-items:center;justify-content:center;gap:12px;padding:18px;border:1px dashed #dce4ef;border-radius:13px;background:#fafbfd;color:#7d8b9e}
+.dashboard-day-review-empty>span{width:38px;height:38px;border-radius:12px;background:#edf5ff;color:#2873f0;display:grid;place-items:center;font-size:17px}
+.dashboard-day-review-empty b{display:block;font-size:10px;color:#43566d}
+.dashboard-day-review-empty p{margin:3px 0 0;font-size:8px;line-height:1.5;color:#8e9bad}
+.dashboard-day-review-row{display:grid;grid-template-columns:38px minmax(0,.8fr) auto minmax(0,1.5fr) auto;align-items:center;gap:10px;padding:11px 12px;border:1px solid #e3e9f1;border-radius:12px;background:#fbfcfe}
+.dashboard-day-review-avatar{width:38px;height:38px;border-radius:12px;background:#edf5ff;color:#2873f0;display:grid;place-items:center;font-size:10px;font-weight:900}
+.dashboard-day-review-student{min-width:0}
+.dashboard-day-review-student b,.dashboard-day-review-student small{display:block}
+.dashboard-day-review-student b{font-size:10px;color:#33485f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dashboard-day-review-student small{font-size:7.5px;color:#98a4b3;margin-top:2px}
+.dashboard-day-review-mood{display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:800;white-space:nowrap}
+.dashboard-day-review-mood.good{background:#edf8f3;color:#277f61}
+.dashboard-day-review-mood.mid{background:#fff8e9;color:#9a7130}
+.dashboard-day-review-mood.hard{background:#fff1f1;color:#ae5058}
+.dashboard-day-review-note{min-width:0;font-size:9px;line-height:1.5;color:#5f7085;overflow-wrap:anywhere}
+.dashboard-day-review-time{font-size:7.5px;color:#9aa5b3;white-space:nowrap}
+@media(max-width:760px){.dashboard-day-review-row{grid-template-columns:36px 1fr auto}.dashboard-day-review-note{grid-column:1/-1;padding-left:46px}.dashboard-day-review-time{grid-column:2}.dashboard-day-review-mood{grid-column:3;grid-row:1/3}}
