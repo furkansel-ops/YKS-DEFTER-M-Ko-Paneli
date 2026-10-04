@@ -75,7 +75,7 @@ document.querySelectorAll("[data-coach-page]").forEach(button=>{
 });
 
 onAuthStateChanged(auth,async user=>{
-  if(!user){if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
+  if(!user){stopCoachShareRealtime();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
   try{
     const profile=await loadCoachProfile(user);
     if(!profile){
@@ -108,6 +108,25 @@ document.querySelectorAll("[data-student-filter]").forEach(button=>button.addEve
 
 
 let coachReportRows=[];
+let coachShareStops=[],coachRealtimeRenderTimer=null;
+function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null}
+function renderCoachRealtimeViews(){
+  try{renderStudentsPage()}catch(error){console.error("Canlı öğrenci görünümü",error)}
+  try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
+  try{renderReport($("reportStudentSelect")?.value||"all")}catch(error){console.error("Canlı rapor görünümü",error)}
+}
+function scheduleCoachRealtimeRender(){clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=setTimeout(()=>{coachRealtimeRenderTimer=null;renderCoachRealtimeViews()},60)}
+function startCoachShareRealtime(){
+  stopCoachShareRealtime();
+  coachReportRows.forEach(row=>{
+    const stop=onSnapshot(doc(db,"coachingShares",row.studentUid),snap=>{
+      const target=coachReportRows.find(item=>item.studentUid===row.studentUid);if(!target)return;
+      target.share=snap.exists()?snap.data():null;scheduleCoachRealtimeRender();
+    },error=>console.error("Öğrenci canlı paylaşımı",row.studentUid,error));
+    coachShareStops.push(stop);
+  });
+}
+
 const escHtml=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
 const reportNum=value=>Number.isFinite(Number(value))?Number(value):0;
 const reportInitial=name=>String(name||"Ö").trim().charAt(0).toLocaleUpperCase("tr-TR")||"Ö";
@@ -154,6 +173,7 @@ function setReportState(name){
 }
 async function loadCoachReports(coachUid){
   if(!coachUid)return;
+  stopCoachShareRealtime();
   setReportState("reportLoading");
   try{
     const linkSnap=await getDocs(query(collection(db,"coachingLinks"),where("coachUid","==",coachUid)));
@@ -184,6 +204,7 @@ async function loadCoachReports(coachUid){
     try{renderStudentsPage()}catch(error){console.error("Öğrenciler render",error)}
     try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Programlar render",error)}
     try{renderMessageStudents()}catch(error){console.error("Mesaj öğrenci listesi",error)}
+    startCoachShareRealtime();
   }catch(error){
     console.error("Takip raporları",error);
     if($("reportErrorText"))$("reportErrorText").textContent=String(error?.message||"Rapor verileri alınamadı.");
