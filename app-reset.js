@@ -165,9 +165,12 @@ function weekStats(program){
   return{week:item?.week||"",taskCounts,done,plannedDays,doneDays,ratio:plannedDays?Math.round(doneDays/plannedDays*100):0};
 }
 function studentName(row){return row?.share?.profile?.name||row?.profile?.displayName||"Öğrenci"}
-function studentDayReview(row,date=todayIsoLocal()){
+function studentDayReviews(row){
   const entries=Array.isArray(row?.share?.progress?.dayReview?.entries)?row.share.progress.dayReview.entries:[];
-  return [...entries].reverse().find(item=>item?.date===date&&(item?.mood||String(item?.note||"").trim()))||null;
+  return entries.filter(item=>item&&/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||""))&&(item.mood||String(item.note||"").trim())).sort((a,b)=>String(b.date).localeCompare(String(a.date))||reportNum(b.at)-reportNum(a.at));
+}
+function studentDayReview(row,date=todayIsoLocal()){
+  return studentDayReviews(row).find(item=>item.date===date)||null;
 }
 function dayReviewMoodMeta(mood){
   if(mood==="good")return{label:"İyi",icon:"🙂",tone:"good"};
@@ -176,17 +179,30 @@ function dayReviewMoodMeta(mood){
   return{label:"Not",icon:"☾",tone:"mid"};
 }
 function renderDashboardDayReviews(){
-  const root=$("dashboardDayReviews");if(!root)return;
+  const root=$("dashboardDayReviews"),summary=$("dashboardDayReviewSummary");if(!root)return;
   const today=todayIsoLocal(),items=coachReportRows.map(row=>({row,review:studentDayReview(row,today)})).filter(item=>item.review).sort((a,b)=>reportNum(b.review?.at)-reportNum(a.review?.at));
+  const counts={good:0,mid:0,hard:0};items.forEach(({review})=>{if(counts[review.mood]!==undefined)counts[review.mood]++});
+  if(summary){
+    summary.innerHTML=
+      '<span><b>'+items.length+'</b> not</span>'+
+      '<span class="good">🙂 <b>'+counts.good+'</b> iyi</span>'+
+      '<span class="mid">😐 <b>'+counts.mid+'</b> orta</span>'+
+      '<span class="hard">😮‍💨 <b>'+counts.hard+'</b> zor</span>';
+  }
   if(!items.length){
     root.innerHTML='<div class="dashboard-day-review-empty"><span>☾</span><div><b>Bugün henüz not yok</b><p>Öğrenciler gün sonu değerlendirmesini kaydettiğinde burada canlı görünecek.</p></div></div>';return;
   }
   root.innerHTML=items.map(({row,review})=>{
     const name=studentName(row),mood=dayReviewMoodMeta(review.mood),note=String(review.note||"").trim()||"Kısa not eklenmedi.";
     const when=review.at?new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(review.at)):"";
-    return '<article class="dashboard-day-review-row"><span class="dashboard-day-review-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-day-review-student"><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span><span class="dashboard-day-review-mood '+mood.tone+'"><i>'+mood.icon+'</i>'+mood.label+'</span><p class="dashboard-day-review-note">'+escHtml(note)+'</p><time class="dashboard-day-review-time">'+escHtml(when)+'</time></article>';
+    return '<button type="button" class="dashboard-day-review-row" data-day-review-student="'+escHtml(row.studentUid)+'"><span class="dashboard-day-review-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-day-review-student"><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span><span class="dashboard-day-review-mood '+mood.tone+'"><i>'+mood.icon+'</i>'+mood.label+'</span><span class="dashboard-day-review-note">'+escHtml(note)+'</span><time class="dashboard-day-review-time">'+escHtml(when)+'</time><span class="dashboard-day-review-open">Raporu aç ›</span></button>';
   }).join("");
+  root.querySelectorAll("[data-day-review-student]").forEach(button=>button.addEventListener("click",()=>{
+    const uid=button.dataset.dayReviewStudent;if(!uid)return;
+    showCoachPage("reports");if($("reportStudentSelect"))$("reportStudentSelect").value=uid;renderReport(uid);
+  }));
 }
+
 function reportStatus(row){
   const overdue=reportNum(row?.share?.progress?.overdueTopics),minutes=reportNum(row?.share?.progress?.minutes7);
   if(overdue>0)return overdue+" geciken konu";
@@ -308,6 +324,14 @@ function renderStudentReport(row){
   $("reportExamList").innerHTML=exams.length?exams.map(exam=>'<div class="report-exam-row"><div><b>'+escHtml(exam.name||exam.type||"Deneme")+'</b><span>'+escHtml(exam.date||"Tarih yok")+'</span></div><strong>'+escHtml(String(reportNum(exam.totalNet)))+' net</strong></div>').join(""):'<div class="report-mini-empty">Henüz deneme verisi yok.</div>';
   const errors=Array.isArray(share.errorJournal)?[...share.errorJournal].slice(-5).reverse():[];
   $("reportErrorList").innerHTML=errors.length?errors.map(item=>'<div class="report-error-row"><div><b>'+escHtml(item.subject||"Ders")+'</b><span>'+escHtml(item.topic||"Konu belirtilmemiş")+'</span></div><strong>'+escHtml(String(Math.max(1,reportNum(item.n))))+' yanlış</strong></div>').join(""):'<div class="report-mini-empty">Henüz hata defteri kaydı yok.</div>';
+  const dayReviews=studentDayReviews(row).slice(0,7),latestReview=dayReviews[0]||null;
+  const latestMood=dayReviewMoodMeta(latestReview?.mood);
+  $("reportDayReviewLatest").textContent=latestReview?latestMood.icon+" "+latestMood.label:"—";
+  $("reportDayReviewHistory").innerHTML=dayReviews.length?dayReviews.map(item=>{
+    const mood=dayReviewMoodMeta(item.mood),date=new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric",month:"short"}).format(new Date(item.date+"T12:00:00")),note=String(item.note||"").trim()||"Not eklenmedi.";
+    const when=item.at?new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(item.at)):"";
+    return '<div class="report-day-review-row"><span class="report-day-review-date">'+escHtml(date)+'</span><span class="report-day-review-mood '+mood.tone+'">'+mood.icon+' '+mood.label+'</span><p>'+escHtml(note)+'</p><time>'+escHtml(when)+'</time></div>';
+  }).join(""):'<div class="report-mini-empty">Henüz gün sonu değerlendirmesi yok.</div>';
   setReportState("reportStudentDetail");
 }
 $("reportStudentSelect")?.addEventListener("change",event=>renderReport(event.currentTarget.value));
