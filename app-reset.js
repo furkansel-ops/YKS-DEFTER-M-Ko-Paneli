@@ -1042,10 +1042,60 @@ function collectProgramDayTasks(program,week,day){
     rows.forEach((row,index)=>{
       const value=String(row?.[day]||"").trim();if(!value)return;
       const label=String(program?.rowLabels?.[key]?.[index]||"").trim();
-      out.push({text:value,label});
+      out.push({id:key+"-"+index+"-"+day,text:value,label});
     });
   });
+  const order=Array.isArray(data?.mv?.["order-"+day])?data.mv["order-"+day]:[],rank=new Map(order.map((id,index)=>[String(id),index]));
+  out.sort((a,b)=>(rank.get(a.id)??Number.MAX_SAFE_INTEGER)-(rank.get(b.id)??Number.MAX_SAFE_INTEGER));
   return out;
+}
+function coachProgramOrderIds(container){
+  return Array.from(container.querySelectorAll("[data-program-task-id]")).map(node=>node.dataset.programTaskId||"").filter(Boolean);
+}
+async function saveCoachProgramOrder(weekStart,day,ids){
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser;if(!row||!user||!ids.length)return false;
+  const week=programWeeks(row).find(item=>item.week===weekStart);if(!week)return false;
+  week.data??={};week.data.mv??={};const key="order-"+day,had=Object.prototype.hasOwnProperty.call(week.data.mv,key),previous=week.data.mv[key];
+  week.data.mv[key]=ids.slice();renderProgramWorkspace();
+  try{
+    await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_order",payload:{date:programDayDate(weekStart,day),order:ids.slice()},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    return true;
+  }catch(error){
+    console.error("Program sırası",error);if(had)week.data.mv[key]=previous;else delete week.data.mv[key];renderProgramWorkspace();return false;
+  }
+}
+function bindCoachProgramReorder(weekStart){
+  document.querySelectorAll("#programWeekBoard [data-program-drag]").forEach(handle=>{
+    const card=handle.closest("[data-program-task-id]"),container=card?.parentElement;if(!card||!container)return;
+    const taskId=card.dataset.programTaskId||"",day=Number(card.dataset.programTaskDay);
+    handle.addEventListener("contextmenu",event=>event.preventDefault());
+    handle.addEventListener("keydown",event=>{
+      if(event.key!=="ArrowUp"&&event.key!=="ArrowDown")return;event.preventDefault();
+      const cards=Array.from(container.querySelectorAll("[data-program-task-id]")),index=cards.indexOf(card),next=index+(event.key==="ArrowUp"?-1:1);
+      if(index<0||next<0||next>=cards.length)return;
+      if(next<index)container.insertBefore(card,cards[next]);else container.insertBefore(cards[next],card);
+      void saveCoachProgramOrder(weekStart,day,coachProgramOrderIds(container));
+    });
+    handle.addEventListener("pointerdown",event=>{
+      if(event.button!==0||!event.isPrimary)return;event.preventDefault();
+      const pointerId=event.pointerId,startX=event.clientX,startY=event.clientY;let active=false,timer=setTimeout(activate,140);
+      function activate(){if(active)return;active=true;card.classList.add("is-dragging");container.classList.add("is-reordering");try{handle.setPointerCapture(pointerId)}catch{}}
+      function move(moveEvent){
+        if(moveEvent.pointerId!==pointerId)return;
+        if(!active&&Math.hypot(moveEvent.clientX-startX,moveEvent.clientY-startY)>6){clearTimeout(timer);activate()}
+        if(!active)return;moveEvent.preventDefault();
+        const siblings=Array.from(container.querySelectorAll("[data-program-task-id]:not(.is-dragging)"));
+        const before=siblings.find(node=>moveEvent.clientY<node.getBoundingClientRect().top+node.getBoundingClientRect().height/2);
+        container.insertBefore(card,before||null);
+      }
+      function finish(finishEvent){
+        if(finishEvent.pointerId!==pointerId)return;clearTimeout(timer);handle.removeEventListener("pointermove",move);handle.removeEventListener("pointerup",finish);handle.removeEventListener("pointercancel",finish);
+        if(!active)return;card.classList.remove("is-dragging");container.classList.remove("is-reordering");try{handle.releasePointerCapture(pointerId)}catch{}
+        void saveCoachProgramOrder(weekStart,day,coachProgramOrderIds(container));
+      }
+      handle.addEventListener("pointermove",move);handle.addEventListener("pointerup",finish);handle.addEventListener("pointercancel",finish);
+    });
+  });
 }
 function hydrateProgramStudents(){
   const list=$("programStudentList"),empty=$("programStudentEmpty"),count=$("programStudentCount");
@@ -1136,9 +1186,10 @@ function renderProgramWorkspace(){
     return '<section class="day-column '+(completed?"done ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+stateBadge+'</header><div class="day-tasks">'+(dayTasks.length?dayTasks.map(task=>{
       const tone=programSubjectTone(task),coachTask=/^Koç ·/.test(task.text);
       const cleanText=task.text.replace(/^Koç ·(?: Deneme sonrası · )?/,"");
-      return '<article class="program-task-card tone-'+tone+'"><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
+      return '<article class="program-task-card tone-'+tone+'" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'"><button type="button" class="program-drag-handle" data-program-drag aria-label="Görevin sırasını değiştir">⠿</button><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
     }).join(""):'<div class="day-empty"><i>＋</i><span>Bu gün için görev yok</span></div>')+'</div></section>';
   }).join("");
+  bindCoachProgramReorder(week.week);
 }
 $("programStudentSearch")?.addEventListener("input",hydrateProgramStudents);
 $("programPrevWeek")?.addEventListener("click",()=>{if(selectedProgramWeekIndex>0){selectedProgramWeekIndex--;renderProgramWorkspace()}});
