@@ -103,7 +103,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
 });
 
 
@@ -116,7 +116,7 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
 });
 
 
@@ -129,7 +129,7 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
 });
 
 
@@ -142,5 +142,20 @@ test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
   assert.match(js,/function showApp[\s\S]*finishBoot\(\)/);
   assert.match(css,/\.coach-boot/);
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.33/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
+});
+
+
+test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()=>{
+  const html=read('index.html'),js=read('app-reset.js'),css=read('dashboard-v21.css');
+  assert.match(html,/id="dashboardDayReviews"/);
+  assert.match(html,/Gün Sonu Notları/);
+  assert.match(js,/function studentDayReview/);
+  assert.match(js,/progress\?\.dayReview\?\.entries/);
+  assert.match(js,/function renderDashboardDayReviews/);
+  assert.match(js,/dayReviewMoodMeta/);
+  assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderDashboardDayReviews/);
+  assert.match(css,/dashboard-day-review-row/);
+  assert.match(html,/dashboard-v21\.css\?v=1\.1\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.34/);
 });
