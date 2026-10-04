@@ -17,12 +17,15 @@ function setStatus(message,type=""){
   node.textContent=message;
   node.className=`status ${type}`.trim();
 }
+function finishBoot(){$("bootView")?.classList.add("hidden")}
 function showAuth(message="Koç hesabınla giriş yap.",type=""){
+  finishBoot();
   $("authView")?.classList.remove("hidden");
   $("appView")?.classList.add("hidden");
   setStatus(message,type);
 }
 function showApp(profile,user){
+  finishBoot();
   $("authView")?.classList.add("hidden");
   $("appView")?.classList.remove("hidden");
   const name=text(profile?.displayName||user?.displayName||"Koç",80)||"Koç";
