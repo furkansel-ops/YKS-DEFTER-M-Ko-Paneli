@@ -98,3 +98,11 @@
 .day-tasks .program-task-card{padding-right:42px}
 .program-drag-handle{position:absolute;right:6px;top:6px;z-index:3;display:grid;place-items:center;min-width:34px;min-height:38px}
 .day-tasks.is-reordering{user-select:none;-webkit-user-select:none;cursor:grabbing}
+
+/* v2.8 — stable day drag/drop */
+.day-column:hover{transform:none!important}
+.week-board.is-program-dragging .day-column{transform:none!important}
+.week-board.is-program-dragging .day-tasks{min-height:120px;border:1px dashed transparent;border-radius:10px;transition:border-color .12s ease,background .12s ease}
+.week-board.is-program-dragging .day-tasks.is-drop-target{border-color:#2873f0;background:#eef5ff}
+.week-board.is-program-dragging .program-task-card:not(.is-dragging){transition:none!important}
+.program-task-card.is-dragging{pointer-events:none;transform:none!important;box-shadow:0 16px 34px rgba(24,63,112,.18)}
