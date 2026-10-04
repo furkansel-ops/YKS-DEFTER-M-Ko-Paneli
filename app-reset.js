@@ -1078,20 +1078,22 @@ function bindCoachProgramReorder(weekStart){
     });
     handle.addEventListener("pointerdown",event=>{
       if(event.button!==0||!event.isPrimary)return;event.preventDefault();
-      const pointerId=event.pointerId,startX=event.clientX,startY=event.clientY;let active=false,timer=setTimeout(activate,140);
-      function activate(){if(active)return;active=true;card.classList.add("is-dragging");container.classList.add("is-reordering");try{handle.setPointerCapture(pointerId)}catch{}}
+      const pointerId=event.pointerId,startX=event.clientX,startY=event.clientY,initial=coachProgramOrderIds(container).join("|");let active=false,timer=setTimeout(activate,120);
+      try{handle.setPointerCapture(pointerId)}catch{}
+      function activate(){if(active)return;active=true;card.classList.add("is-dragging");container.classList.add("is-reordering")}
       function move(moveEvent){
         if(moveEvent.pointerId!==pointerId)return;
-        if(!active&&Math.hypot(moveEvent.clientX-startX,moveEvent.clientY-startY)>6){clearTimeout(timer);activate()}
+        if(!active&&Math.hypot(moveEvent.clientX-startX,moveEvent.clientY-startY)>4){clearTimeout(timer);activate()}
         if(!active)return;moveEvent.preventDefault();
-        const siblings=Array.from(container.querySelectorAll("[data-program-task-id]:not(.is-dragging)"));
-        const before=siblings.find(node=>moveEvent.clientY<node.getBoundingClientRect().top+node.getBoundingClientRect().height/2);
-        container.insertBefore(card,before||null);
+        const target=document.elementFromPoint(moveEvent.clientX,moveEvent.clientY)?.closest("[data-program-task-id]");
+        if(!target||target===card||target.parentElement!==container)return;
+        const rect=target.getBoundingClientRect(),before=moveEvent.clientY<rect.top+rect.height/2;
+        container.insertBefore(card,before?target:target.nextSibling);
       }
       function finish(finishEvent){
         if(finishEvent.pointerId!==pointerId)return;clearTimeout(timer);handle.removeEventListener("pointermove",move);handle.removeEventListener("pointerup",finish);handle.removeEventListener("pointercancel",finish);
-        if(!active)return;card.classList.remove("is-dragging");container.classList.remove("is-reordering");try{handle.releasePointerCapture(pointerId)}catch{}
-        void saveCoachProgramOrder(weekStart,day,coachProgramOrderIds(container));
+        card.classList.remove("is-dragging");container.classList.remove("is-reordering");try{handle.releasePointerCapture(pointerId)}catch{}
+        const next=coachProgramOrderIds(container);if(active&&next.join("|")!==initial)void saveCoachProgramOrder(weekStart,day,next);
       }
       handle.addEventListener("pointermove",move);handle.addEventListener("pointerup",finish);handle.addEventListener("pointercancel",finish);
     });
