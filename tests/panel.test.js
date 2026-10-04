@@ -89,7 +89,7 @@ test('koç paneli öğrenci programını F5 olmadan canlı dinler',()=>{
 
 test('koç günlük program kartları sürüklenerek sıralanır',()=>{
   const html=read('index.html'),js=read('app-reset.js'),css=read('programs-v21.css');
-  assert.match(js,/type:"program_order"/);
+  assert.match(js,/operation:"order"/);
   assert.match(js,/saveCoachProgramOrder/);
   assert.match(js,/data-program-drag/);
   assert.match(js,/pointerdown/);
