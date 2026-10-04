@@ -13,3 +13,18 @@
 @media(max-width:1000px){.reports-page{padding:72px 18px 34px}}
 @media(max-width:720px){.reports-head,.report-selector-card{align-items:stretch;flex-direction:column}.report-refresh{width:100%}.report-select-wrap{min-width:0;width:100%}.report-kpis{grid-template-columns:1fr 1fr}.report-card-head{align-items:flex-start;flex-direction:column}.report-search{width:100%}.report-table-head{display:none}.report-student-row{grid-template-columns:1fr 1fr 1fr;padding:12px}.report-student-main{grid-column:1/4}.report-student-row>em{text-align:left}.report-side-stack{grid-template-columns:1fr}.report-week-days{grid-template-columns:repeat(7,110px);overflow-x:auto}.report-student-hero{align-items:flex-start;flex-wrap:wrap}.report-sync-pill{width:100%}}
 @media(max-width:480px){.report-kpis{grid-template-columns:1fr}.report-student-row{grid-template-columns:1fr 1fr}.report-student-main{grid-column:1/3}}
+
+/* Reports v3.1 — day-end reflection history */
+.report-day-review-card{grid-column:1/-1}
+.report-day-review-latest{font-size:10px;color:#52657d;white-space:nowrap}
+.report-day-review-history{padding:5px 15px 12px}
+.report-day-review-row{display:grid;grid-template-columns:100px 86px minmax(0,1fr) 52px;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #edf1f6}
+.report-day-review-row:last-child{border-bottom:0}
+.report-day-review-date{font-size:8px;font-weight:800;color:#53667d}
+.report-day-review-mood{display:inline-flex;align-items:center;justify-content:center;padding:6px 8px;border-radius:999px;font-size:7.5px;font-weight:850;white-space:nowrap}
+.report-day-review-mood.good{background:#edf8f3;color:#277f61}
+.report-day-review-mood.mid{background:#fff8e9;color:#9a7130}
+.report-day-review-mood.hard{background:#fff1f1;color:#ae5058}
+.report-day-review-row p{margin:0;font-size:8.5px;line-height:1.5;color:#5f7085;overflow-wrap:anywhere}
+.report-day-review-row time{font-size:7px;color:#98a4b3;text-align:right}
+@media(max-width:720px){.report-day-review-row{grid-template-columns:1fr auto}.report-day-review-row p{grid-column:1/-1}.report-day-review-row time{text-align:left}}
