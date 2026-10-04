@@ -97,3 +97,14 @@ test('koç günlük program kartları sürüklenerek sıralanır',()=>{
   assert.match(css,/program-drag-handle/);
   assert.match(html,/app-reset\.js\?v=1\.0\.27/);
 });
+
+
+test('pointer capture sürükleme başında alınır',()=>{
+  const js=read('app-reset.js'),html=read('index.html');
+  const start=js.indexOf('handle.addEventListener("pointerdown"');
+  const capture=js.indexOf('handle.setPointerCapture(pointerId)',start);
+  const activate=js.indexOf('function activate()',start);
+  assert.ok(start>=0&&capture>start&&capture<activate);
+  assert.match(js,/document\.elementFromPoint/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.28/);
+});
