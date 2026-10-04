@@ -8,7 +8,7 @@
   <title>YKS Defterim · Koç Paneli</title>
   <link rel="stylesheet" href="./base-reset.css?v=1.0.1">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
-  <link rel="stylesheet" href="./dashboard-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./dashboard-v21.css?v=1.1.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=2.9.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.0.0">
@@ -101,6 +101,12 @@
           <article class="dash-panel dash-wide">
             <div class="panel-title"><div><h2>Öğrenci Durumu</h2><p>Takip gerektiren öğrenciler burada öne çıkacak</p></div><button data-go-page="students">Öğrencilere git →</button></div>
             <div class="student-placeholder"><div class="placeholder-bars"><i></i><i></i><i></i></div><div><b>Öğrenci verileri bekleniyor</b><p>Bağlı öğrencilerin program ve çalışma verileri geldikçe bu alan otomatik dolacak.</p></div></div>
+          </article>
+          <article class="dash-panel dash-wide day-review-panel">
+            <div class="panel-title"><div><h2>Gün Sonu Notları</h2><p>Öğrencilerin bugünkü kısa değerlendirmeleri</p></div><button data-go-page="students">Öğrencilere git →</button></div>
+            <div class="dashboard-day-reviews" id="dashboardDayReviews">
+              <div class="dashboard-day-review-empty"><span>☾</span><div><b>Bugün henüz not yok</b><p>Öğrenciler gün sonu değerlendirmesini kaydettiğinde burada canlı görünecek.</p></div></div>
+            </div>
           </article>
           <article class="dash-panel">
             <div class="panel-title"><div><h2>Koç Notları</h2><p>Bugün gözden geçir</p></div></div>
@@ -1077,6 +1083,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.33"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.34"></script>
 </body>
 </html>
