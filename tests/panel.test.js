@@ -95,7 +95,7 @@ test('koç günlük program kartları sürüklenerek sıralanır',()=>{
   assert.match(js,/pointerdown/);
   assert.match(js,/ArrowUp/);
   assert.match(css,/program-drag-handle/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.28/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.29/);
 });
 
 
@@ -106,5 +106,17 @@ test('pointer capture sürükleme başında alınır',()=>{
   const activate=js.indexOf('function activate()',start);
   assert.ok(start>=0&&capture>start&&capture<activate);
   assert.match(js,/document\.elementFromPoint/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.28/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.29/);
+});
+
+
+test('görev kartı günler arasında sürüklenir ve hover zıplamaz',()=>{
+  const js=read('app-reset.js'),css=read('programs-v21.css'),html=read('index.html');
+  assert.match(js,/data-program-drop-day/);
+  assert.match(js,/saveCoachProgramMove/);
+  assert.match(js,/operation:"move"/);
+  assert.match(js,/zoneAt\(x,y\)/);
+  assert.match(css,/day-column:hover\{transform:none!important\}/);
+  assert.match(css,/is-drop-target/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.29/);
 });
