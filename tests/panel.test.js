@@ -103,7 +103,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.31/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.32/);
 });
 
 
@@ -116,5 +116,18 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.31/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.32/);
+});
+
+
+test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu vardır',()=>{
+  const js=read('app-reset.js'),css=read('students-v21.css'),html=read('index.html');
+  assert.match(js,/data-remove-student/);
+  assert.match(js,/function removeCoachStudent/);
+  assert.match(js,/active:false,endedAt:serverTimestamp\(\),updatedAt:serverTimestamp\(\)/);
+  assert.match(js,/Öğrencinin YKS Defterim hesabı ve verileri silinmez/);
+  assert.doesNotMatch(js,/deleteDoc\(/);
+  assert.match(css,/student-remove/);
+  assert.match(html,/students-v21\.css\?v=2\.3\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.32/);
 });
