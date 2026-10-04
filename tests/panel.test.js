@@ -87,36 +87,21 @@ test('koç paneli öğrenci programını F5 olmadan canlı dinler',()=>{
 });
 
 
-test('koç günlük program kartları sürüklenerek sıralanır',()=>{
-  const html=read('index.html'),js=read('app-reset.js'),css=read('programs-v21.css');
-  assert.match(js,/operation:"order"/);
-  assert.match(js,/saveCoachProgramOrder/);
-  assert.match(js,/data-program-drag/);
-  assert.match(js,/pointerdown/);
-  assert.match(js,/ArrowUp/);
-  assert.match(css,/program-drag-handle/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.29/);
-});
 
 
-test('pointer capture sürükleme başında alınır',()=>{
-  const js=read('app-reset.js'),html=read('index.html');
-  const start=js.indexOf('handle.addEventListener("pointerdown"');
-  const capture=js.indexOf('handle.setPointerCapture(pointerId)',start);
-  const activate=js.indexOf('function activate()',start);
-  assert.ok(start>=0&&capture>start&&capture<activate);
-  assert.match(js,/getBoundingClientRect/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.29/);
-});
 
 
-test('görev kartı günler arasında sürüklenir ve hover zıplamaz',()=>{
+test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontrolleri vardır',()=>{
   const js=read('app-reset.js'),css=read('programs-v21.css'),html=read('index.html');
-  assert.match(js,/data-program-drop-day/);
-  assert.match(js,/saveCoachProgramMove/);
+  assert.doesNotMatch(js,/bindCoachProgramReorder/);
+  assert.doesNotMatch(js,/data-program-drag/);
+  assert.match(js,/data-program-select/);
+  assert.match(js,/data-program-edit/);
+  assert.match(js,/openCoachMoveMenu/);
+  assert.match(js,/openCoachProgramEdit/);
   assert.match(js,/operation:"move"/);
-  assert.match(js,/zoneAt\(x,y\)/);
-  assert.match(css,/day-column:hover\{transform:none!important\}/);
-  assert.match(css,/is-drop-target/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.29/);
+  assert.match(js,/operation:"edit"/);
+  assert.match(css,/program-select-task/);
+  assert.match(css,/program-edit-task/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.30/);
 });
