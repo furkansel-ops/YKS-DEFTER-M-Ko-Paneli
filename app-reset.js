@@ -114,6 +114,7 @@ let coachReportRows=[];
 let coachShareStops=[],coachRealtimeRenderTimer=null;
 function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null}
 function renderCoachRealtimeViews(){
+  try{renderDashboardDayReviews()}catch(error){console.error("Canlı gün sonu notları",error)}
   try{renderStudentsPage()}catch(error){console.error("Canlı öğrenci görünümü",error)}
   try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
   try{renderReport($("reportStudentSelect")?.value||"all")}catch(error){console.error("Canlı rapor görünümü",error)}
@@ -164,6 +165,28 @@ function weekStats(program){
   return{week:item?.week||"",taskCounts,done,plannedDays,doneDays,ratio:plannedDays?Math.round(doneDays/plannedDays*100):0};
 }
 function studentName(row){return row?.share?.profile?.name||row?.profile?.displayName||"Öğrenci"}
+function studentDayReview(row,date=todayIsoLocal()){
+  const entries=Array.isArray(row?.share?.progress?.dayReview?.entries)?row.share.progress.dayReview.entries:[];
+  return [...entries].reverse().find(item=>item?.date===date&&(item?.mood||String(item?.note||"").trim()))||null;
+}
+function dayReviewMoodMeta(mood){
+  if(mood==="good")return{label:"İyi",icon:"🙂",tone:"good"};
+  if(mood==="mid")return{label:"Orta",icon:"😐",tone:"mid"};
+  if(mood==="hard")return{label:"Zor",icon:"😮‍💨",tone:"hard"};
+  return{label:"Not",icon:"☾",tone:"mid"};
+}
+function renderDashboardDayReviews(){
+  const root=$("dashboardDayReviews");if(!root)return;
+  const today=todayIsoLocal(),items=coachReportRows.map(row=>({row,review:studentDayReview(row,today)})).filter(item=>item.review).sort((a,b)=>reportNum(b.review?.at)-reportNum(a.review?.at));
+  if(!items.length){
+    root.innerHTML='<div class="dashboard-day-review-empty"><span>☾</span><div><b>Bugün henüz not yok</b><p>Öğrenciler gün sonu değerlendirmesini kaydettiğinde burada canlı görünecek.</p></div></div>';return;
+  }
+  root.innerHTML=items.map(({row,review})=>{
+    const name=studentName(row),mood=dayReviewMoodMeta(review.mood),note=String(review.note||"").trim()||"Kısa not eklenmedi.";
+    const when=review.at?new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(review.at)):"";
+    return '<article class="dashboard-day-review-row"><span class="dashboard-day-review-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-day-review-student"><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span><span class="dashboard-day-review-mood '+mood.tone+'"><i>'+mood.icon+'</i>'+mood.label+'</span><p class="dashboard-day-review-note">'+escHtml(note)+'</p><time class="dashboard-day-review-time">'+escHtml(when)+'</time></article>';
+  }).join("");
+}
 function reportStatus(row){
   const overdue=reportNum(row?.share?.progress?.overdueTopics),minutes=reportNum(row?.share?.progress?.minutes7);
   if(overdue>0)return overdue+" geciken konu";
@@ -204,6 +227,7 @@ async function loadCoachReports(coachUid){
       if($("errorLoadErrorText"))$("errorLoadErrorText").textContent=String(error?.message||"Hata kayıtları görüntülenemedi.");
       setErrorState("errorLoadError");
     }
+    try{renderDashboardDayReviews()}catch(error){console.error("Gün sonu notları render",error)}
     try{renderStudentsPage()}catch(error){console.error("Öğrenciler render",error)}
     try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Programlar render",error)}
     try{renderMessageStudents()}catch(error){console.error("Mesaj öğrenci listesi",error)}
