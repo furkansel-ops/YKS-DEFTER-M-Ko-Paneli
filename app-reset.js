@@ -1156,7 +1156,7 @@ const COACH_PROGRAM_SUBJECTS=[
   ["AYT · Kimya",["Modern Atom Teorisi","Gazlar","Çözeltiler","Tepkimelerde Enerji","Kimyasal Denge","Organik Kimya"]],
   ["AYT · Biyoloji",["Sinir Sistemi","Endokrin Sistem","Duyu Organları","Destek ve Hareket","Sindirim","Dolaşım","Solunum","Boşaltım","Üreme","Genetik","Ekoloji"]]
 ];
-let coachProgramQuickMode=true,coachProgramDays=new Set([0]),coachProgramBaseDate="";
+let coachProgramQuickMode=true,coachProgramDays=new Set([0]),coachProgramSelectedDay=0,coachProgramBaseDate="";
 function coachProgramMonday(value){
   const d=value?new Date(value+"T12:00:00"):new Date();if(Number.isNaN(d.getTime()))return new Date();
   d.setDate(d.getDate()-(d.getDay()+6)%7);return d;
@@ -1169,7 +1169,7 @@ function coachProgramTaskText(){
   if(!coachProgramQuickMode)return String($("programTaskText")?.value||"").trim();
   const subject=String($("programTaskSubject")?.value||"").trim(),topic=String($("programTaskTopic")?.value||"").trim();
   if(!subject)return "";
-  const parts=[subject,topic].filter(Boolean),questions=String($("programTaskQuestions")?.value||"").trim(),minutes=String($("programTaskMinutes")?.value||"").trim();
+  const parts=[subject.replace(" · "," "),topic].filter(Boolean),questions=String($("programTaskQuestions")?.value||"").trim(),minutes=String($("programTaskMinutes")?.value||"").trim();
   if(questions)parts.push(Number(questions)+" soru");if(minutes)parts.push(Number(minutes)+" dk");return parts.join(" · ");
 }
 function coachProgramResource(){
@@ -1179,9 +1179,10 @@ function coachProgramResource(){
 function updateCoachProgramBuilder(){
   const task=coachProgramTaskText(),resource=coachProgramResource(),preview=$("programTaskPreview"),dest=$("programTaskDestination");
   if(preview)preview.textContent=task?(resource?task+" · video bağlantılı":task):"Çalışmanı seç; eklenecek plan burada görünsün.";
-  const labels=["Pzt","Sal","Çar","Per","Cum","Cts","Paz"],dates=[...coachProgramDays].sort().map(day=>labels[day]+" "+coachProgramDateForDay(day).slice(8));
-  if(dest)dest.textContent=dates.length?dates.join(", "):"En az bir gün seç";
-  document.querySelectorAll("[data-program-day]").forEach(button=>button.classList.toggle("active",coachProgramDays.has(Number(button.dataset.programDay))));
+  const labels=["Pzt","Sal","Çar","Per","Cum","Cts","Paz"],dates=[...coachProgramDays].sort().map(day=>labels[day]+" "+Number(coachProgramDateForDay(day).slice(8)));
+  const monday=coachProgramMonday(coachProgramBaseDate||todayIsoLocal()),weekLabel=new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",year:"numeric"}).format(monday);
+  if(dest)dest.textContent=weekLabel+" haftası · "+(dates.length?dates.join(", "):"En az bir gün seç");
+  document.querySelectorAll("[data-program-day]").forEach(button=>{const active=coachProgramDays.has(Number(button.dataset.programDay));button.classList.toggle("active",active);button.setAttribute("aria-pressed",String(active))});
   const send=$("programTaskSend");if(send)send.textContent=coachProgramDays.size>1?coachProgramDays.size+" güne ekle":"Programa ekle";
 }
 function syncCoachProgramTopics(){
@@ -1191,7 +1192,7 @@ function syncCoachProgramTopics(){
 }
 function setCoachProgramMode(quick){
   coachProgramQuickMode=quick;$("programQuickBuilder")?.classList.toggle("hidden",!quick);$("programCustomBuilder")?.classList.toggle("hidden",quick);
-  $("programQuickTab")?.classList.toggle("active",quick);$("programCustomTab")?.classList.toggle("active",!quick);updateCoachProgramBuilder();
+  $("programQuickTab")?.classList.toggle("active",quick);$("programCustomTab")?.classList.toggle("active",!quick);$("programQuickTab")?.setAttribute("aria-pressed",String(quick));$("programCustomTab")?.setAttribute("aria-pressed",String(!quick));updateCoachProgramBuilder();
 }
 function openProgramTaskModal(prefill=""){
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid);if(!row){alert("Önce soldan bir öğrenci seç.");return}
@@ -1199,7 +1200,7 @@ function openProgramTaskModal(prefill=""){
   if($("programTaskStudentName"))$("programTaskStudentName").textContent=studentName(row)+" için yeni çalışma";
   const week=programWeeks(row)[selectedProgramWeekIndex];coachProgramBaseDate=week?.week||todayIsoLocal();
   const today=new Date(),monday=coachProgramMonday(coachProgramBaseDate),diff=Math.round((Date.UTC(today.getFullYear(),today.getMonth(),today.getDate())-Date.UTC(monday.getFullYear(),monday.getMonth(),monday.getDate()))/86400000);
-  coachProgramDays=new Set([diff>=0&&diff<=6?diff:0]);
+  coachProgramSelectedDay=diff>=0&&diff<=6?diff:0;coachProgramDays=new Set([coachProgramSelectedDay]);
   if($("programTaskText"))$("programTaskText").value=prefill;if($("programTaskVideo"))$("programTaskVideo").value="";
   if($("programTaskQuestions"))$("programTaskQuestions").value="";if($("programTaskMinutes"))$("programTaskMinutes").value="";
   if(prefill)setCoachProgramMode(false);else setCoachProgramMode(true);
@@ -1212,16 +1213,16 @@ $("programQuickTab")?.addEventListener("click",()=>setCoachProgramMode(true));$(
 $("programTaskSubject")?.addEventListener("change",syncCoachProgramTopics);
 ["programTaskTopic","programTaskQuestions","programTaskMinutes","programTaskText","programTaskVideo"].forEach(id=>$(id)?.addEventListener("input",updateCoachProgramBuilder));
 document.querySelectorAll("[data-program-day]").forEach(button=>button.addEventListener("click",()=>{const day=Number(button.dataset.programDay);coachProgramDays.has(day)?coachProgramDays.delete(day):coachProgramDays.add(day);updateCoachProgramBuilder()}));
-document.querySelectorAll("[data-program-days]").forEach(button=>button.addEventListener("click",()=>{const mode=button.dataset.programDays;coachProgramDays=new Set(mode==="all"?[0,1,2,3,4,5,6]:mode==="weekdays"?[0,1,2,3,4]:[Math.max(0,Math.min(6,(new Date().getDay()+6)%7))]);updateCoachProgramBuilder()}));
+document.querySelectorAll("[data-program-days]").forEach(button=>button.addEventListener("click",()=>{const mode=button.dataset.programDays;coachProgramDays=new Set(mode==="all"?[0,1,2,3,4,5,6]:mode==="weekdays"?[0,1,2,3,4]:[coachProgramSelectedDay]);updateCoachProgramBuilder()}));
 document.querySelectorAll("[data-coach-preset]").forEach(button=>button.addEventListener("click",()=>{const p=button.dataset.coachPreset,subject=$("programTaskSubject"),questions=$("programTaskQuestions");if(!subject||!questions)return;subject.value=p==="paragraph"?"TYT · Türkçe":"TYT · Matematik";syncCoachProgramTopics();$("programTaskTopic").value=p==="paragraph"?"Paragraf":"Problemler";questions.value=p==="paragraph"?"20":"30";updateCoachProgramBuilder()}));
 $("programAddTaskBtn")?.addEventListener("click",()=>openProgramTaskModal());$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTemplatesBtn")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.toggle("hidden"));$("programTemplateClose")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.add("hidden"));
 document.querySelectorAll("[data-program-template]").forEach(button=>button.addEventListener("click",()=>{$("programTemplatePopover")?.classList.add("hidden");openProgramTaskModal(button.dataset.programTemplate||"")}));
 $("programTaskSend")?.addEventListener("click",async()=>{
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser,button=$("programTaskSend"),base=coachProgramTaskText(),resource=coachProgramResource();
-  if(!row||!user)return;if(!base){setProgramTaskStatus("Ders seç veya çalışma metni yaz.","error");return}if(resource===null){setProgramTaskStatus("Video bağlantısı geçerli bir http/https adresi olmalı.","error");return}
+  if(!row||!user)return;if(!base){setProgramTaskStatus("Ders seç veya çalışma metni yaz.","error");return}if(base.length>600){setProgramTaskStatus("Çalışma metni en fazla 600 karakter olabilir.","error");return}if(resource===null){setProgramTaskStatus("Video bağlantısı geçerli bir http/https adresi olmalı.","error");return}
   if(!coachProgramDays.size){setProgramTaskStatus("En az bir gün seç.","error");return}
-  const task=(base+(resource?" — "+resource:"")).slice(0,600),days=[...coachProgramDays].sort((a,b)=>a-b);
+  const task=base+(resource?" — "+resource:""),days=[...coachProgramDays].sort((a,b)=>a-b);if(task.length>600){setProgramTaskStatus("Video bağlantısıyla birlikte çalışma en fazla 600 karakter olabilir.","error");return}
   if(button)button.disabled=true;setProgramTaskStatus(days.length+" çalışma gönderiliyor…","loading");
   try{
     await Promise.all(days.map(day=>addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{text:task,date:coachProgramDateForDay(day)},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()})));
