@@ -63,3 +63,15 @@ test('kayıt ekranı minimal reset stilini kullanır',()=>{
   assert.match(register,/öğrenci hesabı olarak kayıtlı/);
   assert.match(register,/emailVerified/);
 });
+
+
+test('koç program oluşturucu öğrenci Programım alanlarını taşır',()=>{
+  const html=read('index.html');
+  const js=read('app-reset.js');
+  for(const id of ['programQuickTab','programCustomTab','programTaskSubject','programTaskTopic','programTaskQuestions','programTaskMinutes','programTaskVideo','programTaskPreview','programTaskDestination'])assert.ok(html.includes('id="'+id+'"'),id);
+  for(const day of ['0','1','2','3','4','5','6'])assert.ok(html.includes('data-program-day="'+day+'"'),'day '+day);
+  assert.match(js,/COACH_PROGRAM_SUBJECTS/);
+  assert.match(js,/Promise\.all\(days\.map/);
+  assert.match(js,/payload:\{text:task,date:coachProgramDateForDay\(day\)\}/);
+  assert.match(js,/weekLabel\+" haftası/);
+});
