@@ -75,3 +75,13 @@ test('koç program oluşturucu öğrenci Programım alanlarını taşır',()=>{
   assert.match(js,/payload:\{text:task,date:coachProgramDateForDay\(day\)\}/);
   assert.match(js,/weekLabel\+" haftası/);
 });
+
+
+test('koç paneli öğrenci programını F5 olmadan canlı dinler',()=>{
+  const js=read('app-reset.js');
+  assert.match(js,/onSnapshot\(doc\(db,"coachingShares",row\.studentUid\)/);
+  assert.match(js,/target\.share=snap\.exists\(\)\?snap\.data\(\):null/);
+  assert.match(js,/scheduleCoachRealtimeRender/);
+  assert.match(js,/renderProgramWorkspace\(\)/);
+  assert.match(js,/stopCoachShareRealtime/);
+});
