@@ -1089,56 +1089,41 @@ async function saveCoachProgramMove(weekStart,taskId,targetDay){
     console.error("Program günü taşıma",error);week.data=backup;renderProgramWorkspace();alert("Görev başka güne taşınamadı.");return false;
   }
 }
-function bindCoachProgramReorder(weekStart){
-  const board=$("programWeekBoard");if(!board)return;
-  const dropZones=()=>Array.from(board.querySelectorAll("[data-program-drop-day]"));
-  document.querySelectorAll("#programWeekBoard [data-program-drag]").forEach(handle=>{
-    const card=handle.closest("[data-program-task-id]"),sourceContainer=card?.parentElement;if(!card||!sourceContainer)return;
-    const taskId=card.dataset.programTaskId||"",sourceDay=Number(card.dataset.programTaskDay);
-    handle.addEventListener("contextmenu",event=>event.preventDefault());
-    handle.addEventListener("keydown",event=>{
-      if(event.key!=="ArrowUp"&&event.key!=="ArrowDown")return;event.preventDefault();
-      const cards=Array.from(sourceContainer.querySelectorAll("[data-program-task-id]")),index=cards.indexOf(card),next=index+(event.key==="ArrowUp"?-1:1);
-      if(index<0||next<0||next>=cards.length)return;
-      if(next<index)sourceContainer.insertBefore(card,cards[next]);else sourceContainer.insertBefore(cards[next],card);
-      void saveCoachProgramOrder(weekStart,sourceDay,coachProgramOrderIds(sourceContainer));
-    });
-    handle.addEventListener("pointerdown",event=>{
-      if(event.button!==0||!event.isPrimary)return;event.preventDefault();
-      const pointerId=event.pointerId,startX=event.clientX,startY=event.clientY,initial=coachProgramOrderIds(sourceContainer).join("|");let active=false,timer=setTimeout(activate,100),activeZone=null;
-      try{handle.setPointerCapture(pointerId)}catch{}
-      function activate(){if(active)return;active=true;card.classList.add("is-dragging");board.classList.add("is-program-dragging")}
-      function clearZone(){if(activeZone)activeZone.classList.remove("is-drop-target");activeZone=null}
-      function zoneAt(x,y){
-        const zones=dropZones();let hit=zones.find(zone=>{const r=zone.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom});
-        if(hit)return hit;
-        let best=null,bestDistance=Infinity;
-        zones.forEach(zone=>{const r=zone.getBoundingClientRect(),cx=Math.max(r.left,Math.min(x,r.right)),cy=Math.max(r.top,Math.min(y,r.bottom)),distance=Math.hypot(x-cx,y-cy);if(distance<bestDistance){bestDistance=distance;best=zone}});
-        return bestDistance<55?best:null;
-      }
-      function move(moveEvent){
-        if(moveEvent.pointerId!==pointerId)return;
-        if(!active&&Math.hypot(moveEvent.clientX-startX,moveEvent.clientY-startY)>3){clearTimeout(timer);activate()}
-        if(!active)return;moveEvent.preventDefault();
-        const zone=zoneAt(moveEvent.clientX,moveEvent.clientY);if(!zone)return;
-        if(zone!==activeZone){clearZone();activeZone=zone;zone.classList.add("is-drop-target")}
-        zone.querySelector(".day-empty")?.remove();
-        if(card.parentElement!==zone)zone.appendChild(card);
-        const siblings=Array.from(zone.querySelectorAll("[data-program-task-id]:not(.is-dragging)"));
-        const before=siblings.find(node=>moveEvent.clientY<node.getBoundingClientRect().top+node.getBoundingClientRect().height/2);
-        if(before)zone.insertBefore(card,before);else zone.appendChild(card);
-      }
-      function finish(finishEvent){
-        if(finishEvent.pointerId!==pointerId)return;clearTimeout(timer);handle.removeEventListener("pointermove",move);handle.removeEventListener("pointerup",finish);handle.removeEventListener("pointercancel",finish);
-        const targetContainer=card.parentElement,targetDay=Number(targetContainer?.dataset.programDropDay);
-        clearZone();card.classList.remove("is-dragging");board.classList.remove("is-program-dragging");try{handle.releasePointerCapture(pointerId)}catch{}
-        if(!active||!targetContainer||!Number.isInteger(targetDay)){renderProgramWorkspace();return}
-        if(targetDay!==sourceDay){void saveCoachProgramMove(weekStart,taskId,targetDay);return}
-        const next=coachProgramOrderIds(sourceContainer);if(next.join("|")!==initial)void saveCoachProgramOrder(weekStart,sourceDay,next);else renderProgramWorkspace();
-      }
-      handle.addEventListener("pointermove",move);handle.addEventListener("pointerup",finish);handle.addEventListener("pointercancel",finish);
-    });
+let coachMoveMenu=null,coachProgramEditContext=null;
+function closeCoachMoveMenu(){coachMoveMenu?.remove();coachMoveMenu=null;document.querySelectorAll(".program-task-card[data-selected]").forEach(card=>card.removeAttribute("data-selected"))}
+function openCoachMoveMenu(weekStart,taskId,sourceDay,anchor){
+  closeCoachMoveMenu();anchor?.closest(".program-task-card")?.setAttribute("data-selected","");
+  const menu=document.createElement("div");menu.className="program-move-menu";menu.setAttribute("role","dialog");menu.setAttribute("aria-label","Görevi başka güne taşı");
+  const title=document.createElement("b");title.textContent="Hangi güne taşınsın?";menu.append(title);
+  const days=document.createElement("div");days.className="program-move-days";
+  ["Pzt","Sal","Çar","Per","Cum","Cts","Paz"].forEach((label,day)=>{
+    const button=document.createElement("button");button.type="button";button.textContent=label;button.disabled=day===sourceDay;
+    button.addEventListener("click",async()=>{button.disabled=true;const ok=await saveCoachProgramMove(weekStart,taskId,day);closeCoachMoveMenu();if(!ok)renderProgramWorkspace()});
+    days.append(button);
   });
+  const cancel=document.createElement("button");cancel.type="button";cancel.className="program-move-cancel";cancel.textContent="Vazgeç";cancel.addEventListener("click",closeCoachMoveMenu);
+  menu.append(days,cancel);document.body.append(menu);coachMoveMenu=menu;
+  const rect=anchor.getBoundingClientRect(),menuRect=menu.getBoundingClientRect(),left=Math.max(10,Math.min(window.innerWidth-menuRect.width-10,rect.left)),top=Math.min(window.innerHeight-menuRect.height-10,rect.bottom+8);
+  menu.style.left=left+"px";menu.style.top=Math.max(10,top)+"px";
+}
+function coachTaskCell(weekStart,taskId){
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),week=programWeeks(row).find(item=>item.week===weekStart);if(!row||!week)return null;
+  const parts=String(taskId).split("-"),blk=parts[0],ri=Number(parts[1]),day=Number(parts[2]),rows=programRowList(week.data?.[blk]),value=String(rows[ri]?.[day]||"").trim();
+  if(!value)return null;return{row,week,blk,ri,day,rows,value};
+}
+function openCoachProgramEdit(weekStart,taskId){
+  const cell=coachTaskCell(weekStart,taskId);if(!cell)return;
+  coachProgramEditContext={weekStart,taskId};openProgramTaskModal(cell.value.replace(/^Koç ·(?: Deneme sonrası · )?/,""));
+  if($("programTaskTitle"))$("programTaskTitle").textContent="Çalışmayı düzenle";
+  if($("programTaskSend"))$("programTaskSend").textContent="Değişiklikleri kaydet";
+}
+function bindCoachProgramCardActions(weekStart){
+  document.querySelectorAll("#programWeekBoard [data-program-select]").forEach(button=>button.addEventListener("click",event=>{
+    event.stopPropagation();const card=button.closest("[data-program-task-id]");if(!card)return;openCoachMoveMenu(weekStart,card.dataset.programTaskId||"",Number(card.dataset.programTaskDay),button);
+  }));
+  document.querySelectorAll("#programWeekBoard [data-program-edit]").forEach(button=>button.addEventListener("click",event=>{
+    event.stopPropagation();const card=button.closest("[data-program-task-id]");if(card)openCoachProgramEdit(weekStart,card.dataset.programTaskId||"");
+  }));
 }
 
 function hydrateProgramStudents(){
@@ -1230,10 +1215,10 @@ function renderProgramWorkspace(){
     return '<section class="day-column '+(completed?"done ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+stateBadge+'</header><div class="day-tasks" data-program-drop-day="'+day+'">'+(dayTasks.length?dayTasks.map(task=>{
       const tone=programSubjectTone(task),coachTask=/^Koç ·/.test(task.text);
       const cleanText=task.text.replace(/^Koç ·(?: Deneme sonrası · )?/,"");
-      return '<article class="program-task-card tone-'+tone+'" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'"><button type="button" class="program-drag-handle" data-program-drag aria-label="Görevin sırasını değiştir">⠿</button><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
+      return '<article class="program-task-card tone-'+tone+'" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'"><button type="button" class="program-select-task" data-program-select aria-label="Görevi başka güne taşımak için seç">○</button><button type="button" class="program-edit-task" data-program-edit aria-label="Görevi düzenle">✎</button><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
     }).join(""):'<div class="day-empty"><i>＋</i><span>Bu gün için görev yok</span></div>')+'</div></section>';
   }).join("");
-  bindCoachProgramReorder(week.week);
+  bindCoachProgramCardActions(week.week);
 }
 $("programStudentSearch")?.addEventListener("input",hydrateProgramStudents);
 $("programPrevWeek")?.addEventListener("click",()=>{if(selectedProgramWeekIndex>0){selectedProgramWeekIndex--;renderProgramWorkspace()}});
@@ -1331,9 +1316,9 @@ $("programTaskSubject")?.addEventListener("change",syncCoachProgramTopics);
 document.querySelectorAll("[data-program-day]").forEach(button=>button.addEventListener("click",()=>{const day=Number(button.dataset.programDay);coachProgramDays.has(day)?coachProgramDays.delete(day):coachProgramDays.add(day);updateCoachProgramBuilder()}));
 document.querySelectorAll("[data-program-days]").forEach(button=>button.addEventListener("click",()=>{const mode=button.dataset.programDays;coachProgramDays=new Set(mode==="all"?[0,1,2,3,4,5,6]:mode==="weekdays"?[0,1,2,3,4]:[coachProgramSelectedDay]);updateCoachProgramBuilder()}));
 document.querySelectorAll("[data-coach-preset]").forEach(button=>button.addEventListener("click",()=>{const p=button.dataset.coachPreset,subject=$("programTaskSubject"),questions=$("programTaskQuestions");if(!subject||!questions)return;subject.value=p==="paragraph"?"TYT · Türkçe":"TYT · Matematik";syncCoachProgramTopics();$("programTaskTopic").value=p==="paragraph"?"Paragraf":"Problemler";questions.value=p==="paragraph"?"20":"30";updateCoachProgramBuilder()}));
-$("programAddTaskBtn")?.addEventListener("click",()=>openProgramTaskModal());$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
+$("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTemplatesBtn")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.toggle("hidden"));$("programTemplateClose")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.add("hidden"));
-document.querySelectorAll("[data-program-template]").forEach(button=>button.addEventListener("click",()=>{$("programTemplatePopover")?.classList.add("hidden");openProgramTaskModal(button.dataset.programTemplate||"")}));
+document.querySelectorAll("[data-program-template]").forEach(button=>button.addEventListener("click",()=>{coachProgramEditContext=null;$("programTemplatePopover")?.classList.add("hidden");openProgramTaskModal(button.dataset.programTemplate||"")}));
 $("programTaskSend")?.addEventListener("click",async()=>{
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser,button=$("programTaskSend"),base=coachProgramTaskText(),resource=coachProgramResource();
   if(!row||!user)return;if(!base){setProgramTaskStatus("Ders seç veya çalışma metni yaz.","error");return}if(base.length>600){setProgramTaskStatus("Çalışma metni en fazla 600 karakter olabilir.","error");return}if(resource===null){setProgramTaskStatus("Video bağlantısı geçerli bir http/https adresi olmalı.","error");return}
@@ -1341,7 +1326,14 @@ $("programTaskSend")?.addEventListener("click",async()=>{
   const task=base+(resource?" — "+resource:""),days=[...coachProgramDays].sort((a,b)=>a-b);if(task.length>600){setProgramTaskStatus("Video bağlantısıyla birlikte çalışma en fazla 600 karakter olabilir.","error");return}
   if(button)button.disabled=true;setProgramTaskStatus(days.length+" çalışma gönderiliyor…","loading");
   try{
-    await Promise.all(days.map(day=>addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{text:task,date:coachProgramDateForDay(day)},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()})));
-    setProgramTaskStatus(days.length===1?"Çalışma öğrenci programına gönderildi ✓":days.length+" güne çalışma gönderildi ✓","success");setTimeout(closeProgramTaskModal,850);
+    if(coachProgramEditContext){
+      const edit=coachProgramEditContext,cell=coachTaskCell(edit.weekStart,edit.taskId);
+      await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{operation:"edit",sourceWeek:edit.weekStart,taskId:edit.taskId,text:task},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+      if(cell){cell.rows[cell.ri][cell.day]=task;cell.week.data[cell.blk]=cell.rows;renderProgramWorkspace()}
+      coachProgramEditContext=null;setProgramTaskStatus("Çalışma güncellendi ✓","success");setTimeout(closeProgramTaskModal,650);
+    }else{
+      await Promise.all(days.map(day=>addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{text:task,date:coachProgramDateForDay(day)},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()})));
+      setProgramTaskStatus(days.length===1?"Çalışma öğrenci programına gönderildi ✓":days.length+" güne çalışma gönderildi ✓","success");setTimeout(closeProgramTaskModal,850);
+    }
   }catch(error){console.error("Program görevi",error);setProgramTaskStatus("Çalışma gönderilemedi: "+String(error?.message||"Bilinmeyen hata"),"error")}finally{if(button)button.disabled=false}
 });
