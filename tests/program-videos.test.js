@@ -8,7 +8,7 @@ const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 test('programlar ekranında güncel hoca ve video kütüphanesi yüklenir',()=>{
   const html=read('index.html'),js=read('program-videos-v1.js'),css=read('program-videos-v1.css');
   assert.match(html,/program-videos-v1\.css\?v=1\.1\.0/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.3\.0/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.4\.0/);
   assert.match(js,/HOCALAR &amp; VİDEOLAR/);
   assert.match(js,/data-scope="TYT"/);
   assert.match(js,/data-scope="AYT"/);
@@ -27,10 +27,10 @@ test('programlar ekranında güncel hoca ve video kütüphanesi yüklenir',()=>{
   assert.match(js,/Biosem/);
   assert.match(js,/Senin Biyolojin/);
   assert.match(js,/MEDIA_REPO_PATH/);
-  assert.match(js,/SUBJECT_TERMS/);
-  assert.match(js,/teacherRelevant/);
-  assert.match(js,/subjectRelevant/);
-  assert.match(js,/channelId!==teacher\.id/);
+  assert.match(js,/teacherMedia\(feed,state\.teacher\)/);
+  assert.match(js,/loadArchive\(media,force\)/);
+  assert.doesNotMatch(js,/function subjectRelevant/);
+  assert.doesNotMatch(js,/function teacherRelevant/);
   assert.match(css,/\.coach-video-library/);
   assert.match(css,/\.coach-playlist-detail-head/);
 });
