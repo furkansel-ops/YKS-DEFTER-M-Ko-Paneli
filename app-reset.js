@@ -172,13 +172,18 @@ function latestWeek(program){
   const weeks=Array.isArray(program?.weeks)?program.weeks:[];
   return [...weeks].sort((x,y)=>String(x?.week||"").localeCompare(String(y?.week||""))).at(-1)||null;
 }
+function programTaskDone(data,task,day){
+  return Boolean(data?.done?.[day])||Boolean(data?.dn?.[task?.id]);
+}
 function weekStats(program){
-  const item=latestWeek(program),data=item?.data||{},rows=[...programRowList(data.r),...programRowList(data.s)];
-  const taskCounts=Array.from({length:7},(_,day)=>rows.reduce((sum,row)=>sum+(String(row?.[day]||"").trim()?1:0),0));
-  const done=Array.from({length:7},(_,day)=>Boolean(data?.done?.[day]));
+  const item=latestWeek(program),data=item?.data||{};
+  const tasks=Array.from({length:7},(_,day)=>collectProgramDayTasks(program,item||{data:{}},day));
+  const taskCounts=tasks.map(dayTasks=>dayTasks.length);
+  const completedCounts=tasks.map((dayTasks,day)=>dayTasks.filter(task=>programTaskDone(data,task,day)).length);
   const plannedDays=taskCounts.filter(Boolean).length;
-  const doneDays=taskCounts.reduce((sum,count,day)=>sum+(count&&done[day]?1:0),0);
-  return{week:item?.week||"",taskCounts,done,plannedDays,doneDays,ratio:plannedDays?Math.round(doneDays/plannedDays*100):0};
+  const doneDays=taskCounts.reduce((sum,count,day)=>sum+(count&&completedCounts[day]===count?1:0),0);
+  const total=taskCounts.reduce((sum,count)=>sum+count,0),completed=completedCounts.reduce((sum,count)=>sum+count,0);
+  return{week:item?.week||"",taskCounts,completedCounts,plannedDays,doneDays,total,completed,ratio:total?Math.round(completed/total*100):0};
 }
 function studentName(row){return row?.share?.profile?.name||row?.profile?.displayName||"Öğrenci"}
 function studentDayReviews(row){
@@ -1354,16 +1359,16 @@ function renderProgramWorkspace(){
   const tasks=Array.from({length:7},(_,day)=>collectProgramDayTasks(program,week,day));
   const taskCount=tasks.reduce((s,x)=>s+x.length,0);
   const plannedDays=tasks.filter(x=>x.length).length;
-  const done=Array.from({length:7},(_,d)=>Boolean(data.done?.[d]));
-  const doneDays=tasks.reduce((sum,x,d)=>sum+(x.length&&done[d]?1:0),0);
-  const ratio=plannedDays?Math.round(doneDays/plannedDays*100):0;
+  const completedByDay=tasks.map((dayTasks,day)=>dayTasks.filter(task=>programTaskDone(data,task,day)).length);
+  const doneDays=tasks.reduce((sum,dayTasks,day)=>sum+(dayTasks.length&&completedByDay[day]===dayTasks.length?1:0),0);
+  const completedTaskCount=completedByDay.reduce((sum,count)=>sum+count,0);
+  const ratio=taskCount?Math.round(completedTaskCount/taskCount*100):0;
   if($("programWeekLabel"))$("programWeekLabel").textContent=formatProgramWeek(week.week);
   const storedWeek=weeks.some(item=>item.week===week.week);
   if($("programDoneMeta"))$("programDoneMeta").textContent=storedWeek?plannedDays+" planlı gün":"Bu hafta henüz boş";
   if($("programTaskCount"))$("programTaskCount").textContent=String(taskCount);
   if($("programDoneDays"))$("programDoneDays").textContent=String(doneDays);
 
-  const completedTaskCount=tasks.reduce((sum,x,d)=>sum+(done[d]?x.length:0),0);
   const pendingTaskCount=Math.max(0,taskCount-completedTaskCount);
   if($("programProgress"))$("programProgress").textContent=ratio+"%";
   if($("programPendingTasks"))$("programPendingTasks").textContent=String(pendingTaskCount);
@@ -1373,12 +1378,14 @@ function renderProgramWorkspace(){
   if($("programNextWeek"))$("programNextWeek").disabled=false;
   empty?.classList.add("hidden");
   if(board)board.innerHTML=tasks.map((dayTasks,day)=>{
-    const completed=done[day]&&dayTasks.length,isToday=programDayDate(week.week,day)===todayIsoLocal();
-    const stateBadge=completed?'<span class="day-state done">✓ Tamamlandı</span>':isToday?'<span class="day-state today">Bugün</span>':'';
-    return '<section class="day-column '+(completed?"done ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev</small></div>'+stateBadge+'</header><div class="day-tasks" data-program-drop-day="'+day+'">'+(dayTasks.length?dayTasks.map(task=>{
-      const tone=programSubjectTone(task),coachTask=/^Koç ·/.test(task.text);
+    const doneCount=completedByDay[day],completed=dayTasks.length>0&&doneCount===dayTasks.length,isToday=programDayDate(week.week,day)===todayIsoLocal();
+    const partial=doneCount>0&&!completed;
+    const stateBadge=completed?'<span class="day-state done">✓ Tamamlandı</span>':partial?'<span class="day-state partial">✓ '+doneCount+'/'+dayTasks.length+'</span>':isToday?'<span class="day-state today">Bugün</span>':'';
+    return '<section class="day-column '+(completed?"done ":"")+(partial?"partial ":"")+(isToday?"today":"")+'"><header><div><b>'+escHtml(programDayLabel(week.week,day))+'</b><small>'+dayTasks.length+' görev · '+doneCount+' tamamlandı</small></div>'+stateBadge+'</header><div class="day-tasks" data-program-drop-day="'+day+'">'+(dayTasks.length?dayTasks.map(task=>{
+      const tone=programSubjectTone(task),coachTask=/^Koç ·/.test(task.text),taskDone=programTaskDone(data,task,day);
       const cleanText=task.text.replace(/^Koç ·(?: Deneme sonrası · )?/,"");
-      return '<article class="program-task-card tone-'+tone+'" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'"><button type="button" class="program-select-task" data-program-select aria-label="Görevi başka güne taşımak için seç">○</button><button type="button" class="program-edit-task" data-program-edit aria-label="Görevi düzenle">✎</button><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(coachTask?'<em>Koç görevi</em>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
+      const statusBadges=(coachTask?'<em>Koç görevi</em>':'')+(taskDone?'<span class="task-complete-badge">✓ Tamamlandı</span>':'');
+      return '<article class="program-task-card tone-'+tone+(taskDone?' completed':'')+'" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+(taskDone?'true':'false')+'"><button type="button" class="program-select-task" data-program-select aria-label="Görevi başka güne taşımak için seç">○</button><button type="button" class="program-edit-task" data-program-edit aria-label="Görevi düzenle">✎</button><span class="task-accent"></span><div><div class="task-meta-row">'+(task.label?'<small class="task-label">'+escHtml(task.label)+'</small>':'<small class="task-label">Program görevi</small>')+(statusBadges?'<span class="task-meta-badges">'+statusBadges+'</span>':'')+'</div><b>'+escHtml(cleanText)+'</b></div></article>';
     }).join(""):'<div class="day-empty"><i>＋</i><span>Bu gün için görev yok</span></div>')+'</div></section>';
   }).join("");
   bindCoachProgramCardActions(week.week);

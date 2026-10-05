@@ -124,3 +124,15 @@
 .program-move-days button:disabled{opacity:.35;cursor:default}
 .program-move-cancel{width:100%;margin-top:8px;background:#fff}
 .week-board.is-program-dragging,.day-tasks.is-reordering{cursor:default!important}
+
+
+/* v3.0 — öğrenci görev tamamlama durumu */
+.day-column.partial{border-color:#d8e9df;background:#fbfefc}
+.day-state.partial{background:#f1f8f4!important;color:#3b8066!important}
+.task-meta-badges{display:flex;align-items:center;justify-content:flex-end;gap:4px;flex-wrap:wrap}
+.task-complete-badge{display:inline-flex;align-items:center;padding:3px 6px;border-radius:999px;background:#e9f7f0;color:#23805d;font-size:5.5px;font-weight:900;white-space:nowrap}
+.day-tasks .program-task-card.completed{border-color:#b9dfce;background:linear-gradient(180deg,#f5fcf8,#fff);box-shadow:inset 0 0 0 1px rgba(39,135,100,.04)}
+.day-tasks .program-task-card.completed .task-accent{background:#2e9d75}
+.day-tasks .program-task-card.completed>div>b{color:#6f7f78;text-decoration:line-through;text-decoration-thickness:1px;text-decoration-color:#8ebaaa}
+.day-tasks .program-task-card.completed .program-select-task{border-color:#cbe6d9;color:#4e8e76}
+@media(max-width:650px){.task-meta-badges{gap:3px}.task-complete-badge{font-size:6px}}
