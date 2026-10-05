@@ -75,7 +75,7 @@
       <button class="coach-mobile-menu-reset mobile-only" id="menuBtn" type="button" aria-label="Menüyü aç">☰</button>
       <section class="dashboard-page" id="homePage">
         <header class="dashboard-head">
-          <div><span class="dashboard-eyebrow">KOÇ PANELİ</span><h1>İyi akşamlar, <span id="dashboardCoachName">Koç</span> 👋</h1><p>Öğrencilerinin bugünkü durumunu tek ekrandan takip et.</p></div>
+          <div><span class="dashboard-eyebrow">KOÇ PANELİ</span><h1><span id="dashboardGreeting">Merhaba</span>, <span id="dashboardCoachName">Koç</span> 👋</h1><p>Öğrencilerinin bugünkü durumunu tek ekrandan takip et.</p></div>
           <div class="dashboard-date" id="dashboardDate"></div>
         </header>
         <section class="dashboard-stats">
@@ -1092,6 +1092,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.36"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.37"></script>
 </body>
 </html>
