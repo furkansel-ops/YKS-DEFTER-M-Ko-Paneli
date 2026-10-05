@@ -230,7 +230,7 @@
   }
   function normalizeVideo(item,media){
     const id=videoId(item);if(!id)return null;
-    return {kind:"video",id,title:compact(item?.title||"YouTube videosu"),thumb:String(item?.thumbnail||("https://i.ytimg.com/vi/"+id+"/hqdefault.jpg")),by:compact(item?.channel||media?.channelName||state.teacher),channelId:String(item?.channelId||item?.channel_id||media?.channelId||""),meta:state.scope+" · "+state.subject,url:String(item?.url||("https://www.youtube.com/watch?v="+encodeURIComponent(id)))};
+    return {kind:"video",id,title:compact(item?.title||"YouTube videosu"),thumb:String(item?.thumbnail||("https://i.ytimg.com/vi/"+id+"/hqdefault.jpg")),by:compact(item?.channel||media?.channelName||state.teacher),meta:state.scope+" · "+state.subject,url:String(item?.url||("https://www.youtube.com/watch?v="+encodeURIComponent(id)))};
   }
   function normalizePlaylist(item,media){
     const id=playlistId(item);if(!id)return null;
@@ -244,51 +244,9 @@
     for(const x of list){if(!x||seen.has(x.kind+":"+x.id))continue;seen.add(x.kind+":"+x.id);out.push(x);}
     return out;
   }
-  const SUBJECT_TERMS={
-    "Matematik":["matematik","problem","problemler","fonksiyon","polinom","trigonometri","logaritma","limit","türev","turev","integral","sayı","sayi","denklem","eşitsizlik","esitsizlik","kümeler","kumeler","olasılık","olasilik","permütasyon","permutasyon","kombinasyon","binom","dizi"],
-    "Geometri":["geometri","üçgen","ucgen","dörtgen","dortgen","çokgen","cokgen","çember","cember","daire","analitik","katı cisim","kati cisim","doğruda açı","dogruda aci","açıortay","aciortay","kenarortay"],
-    "Türkçe":["türkçe","turkce","paragraf","dil bilgisi","yazım","yazim","noktalama","sözcük","sozcuk","cümle","cumle","anlatım bozukluğu","anlatim bozuklugu"],
-    "Edebiyat":["edebiyat","şiir","siir","roman","hikaye","divan","tanzimat","servetifünun","servetifunun","cumhuriyet dönemi","cumhuriyet donemi"],
-    "Fizik":["fizik","hareket","kuvvet","enerji","elektrik","manyetizma","optik","dalga","basınç","basinc","ısı","isi","sıcaklık","sicaklik"],
-    "Kimya":["kimya","atom","periyodik","mol","gazlar","çözelti","cozelti","asit","baz","organik","elektrokimya","tepkime","denge"],
-    "Biyoloji":["biyoloji","hücre","hucre","kalıtım","kalitim","ekoloji","sistemler","fotosentez","solunum","protein","enzim","dna","rna","genetik"],
-    "Tarih":["tarih","osmanlı","osmanli","inkılap","inkilap","selçuklu","selcuklu","kurtuluş","kurtulus","atatürk","ataturk"],
-    "Coğrafya":["coğrafya","cografya","iklim","harita","nüfus","nufus","yer şekilleri","yer sekilleri","bölge","bolge","ekonomik faaliyet"],
-    "Felsefe":["felsefe","mantık","mantik","psikoloji","sosyoloji","bilgi felsefesi","ahlak felsefesi"],
-    "Din Kültürü":["din kültürü","din kulturu","islam","kuran","hadis","akaid","ibadet"]
-  };
-  function teacherBaseSubjects(teacher){
-    return [...new Set((teacher?.d||[]).map(x=>String(x).replace(/\s*\(AYT\)\s*/i,"").trim()).filter(Boolean))];
-  }
-  function subjectHints(title,subject){
-    return (SUBJECT_TERMS[subject]||[subject]).some(term=>title.includes(norm(term)));
-  }
-  function subjectRelevant(title){
-    const teacher=teacherByName(),bases=teacherBaseSubjects(teacher),selected=state.subject;
-    if(!bases.length||bases.length===1)return true;
-    if(subjectHints(title,selected))return true;
-    for(const other of bases){
-      if(other!==selected&&subjectHints(title,other))return false;
-    }
-    if(teacher?.searchOnly)return false;
-    return bases[0]===selected;
-  }
-  function teacherRelevant(item){
-    const teacher=teacherByName();if(!teacher)return false;
-    if(item?.kind==="playlist")return true;
-    const channelId=String(item?.channelId||"");
-    if(teacher.id&&channelId&&channelId!==teacher.id)return false;
-    if(teacher.q){
-      const title=norm(item?.title||""),tokens=norm(teacher.q).split(/\s+/).filter(x=>x.length>2);
-      const named=tokens.some(token=>title.includes(token));
-      if(!named&&!subjectHints(title,state.subject))return false;
-    }
-    return true;
-  }
   function titleMatches(item){
     const title=norm(item?.title||"");
     const query=norm(state.query);
-    if(!teacherRelevant(item)||!subjectRelevant(title))return false;
     if(query&&!title.includes(query))return false;
     const scope=state.scope.toLowerCase();
     const scopeMatches=title.includes(scope);
