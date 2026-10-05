@@ -1316,7 +1316,8 @@ function hydrateProgramStudents(){
   const q=String($("programStudentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR");
   list.innerHTML=coachReportRows.filter(row=>!q||studentName(row).toLocaleLowerCase("tr-TR").includes(q)).map(row=>{
     const name=studentName(row),weeks=programWeeks(row),stats=weekStats(row.share?.program);
-    return '<button type="button" class="program-student-item '+(row.studentUid===selectedProgramStudentUid?"active":"")+'" data-program-student="'+escHtml(row.studentUid)+'"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+(weeks.length?weeks.length+" hafta · "+stats.ratio+"% uyum":"Program verisi bekleniyor")+'</small></span><em>›</em></button>';
+    const active=row.studentUid===selectedProgramStudentUid;
+    return '<button type="button" class="program-student-item '+(active?"active":"")+'" data-program-student="'+escHtml(row.studentUid)+'" aria-pressed="'+(active?"true":"false")+'"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+(active?"Seçili · ":"")+(weeks.length?weeks.length+" hafta · "+stats.ratio+"% uyum":"Program verisi bekleniyor")+'</small></span><em>'+(active?"✓":"›")+'</em></button>';
   }).join("")||'<div class="program-student-filter-empty">Öğrenci bulunamadı.</div>';
   document.querySelectorAll("[data-program-student]").forEach(button=>button.addEventListener("click",()=>{
     selectedProgramStudentUid=button.dataset.programStudent;

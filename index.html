@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.3.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
-  <link rel="stylesheet" href="./programs-v21.css?v=3.0.0">
+  <link rel="stylesheet" href="./programs-v21.css?v=3.1.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.1.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
@@ -212,10 +212,9 @@
         <section class="program-layout">
           <aside class="program-students">
             <div class="program-side-title">
-              <div><b>Öğrenciler</b><small>Programını görmek istediğin öğrenciyi seç</small></div>
+              <div><b>Öğrencilerim</b></div>
               <span id="programStudentCount">0</span>
             </div>
-            <label class="program-search"><span>⌕</span><input id="programStudentSearch" type="search" placeholder="Öğrenci ara..."></label>
             <div class="program-student-empty" id="programStudentEmpty">
               <span>♟</span><b>Bağlı öğrenci yok</b><p>Öğrenci eklediğinde burada otomatik görünecek.</p>
             </div>
@@ -1093,6 +1092,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.39"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.40"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
