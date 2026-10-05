@@ -103,7 +103,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
 
 
@@ -116,7 +116,7 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
 
 
@@ -129,7 +129,7 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
 
 
@@ -142,7 +142,7 @@ test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
   assert.match(js,/function showApp[\s\S]*finishBoot\(\)/);
   assert.match(css,/\.coach-boot/);
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
 
 
@@ -157,7 +157,7 @@ test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()
   assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderDashboardDayReviews/);
   assert.match(css,/dashboard-day-review-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
 
 
@@ -174,7 +174,7 @@ test('gün sonu entegrasyonu ana özet ve öğrenci geçmişi içerir',()=>{
   assert.match(reports,/report-day-review-history/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
   assert.match(html,/reports-v21\.css\?v=3\.1\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
 
 
@@ -191,5 +191,20 @@ test('koç ana paneli gerçek öğrenci verileriyle dolar',()=>{
   assert.match(css,/dashboard-flow-row/);
   assert.match(css,/dashboard-student-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.36/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
+});
+
+
+test('koç ana ekran selamlaması saate göre otomatik değişir',()=>{
+  const html=read('index.html'),js=read('app-reset.js');
+  assert.match(html,/id="dashboardGreeting">Merhaba</);
+  assert.doesNotMatch(html,/İyi akşamlar, <span id="dashboardCoachName"/);
+  assert.match(js,/function dashboardGreetingFor/);
+  assert.match(js,/hour>=5&&hour<12/);
+  assert.match(js,/return"Günaydın"/);
+  assert.match(js,/return"İyi günler"/);
+  assert.match(js,/return"İyi akşamlar"/);
+  assert.match(js,/return"İyi geceler"/);
+  assert.match(js,/setInterval\(refreshDashboardGreeting,60000\)/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.37/);
 });
