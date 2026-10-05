@@ -25,7 +25,7 @@ test('eski sağ taraf dashboard dosyaları repodan silinmiştir',()=>{
 test('index sadece reset runtime ve sidebar stillerini yükler',()=>{
   const html=read('index.html');
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
-  assert.match(html,/sidebar-v20\.css\?v=1\.0\.0/);
+  assert.match(html,/sidebar-v20\.css\?v=1\.0\.1/);
   assert.match(html,/app-reset\.js\?v=1\.0\.\d+/);
   assert.doesNotMatch(html,/dashboard-v20|app\.js\?|core-v20/);
 });
@@ -272,4 +272,14 @@ test('paragraf + problem bölümü öğrenci kayıtlarını koç panelinde canl�
   assert.match(css,/\.pp-coach-kpis/);
   assert.match(css,/\.pp-coach-history-row/);
   assert.match(html,/app-reset\.js\?v=1\.0\.43/);
+});
+
+
+test('sol menüde kaçış karakteri görünmez ve tüm menüler kaydırılabilir alanda kalır',()=>{
+  const html=read('index.html'),css=read('sidebar-v20.css');
+  assert.doesNotMatch(html,/Takip &amp; Rapor<\/b><\/button>\\n/);
+  assert.match(html,/sidebar-v20\.css\?v=1\.0\.1/);
+  assert.match(css,/\.coach-nav-v20\{[^}]*overflow-y:auto/);
+  assert.match(css,/min-height:39px/);
+  assert.match(css,/\.coach-sidebar-spacer\{flex:1;min-height:4px\}/);
 });
