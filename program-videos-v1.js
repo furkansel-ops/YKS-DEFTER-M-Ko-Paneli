@@ -244,12 +244,30 @@
     for(const x of list){if(!x||seen.has(x.kind+":"+x.id))continue;seen.add(x.kind+":"+x.id);out.push(x);}
     return out;
   }
+  const SUBJECT_TERMS={
+    "Matematik":["matematik","problem","fonksiyon","polinom","trigonometri","logaritma","limit","türev","turev","integral"],
+    "Geometri":["geometri","üçgen","ucgen","dörtgen","dortgen","çember","cember","analitik"],
+    "Türkçe":["türkçe","turkce","paragraf","dil bilgisi","yazım","yazim","noktalama"],
+    "Edebiyat":["edebiyat","şiir","siir","roman","hikaye","divan","tanzimat"],
+    "Fizik":["fizik","hareket","kuvvet","enerji","elektrik","manyetizma","optik"],
+    "Kimya":["kimya","atom","mol","gazlar","çözelti","cozelti","asit","baz","organik"],
+    "Biyoloji":["biyoloji","hücre","hucre","kalıtım","kalitim","ekoloji","fotosentez","genetik"],
+    "Tarih":["tarih","osmanlı","osmanli","inkılap","inkilap","selçuklu","selcuklu"],
+    "Coğrafya":["coğrafya","cografya","iklim","harita","nüfus","nufus"],
+    "Felsefe":["felsefe","mantık","mantik","psikoloji","sosyoloji"],
+    "Din Kültürü":["din kültürü","din kulturu","islam","kuran","hadis"]
+  };
+  function hasSubject(title,subject){return (SUBJECT_TERMS[subject]||[subject]).some(term=>title.includes(norm(term)));}
+  function subjectMatches(title){
+    if(hasSubject(title,state.subject))return true;
+    const otherExplicit=SUBJECTS.some(subject=>subject!==state.subject&&hasSubject(title,subject));
+    return !otherExplicit;
+  }
   function titleMatches(item){
     const title=norm(item?.title||"");
     const query=norm(state.query);
     if(query&&!title.includes(query))return false;
-    const scope=state.scope.toLowerCase();
-    const scopeMatches=title.includes(scope);
+    if(!subjectMatches(title))return false;
     const categoryTerms={
       konu:["konu","anlatım","anlatim","ders"],
       kamp:["kamp","gün","gun"],
@@ -259,13 +277,17 @@
     };
     const terms=categoryTerms[state.category]||[];
     if(terms.length&&!terms.some(term=>title.includes(norm(term))))return false;
-    return {scopeMatches};
+    return {title,tyt:title.includes("tyt"),ayt:title.includes("ayt")};
   }
   function filtered(items){
     const checked=items.map(item=>({item,match:titleMatches(item)})).filter(row=>row.match!==false);
     if(!checked.length)return [];
-    const scoped=checked.filter(row=>row.match?.scopeMatches).map(row=>row.item);
-    return scoped.length?scoped:checked.map(row=>row.item);
+    if(state.scope==="AYT"){
+      const ayt=checked.filter(row=>row.match?.ayt).map(row=>row.item);
+      return ayt.length?ayt:checked.map(row=>row.item);
+    }
+    const tytOrNeutral=checked.filter(row=>!row.match?.ayt).map(row=>row.item);
+    return tytOrNeutral.length?tytOrNeutral:checked.map(row=>row.item);
   }
   async function loadArchive(media,force=false){
     if(!media?.archiveIndex)return null;
@@ -307,16 +329,13 @@
       state.hasMore=false;
       return filtered(items);
     }
-    if(archive){
-      if(loadMore){
-        const index=nextArchiveIndex(archive);if(index>=0)await loadArchivePage(archive,index,force);
-      }else if(!archive.loaded.size&&archive.meta.pages.length){
-        await loadArchivePage(archive,0,force);
-      }
+    if(archive&&archive.meta.pages.length){
+      const missing=archive.meta.pages.map((_,index)=>index).filter(index=>!archive.loaded.has(index));
+      if(missing.length)await Promise.all(missing.map(index=>loadArchivePage(archive,index,force)));
     }
     const preview=(Array.isArray(media.videos)?media.videos:[]).map(video=>normalizeVideo(video,media)).filter(Boolean);
     const archived=Array.isArray(archive?.videos)?archive.videos:[];
-    state.hasMore=Boolean(archive&&nextArchiveIndex(archive)>=0);
+    state.hasMore=false;
     return filtered(dedupe(preview.concat(archived)));
   }
 
