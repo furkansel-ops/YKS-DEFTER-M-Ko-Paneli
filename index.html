@@ -8,7 +8,7 @@
   <title>YKS Defterim · Koç Paneli</title>
   <link rel="stylesheet" href="./base-reset.css?v=1.0.1">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
-  <link rel="stylesheet" href="./dashboard-v21.css?v=1.2.0">
+  <link rel="stylesheet" href="./dashboard-v21.css?v=1.3.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=2.9.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
@@ -87,7 +87,7 @@
         <section class="dashboard-grid">
           <article class="dash-panel dash-wide">
             <div class="panel-title"><div><h2>Bugünün Akışı</h2><p>Öğrencilerden gelen son çalışma hareketleri</p></div><button data-go-page="reports">Tümünü gör →</button></div>
-            <div class="empty-state"><span>◎</span><b>Henüz bugünkü hareket yok</b><p>Öğrenciler çalışmaya başladığında aktiviteleri burada göreceksin.</p></div>
+            <div id="dashboardFlow"><div class="empty-state"><span>◎</span><b>Veriler hazırlanıyor</b><p>Öğrenci hareketleri yükleniyor.</p></div></div>
           </article>
           <article class="dash-panel">
             <div class="panel-title"><div><h2>Hızlı İşlemler</h2><p>Sık kullandığın alanlara geç</p></div></div>
@@ -100,7 +100,7 @@
           </article>
           <article class="dash-panel dash-wide">
             <div class="panel-title"><div><h2>Öğrenci Durumu</h2><p>Takip gerektiren öğrenciler burada öne çıkacak</p></div><button data-go-page="students">Öğrencilere git →</button></div>
-            <div class="student-placeholder"><div class="placeholder-bars"><i></i><i></i><i></i></div><div><b>Öğrenci verileri bekleniyor</b><p>Bağlı öğrencilerin program ve çalışma verileri geldikçe bu alan otomatik dolacak.</p></div></div>
+            <div id="dashboardStudentStatus"><div class="student-placeholder"><div class="placeholder-bars"><i></i><i></i><i></i></div><div><b>Veriler hazırlanıyor</b><p>Bağlı öğrencilerin güncel durumu yükleniyor.</p></div></div></div>
           </article>
           <article class="dash-panel dash-wide day-review-panel">
             <div class="panel-title"><div><h2>Gün Sonu Notları</h2><p>Öğrencilerin bugünkü kısa değerlendirmeleri</p></div><button data-go-page="students">Öğrencilere git →</button></div>
@@ -1092,6 +1092,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.35"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.36"></script>
 </body>
 </html>

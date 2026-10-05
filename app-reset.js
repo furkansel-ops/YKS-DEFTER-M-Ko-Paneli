@@ -71,6 +71,7 @@ function showCoachPage(page){
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
   document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
+  if(page==="home"){try{renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
   closeSidebar();
 }
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
@@ -114,6 +115,7 @@ let coachReportRows=[];
 let coachShareStops=[],coachRealtimeRenderTimer=null;
 function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null}
 function renderCoachRealtimeViews(){
+  try{renderCoachDashboard()}catch(error){console.error("Canlı ana panel görünümü",error)}
   try{renderDashboardDayReviews()}catch(error){console.error("Canlı gün sonu notları",error)}
   try{renderStudentsPage()}catch(error){console.error("Canlı öğrenci görünümü",error)}
   try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
@@ -177,6 +179,81 @@ function dayReviewMoodMeta(mood){
   if(mood==="mid")return{label:"Orta",icon:"😐",tone:"mid"};
   if(mood==="hard")return{label:"Zor",icon:"😮‍💨",tone:"hard"};
   return{label:"Not",icon:"☾",tone:"mid"};
+}
+
+function dashboardProgramStats(row){
+  const weekStart=programCurrentWeekStart();
+  const week=programWeeks(row).find(item=>item?.week===weekStart);
+  if(!week)return{week:null,planned:0,done:0,ratio:0,todayPlanned:0,todayDone:0};
+  const data=week.data||{},program=row?.share?.program||{},todayDay=(new Date().getDay()+6)%7;
+  let planned=0,done=0,todayPlanned=0,todayDone=0;
+  for(let day=0;day<7;day++){
+    const tasks=collectProgramDayTasks(program,week,day);
+    planned+=tasks.length;
+    if(day===todayDay)todayPlanned=tasks.length;
+    for(const task of tasks){
+      const completed=Boolean(data?.done?.[day])||Boolean(data?.dn?.[task.id]);
+      if(completed){done++;if(day===todayDay)todayDone++}
+    }
+  }
+  return{week,planned,done,ratio:planned?Math.round(done/planned*100):0,todayPlanned,todayDone};
+}
+function dashboardNeedsReview(row){
+  const overdue=reportNum(row?.share?.progress?.overdueTopics);
+  const review=studentDayReview(row,todayIsoLocal());
+  return overdue>0||review?.mood==="hard";
+}
+function dashboardStudentOpen(uid){
+  if(!uid)return;
+  showCoachPage("reports");
+  if($("reportStudentSelect"))$("reportStudentSelect").value=uid;
+  renderReport(uid);
+}
+function renderCoachDashboard(){
+  const rows=coachReportRows.slice(),stats=rows.map(row=>({row,program:dashboardProgramStats(row)}));
+  const completed=stats.reduce((sum,item)=>sum+item.program.todayDone,0);
+  const pending=rows.filter(dashboardNeedsReview).length;
+  const progressRows=stats.filter(item=>item.program.planned>0);
+  const progress=progressRows.length?Math.round(progressRows.reduce((sum,item)=>sum+item.program.ratio,0)/progressRows.length):0;
+  if($("statStudents"))$("statStudents").textContent=String(rows.length);
+  if($("statCompleted"))$("statCompleted").textContent=String(completed);
+  if($("statPending"))$("statPending").textContent=String(pending);
+  if($("statProgress"))$("statProgress").textContent=progress+"%";
+
+  const flow=$("dashboardFlow");
+  if(flow){
+    const active=stats.filter(item=>studentActiveToday(item.row)).sort((a,b)=>(studentUpdatedDate(b.row)?.getTime()||0)-(studentUpdatedDate(a.row)?.getTime()||0)).slice(0,6);
+    if(!rows.length){
+      flow.innerHTML='<div class="empty-state"><span>◎</span><b>Henüz bağlı öğrenci yok</b><p>Öğrenci eklediğinde çalışma hareketleri burada görünecek.</p></div>';
+    }else if(!active.length){
+      flow.innerHTML='<div class="empty-state"><span>◎</span><b>Bugün henüz senkron yok</b><p>Öğrenci YKS Defterim’i açtığında güncel durum burada otomatik görünecek.</p></div>';
+    }else{
+      flow.innerHTML='<div class="dashboard-flow-list">'+active.map(({row,program})=>{
+        const name=studentName(row),minutes=reportMinutes(row?.share?.progress?.minutes7);
+        const taskText=program.todayPlanned?program.todayDone+" / "+program.todayPlanned+" görev tamamlandı":"Bugün plan görevi yok";
+        return '<button type="button" class="dashboard-flow-row" data-dashboard-student="'+escHtml(row.studentUid)+'"><span class="dashboard-flow-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-flow-main"><b>'+escHtml(name)+'</b><small>'+escHtml(taskText)+' · Son 7 gün '+escHtml(minutes)+'</small></span><span class="dashboard-flow-status"><i></i>Aktif</span><time>'+escHtml(studentLastActivity(row))+'</time><span class="dashboard-flow-open">›</span></button>';
+      }).join("")+'</div>';
+    }
+  }
+
+  const statusRoot=$("dashboardStudentStatus");
+  if(statusRoot){
+    if(!rows.length){
+      statusRoot.innerHTML='<div class="student-placeholder"><div class="placeholder-bars"><i></i><i></i><i></i></div><div><b>Öğrenci verileri bekleniyor</b><p>Bağlı öğrencilerin program ve çalışma verileri geldikçe bu alan otomatik dolacak.</p></div></div>';
+    }else{
+      const ordered=stats.sort((a,b)=>Number(dashboardNeedsReview(b.row))-Number(dashboardNeedsReview(a.row))||Number(studentActiveToday(b.row))-Number(studentActiveToday(a.row))||b.program.ratio-a.program.ratio).slice(0,5);
+      statusRoot.innerHTML='<div class="dashboard-student-list">'+ordered.map(({row,program})=>{
+        const name=studentName(row),overdue=Math.max(0,Math.round(reportNum(row?.share?.progress?.overdueTopics)));
+        const active=studentActiveToday(row),needs=dashboardNeedsReview(row);
+        const label=overdue?overdue+" geciken konu":needs?"Kontrol et":active?"Bugün aktif":"Takipte";
+        const tone=needs?"attention":active?"active":"idle";
+        const progressText=program.planned?program.done+" / "+program.planned+" görev":"Bu hafta program yok";
+        return '<button type="button" class="dashboard-student-row" data-dashboard-student="'+escHtml(row.studentUid)+'"><span class="dashboard-student-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-student-main"><b>'+escHtml(name)+'</b><small>'+escHtml(progressText)+'</small><span class="dashboard-progress"><i style="width:'+Math.max(0,Math.min(100,program.ratio))+'%"></i></span></span><span class="dashboard-student-pill '+tone+'">'+escHtml(label)+'</span><strong>'+program.ratio+'%</strong></button>';
+      }).join("")+'</div>';
+    }
+  }
+
+  document.querySelectorAll("[data-dashboard-student]").forEach(button=>button.addEventListener("click",()=>dashboardStudentOpen(button.dataset.dashboardStudent)));
 }
 function renderDashboardDayReviews(){
   const root=$("dashboardDayReviews"),summary=$("dashboardDayReviewSummary");if(!root)return;
@@ -243,6 +320,7 @@ async function loadCoachReports(coachUid){
       if($("errorLoadErrorText"))$("errorLoadErrorText").textContent=String(error?.message||"Hata kayıtları görüntülenemedi.");
       setErrorState("errorLoadError");
     }
+    try{renderCoachDashboard()}catch(error){console.error("Ana panel render",error)}
     try{renderDashboardDayReviews()}catch(error){console.error("Gün sonu notları render",error)}
     try{renderStudentsPage()}catch(error){console.error("Öğrenciler render",error)}
     try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Programlar render",error)}
