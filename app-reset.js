@@ -134,6 +134,7 @@ function renderCoachRealtimeViews(){
   try{renderStudentsPage()}catch(error){console.error("Canlı öğrenci görünümü",error)}
   try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
   try{renderReport($("reportStudentSelect")?.value||"all")}catch(error){console.error("Canlı rapor görünümü",error)}
+  try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"all")}catch(error){console.error("Canlı paragraf/problem görünümü",error)}
 }
 function scheduleCoachRealtimeRender(){clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=setTimeout(()=>{coachRealtimeRenderTimer=null;renderCoachRealtimeViews()},60)}
 function startCoachShareRealtime(){
@@ -313,6 +314,7 @@ async function loadCoachReports(coachUid){
   if(!coachUid)return;
   stopCoachShareRealtime();
   setReportState("reportLoading");
+  setParagraphProblemState("ppCoachLoading");
   try{
     const linkSnap=await getDocs(query(collection(db,"coachingLinks"),where("coachUid","==",coachUid)));
     const links=linkSnap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active===true);
@@ -329,6 +331,7 @@ async function loadCoachReports(coachUid){
       select.value="all";
     }
     try{renderReport("all")}catch(error){console.error("Takip & Rapor render",error);setReportState("reportError")}
+    try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"all")}catch(error){console.error("Paragraf + Problem render",error);setParagraphProblemState("ppCoachEmpty")}
     try{hydrateExamStudentSelect();renderExamAnalysis("all")}catch(error){console.error("Deneme Analizi render",error);setExamState("examEmpty")}
     try{hydrateTopicControls();renderTopicAnalysis("all")}catch(error){console.error("Konular render",error);setTopicState("topicEmpty")}
     try{
