@@ -136,3 +136,24 @@
 .day-tasks .program-task-card.completed>div>b{color:#6f7f78;text-decoration:line-through;text-decoration-thickness:1px;text-decoration-color:#8ebaaa}
 .day-tasks .program-task-card.completed .program-select-task{border-color:#cbe6d9;color:#4e8e76}
 @media(max-width:650px){.task-meta-badges{gap:3px}.task-complete-badge{font-size:6px}}
+
+/* v3.1 — compact student selector in Programlar */
+.program-layout{align-items:start}
+.program-students{align-self:start;min-height:0;padding:12px;border-radius:14px}
+.program-side-title{align-items:center}
+.program-side-title b{font-size:13px;letter-spacing:-.01em}
+.program-side-title>span{min-width:24px;height:24px;border-radius:999px;font-size:8px}
+.program-student-list{margin:10px 0 0;gap:7px}
+.program-student-item{grid-template-columns:34px minmax(0,1fr) auto;gap:9px;padding:9px 10px;border:1px solid #e4eaf2;border-radius:10px;background:#fff}
+.program-student-item:hover{transform:none;background:#f7faff;border-color:#dbe6f4}
+.program-student-item.active{background:#edf5ff;border-color:#cfe0f7;box-shadow:inset 3px 0 0 #2873f0}
+.program-student-item>i{width:34px;height:34px;border-radius:10px}
+.program-student-item b{font-size:9.5px}
+.program-student-item small{font-size:6.8px}
+.program-student-item em{font-size:11px;font-weight:900;color:#a4afbd}
+.program-student-item.active em{color:#2873f0}
+.program-student-empty{min-height:120px;padding:18px 8px}
+@media(max-width:1000px){
+  .program-students{min-height:0}
+  .program-student-list{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+}
