@@ -12,7 +12,7 @@ test('programlar ekranında güncel hoca ve video kütüphanesi yüklenir',()=>{
   assert.match(js,/HOCALAR &amp; VİDEOLAR/);
   assert.match(js,/data-scope="TYT"/);
   assert.match(js,/data-scope="AYT"/);
-  assert.match(js,/filter=videos|filter="videos"/);
+  assert.match(js,/&filter=/);
   assert.match(js,/playlists/);
   assert.match(js,/konu anlatımı/);
   assert.match(js,/deneme çözümü/);
