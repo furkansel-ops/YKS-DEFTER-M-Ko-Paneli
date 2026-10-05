@@ -195,3 +195,12 @@
   .program-head-actions button{width:100%}
   .week-board{grid-template-columns:repeat(7,155px);padding:12px}
 }
+
+/* v3.3 — coach-created task deletion */
+.program-task-delete{margin-right:auto;border:1px solid #f0c9cd;background:#fff5f5;color:#b64a55}
+.program-task-delete:hover{background:#ffecee;border-color:#e9aeb5}
+.program-task-delete:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:520px){
+  .program-task-modal footer{flex-wrap:wrap}
+  .program-task-delete{width:100%;margin-right:0}
+}
