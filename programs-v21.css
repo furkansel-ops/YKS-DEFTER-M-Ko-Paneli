@@ -157,3 +157,41 @@
   .program-students{min-height:0}
   .program-student-list{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
 }
+
+
+/* v3.2 — full-width program board + header student picker */
+.programs-page{max-width:1720px}
+.programs-head{align-items:flex-end}
+.program-head-actions{align-items:flex-end;flex-wrap:wrap}
+.program-student-picker{height:40px;min-width:190px;padding:5px 10px 5px 11px;border:1px solid #dfe6ef;border-radius:10px;background:#fff;display:grid;grid-template-rows:auto 1fr;gap:1px;box-sizing:border-box}
+.program-student-picker>span{font-size:6.5px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#2873f0;line-height:1}
+.program-student-picker select{min-width:0;width:100%;border:0;outline:0;background:transparent;color:#34485f;font:800 10px/1.2 inherit;padding:0 20px 0 0;cursor:pointer}
+.program-student-picker select:disabled{color:#98a4b4;cursor:not-allowed}
+.program-layout{display:block}
+.program-workspace{width:100%}
+.week-board{grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;padding:18px}
+.day-column{min-height:360px}
+.day-column header{min-height:64px;padding:12px}
+.day-column header b{font-size:10px}
+.day-column header small{font-size:7.4px}
+.day-tasks{padding:10px;gap:9px}
+.day-tasks .program-task-card{padding:11px 10px 11px 14px}
+.day-tasks .program-task-card b{font-size:8.35px;line-height:1.55}
+.task-meta-row .task-label{font-size:6.4px}
+.program-toolbar{padding:20px 22px}
+.program-toolbar h2{font-size:16px}
+.program-student-hero{margin:18px 20px 0;padding:18px 20px}
+.program-summary article{padding:16px 20px}
+.program-summary strong{font-size:20px}
+@media(max-width:1000px){
+  .program-layout{display:block}
+  .programs-head{align-items:flex-start}
+  .program-head-actions{width:100%}
+  .program-student-picker{flex:1;min-width:180px}
+}
+@media(max-width:650px){
+  .program-head-actions{display:grid;grid-template-columns:1fr 1fr}
+  .program-student-picker{grid-column:1/-1;width:100%}
+  .program-head-actions button{width:100%}
+  .week-board{grid-template-columns:repeat(7,155px);padding:12px}
+}

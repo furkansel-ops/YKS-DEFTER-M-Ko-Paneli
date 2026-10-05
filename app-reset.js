@@ -1304,27 +1304,21 @@ function bindCoachProgramCardActions(weekStart){
 }
 
 function hydrateProgramStudents(){
-  const list=$("programStudentList"),empty=$("programStudentEmpty"),count=$("programStudentCount");
-  if(count)count.textContent=String(coachReportRows.length);
-  if(!list||!empty)return;
+  const select=$("programStudentSelect");
+  if(!select)return;
   if(!coachReportRows.length){
-    empty.classList.remove("hidden");list.classList.add("hidden");list.innerHTML="";
+    select.innerHTML='<option value="">Bağlı öğrenci yok</option>';
+    select.value="";select.disabled=true;
     selectedProgramStudentUid="";selectedProgramWeekStart="";return;
   }
-  empty.classList.add("hidden");list.classList.remove("hidden");
+  select.disabled=false;
   if(!selectedProgramStudentUid||!coachReportRows.some(x=>x.studentUid===selectedProgramStudentUid))selectedProgramStudentUid=coachReportRows[0].studentUid;
-  const q=String($("programStudentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR");
-  list.innerHTML=coachReportRows.filter(row=>!q||studentName(row).toLocaleLowerCase("tr-TR").includes(q)).map(row=>{
-    const name=studentName(row),weeks=programWeeks(row),stats=weekStats(row.share?.program);
-    const active=row.studentUid===selectedProgramStudentUid;
-    return '<button type="button" class="program-student-item '+(active?"active":"")+'" data-program-student="'+escHtml(row.studentUid)+'" aria-pressed="'+(active?"true":"false")+'"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+(active?"Seçili · ":"")+(weeks.length?weeks.length+" hafta · "+stats.ratio+"% uyum":"Program verisi bekleniyor")+'</small></span><em>'+(active?"✓":"›")+'</em></button>';
-  }).join("")||'<div class="program-student-filter-empty">Öğrenci bulunamadı.</div>';
-  document.querySelectorAll("[data-program-student]").forEach(button=>button.addEventListener("click",()=>{
-    selectedProgramStudentUid=button.dataset.programStudent;
-    selectedProgramWeekStart="";
-    hydrateProgramStudents();
-    renderProgramWorkspace();
-  }));
+  select.innerHTML=coachReportRows.map(row=>{
+    const name=studentName(row),stats=weekStats(row.share?.program);
+    const suffix=stats.total?" · "+stats.ratio+"% uyum":"";
+    return '<option value="'+escHtml(row.studentUid)+'">'+escHtml(name+suffix)+'</option>';
+  }).join("");
+  select.value=selectedProgramStudentUid;
 }
 function renderProgramWorkspace(){
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid);
@@ -1392,7 +1386,12 @@ function renderProgramWorkspace(){
   }).join("");
   bindCoachProgramCardActions(week.week);
 }
-$("programStudentSearch")?.addEventListener("input",hydrateProgramStudents);
+$("programStudentSelect")?.addEventListener("change",event=>{
+  selectedProgramStudentUid=event.target.value||"";
+  selectedProgramWeekStart="";
+  hydrateProgramStudents();
+  renderProgramWorkspace();
+});
 $("programPrevWeek")?.addEventListener("click",()=>{
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid);if(!row)return;
   selectedProgramWeekStart=shiftProgramWeek(activeProgramWeek(row).week,-1);renderProgramWorkspace();

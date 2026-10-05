@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.0">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.3.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
-  <link rel="stylesheet" href="./programs-v21.css?v=3.1.0">
+  <link rel="stylesheet" href="./programs-v21.css?v=3.2.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.1.0">
   <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
@@ -204,23 +204,18 @@
             <p>Öğrencinin YKS Defterim'de hazırladığı haftalık programı gerçek zamanlı görüntüle ve koç görevi ekle.</p>
           </div>
           <div class="program-head-actions">
+            <label class="program-student-picker">
+              <span>Öğrencilerim</span>
+              <select id="programStudentSelect" aria-label="Programı gösterilecek öğrenci">
+                <option value="">Öğrenci seç</option>
+              </select>
+            </label>
             <button type="button" class="program-secondary" id="programTemplatesBtn">Şablonlar</button>
             <button type="button" class="program-primary" id="programAddTaskBtn">＋ Çalışma Ekle</button>
           </div>
         </header>
 
         <section class="program-layout">
-          <aside class="program-students">
-            <div class="program-side-title">
-              <div><b>Öğrencilerim</b></div>
-              <span id="programStudentCount">0</span>
-            </div>
-            <div class="program-student-empty" id="programStudentEmpty">
-              <span>♟</span><b>Bağlı öğrenci yok</b><p>Öğrenci eklediğinde burada otomatik görünecek.</p>
-            </div>
-            <div class="program-student-list hidden" id="programStudentList"></div>
-          </aside>
-
           <section class="program-workspace">
             <div class="program-toolbar">
               <div>
@@ -270,7 +265,7 @@
             <div class="week-board" id="programWeekBoard"></div>
 
             <div class="program-main-empty" id="programMainEmpty">
-              <span>▣</span><div><b>Bir öğrenci seç</b><p>Soldaki listeden öğrenciyi seçtiğinde kendi hazırladığı program gün gün burada açılacak.</p></div>
+              <span>▣</span><div><b>Bir öğrenci seç</b><p>Yukarıdaki Öğrencilerim alanından bir öğrenci seçtiğinde programı gün gün burada açılacak.</p></div>
             </div>
           </section>
         </section>
@@ -1092,6 +1087,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.40"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.41"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
