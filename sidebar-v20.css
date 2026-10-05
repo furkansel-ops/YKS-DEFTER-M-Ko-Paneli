@@ -32,10 +32,10 @@
 .coach-brand-v20 .brand-copy b{font-size:16px;color:#fff}
 .coach-brand-v20 .brand-copy span{font-size:10px;color:#86a7d2;margin-top:2px}
 
-.coach-nav-v20{display:grid;gap:5px;margin-top:3px}
+.coach-nav-v20{display:grid;gap:4px;margin-top:3px;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:2px;scrollbar-width:thin;scrollbar-color:#29415f transparent}
 .coach-nav-item{
   width:100%;
-  min-height:42px;
+  min-height:39px;
   padding:0 12px;
   border:0;
   border-radius:10px;
@@ -58,7 +58,7 @@
 }
 .coach-nav-item.on>span{color:#58c5ff}
 
-.coach-sidebar-spacer{flex:1}
+.coach-sidebar-spacer{flex:1;min-height:4px}
 .coach-profile-v20{
   display:grid;
   grid-template-columns:38px 1fr;
@@ -124,3 +124,7 @@
   .coach-sidebar-v20.open{transform:translateX(0)}
   .mobile-only{display:inline-flex!important;align-items:center;justify-content:center}
 }
+
+.coach-nav-v20::-webkit-scrollbar{width:5px}
+.coach-nav-v20::-webkit-scrollbar-thumb{background:#29415f;border-radius:999px}
+.coach-nav-v20::-webkit-scrollbar-track{background:transparent}
