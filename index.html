@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=3.3.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.1.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">\n  <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.0.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
@@ -52,7 +52,7 @@
         <button class="coach-nav-item on" type="button" data-coach-page="home"><span>⌂</span><b>Ana Sayfa</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="students"><span>♟</span><b>Öğrenciler</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="programs"><span>▣</span><b>Programlar</b></button>
-        <button class="coach-nav-item" type="button" data-coach-page="reports"><span>▥</span><b>Takip &amp; Rapor</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="reports"><span>▥</span><b>Takip &amp; Rapor</b></button>\n        <button class="coach-nav-item" type="button" data-coach-page="paragraphProblem"><span>∑</span><b>Paragraf + Problem</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="exams"><span>▤</span><b>Deneme Analizi</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="topics"><span>◫</span><b>Konular</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="errors"><span>✎</span><b>Hata Defteri</b></button>
@@ -437,6 +437,53 @@
                 <div><span>HATA DEFTERİ</span><h2>Son yanlışlar</h2><p>Ders ve konu bazında son kayıtlar.</p></div>
               </div>
               <div class="report-error-list" id="reportErrorList"></div>
+            </article>
+          </section>
+        </div>
+      </section>
+      <section class="pp-coach-page hidden" id="paragraphProblemPage">
+        <header class="pp-coach-head">
+          <div>
+            <span class="dashboard-eyebrow">PARAGRAF + PROBLEM</span>
+            <h1>Paragraf + Problem</h1>
+            <p>Öğrencinin günlük paragraf ve problem soru ritmini, netini ve doğruluk oranını gerçek kayıtlarla takip et.</p>
+          </div>
+          <button class="pp-coach-refresh" id="ppCoachRefreshBtn" type="button">↻ Verileri yenile</button>
+        </header>
+
+        <section class="pp-coach-controls">
+          <div class="pp-coach-control-copy">
+            <span>PERFORMANS GÖRÜNÜMÜ</span>
+            <b id="ppCoachScopeTitle">Tüm öğrenciler</b>
+            <small id="ppCoachScopeMeta">Son 7 günlük paragraf + problem özeti</small>
+          </div>
+          <div class="pp-coach-control-fields">
+            <label><span>Öğrenci</span><select id="ppCoachStudentSelect"><option value="all">Tüm öğrenciler</option></select></label>
+            <label><span>Dönem</span><select id="ppCoachRangeSelect"><option value="7">Son 7 gün</option><option value="30">Son 30 gün</option><option value="90">Son 90 gün</option></select></label>
+          </div>
+        </section>
+
+        <div id="ppCoachLoading" class="pp-coach-state">
+          <span>↻</span><div><b>Paragraf + Problem verileri hazırlanıyor</b><p>Öğrenci kayıtları yükleniyor.</p></div>
+        </div>
+        <div id="ppCoachEmpty" class="pp-coach-state hidden">
+          <span>∑</span><div><b>Henüz kayıt yok</b><p id="ppCoachEmptyText">Öğrenci paragraf veya problem çalışması kaydettiğinde burada görünecek.</p></div>
+        </div>
+
+        <div id="ppCoachContent" class="hidden">
+          <section class="pp-coach-kpis" id="ppCoachKpis"></section>
+          <section class="pp-coach-grid">
+            <article class="pp-coach-card">
+              <div class="pp-coach-card-head"><div><span>DERS DAĞILIMI</span><h2>Paragraf ve problem</h2><p>Seçili dönemde iki çalışma türünü ayrı ayrı karşılaştır.</p></div><strong id="ppCoachSync">—</strong></div>
+              <div class="pp-coach-kind-grid" id="ppCoachKinds"></div>
+            </article>
+            <article class="pp-coach-card">
+              <div class="pp-coach-card-head"><div><span>GÜNLÜK RİTİM</span><h2>Son 7 gün</h2><p>Soru hacmi, net ve doğruluk değişimini günlük gör.</p></div></div>
+              <div class="pp-coach-daily" id="ppCoachDaily"></div>
+            </article>
+            <article class="pp-coach-card pp-coach-history-card">
+              <div class="pp-coach-card-head"><div><span>SON KAYITLAR</span><h2>Çalışma geçmişi</h2><p>En yeni paragraf ve problem oturumları.</p></div></div>
+              <div class="pp-coach-history" id="ppCoachHistory"></div>
             </article>
           </section>
         </div>
@@ -1088,6 +1135,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.42"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.43"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
