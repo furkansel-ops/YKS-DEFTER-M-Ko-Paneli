@@ -12,6 +12,19 @@ const $=id=>document.getElementById(id);
 const text=(value,max=120)=>String(value??"").trim().slice(0,max);
 const initials=name=>text(name,80).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"K";
 
+function dashboardGreetingFor(date=new Date()){
+  const hour=date.getHours();
+  if(hour>=5&&hour<12)return"Günaydın";
+  if(hour>=12&&hour<18)return"İyi günler";
+  if(hour>=18&&hour<23)return"İyi akşamlar";
+  return"İyi geceler";
+}
+function refreshDashboardGreeting(){
+  const node=$("dashboardGreeting");if(node)node.textContent=dashboardGreetingFor();
+}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refreshDashboardGreeting()});
+setInterval(refreshDashboardGreeting,60000);
+
 function setStatus(message,type=""){
   const node=$("authStatus");if(!node)return;
   node.textContent=message;
@@ -33,6 +46,7 @@ function showApp(profile,user){
   if(nameNode)nameNode.textContent=name;
   if(avatar)avatar.textContent=initials(name).slice(0,1);
   const dashName=$("dashboardCoachName");if(dashName)dashName.textContent=name.split(/\\s+/)[0]||"Koç";
+  refreshDashboardGreeting();
   const dashDate=$("dashboardDate");if(dashDate)dashDate.textContent=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
   hydrateCoachSettings(profile,user);
   const startPage=readCoachUiPrefs().defaultPage||"home";
@@ -71,7 +85,7 @@ function showCoachPage(page){
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
   document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
-  if(page==="home"){try{renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
+  if(page==="home"){try{refreshDashboardGreeting();renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
   closeSidebar();
 }
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
