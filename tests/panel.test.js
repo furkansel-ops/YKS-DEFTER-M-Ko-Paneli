@@ -184,7 +184,7 @@ test('koç ana paneli gerçek öğrenci verileriyle dolar',()=>{
   assert.match(js,/function renderCoachDashboard/);
   assert.match(js,/function dashboardProgramStats/);
   assert.match(js,/programCurrentWeekStart\(\)/);
-  assert.match(js,/data\?\.dn\?\[task\.id\]/);
+  assert.match(js,/data\?\.dn\?\.\[task\.id\]/);
   assert.match(js,/studentActiveToday/);
   assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderCoachDashboard/);
   assert.match(js,/loadCoachReports[\s\S]*renderCoachDashboard/);
