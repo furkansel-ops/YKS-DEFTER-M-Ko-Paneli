@@ -283,3 +283,17 @@ test('sol menüde kaçış karakteri görünmez ve tüm menüler kaydırılabili
   assert.match(css,/min-height:39px/);
   assert.match(css,/\.coach-sidebar-spacer\{flex:1;min-height:4px\}/);
 });
+
+
+test('Paragraf + Problem seçili öğrencinin profil ve hedef bilgilerini gösterir',()=>{
+  const html=read('index.html'),js=read('app-reset.js'),css=read('paragraph-problem-v1.css');
+  for(const id of ['ppCoachStudentInfo','ppCoachStudentAvatar','ppCoachStudentName','ppCoachStudentTarget','ppCoachStudentMeta','ppCoachStudentSync'])assert.match(html,new RegExp('id="'+id+'"'));
+  assert.match(js,/function renderParagraphProblemStudentInfo/);
+  assert.match(js,/profile\.targetUniversity/);
+  assert.match(js,/profile\.targetDepartment/);
+  assert.match(js,/profile\.targetNetTYT/);
+  assert.match(js,/profile\.targetNetAYT/);
+  assert.match(js,/coachReportRows\.length===1&&current==="all"\?coachReportRows\[0\]\.studentUid/);
+  assert.match(css,/\.pp-coach-student-info/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.44/);
+});
