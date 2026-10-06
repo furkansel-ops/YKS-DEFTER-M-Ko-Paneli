@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./reports-v21.css?v=4.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.2.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
-  <link rel="stylesheet" href="./topics-v21.css?v=2.0.0">
+  <link rel="stylesheet" href="./topics-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
   <link rel="stylesheet" href="./messages-v21.css?v=2.0.0">
   <link rel="stylesheet" href="./settings-v21.css?v=2.1.0">
@@ -665,12 +665,32 @@
             <label class="topic-search-field"><span>Konu ara</span><input id="topicSearchInput" type="search" placeholder="Örn. Problemler"></label>
           </div>
         </section>
+        <nav class="topic-quick-filters" id="topicQuickFilters" aria-label="Hızlı konu filtreleri">
+          <button type="button" class="on" data-topic-quick="all">Tüm konular</button>
+          <button type="button" data-topic-quick="overdue">Geciken</button>
+          <button type="button" data-topic-quick="due-soon">7 gün içinde</button>
+          <button type="button" data-topic-quick="active">Devam eden</button>
+          <button type="button" data-topic-quick="completed">Tamamlanan</button>
+        </nav>
 
         <div id="topicLoading" class="topic-state"><span>↻</span><div><b>Konular hazırlanıyor</b><p>Öğrencilerin güncel konu verileri alınıyor.</p></div></div>
         <div id="topicEmpty" class="topic-state hidden"><span>◫</span><div><b>Henüz konu verisi yok</b><p>Öğrenciler konu takibini kullandıkça ilerleme burada otomatik oluşacak.</p></div></div>
 
         <div id="topicOverview" class="hidden">
           <section class="topic-kpis" id="topicOverviewKpis"></section>
+          <section class="topic-command-grid">
+            <article class="topic-card topic-progress-command">
+              <div class="topic-card-head compact"><div><span>GENEL İLERLEME</span><h2>Konu tamamlama görünümü</h2><p>Filtrelenen konuların genel dağılımı.</p></div></div>
+              <div class="topic-progress-command-body">
+                <div id="topicOverviewProgress"></div>
+                <div class="topic-stage-summary" id="topicOverviewStage"></div>
+              </div>
+            </article>
+            <article class="topic-card topic-critical-card">
+              <div class="topic-card-head compact"><div><span>KRİTİK ODAK</span><h2>Koçun önce bakacağı konular</h2><p>Gecikme, hedef tarihi ve yanlış kayıtları birlikte değerlendirilir.</p></div></div>
+              <div class="topic-critical-deck" id="topicCriticalDeck"></div>
+            </article>
+          </section>
           <section class="topic-overview-grid">
             <article class="topic-card topic-student-card">
               <div class="topic-card-head"><div><span>ÖĞRENCİ İLERLEMESİ</span><h2>Konu durumu ve koç önceliği</h2><p>İlerleme, geciken ve yaklaşan hedefleri öğrenci bazında karşılaştır.</p></div></div>
@@ -710,6 +730,17 @@
           </section>
 
           <section class="topic-kpis" id="topicStudentKpis"></section>
+
+          <section class="topic-student-command-grid">
+            <article class="topic-card topic-student-progress-card">
+              <div class="topic-card-head compact"><div><span>İLERLEME HARİTASI</span><h2>Konu dağılımı</h2><p>Öğrencinin konu durumunu tek bakışta gör.</p></div></div>
+              <div id="topicStudentProgressBoard" class="topic-student-progress-board"></div>
+            </article>
+            <article class="topic-card topic-week-focus-card">
+              <div class="topic-card-head compact"><div><span>BU HAFTA ODAK</span><h2>Öncelikli konular</h2><p>Koçun öğrenciden özellikle takip etmesi gereken konular.</p></div></div>
+              <div id="topicStudentFocusDeck" class="topic-student-focus-deck"></div>
+            </article>
+          </section>
 
           <section class="topic-insight-grid">
             <article class="topic-card">
@@ -1188,6 +1219,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.48"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.49"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
