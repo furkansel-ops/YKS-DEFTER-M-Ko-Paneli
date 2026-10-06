@@ -237,7 +237,7 @@ test('koç programında öğrencinin tamamladığı dersler tek tek görünür',
   assert.match(css,/program-task-card\.completed/);
   assert.match(css,/task-complete-badge/);
   assert.match(css,/day-state\.partial/);
-  assert.match(html,/programs-v21\.css\?v=3\.3\.0/);
+  assert.match(html,/programs-v21\.css\?v=3\.4\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
@@ -252,7 +252,7 @@ test('koçun eklediği program görevi düzenleme ekranından silinebilir',()=>{
   assert.match(js,/Sadece koç tarafından eklenen görevler buradan silinebilir/);
   assert.match(js,/confirm\("Bu koç görevi öğrencinin programından silinsin mi\?"\)/);
   assert.match(css,/\.program-task-delete/);
-  assert.match(html,/programs-v21\.css\?v=3\.3\.0/);
+  assert.match(html,/programs-v21\.css\?v=3\.4\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
@@ -319,4 +319,15 @@ test('Takip & Rapor ayrıntılı koçluk analitiği gösterir',()=>{
   assert.match(css,/\.report-attention-list/);
   assert.match(html,/reports-v21\.css\?v=4\.0\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.46/);
+});
+
+
+test('uzun program görevleri gün kartının dışına taşmaz',()=>{
+  const html=read('index.html'),css=read('programs-v21.css');
+  assert.match(css,/\.day-tasks \.program-task-card\{overflow:hidden!important\}/);
+  assert.match(css,/\.day-tasks \.program-task-card>div\{min-width:0;max-width:100%;overflow:hidden\}/);
+  assert.match(css,/overflow-wrap:anywhere/);
+  assert.match(css,/word-break:break-word/);
+  assert.match(css,/\.task-meta-row\{min-width:0;max-width:100%;flex-wrap:wrap/);
+  assert.match(html,/programs-v21\.css\?v=3\.4\.0/);
 });
