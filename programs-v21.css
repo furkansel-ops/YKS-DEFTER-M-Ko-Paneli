@@ -204,3 +204,14 @@
   .program-task-modal footer{flex-wrap:wrap}
   .program-task-delete{width:100%;margin-right:0}
 }
+
+
+/* v3.4 — keep long program tasks inside their day card */
+.week-board,.day-column,.day-tasks{min-width:0}
+.day-column,.day-tasks,.day-tasks .program-task-card{max-width:100%;box-sizing:border-box}
+.day-tasks .program-task-card{overflow:hidden!important}
+.day-tasks .program-task-card>div{min-width:0;max-width:100%;overflow:hidden}
+.day-tasks .program-task-card b{display:block;min-width:0;max-width:100%;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
+.task-meta-row{min-width:0;max-width:100%;flex-wrap:wrap;align-items:flex-start}
+.task-meta-row .task-label{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.task-meta-badges{min-width:0;max-width:100%;justify-content:flex-start}
