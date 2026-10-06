@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=3.3.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.1.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">\n  <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.0.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
+  <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.1.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
@@ -447,36 +448,25 @@
           <div>
             <span class="dashboard-eyebrow">PARAGRAF + PROBLEM</span>
             <h1>Paragraf + Problem</h1>
-            <p>Öğrencinin günlük paragraf ve problem soru ritmini, netini ve doğruluk oranını gerçek kayıtlarla takip et.</p>
+            <p>Seçili öğrencinin yalnız paragraf ve problem çalışma verilerini; soru hacmi, net, doğruluk ve düzen üzerinden takip et.</p>
           </div>
           <button class="pp-coach-refresh" id="ppCoachRefreshBtn" type="button">↻ Verileri yenile</button>
         </header>
 
         <section class="pp-coach-controls">
           <div class="pp-coach-control-copy">
-            <span>PERFORMANS GÖRÜNÜMÜ</span>
-            <b id="ppCoachScopeTitle">Tüm öğrenciler</b>
-            <small id="ppCoachScopeMeta">Son 7 günlük paragraf + problem özeti</small>
+            <span>ÖĞRENCİ PERFORMANSI</span>
+            <b id="ppCoachScopeTitle">Öğrenci</b>
+            <small id="ppCoachScopeMeta">Paragraf + Problem performans görünümü</small>
           </div>
           <div class="pp-coach-control-fields">
-            <label><span>Öğrenci</span><select id="ppCoachStudentSelect"><option value="all">Tüm öğrenciler</option></select></label>
-            <label><span>Dönem</span><select id="ppCoachRangeSelect"><option value="7">Son 7 gün</option><option value="30">Son 30 gün</option><option value="90">Son 90 gün</option></select></label>
+            <label><span>Öğrenci</span><select id="ppCoachStudentSelect"><option value="">Öğrenci seç</option></select></label>
+            <strong id="ppCoachSync">—</strong>
           </div>
-        </section>
-
-        <section class="pp-coach-student-info hidden" id="ppCoachStudentInfo">
-          <div class="pp-coach-student-avatar" id="ppCoachStudentAvatar">Ö</div>
-          <div class="pp-coach-student-copy">
-            <span>ÖĞRENCİ BİLGİLERİ</span>
-            <h2 id="ppCoachStudentName">Öğrenci</h2>
-            <p id="ppCoachStudentTarget">Hedef bilgisi yok</p>
-          </div>
-          <div class="pp-coach-student-meta" id="ppCoachStudentMeta"></div>
-          <div class="pp-coach-student-sync" id="ppCoachStudentSync">—</div>
         </section>
 
         <div id="ppCoachLoading" class="pp-coach-state">
-          <span>↻</span><div><b>Paragraf + Problem verileri hazırlanıyor</b><p>Öğrenci kayıtları yükleniyor.</p></div>
+          <span>↻</span><div><b>Paragraf + Problem verileri hazırlanıyor</b><p>Öğrencinin çalışma kayıtları yükleniyor.</p></div>
         </div>
         <div id="ppCoachEmpty" class="pp-coach-state hidden">
           <span>∑</span><div><b>Henüz kayıt yok</b><p id="ppCoachEmptyText">Öğrenci paragraf veya problem çalışması kaydettiğinde burada görünecek.</p></div>
@@ -484,17 +474,31 @@
 
         <div id="ppCoachContent" class="hidden">
           <section class="pp-coach-kpis" id="ppCoachKpis"></section>
-          <section class="pp-coach-grid">
-            <article class="pp-coach-card">
-              <div class="pp-coach-card-head"><div><span>DERS DAĞILIMI</span><h2>Paragraf ve problem</h2><p>Seçili dönemde iki çalışma türünü ayrı ayrı karşılaştır.</p></div><strong id="ppCoachSync">—</strong></div>
-              <div class="pp-coach-kind-grid" id="ppCoachKinds"></div>
+          <section class="pp-coach-kind-grid" id="ppCoachKinds"></section>
+
+          <section class="pp-coach-analysis-grid">
+            <article class="pp-coach-card pp-tempo-card">
+              <div class="pp-coach-card-head"><div><span>TEMPO</span><h2>Son 14 gün</h2><p>Günlük soru hacmi ve doğru sayısı.</p></div></div>
+              <div id="ppCoachTempo" class="pp-tempo"></div>
+            </article>
+            <article class="pp-coach-card pp-signals-card">
+              <div class="pp-coach-card-head"><div><span>AKILLI ÖZET</span><h2>Performans sinyalleri</h2><p>Mevcut kayıtlardan hızlı koç özeti.</p></div></div>
+              <div id="ppCoachSignals" class="pp-signals"></div>
             </article>
             <article class="pp-coach-card">
-              <div class="pp-coach-card-head"><div><span>GÜNLÜK RİTİM</span><h2>Son 7 gün</h2><p>Soru hacmi, net ve doğruluk değişimini günlük gör.</p></div></div>
+              <div class="pp-coach-card-head"><div><span>DÖNEM KARŞILAŞTIRMASI</span><h2>Son 7 gün ↔ önceki 7 gün</h2></div></div>
+              <div id="ppCoachCompare" class="pp-compare"></div>
+            </article>
+            <article class="pp-coach-card">
+              <div class="pp-coach-card-head"><div><span>ÇALIŞMA DÜZENİ</span><h2>30 günlük ritim</h2></div></div>
+              <div id="ppCoachRhythm" class="pp-rhythm"></div>
+            </article>
+            <article class="pp-coach-card pp-wide-card">
+              <div class="pp-coach-card-head"><div><span>GÜNLÜK DÖKÜM</span><h2>Son 7 gün</h2><p>Paragraf ve problem toplamlarını gün gün incele.</p></div></div>
               <div class="pp-coach-daily" id="ppCoachDaily"></div>
             </article>
-            <article class="pp-coach-card pp-coach-history-card">
-              <div class="pp-coach-card-head"><div><span>SON KAYITLAR</span><h2>Çalışma geçmişi</h2><p>En yeni paragraf ve problem oturumları.</p></div></div>
+            <article class="pp-coach-card pp-wide-card">
+              <div class="pp-coach-card-head"><div><span>KAYIT DEFTERİ</span><h2>Geçmiş oturumlar</h2><p>Öğrencinin en yeni paragraf ve problem kayıtları.</p></div></div>
               <div class="pp-coach-history" id="ppCoachHistory"></div>
             </article>
           </section>
@@ -1147,6 +1151,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.44"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.45"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
