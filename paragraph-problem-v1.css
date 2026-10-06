@@ -26,3 +26,15 @@
 @media(max-width:1000px){.pp-coach-page{padding:76px 18px 36px}.pp-coach-head,.pp-coach-controls{flex-direction:column;align-items:stretch}.pp-coach-control-fields{width:100%;align-items:stretch}.pp-coach-control-fields label{flex:1}.pp-coach-control-fields select{width:100%;min-width:0}.pp-coach-kpis{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.pp-coach-kind-grid{grid-template-columns:1fr}.pp-coach-kind-foot{grid-template-columns:1fr 1fr}.pp-coach-kind-foot>div:nth-child(3){border-left:0;border-top:1px solid #e7edf4}.pp-coach-kind-foot>div:nth-child(4){border-top:1px solid #e7edf4}.pp-tempo-bars{gap:3px}.pp-tempo-columns{gap:1px}.pp-rhythm-heat{grid-template-columns:repeat(10,1fr)}}
 @media(max-width:620px){.pp-coach-page{padding-left:13px;padding-right:13px}.pp-coach-head h1{font-size:28px}.pp-coach-control-fields{flex-direction:column}.pp-coach-kpis{grid-template-columns:1fr 1fr;gap:9px}.pp-coach-kpi{padding:14px}.pp-coach-kpi>strong{font-size:21px}.pp-coach-kind-main{grid-template-columns:1fr}.pp-coach-card{padding:15px}.pp-rhythm-stats{grid-template-columns:1fr 1fr}}
+
+.pp-coach-answer-summary{display:grid;margin-bottom:14px;border:1px solid #e3eaf3;border-radius:17px;overflow:hidden;background:#fff;box-shadow:0 10px 26px rgba(20,39,67,.045)}
+.pp-coach-answer-head,.pp-coach-answer-row{display:grid;grid-template-columns:minmax(120px,1.25fr) repeat(4,minmax(64px,.75fr));align-items:center;gap:8px;padding:11px 15px}
+.pp-coach-answer-head{background:#f3f6fb;color:#7d8da2;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.pp-coach-answer-head b{text-align:center}
+.pp-coach-answer-row{border-top:1px solid #e7edf4;font-size:12px;color:#687a91}
+.pp-coach-answer-row>span{font-weight:900;color:#273f5d}
+.pp-coach-answer-row>strong,.pp-coach-answer-row>b{text-align:center;font-size:15px;color:#273f5d}
+.pp-coach-answer-row.today>strong:first-of-type{color:#18745f}
+.pp-coach-answer-row.today>strong:nth-of-type(2),.pp-coach-answer-row.week>strong:nth-of-type(2){color:#b45158}
+.pp-coach-answer-row>b{font-size:17px}
+@media(max-width:720px){.pp-coach-answer-summary{overflow-x:auto}.pp-coach-answer-head,.pp-coach-answer-row{min-width:500px}}
