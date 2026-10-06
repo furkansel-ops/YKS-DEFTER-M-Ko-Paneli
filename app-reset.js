@@ -629,6 +629,7 @@ function renderParagraphProblem(scope=""){
     paragraphProblemKpi("BUGÜN NET",paragraphProblemFmtNet(today.net)+" net",paragraphProblemFmtPct(today.accuracy)+" doğruluk")+
     paragraphProblemKpi("7 GÜNLÜK HACİM",last7.total+" soru",last7.activeDays+"/7 aktif gün")+
     paragraphProblemKpi("AKTİF SERİ",streak+" gün","düzenli kayıtla büyür",streak?"good":"");
+  $("ppCoachAnswerSummary").innerHTML='<div class="pp-coach-answer-head"><span>Dönem</span><b>Doğru</b><b>Yanlış</b><b>Boş</b><b>Toplam</b></div>'+'<div class="pp-coach-answer-row today"><span>Bugün</span><strong>'+today.correct+'</strong><strong>'+today.wrong+'</strong><strong>'+today.blank+'</strong><b>'+today.total+'</b></div>'+'<div class="pp-coach-answer-row week"><span>Son 7 gün</span><strong>'+last7.correct+'</strong><strong>'+last7.wrong+'</strong><strong>'+last7.blank+'</strong><b>'+last7.total+'</b></div>';
   $("ppCoachKinds").innerHTML=paragraphProblemKindCard("paragraph",entries)+paragraphProblemKindCard("problem",entries);
 
   const tempoDays=Array.from({length:14},(_,i)=>paragraphProblemDateOffset(i-13)),tempoRows=tempoDays.map(date=>{const m=paragraphProblemMetrics(entries.filter(item=>item.date===date));return{date,m}}),tempoMax=Math.max(1,...tempoRows.map(item=>item.m.total));
