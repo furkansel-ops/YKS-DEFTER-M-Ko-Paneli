@@ -869,6 +869,31 @@ function topicDeadlineText(item){
   if(days===1)return"Yarın";
   return days+" gün kaldı";
 }
+function topicProgressVisual(counts,label="İlerleme"){
+  return '<div class="topic-progress-visual"><div class="topic-progress-ring" style="--topic-progress:'+counts.ratio+'"><span><b>'+counts.ratio+'%</b><small>'+escHtml(label)+'</small></span></div><div class="topic-progress-copy"><strong>'+counts.completed+' / '+counts.total+' konu tamamlandı</strong><p>'+counts.active+' devam · '+counts.notStarted+' başlanmadı · '+counts.overdue+' geciken</p></div></div>';
+}
+function topicCoachAction(row,item){
+  const state=topicState(item),days=topicDaysUntil(item?.deadline),errors=topicErrorWeight(row,item);
+  if(state==="overdue"&&errors>0)return"Yanlışları tekrar et, sonra konuyu yeniden programa al.";
+  if(state==="overdue")return"Hedef tarihini güncelle ve bu hafta programa ekle.";
+  if(errors>=3)return"Hata defterindeki yanlışları tekrar ederek konuyu pekiştir.";
+  if(topicDueSoon(item)&&state==="not-started")return"İlk konu anlatımı + soru çözümü bloğu planla.";
+  if(topicDueSoon(item))return"Bu hafta bitirip kısa bir tekrar bloğu ekle.";
+  if(days!==null&&days<=14)return"Takvime kısa çalışma bloğu ekleyip ilerlemeyi kontrol et.";
+  return state==="active"?"Mevcut çalışmayı sürdür ve tamamlama tarihini netleştir.":"Takibi sürdür.";
+}
+function topicFocusReason(row,item){
+  const state=topicState(item),errors=topicErrorWeight(row,item),deadline=topicDeadlineText(item),parts=[];
+  if(state==="overdue")parts.push(deadline||"hedef tarihi geçti");
+  else if(topicDueSoon(item))parts.push(deadline||"hedef yaklaşıyor");
+  if(errors)parts.push(Math.round(errors)+" yanlış kaydı");
+  if(state==="active")parts.push("çalışma başladı");
+  return parts.join(" · ")||topicStateText(item);
+}
+function topicFocusCards(row,items,limit=4){
+  const ranked=[...items].filter(item=>topicState(item)!=="completed").map(item=>({item,score:topicPriorityScore(row,item)})).sort((a,b)=>b.score-a.score||String(a.item?.deadline||"9999").localeCompare(String(b.item?.deadline||"9999"))).slice(0,limit);
+  return ranked.length?ranked.map(({item,score},index)=>{const meta=topicPriorityMeta(score);return '<article class="topic-focus-card '+meta.tone+'"><div class="topic-focus-rank">'+(index+1)+'</div><div class="topic-focus-card-copy"><div class="topic-focus-top"><span>'+escHtml(item.subject||"Ders")+' · '+escHtml(topicExam(item))+'</span><em>'+escHtml(meta.label)+'</em></div><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(topicFocusReason(row,item))+'</small><p>'+escHtml(topicCoachAction(row,item))+'</p></div></article>';}).join(""):'<div class="topic-mini-empty">Öncelikli konu görünmüyor.</div>';
+}
 function topicStudentSignals(row){
   const items=topicItems(row),counts=topicCounts(items),subjects=topicSubjectStats(items),signals=[];
   if(counts.overdue)signals.push({tone:"danger",title:"Geciken hedef",text:counts.overdue+" konu hedef tarihini geçti."});
@@ -901,6 +926,14 @@ function renderTopicOverview(){
     topicKpi("DEVAM EDEN",String(counts.active),"Aktif çalışma")+
     topicKpi("YAKLAŞAN",String(counts.dueSoon),"7 gün içinde",counts.dueSoon?"watch":"")+
     topicKpi("GECİKEN",String(counts.overdue),"Koç takibi",counts.overdue?"warn":"");
+  $("topicOverviewProgress").innerHTML=topicProgressVisual(counts,"genel ilerleme");
+  $("topicOverviewStage").innerHTML=
+    '<div class="done"><span>Tamamlandı</span><strong>'+counts.completed+'</strong></div>'+
+    '<div class="active"><span>Devam ediyor</span><strong>'+counts.active+'</strong></div>'+
+    '<div class="idle"><span>Başlanmadı</span><strong>'+counts.notStarted+'</strong></div>'+
+    '<div class="late"><span>Geciken</span><strong>'+counts.overdue+'</strong></div>';
+  const criticalAll=rows.flatMap(row=>topicItems(row).map(item=>({row,item,score:topicPriorityScore(row,item)}))).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||String(a.item?.deadline||"9999").localeCompare(String(b.item?.deadline||"9999"))).slice(0,4);
+  $("topicCriticalDeck").innerHTML=criticalAll.length?criticalAll.map(({row,item,score},index)=>{const meta=topicPriorityMeta(score);return '<button type="button" class="topic-critical-item '+meta.tone+'" data-topic-student="'+escHtml(row.studentUid)+'"><span class="topic-critical-rank">'+(index+1)+'</span><span class="topic-critical-copy"><small>'+escHtml(studentName(row))+' · '+escHtml(item.subject||"Ders")+'</small><b>'+escHtml(item.topic||"Konu")+'</b><em>'+escHtml(topicFocusReason(row,item))+'</em></span><strong>'+escHtml(meta.label)+'</strong></button>';}).join(""):'<div class="topic-mini-empty">Kritik konu görünmüyor.</div>';
   $("topicStudentList").innerHTML=rows.map(row=>{
     const items=topicFiltered(topicItems(row));if(!items.length)return"";
     const c=topicCounts(items),name=studentName(row),risk=topicPriorityMeta(topicStudentRisk(row,items));
@@ -935,6 +968,9 @@ function renderTopicStudent(row){
     topicKpi("DEVAM EDEN",String(counts.active),"Aktif çalışma")+
     topicKpi("YAKLAŞAN",String(counts.dueSoon),"7 gün içinde",counts.dueSoon?"watch":"")+
     topicKpi("GECİKEN",String(counts.overdue),"Takip bekleyen",counts.overdue?"warn":"");
+  $("topicStudentProgressBoard").innerHTML=topicProgressVisual(counts,"tamamlama")+
+    '<div class="topic-student-stage-grid"><div class="done"><span>Tamamlandı</span><b>'+counts.completed+'</b></div><div class="active"><span>Devam</span><b>'+counts.active+'</b></div><div class="watch"><span>Yaklaşan</span><b>'+counts.dueSoon+'</b></div><div class="late"><span>Geciken</span><b>'+counts.overdue+'</b></div></div>';
+  $("topicStudentFocusDeck").innerHTML=topicFocusCards(row,base,3);
 
   $("topicStudentSignals").innerHTML=topicStudentSignals(row).map(signal=>'<div class="topic-signal '+signal.tone+'"><i></i><span><b>'+escHtml(signal.title)+'</b><small>'+escHtml(signal.text)+'</small></span></div>').join("");
 
@@ -955,8 +991,9 @@ function renderTopicStudent(row){
 $("topicStudentSelect")?.addEventListener("change",event=>renderTopicAnalysis(event.currentTarget.value));
 $("topicSubjectSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
 $("topicExamSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
-$("topicStatusSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
+$("topicStatusSelect")?.addEventListener("change",()=>{const value=$("topicStatusSelect")?.value||"all";document.querySelectorAll("[data-topic-quick]").forEach(btn=>btn.classList.toggle("on",btn.dataset.topicQuick===value));renderTopicAnalysis($("topicStudentSelect")?.value||"all")});
 $("topicSearchInput")?.addEventListener("input",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
+document.querySelectorAll("[data-topic-quick]").forEach(btn=>btn.addEventListener("click",()=>{const value=btn.dataset.topicQuick||"all";if($("topicStatusSelect"))$("topicStatusSelect").value=value;document.querySelectorAll("[data-topic-quick]").forEach(item=>item.classList.toggle("on",item===btn));renderTopicAnalysis($("topicStudentSelect")?.value||"all")}));
 $("topicRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setTopicState("topicLoading");void loadCoachReports(user.uid)}});
 
 
