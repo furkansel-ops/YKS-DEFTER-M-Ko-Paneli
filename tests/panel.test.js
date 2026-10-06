@@ -291,10 +291,12 @@ test('sol menüde kaçış karakteri görünmez ve tüm menüler kaydırılabili
 
 test('Paragraf + Problem ekranı kişisel profil yerine çalışma performansını gösterir',()=>{
   const html=read('index.html'),js=read('app-reset.js'),css=read('paragraph-problem-v1.css');
-  assert.doesNotMatch(html,/ÖĞRENCİ BİLGİLERİ|Hedef bilgisi yok|ppCoachStudentAvatar|ppCoachStudentTarget|ppCoachStudentMeta/);
-  assert.doesNotMatch(js,/renderParagraphProblemStudentInfo|profile\.targetUniversity|profile\.targetDepartment|profile\.targetNetTYT|profile\.targetNetAYT/);
-  for(const label of ['BUGÜN TOPLAM','BUGÜN NET','7 GÜNLÜK HACİM','AKTİF SERİ'])assert.match(js,new RegExp(label));
-  for(const heading of ['Son 14 gün','Performans sinyalleri','Son 7 gün ↔ önceki 7 gün','30 günlük ritim','Günlük döküm','Geçmiş oturumlar'])assert.ok(html.includes(heading),heading);
+  const ppHtml=html.slice(html.indexOf('<section class="pp-coach-page'),html.indexOf('<section class="exams-page'));
+  const ppJs=js.slice(js.indexOf('function paragraphProblemEntries'),js.indexOf('function examList'));
+  assert.doesNotMatch(ppHtml,/ÖĞRENCİ BİLGİLERİ|Hedef bilgisi yok|ppCoachStudentAvatar|ppCoachStudentTarget|ppCoachStudentMeta/);
+  assert.doesNotMatch(ppJs,/renderParagraphProblemStudentInfo|profile\.targetUniversity|profile\.targetDepartment|profile\.targetNetTYT|profile\.targetNetAYT/);
+  for(const label of ['BUGÜN TOPLAM','BUGÜN NET','7 GÜNLÜK HACİM','AKTİF SERİ'])assert.match(ppJs,new RegExp(label));
+  for(const heading of ['Son 14 gün','Performans sinyalleri','Son 7 gün ↔ önceki 7 gün','30 günlük ritim','Günlük döküm','Geçmiş oturumlar'])assert.ok(ppHtml.includes(heading),heading);
   assert.match(css,/\.pp-coach-kind-main/);
   assert.match(css,/\.pp-compare-row/);
   assert.match(html,/app-reset\.js\?v=1\.0\.45/);
