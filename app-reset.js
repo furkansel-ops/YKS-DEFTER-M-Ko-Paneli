@@ -479,11 +479,38 @@ function hydrateParagraphProblemControls(){
   const select=$("ppCoachStudentSelect");if(!select)return;
   const current=select.value||"all";
   select.innerHTML='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
-  select.value=current==="all"||coachReportRows.some(row=>row.studentUid===current)?current:"all";
+  select.value=coachReportRows.length===1&&current==="all"?coachReportRows[0].studentUid:(current==="all"||coachReportRows.some(row=>row.studentUid===current)?current:"all");
 }
 function setParagraphProblemState(name){
   ["ppCoachLoading","ppCoachEmpty","ppCoachContent"].forEach(id=>$(id)?.classList.add("hidden"));
   $(name)?.classList.remove("hidden");
+}
+function renderParagraphProblemStudentInfo(scope){
+  const box=$("ppCoachStudentInfo");if(!box)return;
+  if(scope==="all"){
+    box.classList.toggle("hidden",!coachReportRows.length);
+    if(!coachReportRows.length)return;
+    $("ppCoachStudentAvatar").textContent=String(coachReportRows.length);
+    $("ppCoachStudentName").textContent=coachReportRows.length+" bağlı öğrenci";
+    $("ppCoachStudentTarget").textContent="Toplu Paragraf + Problem görünümü";
+    $("ppCoachStudentMeta").innerHTML='<span><b>'+coachReportRows.filter(row=>row.share).length+'</b> güncel veri</span><span><b>'+coachReportRows.reduce((n,row)=>n+paragraphProblemEntries(row).length,0)+'</b> toplam kayıt</span>';
+    $("ppCoachStudentSync").textContent="Öğrenci seçerek kişisel hedefleri gör";
+    return;
+  }
+  const row=coachReportRows.find(item=>item.studentUid===scope);if(!row){box.classList.add("hidden");return}
+  const profile=row.share?.profile||{},account=row.profile||{},name=studentName(row);
+  const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
+  const track=profile.track||"YKS";
+  box.classList.remove("hidden");
+  $("ppCoachStudentAvatar").textContent=reportInitial(name);
+  $("ppCoachStudentName").textContent=name;
+  $("ppCoachStudentTarget").textContent=[track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
+  const meta=[];
+  if(reportNum(profile.targetNetTYT))meta.push('<span><b>'+escHtml(String(reportNum(profile.targetNetTYT)))+'</b> TYT hedef net</span>');
+  if(reportNum(profile.targetNetAYT))meta.push('<span><b>'+escHtml(String(reportNum(profile.targetNetAYT)))+'</b> AYT hedef net</span>');
+  if(account.email)meta.push('<span><b>E-posta</b> '+escHtml(account.email)+'</span>');
+  $("ppCoachStudentMeta").innerHTML=meta.join("")||'<span>Ek hedef bilgisi girilmemiş.</span>';
+  $("ppCoachStudentSync").textContent=row.share?.updatedAt?"Son veri · "+reportTimestamp(row.share.updatedAt):"Henüz paylaşım alınmadı";
 }
 function paragraphProblemKpi(label,value,note,tone=""){
   return '<article class="pp-coach-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
@@ -493,10 +520,11 @@ function paragraphProblemKindCard(kind,entries){
   return '<article class="pp-coach-kind '+kind+'"><div><span>'+label.toUpperCase()+'</span><b>'+m.total+' soru</b><small>'+m.sessions+' oturum</small></div><dl><div><dt>Net</dt><dd>'+escHtml(paragraphProblemFmtNet(m.net))+'</dd></div><div><dt>Doğruluk</dt><dd>'+escHtml(paragraphProblemFmtPct(m.accuracy))+'</dd></div><div><dt>Aktif gün</dt><dd>'+m.activeDays+'</dd></div></dl></article>';
 }
 function renderParagraphProblem(scope="all"){
-  if(!coachReportRows.length){if($("ppCoachEmptyText"))$("ppCoachEmptyText").textContent="Henüz bağlı öğrenci yok.";setParagraphProblemState("ppCoachEmpty");return}
+  if(!coachReportRows.length){renderParagraphProblemStudentInfo("all");if($("ppCoachEmptyText"))$("ppCoachEmptyText").textContent="Henüz bağlı öğrenci yok.";setParagraphProblemState("ppCoachEmpty");return}
   if(scope!=="all"&&!coachReportRows.some(row=>row.studentUid===scope))scope="all";
   const rows=paragraphProblemRows(scope),entries=paragraphProblemScopedEntries(scope),m=paragraphProblemMetrics(entries),range=paragraphProblemRange();
   const name=scope==="all"?"Tüm öğrenciler":studentName(rows[0]);
+  renderParagraphProblemStudentInfo(scope);
   if($("ppCoachScopeTitle"))$("ppCoachScopeTitle").textContent=name;
   if($("ppCoachScopeMeta"))$("ppCoachScopeMeta").textContent="Son "+range+" günlük paragraf + problem özeti";
   if(!entries.length){
