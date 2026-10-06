@@ -758,35 +758,57 @@ function topicItems(row){
   const items=row?.share?.topics?.items;
   return Array.isArray(items)?items:[];
 }
-function topicToday(){return new Date().toISOString().slice(0,10)}
+function topicToday(){const d=new Date(),off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10)}
+function topicDaysUntil(deadline){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(deadline||"")))return null;
+  const base=new Date(topicToday()+"T12:00:00"),target=new Date(String(deadline)+"T12:00:00");
+  return Math.round((target-base)/86400000);
+}
 function topicState(item){
   const st=reportNum(item?.st),deadline=String(item?.deadline||"");
   if(st>=3)return"completed";
-  if(deadline&&deadline<topicToday())return"overdue";
+  if(deadline&&topicDaysUntil(deadline)<0)return"overdue";
   if(st>0)return"active";
   return"not-started";
+}
+function topicDueSoon(item){
+  if(topicState(item)==="completed")return false;
+  const days=topicDaysUntil(item?.deadline);
+  return days!==null&&days>=0&&days<=7;
 }
 function topicStateText(item){
   const state=topicState(item);
   return state==="completed"?"Tamamlandı":state==="overdue"?"Gecikti":state==="active"?"Devam ediyor":"Başlanmadı";
 }
+function topicExam(item){
+  const exam=String(item?.exam||"").trim().toUpperCase();
+  if(exam==="TYT"||exam==="AYT")return exam;
+  const key=String(item?.key||"").toUpperCase();
+  return key.startsWith("AYT|")?"AYT":key.startsWith("TYT|")?"TYT":"YKS";
+}
+function topicSearchText(item){
+  return [item?.topic,item?.subject,item?.exam,item?.key].filter(Boolean).join(" ").toLocaleLowerCase("tr-TR");
+}
 function topicFiltered(items){
-  const subject=$("topicSubjectSelect")?.value||"all";
-  const status=$("topicStatusSelect")?.value||"all";
-  return items.filter(item=>(subject==="all"||String(item.subject||"Ders")===subject)&&(status==="all"||topicState(item)===status));
+  const subject=$("topicSubjectSelect")?.value||"all",status=$("topicStatusSelect")?.value||"all",exam=$("topicExamSelect")?.value||"all",query=String($("topicSearchInput")?.value||"").trim().toLocaleLowerCase("tr-TR");
+  return items.filter(item=>(subject==="all"||String(item.subject||"Ders")===subject)&&(exam==="all"||topicExam(item)===exam)&&(status==="all"||(status==="due-soon"?topicDueSoon(item):topicState(item)===status))&&(!query||topicSearchText(item).includes(query)));
 }
 function hydrateTopicControls(){
-  const student=$("topicStudentSelect"),subject=$("topicSubjectSelect");
+  const student=$("topicStudentSelect"),subject=$("topicSubjectSelect"),exam=$("topicExamSelect");
   if(student){
     const current=student.value||"all";
     student.innerHTML='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
     student.value=coachReportRows.some(x=>x.studentUid===current)?current:"all";
   }
   if(subject){
-    const current=subject.value||"all";
-    const subjects=[...new Set(coachReportRows.flatMap(row=>topicItems(row).map(x=>String(x.subject||"Ders"))))].sort((a,b)=>a.localeCompare(b,"tr"));
+    const current=subject.value||"all",subjects=[...new Set(coachReportRows.flatMap(row=>topicItems(row).map(x=>String(x.subject||"Ders"))))].sort((a,b)=>a.localeCompare(b,"tr"));
     subject.innerHTML='<option value="all">Tüm dersler</option>'+subjects.map(name=>'<option value="'+escHtml(name)+'">'+escHtml(name)+'</option>').join("");
     subject.value=subjects.includes(current)?current:"all";
+  }
+  if(exam){
+    const current=exam.value||"all",exams=[...new Set(coachReportRows.flatMap(row=>topicItems(row).map(topicExam)).filter(x=>x&&x!=="YKS"))].sort();
+    exam.innerHTML='<option value="all">TYT + AYT</option>'+exams.map(name=>'<option value="'+escHtml(name)+'">'+escHtml(name)+'</option>').join("");
+    exam.value=exams.includes(current)?current:"all";
   }
 }
 function setTopicState(name){
@@ -797,10 +819,66 @@ function topicKpi(label,value,note,tone=""){
   return '<article class="topic-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
 }
 function topicCounts(items){
-  const counts={total:items.length,completed:0,active:0,overdue:0,notStarted:0};
-  items.forEach(item=>{const s=topicState(item);if(s==="completed")counts.completed++;else if(s==="active")counts.active++;else if(s==="overdue")counts.overdue++;else counts.notStarted++});
+  const counts={total:items.length,completed:0,active:0,overdue:0,notStarted:0,dueSoon:0};
+  items.forEach(item=>{const s=topicState(item);if(s==="completed")counts.completed++;else if(s==="active")counts.active++;else if(s==="overdue")counts.overdue++;else counts.notStarted++;if(topicDueSoon(item))counts.dueSoon++});
   counts.ratio=counts.total?Math.round(counts.completed/counts.total*100):0;
   return counts;
+}
+function topicSubjectStats(items){
+  const map=new Map();
+  items.forEach(item=>{const key=String(item?.subject||"Ders"),row=map.get(key)||{subject:key,total:0,completed:0,active:0,overdue:0,dueSoon:0,notStarted:0};row.total++;const state=topicState(item);if(state==="completed")row.completed++;else if(state==="active")row.active++;else if(state==="overdue")row.overdue++;else row.notStarted++;if(topicDueSoon(item))row.dueSoon++;map.set(key,row)});
+  return[...map.values()].map(row=>({...row,ratio:row.total?Math.round(row.completed/row.total*100):0})).sort((a,b)=>b.overdue-a.overdue||b.dueSoon-a.dueSoon||a.ratio-b.ratio||b.total-a.total);
+}
+function topicErrorWeight(row,item){
+  const targetSubject=String(item?.subject||"").toLocaleLowerCase("tr-TR"),targetTopic=String(item?.topic||"").toLocaleLowerCase("tr-TR");
+  return (Array.isArray(row?.share?.errorJournal)?row.share.errorJournal:[]).reduce((sum,error)=>{
+    const subject=String(error?.subject||"").toLocaleLowerCase("tr-TR"),topic=String(error?.topic||"").toLocaleLowerCase("tr-TR");
+    const sameSubject=targetSubject&&subject===targetSubject,sameTopic=targetTopic&&topic&&(topic.includes(targetTopic)||targetTopic.includes(topic));
+    return sum+(sameSubject&&sameTopic?Math.max(1,reportNum(error?.n)):0);
+  },0);
+}
+function topicPriorityScore(row,item){
+  if(topicState(item)==="completed")return 0;
+  const days=topicDaysUntil(item?.deadline),errors=topicErrorWeight(row,item),state=topicState(item);
+  let score=0;
+  if(state==="overdue")score+=65+Math.min(20,Math.abs(days||0));
+  else if(days!==null&&days<=3)score+=45;
+  else if(days!==null&&days<=7)score+=28;
+  if(state==="active")score+=8;
+  score+=Math.min(25,errors*5);
+  return Math.min(100,score);
+}
+function topicPriorityMeta(score){
+  if(score>=70)return{label:"Kritik",tone:"danger"};
+  if(score>=45)return{label:"Yüksek",tone:"warn"};
+  if(score>=20)return{label:"Takip",tone:"watch"};
+  return{label:"Normal",tone:"good"};
+}
+function topicStudentRisk(row,items=topicItems(row)){
+  const counts=topicCounts(items),priorities=items.map(item=>topicPriorityScore(row,item)),maxPriority=Math.max(0,...priorities);
+  let score=maxPriority+Math.min(20,counts.overdue*4)+Math.min(10,counts.dueSoon*2);
+  if(counts.total&&counts.ratio<35)score+=10;
+  return Math.min(100,score);
+}
+function topicDeadlineText(item){
+  const days=topicDaysUntil(item?.deadline);
+  if(days===null)return"";
+  if(days<0)return Math.abs(days)+" gün gecikti";
+  if(days===0)return"Bugün";
+  if(days===1)return"Yarın";
+  return days+" gün kaldı";
+}
+function topicStudentSignals(row){
+  const items=topicItems(row),counts=topicCounts(items),subjects=topicSubjectStats(items),signals=[];
+  if(counts.overdue)signals.push({tone:"danger",title:"Geciken hedef",text:counts.overdue+" konu hedef tarihini geçti."});
+  else signals.push({tone:"good",title:"Hedef takvimi",text:"Geciken konu görünmüyor."});
+  if(counts.dueSoon)signals.push({tone:"warn",title:"Yaklaşan hedef",text:counts.dueSoon+" konu önümüzdeki 7 gün içinde hedeflenmiş."});
+  const weakest=subjects.filter(x=>x.total>=2).sort((a,b)=>a.ratio-b.ratio||b.overdue-a.overdue)[0];
+  if(weakest)signals.push({tone:weakest.ratio<50?"warn":"good",title:"Ders odağı",text:weakest.subject+" · %"+weakest.ratio+" tamamlandı, "+weakest.overdue+" geciken."});
+  const errorLinked=items.map(item=>({item,n:topicErrorWeight(row,item)})).filter(x=>x.n>0&&topicState(x.item)!=="completed").sort((a,b)=>b.n-a.n)[0];
+  if(errorLinked)signals.push({tone:"danger",title:"Hata defteri bağlantısı",text:errorLinked.item.topic+" konusunda "+Math.round(errorLinked.n)+" yanlış kaydı var."});
+  if(!signals.length)signals.push({tone:"good",title:"Genel durum",text:"Konu takibi düzenli görünüyor."});
+  return signals.slice(0,4);
 }
 function renderTopicAnalysis(scope){
   const allTopics=coachReportRows.flatMap(row=>topicItems(row));
@@ -811,59 +889,73 @@ function renderTopicAnalysis(scope){
   renderTopicStudent(row);
 }
 function renderTopicOverview(){
-  const rows=coachReportRows;
-  const all=topicFiltered(rows.flatMap(row=>topicItems(row)));
+  const rows=coachReportRows,all=topicFiltered(rows.flatMap(row=>topicItems(row)));
   if(!all.length){setTopicState("topicEmpty");return}
-  const counts=topicCounts(all);
+  const counts=topicCounts(all),subjectStats=topicSubjectStats(all);
   $("topicScopeTitle").textContent="Tüm öğrenciler";
-  $("topicScopeMeta").textContent="Genel konu ilerleme özeti";
+  $("topicScopeMeta").textContent="Genel konu ilerleme, hedef ve koç önceliği";
   $("topicOverviewKpis").innerHTML=
-    topicKpi("TOPLAM KONU",String(counts.total),"Takip edilen")+
-    topicKpi("TAMAMLANAN",String(counts.completed),counts.ratio+"% tamamlandı")+
+    topicKpi("TOPLAM KONU",String(counts.total),"Filtrelenen konular")+
+    topicKpi("TAMAMLANAN",String(counts.completed),counts.ratio+"% tamamlandı","good")+
     topicKpi("DEVAM EDEN",String(counts.active),"Aktif çalışma")+
+    topicKpi("YAKLAŞAN",String(counts.dueSoon),"7 gün içinde",counts.dueSoon?"watch":"")+
     topicKpi("GECİKEN",String(counts.overdue),"Koç takibi",counts.overdue?"warn":"");
   $("topicStudentList").innerHTML=rows.map(row=>{
-    const items=topicFiltered(topicItems(row)),c=topicCounts(items),name=studentName(row);
-    if(!items.length)return"";
-    return '<button type="button" class="topic-student-row" data-topic-student="'+escHtml(row.studentUid)+'"><span class="topic-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+c.completed+'</strong><strong>'+c.active+'</strong><strong class="'+(c.overdue?"danger":"")+'">'+c.overdue+'</strong><span class="topic-progress-cell"><i><b style="width:'+c.ratio+'%"></b></i><em>'+c.ratio+'%</em></span></button>';
+    const items=topicFiltered(topicItems(row));if(!items.length)return"";
+    const c=topicCounts(items),name=studentName(row),risk=topicPriorityMeta(topicStudentRisk(row,items));
+    return '<button type="button" class="topic-student-row" data-topic-student="'+escHtml(row.studentUid)+'"><span class="topic-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+c.completed+'</strong><strong>'+c.active+'</strong><strong class="'+(c.overdue?"danger":"")+'">'+c.overdue+'</strong><strong class="'+(c.dueSoon?"watch":"")+'">'+c.dueSoon+'</strong><span class="topic-progress-cell"><i><b style="width:'+c.ratio+'%"></b></i><em>'+c.ratio+'%</em></span><em class="topic-risk-inline '+risk.tone+'">'+escHtml(risk.label)+'</em></button>';
   }).join("")||'<div class="topic-mini-empty">Seçili filtrelerde öğrenci konusu yok.</div>';
-  const subjectMap=new Map();
-  all.forEach(item=>{const key=String(item.subject||"Ders"),entry=subjectMap.get(key)||{total:0,completed:0};entry.total++;if(topicState(item)==="completed")entry.completed++;subjectMap.set(key,entry)});
-  $("topicSubjectOverview").innerHTML=[...subjectMap.entries()].sort((a,b)=>b[1].total-a[1].total).slice(0,8).map(([name,v])=>{const ratio=v.total?Math.round(v.completed/v.total*100):0;return '<div><span>'+escHtml(name)+'</span><i><b style="width:'+ratio+'%"></b></i><strong>'+ratio+'%</strong></div>'}).join("")||'<div class="topic-mini-empty">Ders verisi yok.</div>';
-  const overdue=rows.flatMap(row=>topicItems(row).filter(x=>topicState(x)==="overdue").map(item=>({row,item}))).slice(0,6);
-  $("topicOverdueOverview").innerHTML=overdue.length?overdue.map(({row,item})=>'<button type="button" data-topic-student="'+escHtml(row.studentUid)+'"><div><b>'+escHtml(item.topic||"Konu")+'</b><span>'+escHtml(studentName(row))+' · '+escHtml(item.subject||"Ders")+'</span></div><strong>'+escHtml(item.deadline||"—")+'</strong></button>').join(""):'<div class="topic-mini-empty">Geciken konu yok.</div>';
+
+  const attention=rows.flatMap(row=>topicItems(row).map(item=>({row,item,score:topicPriorityScore(row,item)}))).filter(x=>x.score>=20).sort((a,b)=>b.score-a.score||String(a.item?.deadline||"9999").localeCompare(String(b.item?.deadline||"9999"))).slice(0,8);
+  $("topicAttentionOverview").innerHTML=attention.length?attention.map(({row,item,score})=>{const meta=topicPriorityMeta(score),errors=topicErrorWeight(row,item);return '<button type="button" data-topic-student="'+escHtml(row.studentUid)+'"><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(studentName(row))+' · '+escHtml(item.subject||"Ders")+(errors?' · '+Math.round(errors)+' yanlış':'')+'</small></span><em class="'+meta.tone+'">'+escHtml(meta.label)+'</em></button>';}).join(""):'<div class="topic-mini-empty">Öncelikli konu görünmüyor.</div>';
+
+  $("topicSubjectOverview").innerHTML=subjectStats.slice(0,9).map(v=>'<div class="'+(v.overdue?"danger":"")+'"><div><span>'+escHtml(v.subject)+'</span><small>'+v.completed+'/'+v.total+' · '+v.overdue+' geciken</small></div><i><b style="width:'+v.ratio+'%"></b></i><strong>'+v.ratio+'%</strong></div>').join("")||'<div class="topic-mini-empty">Ders verisi yok.</div>';
+
+  const deadlines=rows.flatMap(row=>topicItems(row).filter(item=>topicDueSoon(item)).map(item=>({row,item,days:topicDaysUntil(item.deadline)}))).sort((a,b)=>a.days-b.days).slice(0,8);
+  $("topicDeadlineOverview").innerHTML=deadlines.length?deadlines.map(({row,item})=>'<button type="button" data-topic-student="'+escHtml(row.studentUid)+'"><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(studentName(row))+' · '+escHtml(item.subject||"Ders")+'</small></span><strong>'+escHtml(topicDeadlineText(item))+'</strong></button>').join(""):'<div class="topic-mini-empty">7 gün içinde hedeflenen konu yok.</div>';
+
   document.querySelectorAll("[data-topic-student]").forEach(btn=>btn.addEventListener("click",()=>{if($("topicStudentSelect"))$("topicStudentSelect").value=btn.dataset.topicStudent;renderTopicAnalysis(btn.dataset.topicStudent)}));
   setTopicState("topicOverview");
 }
 function renderTopicStudent(row){
-  const base=topicItems(row),items=topicFiltered(base),counts=topicCounts(base),name=studentName(row),profile=row.share?.profile||{};
+  const base=topicItems(row),items=topicFiltered(base),counts=topicCounts(base),name=studentName(row),profile=row.share?.profile||{},risk=topicPriorityMeta(topicStudentRisk(row,base)),subjects=topicSubjectStats(base);
   if(!base.length){setTopicState("topicEmpty");return}
   $("topicScopeTitle").textContent=name;
-  $("topicScopeMeta").textContent="Öğrenci konu detay raporu";
+  $("topicScopeMeta").textContent="Öğrenci konu detay ve öncelik raporu";
   $("topicStudentAvatar").textContent=reportInitial(name);
   $("topicStudentName").textContent=name;
   const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
   $("topicStudentTarget").textContent=[profile.track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
   $("topicStudentProgress").textContent=counts.ratio+"% tamamlandı";
+  $("topicStudentRisk").textContent=risk.label;$("topicStudentRisk").className="topic-risk-pill "+risk.tone;
   $("topicStudentKpis").innerHTML=
     topicKpi("TOPLAM KONU",String(counts.total),"Takip edilen")+
-    topicKpi("TAMAMLANAN",String(counts.completed),counts.ratio+"% ilerleme")+
+    topicKpi("TAMAMLANAN",String(counts.completed),counts.ratio+"% ilerleme","good")+
     topicKpi("DEVAM EDEN",String(counts.active),"Aktif çalışma")+
+    topicKpi("YAKLAŞAN",String(counts.dueSoon),"7 gün içinde",counts.dueSoon?"watch":"")+
     topicKpi("GECİKEN",String(counts.overdue),"Takip bekleyen",counts.overdue?"warn":"");
-  $("topicDetailList").innerHTML=items.length?items.sort((a,b)=>String(a.subject||"").localeCompare(String(b.subject||""),"tr")).map(item=>{
-    const state=topicState(item);
-    return '<div class="topic-detail-row"><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(item.key||"")+'</small></span><strong>'+escHtml(item.subject||"Ders")+'</strong><em>'+escHtml(item.exam||"YKS")+'</em><small>'+escHtml(item.deadline||"—")+'</small><i class="'+state+'">'+escHtml(topicStateText(item))+'</i></div>';
+
+  $("topicStudentSignals").innerHTML=topicStudentSignals(row).map(signal=>'<div class="topic-signal '+signal.tone+'"><i></i><span><b>'+escHtml(signal.title)+'</b><small>'+escHtml(signal.text)+'</small></span></div>').join("");
+
+  $("topicWeakSubjects").innerHTML=subjects.slice(0,6).map(v=>{const score=Math.min(100,v.overdue*25+v.dueSoon*10+(100-v.ratio)*.35),meta=topicPriorityMeta(score);return '<div><span><b>'+escHtml(v.subject)+'</b><small>'+v.completed+'/'+v.total+' tamamlandı · '+v.overdue+' geciken</small></span><em class="'+meta.tone+'">'+v.ratio+'%</em></div>';}).join("")||'<div class="topic-mini-empty">Ders verisi yok.</div>';
+
+  const sortedItems=[...items].sort((a,b)=>topicPriorityScore(row,b)-topicPriorityScore(row,a)||String(a.deadline||"9999").localeCompare(String(b.deadline||"9999"))||String(a.subject||"").localeCompare(String(b.subject||""),"tr"));
+  $("topicDetailList").innerHTML=sortedItems.length?sortedItems.map(item=>{
+    const state=topicState(item),score=topicPriorityScore(row,item),meta=topicPriorityMeta(score),deadline=topicDeadlineText(item),errors=topicErrorWeight(row,item);
+    return '<div class="topic-detail-row"><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+(errors?errors+' yanlış bağlantısı':escHtml(item.key||""))+'</small></span><strong>'+escHtml(item.subject||"Ders")+'</strong><em>'+escHtml(topicExam(item))+'</em><small class="'+(state==="overdue"?"danger":topicDueSoon(item)?"watch":"")+'">'+escHtml(item.deadline||"—")+(deadline?' · '+escHtml(deadline):'')+'</small><i class="'+state+'">'+escHtml(topicStateText(item))+'</i><em class="topic-priority-badge '+meta.tone+'">'+escHtml(meta.label)+'</em></div>';
   }).join(""):'<div class="topic-mini-empty">Seçili filtrelerde konu yok.</div>';
-  const subjectMap=new Map();
-  base.forEach(item=>{const key=String(item.subject||"Ders"),entry=subjectMap.get(key)||{total:0,completed:0};entry.total++;if(topicState(item)==="completed")entry.completed++;subjectMap.set(key,entry)});
-  $("topicStudentSubjects").innerHTML=[...subjectMap.entries()].sort((a,b)=>b[1].total-a[1].total).map(([subject,v])=>{const ratio=v.total?Math.round(v.completed/v.total*100):0;return '<div><div><span>'+escHtml(subject)+'</span><strong>'+ratio+'%</strong></div><i><b style="width:'+ratio+'%"></b></i><small>'+v.completed+' / '+v.total+' konu</small></div>'}).join("");
-  const priority=base.filter(item=>topicState(item)==="overdue").sort((a,b)=>String(a.deadline||"").localeCompare(String(b.deadline||""))).slice(0,7);
-  $("topicPriorityList").innerHTML=priority.length?priority.map(item=>'<div><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(item.subject||"Ders")+'</small></span><strong>'+escHtml(item.deadline||"—")+'</strong></div>').join(""):'<div class="topic-mini-empty">Geciken hedef yok.</div>';
+
+  $("topicStudentSubjects").innerHTML=subjects.map(v=>'<div class="'+(v.overdue?"danger":"")+'"><div><span>'+escHtml(v.subject)+'</span><strong>'+v.ratio+'%</strong></div><i><b style="width:'+v.ratio+'%"></b></i><small>'+v.completed+' / '+v.total+' konu · '+v.active+' devam · '+v.overdue+' geciken</small></div>').join("");
+
+  const priority=base.filter(item=>topicState(item)==="overdue"||topicDueSoon(item)).sort((a,b)=>topicPriorityScore(row,b)-topicPriorityScore(row,a)).slice(0,9);
+  $("topicPriorityList").innerHTML=priority.length?priority.map(item=>{const state=topicState(item),score=topicPriorityScore(row,item),meta=topicPriorityMeta(score);return '<div class="'+(state==="overdue"?"danger":"watch")+'"><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(item.subject||"Ders")+' · '+escHtml(topicDeadlineText(item))+'</small></span><strong class="'+meta.tone+'">'+escHtml(meta.label)+'</strong></div>';}).join(""):'<div class="topic-mini-empty">Geciken veya yaklaşan hedef yok.</div>';
   setTopicState("topicStudentDetail");
 }
 $("topicStudentSelect")?.addEventListener("change",event=>renderTopicAnalysis(event.currentTarget.value));
 $("topicSubjectSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
+$("topicExamSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
 $("topicStatusSelect")?.addEventListener("change",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
+$("topicSearchInput")?.addEventListener("input",()=>renderTopicAnalysis($("topicStudentSelect")?.value||"all"));
 $("topicRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setTopicState("topicLoading");void loadCoachReports(user.uid)}});
 
 
