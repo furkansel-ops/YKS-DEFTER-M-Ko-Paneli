@@ -134,7 +134,7 @@ function renderCoachRealtimeViews(){
   try{renderStudentsPage()}catch(error){console.error("Canlı öğrenci görünümü",error)}
   try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
   try{renderReport($("reportStudentSelect")?.value||"all")}catch(error){console.error("Canlı rapor görünümü",error)}
-  try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"all")}catch(error){console.error("Canlı paragraf/problem görünümü",error)}
+  try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"")}catch(error){console.error("Canlı paragraf/problem görünümü",error)}
 }
 function scheduleCoachRealtimeRender(){clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=setTimeout(()=>{coachRealtimeRenderTimer=null;renderCoachRealtimeViews()},60)}
 function startCoachShareRealtime(){
@@ -331,7 +331,7 @@ async function loadCoachReports(coachUid){
       select.value="all";
     }
     try{renderReport("all")}catch(error){console.error("Takip & Rapor render",error);setReportState("reportError")}
-    try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"all")}catch(error){console.error("Paragraf + Problem render",error);setParagraphProblemState("ppCoachEmpty")}
+    try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"")}catch(error){console.error("Paragraf + Problem render",error);setParagraphProblemState("ppCoachEmpty")}
     try{hydrateExamStudentSelect();renderExamAnalysis("all")}catch(error){console.error("Deneme Analizi render",error);setExamState("examEmpty")}
     try{hydrateTopicControls();renderTopicAnalysis("all")}catch(error){console.error("Konular render",error);setTopicState("topicEmpty")}
     try{
@@ -459,106 +459,94 @@ function paragraphProblemDateOffset(offset){
 }
 function paragraphProblemMetrics(entries){
   const totals=entries.reduce((sum,item)=>{sum.correct+=item.correct;sum.wrong+=item.wrong;sum.blank+=item.blank;return sum},{correct:0,wrong:0,blank:0});
-  const total=totals.correct+totals.wrong+totals.blank,net=totals.correct-totals.wrong/4,accuracy=total?100*totals.correct/total:0;
-  return{...totals,total,net,accuracy,sessions:entries.length,activeDays:new Set(entries.map(item=>item.date)).size};
+  const total=totals.correct+totals.wrong+totals.blank,net=totals.correct-totals.wrong/4,accuracy=total?100*totals.correct/total:0,wrongRate=total?100*totals.wrong/total:0;
+  return{...totals,total,net,accuracy,wrongRate,sessions:entries.length,activeDays:new Set(entries.filter(item=>item.correct+item.wrong+item.blank>0).map(item=>item.date)).size};
 }
-function paragraphProblemFmtNet(value){
-  const n=reportNum(value);return Number.isInteger(n)?String(n):n.toFixed(2).replace(".",",");
+function paragraphProblemEntriesForDays(entries,days,endOffset=0){
+  const keys=new Set(Array.from({length:days},(_,i)=>paragraphProblemDateOffset(endOffset-(days-1-i))));
+  return entries.filter(item=>keys.has(item.date));
 }
-function paragraphProblemFmtPct(value){return reportNum(value).toFixed(0).replace(".",",")+"%"}
-function paragraphProblemRange(){const value=Number($("ppCoachRangeSelect")?.value||7);return[7,30,90].includes(value)?value:7}
-function paragraphProblemRows(scope){
-  if(scope==="all")return coachReportRows;
-  const row=coachReportRows.find(item=>item.studentUid===scope);return row?[row]:[];
+function paragraphProblemActiveStreak(entries){
+  const active=new Set(entries.filter(item=>item.correct+item.wrong+item.blank>0).map(item=>item.date));
+  let start=0;if(!active.has(paragraphProblemDateOffset(0))&&active.has(paragraphProblemDateOffset(-1)))start=-1;
+  if(!active.has(paragraphProblemDateOffset(start)))return 0;
+  let streak=0;while(streak<3650&&active.has(paragraphProblemDateOffset(start-streak)))streak++;return streak;
 }
-function paragraphProblemScopedEntries(scope){
-  const days=paragraphProblemRange(),cutoff=paragraphProblemDateOffset(-(days-1));
-  return paragraphProblemRows(scope).flatMap(row=>paragraphProblemEntries(row).map(item=>({...item,studentUid:row.studentUid,student:studentName(row)}))).filter(item=>item.date>=cutoff).sort((a,b)=>String(b.date).localeCompare(String(a.date))||b.createdAt-a.createdAt);
+function paragraphProblemFmtNet(value){const n=reportNum(value);return Number.isInteger(n)?String(n):n.toFixed(2).replace(".",",")}
+function paragraphProblemFmtPct(value,digits=0){return reportNum(value).toFixed(digits).replace(".",",")+"%"}
+function paragraphProblemSigned(value,suffix=""){const n=reportNum(value);if(Math.abs(n)<.005)return"0"+suffix;return(n>0?"+":"")+n.toFixed(1).replace(".",",")+suffix}
+function paragraphProblemDateLabel(date){
+  return new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"2-digit",month:"short"}).format(new Date(date+"T12:00:00"));
+}
+function paragraphProblemBestDay(entries){
+  const grouped=new Map();
+  entries.forEach(item=>{const list=grouped.get(item.date)||[];list.push(item);grouped.set(item.date,list)});
+  return[...grouped.entries()].map(([date,list])=>({date,m:paragraphProblemMetrics(list)})).sort((a,b)=>b.m.net-a.m.net||b.m.total-a.m.total)[0]||null;
 }
 function hydrateParagraphProblemControls(){
   const select=$("ppCoachStudentSelect");if(!select)return;
-  const current=select.value||"all";
-  select.innerHTML='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
-  select.value=coachReportRows.length===1&&current==="all"?coachReportRows[0].studentUid:(current==="all"||coachReportRows.some(row=>row.studentUid===current)?current:"all");
+  const current=select.value;
+  if(!coachReportRows.length){select.innerHTML='<option value="">Öğrenci yok</option>';select.value="";return}
+  select.innerHTML=coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
+  select.value=coachReportRows.some(row=>row.studentUid===current)?current:coachReportRows[0].studentUid;
 }
 function setParagraphProblemState(name){
   ["ppCoachLoading","ppCoachEmpty","ppCoachContent"].forEach(id=>$(id)?.classList.add("hidden"));
   $(name)?.classList.remove("hidden");
 }
-function renderParagraphProblemStudentInfo(scope){
-  const box=$("ppCoachStudentInfo");if(!box)return;
-  if(scope==="all"){
-    box.classList.toggle("hidden",!coachReportRows.length);
-    if(!coachReportRows.length)return;
-    $("ppCoachStudentAvatar").textContent=String(coachReportRows.length);
-    $("ppCoachStudentName").textContent=coachReportRows.length+" bağlı öğrenci";
-    $("ppCoachStudentTarget").textContent="Toplu Paragraf + Problem görünümü";
-    $("ppCoachStudentMeta").innerHTML='<span><b>'+coachReportRows.filter(row=>row.share).length+'</b> güncel veri</span><span><b>'+coachReportRows.reduce((n,row)=>n+paragraphProblemEntries(row).length,0)+'</b> toplam kayıt</span>';
-    $("ppCoachStudentSync").textContent="Öğrenci seçerek kişisel hedefleri gör";
-    return;
-  }
-  const row=coachReportRows.find(item=>item.studentUid===scope);if(!row){box.classList.add("hidden");return}
-  const profile=row.share?.profile||{},account=row.profile||{},name=studentName(row);
-  const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
-  const track=profile.track||"YKS";
-  box.classList.remove("hidden");
-  $("ppCoachStudentAvatar").textContent=reportInitial(name);
-  $("ppCoachStudentName").textContent=name;
-  $("ppCoachStudentTarget").textContent=[track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
-  const meta=[];
-  if(reportNum(profile.targetNetTYT))meta.push('<span><b>'+escHtml(String(reportNum(profile.targetNetTYT)))+'</b> TYT hedef net</span>');
-  if(reportNum(profile.targetNetAYT))meta.push('<span><b>'+escHtml(String(reportNum(profile.targetNetAYT)))+'</b> AYT hedef net</span>');
-  if(account.email)meta.push('<span><b>E-posta</b> '+escHtml(account.email)+'</span>');
-  $("ppCoachStudentMeta").innerHTML=meta.join("")||'<span>Ek hedef bilgisi girilmemiş.</span>';
-  $("ppCoachStudentSync").textContent=row.share?.updatedAt?"Son veri · "+reportTimestamp(row.share.updatedAt):"Henüz paylaşım alınmadı";
-}
 function paragraphProblemKpi(label,value,note,tone=""){
   return '<article class="pp-coach-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
 }
 function paragraphProblemKindCard(kind,entries){
-  const items=entries.filter(item=>item.kind===kind),m=paragraphProblemMetrics(items),label=kind==="paragraph"?"Paragraf":"Problem";
-  return '<article class="pp-coach-kind '+kind+'"><div><span>'+label.toUpperCase()+'</span><b>'+m.total+' soru</b><small>'+m.sessions+' oturum</small></div><dl><div><dt>Net</dt><dd>'+escHtml(paragraphProblemFmtNet(m.net))+'</dd></div><div><dt>Doğruluk</dt><dd>'+escHtml(paragraphProblemFmtPct(m.accuracy))+'</dd></div><div><dt>Aktif gün</dt><dd>'+m.activeDays+'</dd></div></dl></article>';
+  const items=entries.filter(item=>item.kind===kind),today=paragraphProblemMetrics(paragraphProblemEntriesForDays(items,1)),last7=paragraphProblemMetrics(paragraphProblemEntriesForDays(items,7)),prev7=paragraphProblemMetrics(paragraphProblemEntriesForDays(items,7,-7)),last30=paragraphProblemMetrics(paragraphProblemEntriesForDays(items,30)),label=kind==="paragraph"?"Paragraf":"Problem",delta=prev7.total?last7.accuracy-prev7.accuracy:null;
+  return '<article class="pp-coach-kind '+kind+'"><div class="pp-coach-kind-head"><div><span>ÇALIŞMA ALANI</span><b>'+label+'</b></div><em>'+(last7.total?(last7.accuracy>=70?"İyi gidiyor":"Dikkat"):"Veri bekleniyor")+'</em></div><div class="pp-coach-kind-main"><div><span>Bugün</span><strong>'+today.total+'</strong><small>soru · '+paragraphProblemFmtNet(today.net)+' net</small></div><div><span>7 gün</span><strong>'+last7.total+'</strong><small>'+paragraphProblemFmtPct(last7.accuracy)+' doğruluk</small></div><div><span>30 gün</span><strong>'+last30.total+'</strong><small>'+paragraphProblemFmtNet(last30.net)+' net</small></div></div><div class="pp-coach-kind-foot"><div><span>7 günlük net</span><b>'+paragraphProblemFmtNet(last7.net)+'</b></div><div><span>Yanlış oranı</span><b>'+paragraphProblemFmtPct(last7.wrongRate)+'</b></div><div><span>Aktif gün</span><b>'+last7.activeDays+'/7</b></div><div><span>Doğruluk farkı</span><b>'+(delta===null?"—":paragraphProblemSigned(delta," puan"))+'</b></div></div></article>';
 }
-function renderParagraphProblem(scope="all"){
-  if(!coachReportRows.length){renderParagraphProblemStudentInfo("all");if($("ppCoachEmptyText"))$("ppCoachEmptyText").textContent="Henüz bağlı öğrenci yok.";setParagraphProblemState("ppCoachEmpty");return}
-  if(scope!=="all"&&!coachReportRows.some(row=>row.studentUid===scope))scope="all";
-  const rows=paragraphProblemRows(scope),entries=paragraphProblemScopedEntries(scope),m=paragraphProblemMetrics(entries),range=paragraphProblemRange();
-  const name=scope==="all"?"Tüm öğrenciler":studentName(rows[0]);
-  renderParagraphProblemStudentInfo(scope);
+function renderParagraphProblem(scope=""){
+  if(!coachReportRows.length){if($("ppCoachEmptyText"))$("ppCoachEmptyText").textContent="Henüz bağlı öğrenci yok.";setParagraphProblemState("ppCoachEmpty");return}
+  let row=coachReportRows.find(item=>item.studentUid===scope);if(!row)row=coachReportRows[0];
+  if($("ppCoachStudentSelect"))$("ppCoachStudentSelect").value=row.studentUid;
+  const entries=paragraphProblemEntries(row).sort((a,b)=>String(b.date).localeCompare(String(a.date))||b.createdAt-a.createdAt),name=studentName(row);
   if($("ppCoachScopeTitle"))$("ppCoachScopeTitle").textContent=name;
-  if($("ppCoachScopeMeta"))$("ppCoachScopeMeta").textContent="Son "+range+" günlük paragraf + problem özeti";
-  if(!entries.length){
-    if($("ppCoachEmptyText"))$("ppCoachEmptyText").textContent=name+" için son "+range+" günde paragraf veya problem kaydı yok.";
-    setParagraphProblemState("ppCoachEmpty");return;
-  }
+  if($("ppCoachScopeMeta"))$("ppCoachScopeMeta").textContent="Paragraf + Problem performans görünümü";
+  $("ppCoachSync").textContent=row.share?.updatedAt?"Son veri · "+reportTimestamp(row.share.updatedAt):"Henüz paylaşım alınmadı";
+  if(!entries.length){if($("ppCoachEmptyText"))$("ppCoachEmptyText").textContent=name+" henüz paragraf veya problem kaydı eklememiş.";setParagraphProblemState("ppCoachEmpty");return}
+
+  const today=paragraphProblemMetrics(paragraphProblemEntriesForDays(entries,1)),last7=paragraphProblemMetrics(paragraphProblemEntriesForDays(entries,7)),prev7=paragraphProblemMetrics(paragraphProblemEntriesForDays(entries,7,-7)),last30Entries=paragraphProblemEntriesForDays(entries,30),last30=paragraphProblemMetrics(last30Entries),streak=paragraphProblemActiveStreak(entries);
   $("ppCoachKpis").innerHTML=
-    paragraphProblemKpi("TOPLAM SORU",String(m.total),"Son "+range+" gün","accent")+
-    paragraphProblemKpi("TOPLAM NET",paragraphProblemFmtNet(m.net),m.sessions+" oturum")+
-    paragraphProblemKpi("DOĞRULUK",paragraphProblemFmtPct(m.accuracy),m.correct+" doğru",m.accuracy>=80?"good":"")+
-    paragraphProblemKpi("AKTİF GÜN",String(m.activeDays),range+" gün içinde");
+    paragraphProblemKpi("BUGÜN TOPLAM",today.total+" soru",today.sessions+" oturum","accent")+
+    paragraphProblemKpi("BUGÜN NET",paragraphProblemFmtNet(today.net)+" net",paragraphProblemFmtPct(today.accuracy)+" doğruluk")+
+    paragraphProblemKpi("7 GÜNLÜK HACİM",last7.total+" soru",last7.activeDays+"/7 aktif gün")+
+    paragraphProblemKpi("AKTİF SERİ",streak+" gün","düzenli kayıtla büyür",streak?"good":"");
   $("ppCoachKinds").innerHTML=paragraphProblemKindCard("paragraph",entries)+paragraphProblemKindCard("problem",entries);
-  const latestSync=rows.map(row=>row?.share?.updatedAt).filter(Boolean).sort((a,b)=>{
-    const at=a?.toMillis?.()||new Date(a).getTime()||0,bt=b?.toMillis?.()||new Date(b).getTime()||0;return bt-at;
-  })[0];
-  $("ppCoachSync").textContent=latestSync?"Son veri · "+reportTimestamp(latestSync):"Veri zamanı yok";
-  const daily=Array.from({length:7},(_,index)=>paragraphProblemDateOffset(index-6)).map(date=>{
-    const dayEntries=entries.filter(item=>item.date===date),dm=paragraphProblemMetrics(dayEntries),p=paragraphProblemMetrics(dayEntries.filter(item=>item.kind==="paragraph")),pr=paragraphProblemMetrics(dayEntries.filter(item=>item.kind==="problem"));
-    return{date,dm,p,pr};
+
+  const tempoDays=Array.from({length:14},(_,i)=>paragraphProblemDateOffset(i-13)),tempoRows=tempoDays.map(date=>{const m=paragraphProblemMetrics(entries.filter(item=>item.date===date));return{date,m}}),tempoMax=Math.max(1,...tempoRows.map(item=>item.m.total));
+  $("ppCoachTempo").innerHTML='<div class="pp-tempo-bars">'+tempoRows.map(({date,m})=>'<div class="pp-tempo-day" title="'+escHtml(paragraphProblemDateLabel(date))+' · '+m.total+' soru"><div class="pp-tempo-columns"><i style="height:'+(m.total/tempoMax*100)+'%"></i><b style="height:'+(m.correct/tempoMax*100)+'%"></b></div><span>'+date.slice(8)+'</span></div>').join("")+'</div><div class="pp-tempo-legend"><span><i></i>Soru hacmi</span><span><b></b>Doğru</span></div>';
+
+  const volumeDelta=last7.total-prev7.total,signals=[];
+  signals.push(today.total?'Bugün '+today.total+' soru çözüldü ve '+paragraphProblemFmtNet(today.net)+' net yapıldı.':'Bugün henüz kayıt yok. İlk oturum eklendiğinde günlük performans burada oluşacak.');
+  signals.push(prev7.total?'Son 7 günde '+last7.total+' soru çözüldü. Önceki 7 güne göre '+paragraphProblemSigned(volumeDelta,' soru')+'.':'Son 7 günde '+last7.total+' soru çözüldü. Önceki dönem verisi oluşunca karşılaştırma açılacak.');
+  signals.push('Aktif çalışma serisi '+streak+' gün. Son 30 günde '+last30.activeDays+' aktif gün var.');
+  $("ppCoachSignals").innerHTML=signals.map((signal,index)=>'<div><b>'+(index+1)+'</b><p>'+escHtml(signal)+'</p></div>').join("");
+
+  const accuracyDelta=last7.accuracy-prev7.accuracy,activeDelta=last7.activeDays-prev7.activeDays;
+  $("ppCoachCompare").innerHTML='<div class="pp-compare-row head"><span>Ölçüm</span><span>Son 7</span><span>Önceki 7</span><span>Fark</span></div>'+
+    '<div class="pp-compare-row"><b>Soru</b><strong>'+last7.total+'</strong><span>'+prev7.total+'</span><em>'+(prev7.total?paragraphProblemSigned(volumeDelta):"Yeni veri")+'</em></div>'+
+    '<div class="pp-compare-row"><b>Net</b><strong>'+paragraphProblemFmtNet(last7.net)+'</strong><span>'+paragraphProblemFmtNet(prev7.net)+'</span><em>'+paragraphProblemSigned(last7.net-prev7.net)+'</em></div>'+
+    '<div class="pp-compare-row"><b>Doğruluk</b><strong>'+paragraphProblemFmtPct(last7.accuracy)+'</strong><span>'+paragraphProblemFmtPct(prev7.accuracy)+'</span><em>'+paragraphProblemSigned(accuracyDelta," puan")+'</em></div>'+
+    '<div class="pp-compare-row"><b>Aktif gün</b><strong>'+last7.activeDays+'</strong><span>'+prev7.activeDays+'</span><em>'+paragraphProblemSigned(activeDelta)+'</em></div>';
+
+  const best=paragraphProblemBestDay(last30Entries),avg=last30.activeDays?last30.total/last30.activeDays:0,maxDay=Math.max(1,...Array.from({length:30},(_,i)=>paragraphProblemMetrics(entries.filter(item=>item.date===paragraphProblemDateOffset(i-29))).total));
+  $("ppCoachRhythm").innerHTML='<div class="pp-rhythm-stats"><div><span>Aktif gün</span><strong>'+last30.activeDays+'<small>/30</small></strong></div><div><span>Aktif gün ort.</span><strong>'+avg.toFixed(1).replace(".",",")+'<small> soru</small></strong></div><div><span>Seri</span><strong>'+streak+'<small> gün</small></strong></div><div><span>En iyi gün</span><strong>'+(best?paragraphProblemFmtNet(best.m.net):"—")+'<small>'+(best?" net · "+paragraphProblemDateLabel(best.date):"")+'</small></strong></div></div><div class="pp-rhythm-heat">'+Array.from({length:30},(_,i)=>{const date=paragraphProblemDateOffset(i-29),m=paragraphProblemMetrics(entries.filter(item=>item.date===date)),level=m.total?Math.max(.18,m.total/maxDay):0;return'<i title="'+escHtml(paragraphProblemDateLabel(date))+' · '+m.total+' soru" style="--pp-level:'+level+'"></i>'}).join("")+'</div>';
+
+  const daily=Array.from({length:7},(_,index)=>paragraphProblemDateOffset(-index)).map(date=>{
+    const dayEntries=entries.filter(item=>item.date===date),m=paragraphProblemMetrics(dayEntries),p=paragraphProblemMetrics(dayEntries.filter(item=>item.kind==="paragraph")),pr=paragraphProblemMetrics(dayEntries.filter(item=>item.kind==="problem"));return{date,m,p,pr};
   });
-  $("ppCoachDaily").innerHTML='<div class="pp-coach-daily-row head"><span>Gün</span><span>Paragraf</span><span>Problem</span><span>Toplam</span><span>Net</span><span>Doğruluk</span></div>'+daily.map(({date,dm,p,pr})=>{
-    const label=new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric",month:"short"}).format(new Date(date+"T12:00:00"));
-    return '<div class="pp-coach-daily-row"><b>'+escHtml(label)+'</b><span>'+p.total+'</span><span>'+pr.total+'</span><strong>'+dm.total+'</strong><span>'+escHtml(paragraphProblemFmtNet(dm.net))+'</span><em>'+escHtml(paragraphProblemFmtPct(dm.accuracy))+'</em></div>';
-  }).join("");
-  $("ppCoachHistory").innerHTML=entries.slice(0,30).map(item=>{
-    const total=item.correct+item.wrong+item.blank,net=item.correct-item.wrong/4,accuracy=total?100*item.correct/total:0;
-    const label=new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric",month:"short"}).format(new Date(item.date+"T12:00:00"));
-    const who=scope==="all"?'<small>'+escHtml(item.student)+'</small>':"";
-    return '<div class="pp-coach-history-row"><span class="pp-coach-badge '+item.kind+'">'+(item.kind==="paragraph"?"Paragraf":"Problem")+'</span><div><b>'+escHtml(label)+'</b>'+who+'</div><span>'+total+' soru</span><span>'+item.correct+'D · '+item.wrong+'Y · '+item.blank+'B</span><strong>'+escHtml(paragraphProblemFmtNet(net))+' net</strong><em>'+escHtml(paragraphProblemFmtPct(accuracy))+'</em></div>';
-  }).join("");
+  $("ppCoachDaily").innerHTML='<div class="pp-coach-daily-row head"><span>Gün</span><span>Paragraf</span><span>Problem</span><span>Toplam</span><span>Net</span><span>Doğruluk</span></div>'+daily.map(({date,m,p,pr})=>'<div class="pp-coach-daily-row"><b>'+escHtml(paragraphProblemDateLabel(date))+'</b><span>'+p.total+'</span><span>'+pr.total+'</span><strong>'+m.total+'</strong><span>'+escHtml(paragraphProblemFmtNet(m.net))+'</span><em>'+escHtml(paragraphProblemFmtPct(m.accuracy))+'</em></div>').join("");
+
+  $("ppCoachHistory").innerHTML=entries.slice(0,40).map(item=>{const m=paragraphProblemMetrics([item]);return'<div class="pp-coach-history-row"><span class="pp-coach-badge '+item.kind+'">'+(item.kind==="paragraph"?"Paragraf":"Problem")+'</span><b>'+escHtml(paragraphProblemDateLabel(item.date))+'</b><span>'+item.correct+' doğru</span><span>'+item.wrong+' yanlış</span><span>'+item.blank+' boş</span><strong>'+m.total+' soru</strong><em>'+escHtml(paragraphProblemFmtNet(m.net))+' net</em><small>'+escHtml(paragraphProblemFmtPct(m.accuracy))+' doğruluk</small></div>'}).join("");
   setParagraphProblemState("ppCoachContent");
 }
 $("ppCoachStudentSelect")?.addEventListener("change",event=>renderParagraphProblem(event.currentTarget.value));
-$("ppCoachRangeSelect")?.addEventListener("change",()=>renderParagraphProblem($("ppCoachStudentSelect")?.value||"all"));
 $("ppCoachRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user)void loadCoachReports(user.uid)});
 
 
