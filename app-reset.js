@@ -357,6 +357,80 @@ async function loadCoachReports(coachUid){
 function kpi(label,value,note,tone=""){
   return '<article class="report-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
 }
+function reportDateOffset(offset){
+  const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+offset);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function reportDailyRows(row){
+  const entries=Array.isArray(row?.share?.progress?.daily14)?row.share.progress.daily14:[];
+  return entries.filter(item=>item&&/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||""))).map(item=>({
+    date:String(item.date),minutes:Math.max(0,reportNum(item.minutes)),questions:Math.max(0,reportNum(item.questions))
+  })).sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
+}
+function reportPeriod(rows){
+  const minutes=rows.reduce((sum,item)=>sum+item.minutes,0),questions=rows.reduce((sum,item)=>sum+item.questions,0);
+  return{minutes,questions,activeDays:rows.filter(item=>item.minutes>0||item.questions>0).length};
+}
+function reportUpdatedMs(value){
+  try{const d=value?.toDate?.()||new Date(value);return d&&!Number.isNaN(d.getTime())?d.getTime():0}catch{return 0}
+}
+function reportFreshnessHours(row){
+  const ms=reportUpdatedMs(row?.share?.updatedAt);return ms?Math.max(0,(Date.now()-ms)/3600000):Infinity;
+}
+function reportPpSummaryMetrics(row,days=7){
+  const dates=new Set(Array.from({length:days},(_,index)=>reportDateOffset(-(days-1-index))));
+  const entries=(Array.isArray(row?.share?.paragraphProblem?.entries)?row.share.paragraphProblem.entries:[]).filter(item=>dates.has(String(item?.date||"")));
+  const sums=entries.reduce((acc,item)=>{const correct=Math.max(0,reportNum(item?.correct)),wrong=Math.max(0,reportNum(item?.wrong)),blank=Math.max(0,reportNum(item?.blank)),total=correct+wrong+blank;acc.correct+=correct;acc.wrong+=wrong;acc.blank+=blank;acc.total+=total;if(item?.kind==="problem")acc.problem+=total;else acc.paragraph+=total;if(total)acc.days.add(String(item?.date||""));return acc},{correct:0,wrong:0,blank:0,total:0,paragraph:0,problem:0,days:new Set()});
+  return{...sums,net:sums.correct-sums.wrong/4,accuracy:sums.total?sums.correct/sums.total*100:0,activeDays:sums.days.size};
+}
+function reportExamRows(row){
+  return (Array.isArray(row?.share?.exams)?[...row.share.exams]:[]).filter(Boolean).sort((a,b)=>String(b?.date||"").localeCompare(String(a?.date||""))||reportNum(b?.id)-reportNum(a?.id));
+}
+function reportExamDelta(exams,index){
+  const exam=exams[index];if(!exam)return null;
+  const previous=exams.slice(index+1).find(item=>String(item?.type||"")===String(exam?.type||""))||exams[index+1];
+  return previous?reportNum(exam.totalNet)-reportNum(previous.totalNet):null;
+}
+function reportSubjectRows(row){
+  const progress=Array.isArray(row?.share?.progress?.subjects7)?row.share.progress.subjects7:[],map=new Map();
+  const ensure=name=>{const key=String(name||"").trim();if(!key)return null;if(!map.has(key))map.set(key,{name:key,minutes:0,questions:0,wrongs:0,examNet:null});return map.get(key)};
+  progress.forEach(item=>{const target=ensure(item?.name);if(target){target.minutes+=Math.max(0,reportNum(item?.minutes));target.questions+=Math.max(0,reportNum(item?.questions));}});
+  const cutoff=reportDateOffset(-6);
+  (Array.isArray(row?.share?.errorJournal)?row.share.errorJournal:[]).filter(item=>String(item?.date||"")>=cutoff).forEach(item=>{const target=ensure(item?.subject||"Ders");if(target)target.wrongs+=Math.max(1,reportNum(item?.n));});
+  const latestExam=reportExamRows(row)[0];(Array.isArray(latestExam?.subjectResults)?latestExam.subjectResults:[]).forEach(item=>{const target=ensure(item?.name);if(target)target.examNet=reportNum(item?.net);});
+  return[...map.values()].filter(item=>item.minutes||item.questions||item.wrongs||item.examNet!==null).sort((a,b)=>(b.minutes+b.questions+b.wrongs*20)-(a.minutes+a.questions+a.wrongs*20)).slice(0,10);
+}
+function reportRiskScore(row){
+  if(!row?.share)return 100;
+  const progress=row.share.progress||{},w=weekStats(row.share.program),fresh=reportFreshnessHours(row),review=studentDayReviews(row)[0],pp=reportPpSummaryMetrics(row);
+  let score=0;
+  if(fresh>48)score+=28;else if(fresh>24)score+=12;
+  const minutes=reportNum(progress.minutes7),questions=reportNum(progress.questions7);
+  if(minutes<120)score+=20;else if(minutes<300)score+=9;
+  if(questions<80)score+=14;else if(questions<180)score+=6;
+  if(w.total){if(w.ratio<50)score+=26;else if(w.ratio<75)score+=12}else score+=8;
+  score+=Math.min(24,Math.round(reportNum(progress.overdueTopics))*6);
+  if(review?.mood==="hard")score+=14;else if(review?.mood==="mid")score+=5;
+  if(pp.total>0&&pp.activeDays<2)score+=5;
+  return Math.min(100,Math.round(score));
+}
+function reportRiskMeta(score){
+  if(score>=55)return{label:"Öncelikli",tone:"danger"};
+  if(score>=30)return{label:"Takip",tone:"warn"};
+  return{label:"İyi gidiyor",tone:"good"};
+}
+function reportStudentSignals(row){
+  const progress=row?.share?.progress||{},w=weekStats(row?.share?.program),daily=reportDailyRows(row),current=reportPeriod(daily.slice(-7)),previous=reportPeriod(daily.slice(-14,-7)),pp=reportPpSummaryMetrics(row),exams=reportExamRows(row),signals=[];
+  if(daily.length>=14&&previous.minutes>0){const pct=Math.round((current.minutes-previous.minutes)/previous.minutes*100);signals.push({tone:pct>=0?"good":"warn",title:"Çalışma süresi",text:"Önceki 7 güne göre "+(pct>=0?"+":"")+pct+"% değişti."});}
+  else signals.push({tone:current.minutes?"good":"warn",title:"Çalışma kaydı",text:current.minutes?reportMinutes(current.minutes)+" çalışma · "+current.activeDays+"/7 aktif gün.":"Son 7 günde odak süresi görünmüyor."});
+  if(w.total)signals.push({tone:w.ratio>=75?"good":w.ratio>=50?"warn":"danger",title:"Program uyumu",text:w.completed+" / "+w.total+" görev tamamlandı · %"+w.ratio+" uyum."});
+  if(reportNum(progress.overdueTopics)>0)signals.push({tone:"danger",title:"Geciken konular",text:Math.round(reportNum(progress.overdueTopics))+" konu hedef tarihini geçmiş."});
+  else signals.push({tone:"good",title:"Konu takibi",text:"Geciken konu görünmüyor."});
+  if(exams.length>=2){const delta=reportExamDelta(exams,0);signals.push({tone:delta===null?"":delta>=0?"good":"warn",title:"Deneme trendi",text:delta===null?"Yeni deneme verisi bekleniyor.":"Son deneme "+(delta>=0?"+":"")+delta.toFixed(1).replace(".",",")+" net değişti."});}
+  else if(pp.total)signals.push({tone:pp.accuracy>=70?"good":"warn",title:"P&P düzeni",text:pp.total+" soru · "+pp.activeDays+"/7 aktif gün · %"+Math.round(pp.accuracy)+" doğruluk."});
+  const review=studentDayReviews(row)[0];if(review?.mood==="hard")signals.unshift({tone:"danger",title:"Gün sonu notu",text:"Öğrenci son gününü zor olarak işaretledi; notunu kontrol et."});
+  return signals.slice(0,4);
+}
 function renderReport(scope){
   if(!coachReportRows.length){setReportState("reportEmpty");return}
   if(scope==="all"){renderReportOverview();return}
@@ -365,29 +439,34 @@ function renderReport(scope){
   renderStudentReport(row);
 }
 function renderReportOverview(){
-  const rows=coachReportRows,withShare=rows.filter(r=>r.share);
-  const minutes=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.minutes7),0);
-  const questions=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.questions7),0);
-  const overdueStudents=withShare.filter(r=>reportNum(r.share?.progress?.overdueTopics)>0).length;
+  const rows=coachReportRows,withShare=rows.filter(r=>r.share),minutes=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.minutes7),0),questions=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.questions7),0);
+  const programRows=withShare.map(row=>weekStats(row.share?.program)).filter(w=>w.total),avgProgram=programRows.length?Math.round(programRows.reduce((sum,w)=>sum+w.ratio,0)/programRows.length):0;
+  const activeToday=withShare.filter(row=>reportDailyRows(row).some(item=>item.date===reportDateOffset(0)&&(item.minutes>0||item.questions>0))).length;
+  const attention=rows.map(row=>({row,score:reportRiskScore(row)})).sort((a,b)=>b.score-a.score||studentName(a.row).localeCompare(studentName(b.row),"tr"));
   $("reportScopeTitle").textContent="Tüm öğrenciler";
-  $("reportScopeMeta").textContent="Son 7 günlük koçluk özeti";
+  $("reportScopeMeta").textContent="Son 7 gün · çalışma, program, P&P ve risk özeti";
   $("reportOverviewKpis").innerHTML=
-    kpi("BAĞLI ÖĞRENCİ",String(rows.length),"Aktif bağlantı")+
+    kpi("BAĞLI ÖĞRENCİ",String(rows.length),withShare.length+" öğrenciden veri var")+
+    kpi("BUGÜN AKTİF",String(activeToday),rows.length?activeToday+" / "+rows.length+" öğrenci":"Günlük veri bekleniyor",activeToday?"good":"")+
     kpi("TOPLAM ÇALIŞMA",reportMinutes(minutes),"Son 7 gün")+
     kpi("ÇÖZÜLEN SORU",String(Math.round(questions)),"Son 7 gün")+
-    kpi("GECİKEN KONUSU OLAN",String(overdueStudents),"Öğrenci",overdueStudents?"warn":"");
-  const studentRows=rows.map(row=>{
-    const p=row.share?.progress||{},w=weekStats(row.share?.program),name=studentName(row);
-    return '<button class="report-student-row" type="button" data-report-student="'+escHtml(row.studentUid)+'" data-report-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="report-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+escHtml(reportMinutes(p.minutes7))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.questions7))))+'</strong><strong>'+(w.plannedDays?escHtml(w.ratio+"%"):"—")+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.overdueTopics))))+'</strong><em>'+escHtml(reportStatus(row))+' ›</em></button>';
+    kpi("ORT. PROGRAM UYUMU",programRows.length?avgProgram+"%":"—",programRows.length+" programlı öğrenci",avgProgram&&avgProgram<60?"warn":"");
+  const studentRows=[...rows].sort((a,b)=>reportRiskScore(b)-reportRiskScore(a)).map(row=>{
+    const p=row.share?.progress||{},w=weekStats(row.share?.program),name=studentName(row),pp=reportPpSummaryMetrics(row),risk=reportRiskMeta(reportRiskScore(row));
+    return '<button class="report-student-row" type="button" data-report-student="'+escHtml(row.studentUid)+'" data-report-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="report-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+escHtml(reportMinutes(p.minutes7))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.questions7))))+'</strong><strong>'+(w.total?escHtml(w.ratio+"%"):"—")+'</strong><strong>'+escHtml(String(Math.round(pp.total)))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.overdueTopics))))+'</strong><em class="report-risk-inline '+risk.tone+'">'+escHtml(risk.label)+' ›</em></button>';
   }).join("");
   $("reportStudentList").innerHTML=studentRows||'<div class="report-list-empty">Öğrenci verisi yok.</div>';
+  const attentionRows=attention.slice(0,4);
+  $("reportAttentionList").innerHTML=attentionRows.length?attentionRows.map(({row,score})=>{const risk=reportRiskMeta(score),p=row.share?.progress||{},w=weekStats(row.share?.program);return '<button type="button" data-report-student="'+escHtml(row.studentUid)+'"><span><b>'+escHtml(studentName(row))+'</b><small>'+(w.total?"Program %"+w.ratio:"Program yok")+' · '+Math.round(reportNum(p.overdueTopics))+' geciken</small></span><em class="'+risk.tone+'">'+escHtml(risk.label)+'</em></button>';}).join(""):'<div class="report-mini-empty">Takip önceliği oluşmadı.</div>';
+  const overdueTotal=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.overdueTopics),0),ppTotal=withShare.reduce((s,r)=>s+reportPpSummaryMetrics(r).total,0);
   $("reportCoachSummary").innerHTML=
     '<div><span>Verisi güncel öğrenci</span><strong>'+withShare.length+' / '+rows.length+'</strong></div>'+
     '<div><span>Ortalama çalışma</span><strong>'+reportMinutes(rows.length?minutes/rows.length:0)+'</strong></div>'+
     '<div><span>Ortalama soru</span><strong>'+Math.round(rows.length?questions/rows.length:0)+'</strong></div>'+
-    '<div><span>Geciken konu toplamı</span><strong>'+withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.overdueTopics),0)+'</strong></div>';
-  const stamps=withShare.map(r=>r.share?.updatedAt).filter(Boolean);
-  $("reportSyncBox").innerHTML=stamps.length?'<b>'+escHtml(reportTimestamp(stamps.at(-1)))+'</b><span>Öğrenci uygulamasından gelen son veri</span>':'<b>Veri bekleniyor</b><span>Henüz paylaşım alınmadı</span>';
+    '<div><span>Paragraf + Problem</span><strong>'+Math.round(ppTotal)+' soru</strong></div>'+
+    '<div><span>Geciken konu toplamı</span><strong>'+Math.round(overdueTotal)+'</strong></div>';
+  const freshest=withShare.map(row=>({row,ms:reportUpdatedMs(row.share?.updatedAt)})).sort((a,b)=>b.ms-a.ms)[0]?.row;
+  $("reportSyncBox").innerHTML=freshest?'<b>'+escHtml(reportTimestamp(freshest.share?.updatedAt))+'</b><span>En son '+escHtml(studentName(freshest))+' verisi güncellendi</span>':'<b>Veri bekleniyor</b><span>Henüz paylaşım alınmadı</span>';
   document.querySelectorAll("[data-report-student]").forEach(btn=>btn.addEventListener("click",()=>{
     if($("reportStudentSelect"))$("reportStudentSelect").value=btn.dataset.reportStudent;
     renderReport(btn.dataset.reportStudent);
@@ -395,43 +474,73 @@ function renderReportOverview(){
   setReportState("reportOverview");
 }
 function renderStudentReport(row){
-  const share=row.share||{},profile=share.profile||{},progress=share.progress||{},w=weekStats(share.program),name=studentName(row);
+  const share=row.share||{},profile=share.profile||{},progress=share.progress||{},w=weekStats(share.program),name=studentName(row),daily=reportDailyRows(row),current7=reportPeriod(daily.slice(-7)),previous7=reportPeriod(daily.slice(-14,-7)),riskScore=reportRiskScore(row),risk=reportRiskMeta(riskScore);
   $("reportScopeTitle").textContent=name;
-  $("reportScopeMeta").textContent="Öğrenci detay raporu";
+  $("reportScopeMeta").textContent="Detaylı takip · son 7 gün";
   $("reportStudentAvatar").textContent=reportInitial(name);
   $("reportStudentName").textContent=name;
   const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
   $("reportStudentTarget").textContent=[profile.track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
   $("reportStudentSync").textContent="Son veri: "+reportTimestamp(share.updatedAt);
+  $("reportStudentRisk").textContent=risk.label;$("reportStudentRisk").className="report-risk-pill "+risk.tone;
   $("reportStudentKpis").innerHTML=
     kpi("ÇALIŞMA",reportMinutes(progress.minutes7),"Son 7 gün")+
     kpi("SORU",String(Math.round(reportNum(progress.questions7))),"Son 7 gün")+
-    kpi("PROGRAM UYUMU",w.plannedDays?w.ratio+"%":"—",w.plannedDays?w.doneDays+" / "+w.plannedDays+" gün":"Program verisi yok")+
+    kpi("AKTİF GÜN",daily.length?current7.activeDays+" / 7":"—",daily.length?"Çalışma veya soru kaydı":"Yeni senkron bekleniyor")+
+    kpi("PROGRAM UYUMU",w.total?w.ratio+"%":"—",w.total?w.completed+" / "+w.total+" görev":"Program verisi yok",w.total&&w.ratio<60?"warn":"")+
     kpi("GECİKEN KONU",String(Math.round(reportNum(progress.overdueTopics))),"Takip bekleyen",reportNum(progress.overdueTopics)?"warn":"");
+
+  const trend=$("reportActivityTrend");
+  if(daily.length>=14&&previous7.minutes>0){const pct=Math.round((current7.minutes-previous7.minutes)/previous7.minutes*100);trend.textContent=(pct>=0?"+":"")+pct+"% süre";trend.className="report-trend-pill "+(pct>=0?"good":"warn");}
+  else{trend.textContent=daily.length?"7 günlük görünüm":"Günlük veri bekleniyor";trend.className="report-trend-pill";}
+  if(daily.length){
+    const rows=daily.slice(-7),maxMinutes=Math.max(1,...rows.map(item=>item.minutes)),maxQuestions=Math.max(1,...rows.map(item=>item.questions));
+    $("reportActivityChart").innerHTML='<div class="report-activity-bars">'+rows.map(item=>{const d=new Date(item.date+"T12:00:00"),label=new Intl.DateTimeFormat("tr-TR",{weekday:"short"}).format(d);return '<div class="report-activity-day" title="'+escHtml(item.date+" · "+Math.round(item.minutes)+" dk · "+Math.round(item.questions)+" soru")+'"><div class="report-activity-columns"><i style="height:'+Math.max(item.minutes?8:2,item.minutes/maxMinutes*100)+'%"></i><b style="height:'+Math.max(item.questions?8:2,item.questions/maxQuestions*100)+'%"></b></div><span>'+escHtml(label)+'</span><small>'+Math.round(item.minutes)+'dk · '+Math.round(item.questions)+'s</small></div>';}).join("")+'</div><div class="report-activity-legend"><span><i></i>Odak süresi</span><span><b></b>Soru</span><em>'+reportMinutes(current7.minutes)+' · '+Math.round(current7.questions)+' soru</em></div>';
+  }else $("reportActivityChart").innerHTML='<div class="report-data-wait"><b>Günlük dağılım yeni senkronla açılacak.</b><span>Toplam çalışma: '+escHtml(reportMinutes(progress.minutes7))+' · '+Math.round(reportNum(progress.questions7))+' soru</span></div>';
+
+  $("reportStudentSignals").innerHTML=reportStudentSignals(row).map(item=>'<div class="report-signal '+item.tone+'"><i></i><span><b>'+escHtml(item.title)+'</b><small>'+escHtml(item.text)+'</small></span></div>').join("");
+
   $("reportProgramTitle").textContent=w.week?"Hafta · "+w.week:"Haftalık program";
-  $("reportProgramScore").textContent=w.plannedDays?w.ratio+"%":"—";
+  $("reportProgramScore").textContent=w.total?w.ratio+"%":"—";
   const days=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
   $("reportWeekDays").innerHTML=days.map((day,i)=>{
-    const tasks=w.taskCounts[i]||0,done=w.done[i],cls=!tasks?"empty":done?"done":"open";
-    const meta=!tasks?"Plan yok":done?"Tamamlandı":tasks+" görev";
-    return '<div class="report-day '+cls+'"><span>'+day+'</span><b>'+tasks+'</b><small>'+meta+'</small></div>';
+    const tasks=w.taskCounts[i]||0,completed=w.completedCounts[i]||0,cls=!tasks?"empty":completed>=tasks?"done":completed>0?"partial":"open";
+    const meta=!tasks?"Plan yok":completed>=tasks?"Tümü tamam":completed+" / "+tasks+" tamamlandı";
+    return '<div class="report-day '+cls+'"><span>'+day+'</span><b>'+completed+'<small>/'+tasks+'</small></b><em class="report-day-progress"><i style="width:'+(tasks?Math.round(completed/tasks*100):0)+'%"></i></em><small>'+meta+'</small></div>';
   }).join("");
+
+  const pp=reportPpSummaryMetrics(row);
+  $("reportPpSummary").innerHTML=
+    '<div><span>Soru</span><strong>'+Math.round(pp.total)+'</strong><small>Paragraf '+Math.round(pp.paragraph)+' · Problem '+Math.round(pp.problem)+'</small></div>'+
+    '<div><span>Net</span><strong>'+paragraphProblemFmtNet(pp.net)+'</strong><small>Son 7 gün</small></div>'+
+    '<div><span>Doğruluk</span><strong>'+Math.round(pp.accuracy)+'%</strong><small>'+Math.round(pp.correct)+' doğru · '+Math.round(pp.wrong)+' yanlış</small></div>'+
+    '<div><span>Aktif gün</span><strong>'+pp.activeDays+'/7</strong><small>'+(pp.activeDays?"Düzenli kayıt":"Henüz kayıt yok")+'</small></div>';
+
+  const dayReviews=studentDayReviews(row).slice(0,7),latestReview=dayReviews[0]||null,latestMood=dayReviewMoodMeta(latestReview?.mood);
+  $("reportDayReviewLatest").textContent=latestReview?latestMood.icon+" "+latestMood.label:"—";
+  $("reportDayReviewHistory").innerHTML=dayReviews.length?dayReviews.map(item=>{
+    const mood=dayReviewMoodMeta(item.mood),date=new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric",month:"short"}).format(new Date(item.date+"T12:00:00")),note=String(item.note||"").trim()||"Not eklenmedi.",when=item.at?new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(item.at)):"";
+    return '<div class="report-day-review-row"><span class="report-day-review-date">'+escHtml(date)+'</span><span class="report-day-review-mood '+mood.tone+'">'+mood.icon+' '+mood.label+'</span><p>'+escHtml(note)+'</p><time>'+escHtml(when)+'</time></div>';
+  }).join(""):'<div class="report-mini-empty">Henüz gün sonu değerlendirmesi yok.</div>';
+
+  const subjects=reportSubjectRows(row);
+  $("reportSubjectBreakdown").innerHTML=subjects.length?'<div class="report-subject-row head"><span>Ders</span><span>Odak</span><span>Soru</span><span>Yanlış</span><span>Son deneme</span></div>'+subjects.map(item=>'<div class="report-subject-row"><b>'+escHtml(item.name)+'</b><span>'+escHtml(reportMinutes(item.minutes))+'</span><span>'+Math.round(item.questions)+'</span><em class="'+(item.wrongs?"warn":"")+'">'+Math.round(item.wrongs)+'</em><strong>'+(item.examNet===null?"—":escHtml(paragraphProblemFmtNet(item.examNet)+" net"))+'</strong></div>').join(""):'<div class="report-data-wait"><b>Ders dağılımı yeni öğrenci senkronuyla açılacak.</b><span>Odak oturumları ve soru kayıtları ders bazında burada görünecek.</span></div>';
+
   $("reportTopicStats").innerHTML=
     '<div><span>Tamamlanan</span><strong>'+Math.round(reportNum(progress.completedTopics))+'</strong></div>'+
     '<div><span>Devam eden</span><strong>'+Math.round(reportNum(progress.activeTopics))+'</strong></div>'+
     '<div class="'+(reportNum(progress.overdueTopics)?"danger":"")+'"><span>Geciken</span><strong>'+Math.round(reportNum(progress.overdueTopics))+'</strong></div>';
-  const exams=Array.isArray(share.exams)?[...share.exams].slice(-4).reverse():[];
-  $("reportExamList").innerHTML=exams.length?exams.map(exam=>'<div class="report-exam-row"><div><b>'+escHtml(exam.name||exam.type||"Deneme")+'</b><span>'+escHtml(exam.date||"Tarih yok")+'</span></div><strong>'+escHtml(String(reportNum(exam.totalNet)))+' net</strong></div>').join(""):'<div class="report-mini-empty">Henüz deneme verisi yok.</div>';
-  const errors=Array.isArray(share.errorJournal)?[...share.errorJournal].slice(-5).reverse():[];
-  $("reportErrorList").innerHTML=errors.length?errors.map(item=>'<div class="report-error-row"><div><b>'+escHtml(item.subject||"Ders")+'</b><span>'+escHtml(item.topic||"Konu belirtilmemiş")+'</span></div><strong>'+escHtml(String(Math.max(1,reportNum(item.n))))+' yanlış</strong></div>').join(""):'<div class="report-mini-empty">Henüz hata defteri kaydı yok.</div>';
-  const dayReviews=studentDayReviews(row).slice(0,7),latestReview=dayReviews[0]||null;
-  const latestMood=dayReviewMoodMeta(latestReview?.mood);
-  $("reportDayReviewLatest").textContent=latestReview?latestMood.icon+" "+latestMood.label:"—";
-  $("reportDayReviewHistory").innerHTML=dayReviews.length?dayReviews.map(item=>{
-    const mood=dayReviewMoodMeta(item.mood),date=new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric",month:"short"}).format(new Date(item.date+"T12:00:00")),note=String(item.note||"").trim()||"Not eklenmedi.";
-    const when=item.at?new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(item.at)):"";
-    return '<div class="report-day-review-row"><span class="report-day-review-date">'+escHtml(date)+'</span><span class="report-day-review-mood '+mood.tone+'">'+mood.icon+' '+mood.label+'</span><p>'+escHtml(note)+'</p><time>'+escHtml(when)+'</time></div>';
-  }).join(""):'<div class="report-mini-empty">Henüz gün sonu değerlendirmesi yok.</div>';
+  const topicItems=Array.isArray(share.topics?.items)?share.topics.items:[],today=reportDateOffset(0),topicFocus=[...topicItems].filter(item=>reportNum(item?.st)<3&&(item?.deadline||reportNum(item?.st)>0)).sort((a,b)=>{const ao=a?.deadline&&a.deadline<today?0:1,bo=b?.deadline&&b.deadline<today?0:1;return ao-bo||String(a?.deadline||"9999").localeCompare(String(b?.deadline||"9999"))}).slice(0,5);
+  $("reportTopicFocus").innerHTML=topicFocus.length?topicFocus.map(item=>{const overdue=item.deadline&&item.deadline<today;return '<div class="report-topic-focus-row '+(overdue?"danger":"")+'"><span><b>'+escHtml(item.subject||"Ders")+'</b><small>'+escHtml(item.topic||"Konu")+'</small></span><em>'+(item.deadline?escHtml(item.deadline):"Devam ediyor")+'</em></div>';}).join(""):'<div class="report-mini-empty">Takip bekleyen detaylı konu görünmüyor.</div>';
+
+  const exams=reportExamRows(row),latestDelta=exams.length>1?reportExamDelta(exams,0):null;
+  $("reportExamTrend").textContent=latestDelta===null?"—":(latestDelta>=0?"+":"")+latestDelta.toFixed(1).replace(".",",")+" net";
+  $("reportExamTrend").className="report-trend-pill "+(latestDelta===null?"":latestDelta>=0?"good":"warn");
+  $("reportExamList").innerHTML=exams.length?exams.slice(0,5).map((exam,index)=>{const delta=reportExamDelta(exams,index);return '<div class="report-exam-row"><div><b>'+escHtml(exam.name||exam.type||"Deneme")+'</b><span>'+escHtml(exam.date||"Tarih yok")+' · '+escHtml(exam.type||"YKS")+'</span></div><span class="report-exam-delta '+(delta===null?"":delta>=0?"good":"warn")+'">'+(delta===null?"İlk veri":(delta>=0?"+":"")+delta.toFixed(1).replace(".",",")+' net')+'</span><strong>'+escHtml(paragraphProblemFmtNet(reportNum(exam.totalNet)))+' net</strong></div>';}).join(""):'<div class="report-mini-empty">Henüz deneme verisi yok.</div>';
+
+  const errorMap=new Map();(Array.isArray(share.errorJournal)?share.errorJournal:[]).forEach(item=>{const key=(item?.subject||"Ders")+"|"+(item?.topic||"Konu"),current=errorMap.get(key)||{subject:item?.subject||"Ders",topic:item?.topic||"Konu",n:0,date:""};current.n+=Math.max(1,reportNum(item?.n));if(String(item?.date||"")>current.date)current.date=String(item.date);errorMap.set(key,current);});
+  const errors=[...errorMap.values()].sort((a,b)=>b.n-a.n||b.date.localeCompare(a.date)).slice(0,7);
+  $("reportErrorList").innerHTML=errors.length?errors.map(item=>'<div class="report-error-row"><div><b>'+escHtml(item.subject)+'</b><span>'+escHtml(item.topic)+' · '+escHtml(item.date||"tarih yok")+'</span></div><strong>'+Math.round(item.n)+' yanlış</strong></div>').join(""):'<div class="report-mini-empty">Henüz hata defteri kaydı yok.</div>';
   setReportState("reportStudentDetail");
 }
 $("reportStudentSelect")?.addEventListener("change",event=>renderReport(event.currentTarget.value));
@@ -440,7 +549,10 @@ $("reportSearch")?.addEventListener("input",event=>{
   const q=String(event.currentTarget.value||"").trim().toLocaleLowerCase("tr-TR");
   document.querySelectorAll("[data-report-name]").forEach(row=>row.classList.toggle("hidden",q&&!String(row.dataset.reportName||"").includes(q)));
 });
-
+$("reportOpenPp")?.addEventListener("click",()=>{
+  const uid=$("reportStudentSelect")?.value||"";showCoachPage("paragraphProblem");hydrateParagraphProblemControls();
+  if(uid&&uid!=="all"&&$("ppCoachStudentSelect")){$("ppCoachStudentSelect").value=uid;renderParagraphProblem(uid)}
+});
 
 
 function paragraphProblemEntries(row){

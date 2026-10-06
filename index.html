@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=3.3.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.1.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=3.1.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=4.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.1.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
@@ -373,13 +373,17 @@
           <section class="report-overview-grid">
             <article class="report-card report-student-table-card">
               <div class="report-card-head">
-                <div><span>ÖĞRENCİ TAKİBİ</span><h2>Haftalık durum</h2><p>Kimin çalıştığını, kimin takibe ihtiyaç duyduğunu hızlıca gör.</p></div>
+                <div><span>ÖĞRENCİ TAKİBİ</span><h2>Haftalık durum</h2><p>Çalışma, program, P&amp;P ve geciken konuları aynı satırda karşılaştır.</p></div>
                 <label class="report-search"><span>⌕</span><input id="reportSearch" type="search" placeholder="Öğrenci ara..."></label>
               </div>
-              <div class="report-table-head"><span>Öğrenci</span><span>Çalışma</span><span>Soru</span><span>Program</span><span>Geciken konu</span><span></span></div>
+              <div class="report-table-head"><span>Öğrenci</span><span>Çalışma</span><span>Soru</span><span>Program</span><span>P&amp;P</span><span>Geciken</span><span>Durum</span></div>
               <div class="report-student-list" id="reportStudentList"></div>
             </article>
             <aside class="report-side-stack">
+              <article class="report-card report-attention-card">
+                <div class="report-card-head compact"><div><span>KOÇ ÖNCELİĞİ</span><h2>Bugün kimlere bakmalı?</h2></div></div>
+                <div class="report-attention-list" id="reportAttentionList"></div>
+              </article>
               <article class="report-card">
                 <div class="report-card-head compact"><div><span>GENEL DURUM</span><h2>Koç özeti</h2></div></div>
                 <div class="report-summary-list" id="reportCoachSummary"></div>
@@ -400,43 +404,76 @@
               <h2 id="reportStudentName">Öğrenci</h2>
               <p id="reportStudentTarget">Hedef bilgisi yok</p>
             </div>
-            <div class="report-sync-pill" id="reportStudentSync">—</div>
+            <div class="report-hero-status">
+              <span class="report-risk-pill" id="reportStudentRisk">—</span>
+              <div class="report-sync-pill" id="reportStudentSync">—</div>
+            </div>
           </section>
 
           <section class="report-kpis" id="reportStudentKpis"></section>
 
           <section class="report-detail-grid">
+            <article class="report-card report-activity-card">
+              <div class="report-card-head">
+                <div><span>ÇALIŞMA RİTMİ</span><h2>Son 7 gün</h2><p>Günlük odak süresi ve çözülen soru hareketi.</p></div>
+                <strong class="report-trend-pill" id="reportActivityTrend">—</strong>
+              </div>
+              <div class="report-activity-chart" id="reportActivityChart"></div>
+            </article>
+
+            <article class="report-card report-insights-card">
+              <div class="report-card-head compact"><div><span>KOÇ SİNYALLERİ</span><h2>Dikkat edilmesi gerekenler</h2><p>Verilerden çıkan hızlı takip notları.</p></div></div>
+              <div class="report-signal-list" id="reportStudentSignals"></div>
+            </article>
+
             <article class="report-card report-program-card">
               <div class="report-card-head">
-                <div><span>PROGRAM UYUMU</span><h2 id="reportProgramTitle">Haftalık program</h2><p>Planlanan günler ve tamamlanma durumu.</p></div>
+                <div><span>PROGRAM UYUMU</span><h2 id="reportProgramTitle">Haftalık program</h2><p>Görev bazında planlanan ve tamamlanan çalışma.</p></div>
                 <strong class="report-score" id="reportProgramScore">—</strong>
               </div>
               <div class="report-week-days" id="reportWeekDays"></div>
             </article>
 
+            <article class="report-card report-pp-card">
+              <div class="report-card-head">
+                <div><span>PARAGRAF + PROBLEM</span><h2>Son 7 günlük performans</h2><p>Soru hacmi, net, doğruluk ve aktif gün.</p></div>
+                <button class="report-link-button" id="reportOpenPp" type="button">Detaya git →</button>
+              </div>
+              <div class="report-pp-summary" id="reportPpSummary"></div>
+            </article>
+
             <article class="report-card report-day-review-card">
               <div class="report-card-head">
-                <div><span>GÜN SONU</span><h2>Öğrencinin kısa notları</h2><p>Son günlerde öğrencinin günü nasıl kapattığını gör.</p></div>
+                <div><span>GÜN SONU</span><h2>Öğrencinin gün sonu notları</h2><p>Son 7 değerlendirmeyi ve ruh halini birlikte gör.</p></div>
                 <strong class="report-day-review-latest" id="reportDayReviewLatest">—</strong>
               </div>
               <div class="report-day-review-history" id="reportDayReviewHistory"></div>
             </article>
 
-            <article class="report-card report-topics-card">
-              <div class="report-card-head compact"><div><span>KONU TAKİBİ</span><h2>Konu durumu</h2></div></div>
-              <div class="report-topic-stats" id="reportTopicStats"></div>
+            <article class="report-card report-subject-card">
+              <div class="report-card-head">
+                <div><span>DERS DAĞILIMI</span><h2>Son 7 gün ders bazlı hareket</h2><p>Odak süresi, soru ve hata kayıtlarını tek tabloda karşılaştır.</p></div>
+              </div>
+              <div class="report-subject-table" id="reportSubjectBreakdown"></div>
             </article>
 
             <article class="report-card report-exams-card">
               <div class="report-card-head">
-                <div><span>DENEMELER</span><h2>Son denemeler</h2><p>En güncel deneme sonuçları.</p></div>
+                <div><span>DENEMELER</span><h2>Net trendi</h2><p>Son denemeler ve bir önceki sonuca göre değişim.</p></div>
+                <strong class="report-trend-pill" id="reportExamTrend">—</strong>
               </div>
               <div class="report-exam-list" id="reportExamList"></div>
             </article>
 
+            <article class="report-card report-topics-card">
+              <div class="report-card-head compact"><div><span>KONU TAKİBİ</span><h2>Konu durumu</h2><p>Tamamlanan, devam eden ve tarihi geçen konular.</p></div></div>
+              <div class="report-topic-stats" id="reportTopicStats"></div>
+              <div class="report-topic-focus" id="reportTopicFocus"></div>
+            </article>
+
             <article class="report-card report-errors-card">
               <div class="report-card-head">
-                <div><span>HATA DEFTERİ</span><h2>Son yanlışlar</h2><p>Ders ve konu bazında son kayıtlar.</p></div>
+                <div><span>HATA DEFTERİ</span><h2>Tekrarlayan yanlışlar</h2><p>Ders ve konu bazında öne çıkan hata kayıtları.</p></div>
               </div>
               <div class="report-error-list" id="reportErrorList"></div>
             </article>
@@ -1151,6 +1188,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.45"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.46"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
