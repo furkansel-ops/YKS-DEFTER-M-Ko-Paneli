@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./reports-v21.css?v=4.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.1.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
-  <link rel="stylesheet" href="./topics-v21.css?v=1.0.0">
+  <link rel="stylesheet" href="./topics-v21.css?v=2.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
   <link rel="stylesheet" href="./messages-v21.css?v=2.0.0">
   <link rel="stylesheet" href="./settings-v21.css?v=2.1.0">
@@ -645,7 +645,7 @@
           <div>
             <span class="dashboard-eyebrow">KONU TAKİBİ</span>
             <h1>Konular</h1>
-            <p>Öğrencilerin hangi konuları bitirdiğini, hangilerinde ilerlediğini ve hangi hedeflerin geciktiğini gerçek verilerle takip et.</p>
+            <p>Öğrencilerin konu ilerlemesini, hedef tarihlerini ve koç müdahalesi gereken alanları tek ekranda takip et.</p>
           </div>
           <button class="topic-refresh" id="topicRefreshBtn" type="button">↻ Verileri yenile</button>
         </header>
@@ -654,56 +654,41 @@
           <div class="topic-control-copy">
             <span>KONU GÖRÜNÜMÜ</span>
             <b id="topicScopeTitle">Tüm öğrenciler</b>
-            <small id="topicScopeMeta">Genel konu ilerleme özeti</small>
+            <small id="topicScopeMeta">Genel konu ilerleme ve öncelik özeti</small>
           </div>
           <div class="topic-control-fields">
-            <label>
-              <span>Öğrenci</span>
-              <select id="topicStudentSelect"><option value="all">Tüm öğrenciler</option></select>
-            </label>
-            <label>
-              <span>Ders</span>
-              <select id="topicSubjectSelect"><option value="all">Tüm dersler</option></select>
-            </label>
-            <label>
-              <span>Durum</span>
-              <select id="topicStatusSelect">
-                <option value="all">Tümü</option>
-                <option value="completed">Tamamlanan</option>
-                <option value="active">Devam eden</option>
-                <option value="overdue">Geciken</option>
-                <option value="not-started">Başlanmayan</option>
-              </select>
-            </label>
+            <label><span>Öğrenci</span><select id="topicStudentSelect"><option value="all">Tüm öğrenciler</option></select></label>
+            <label><span>Sınav</span><select id="topicExamSelect"><option value="all">TYT + AYT</option></select></label>
+            <label><span>Ders</span><select id="topicSubjectSelect"><option value="all">Tüm dersler</option></select></label>
+            <label><span>Durum</span><select id="topicStatusSelect"><option value="all">Tümü</option><option value="completed">Tamamlanan</option><option value="active">Devam eden</option><option value="overdue">Geciken</option><option value="due-soon">Yaklaşan</option><option value="not-started">Başlanmayan</option></select></label>
+            <label class="topic-search-field"><span>Konu ara</span><input id="topicSearchInput" type="search" placeholder="Örn. Problemler"></label>
           </div>
         </section>
 
-        <div id="topicLoading" class="topic-state">
-          <span>↻</span><div><b>Konular hazırlanıyor</b><p>Öğrencilerin güncel konu verileri alınıyor.</p></div>
-        </div>
-        <div id="topicEmpty" class="topic-state hidden">
-          <span>◫</span><div><b>Henüz konu verisi yok</b><p>Öğrenciler konu takibini kullandıkça ilerleme burada otomatik oluşacak.</p></div>
-        </div>
+        <div id="topicLoading" class="topic-state"><span>↻</span><div><b>Konular hazırlanıyor</b><p>Öğrencilerin güncel konu verileri alınıyor.</p></div></div>
+        <div id="topicEmpty" class="topic-state hidden"><span>◫</span><div><b>Henüz konu verisi yok</b><p>Öğrenciler konu takibini kullandıkça ilerleme burada otomatik oluşacak.</p></div></div>
 
         <div id="topicOverview" class="hidden">
           <section class="topic-kpis" id="topicOverviewKpis"></section>
           <section class="topic-overview-grid">
             <article class="topic-card topic-student-card">
-              <div class="topic-card-head">
-                <div><span>ÖĞRENCİ İLERLEMESİ</span><h2>Konu durumu</h2><p>Öğrencilerin konu takibini tek tabloda karşılaştır.</p></div>
-              </div>
-              <div class="topic-table-head"><span>Öğrenci</span><span>Tamamlanan</span><span>Devam eden</span><span>Geciken</span><span>İlerleme</span></div>
+              <div class="topic-card-head"><div><span>ÖĞRENCİ İLERLEMESİ</span><h2>Konu durumu ve koç önceliği</h2><p>İlerleme, geciken ve yaklaşan hedefleri öğrenci bazında karşılaştır.</p></div></div>
+              <div class="topic-table-head"><span>Öğrenci</span><span>Tamamlanan</span><span>Devam</span><span>Geciken</span><span>Yaklaşan</span><span>İlerleme</span><span>Durum</span></div>
               <div id="topicStudentList" class="topic-student-list"></div>
             </article>
 
             <aside class="topic-side-stack">
               <article class="topic-card">
-                <div class="topic-card-head compact"><div><span>DERSLER</span><h2>Genel dağılım</h2></div></div>
+                <div class="topic-card-head compact"><div><span>KOÇ ODAĞI</span><h2>Önce bunlara bak</h2><p>Gecikme, hedef tarihi ve hata kayıtları birlikte değerlendirilir.</p></div></div>
+                <div id="topicAttentionOverview" class="topic-attention-overview"></div>
+              </article>
+              <article class="topic-card">
+                <div class="topic-card-head compact"><div><span>DERSLER</span><h2>Genel ilerleme</h2></div></div>
                 <div id="topicSubjectOverview" class="topic-subject-overview"></div>
               </article>
               <article class="topic-card">
-                <div class="topic-card-head compact"><div><span>KOÇ ODAĞI</span><h2>Geciken hedefler</h2></div></div>
-                <div id="topicOverdueOverview" class="topic-overdue-overview"></div>
+                <div class="topic-card-head compact"><div><span>TAKVİM</span><h2>Yaklaşan hedefler</h2></div></div>
+                <div id="topicDeadlineOverview" class="topic-deadline-overview"></div>
               </article>
             </aside>
           </section>
@@ -717,17 +702,31 @@
               <h2 id="topicStudentName">Öğrenci</h2>
               <p id="topicStudentTarget">Hedef bilgisi yok</p>
             </div>
-            <div class="topic-progress-pill" id="topicStudentProgress">—</div>
+            <div class="topic-hero-right">
+              <span class="topic-risk-pill" id="topicStudentRisk">—</span>
+              <div class="topic-progress-pill" id="topicStudentProgress">—</div>
+            </div>
           </section>
 
           <section class="topic-kpis" id="topicStudentKpis"></section>
 
+          <section class="topic-insight-grid">
+            <article class="topic-card">
+              <div class="topic-card-head compact"><div><span>KOÇ SİNYALLERİ</span><h2>Hızlı değerlendirme</h2></div></div>
+              <div id="topicStudentSignals" class="topic-signal-list"></div>
+            </article>
+            <article class="topic-card">
+              <div class="topic-card-head compact"><div><span>DERS RİSKİ</span><h2>Öncelikli dersler</h2></div></div>
+              <div id="topicWeakSubjects" class="topic-weak-subjects"></div>
+            </article>
+          </section>
+
           <section class="topic-detail-grid">
             <article class="topic-card topic-list-card">
               <div class="topic-card-head">
-                <div><span>KONU LİSTESİ</span><h2>Takip edilen konular</h2><p>Durum, ders ve hedef tarihine göre filtrelenmiş görünüm.</p></div>
+                <div><span>KONU LİSTESİ</span><h2>Takip edilen konular</h2><p>Filtrelenen konuları hedef tarihi, durum ve öncelik bilgisiyle incele.</p></div>
               </div>
-              <div class="topic-detail-head"><span>Konu</span><span>Ders</span><span>Sınav</span><span>Hedef</span><span>Durum</span></div>
+              <div class="topic-detail-head"><span>Konu</span><span>Ders</span><span>Sınav</span><span>Hedef</span><span>Durum</span><span>Öncelik</span></div>
               <div id="topicDetailList" class="topic-detail-list"></div>
             </article>
 
@@ -737,7 +736,7 @@
                 <div id="topicStudentSubjects" class="topic-subject-progress"></div>
               </article>
               <article class="topic-card">
-                <div class="topic-card-head compact"><div><span>ÖNCELİK</span><h2>Takip listesi</h2></div></div>
+                <div class="topic-card-head compact"><div><span>HEDEF TAKVİMİ</span><h2>Geciken ve yaklaşanlar</h2></div></div>
                 <div id="topicPriorityList" class="topic-priority-list"></div>
               </article>
             </aside>
@@ -1188,6 +1187,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.46"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.47"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
