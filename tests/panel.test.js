@@ -103,7 +103,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 test('koç program düzenleme mevcut hücreyi, günü ve video kaynağını korur',()=>{
@@ -117,7 +117,7 @@ test('koç program düzenleme mevcut hücreyi, günü ve video kaynağını koru
   assert.match(js,/const editedTask=\(edit\.prefix\|\|""\)\+task/);
   assert.match(js,/if\(!cell\)\{setProgramTaskStatus\("Bu görev artık programda bulunmuyor/);
   assert.match(js,/function closeProgramTaskModal\(\)\{coachProgramEditContext=null/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -131,7 +131,7 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -144,7 +144,7 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -157,7 +157,7 @@ test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
   assert.match(js,/function showApp[\s\S]*finishBoot\(\)/);
   assert.match(css,/\.coach-boot/);
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -172,7 +172,7 @@ test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()
   assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderDashboardDayReviews/);
   assert.match(css,/dashboard-day-review-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -188,8 +188,8 @@ test('gün sonu entegrasyonu ana özet ve öğrenci geçmişi içerir',()=>{
   assert.match(dash,/dashboard-day-review-summary/);
   assert.match(reports,/report-day-review-history/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/reports-v21\.css\?v=3\.1\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/reports-v21\.css\?v=4\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -206,7 +206,7 @@ test('koç ana paneli gerçek öğrenci verileriyle dolar',()=>{
   assert.match(css,/dashboard-flow-row/);
   assert.match(css,/dashboard-student-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -221,7 +221,7 @@ test('koç ana ekran selamlaması saate göre otomatik değişir',()=>{
   assert.match(js,/return"İyi akşamlar"/);
   assert.match(js,/return"İyi geceler"/);
   assert.match(js,/setInterval\(refreshDashboardGreeting,60000\)/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -238,7 +238,7 @@ test('koç programında öğrencinin tamamladığı dersler tek tek görünür',
   assert.match(css,/task-complete-badge/);
   assert.match(css,/day-state\.partial/);
   assert.match(html,/programs-v21\.css\?v=3\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -253,7 +253,7 @@ test('koçun eklediği program görevi düzenleme ekranından silinebilir',()=>{
   assert.match(js,/confirm\("Bu koç görevi öğrencinin programından silinsin mi\?"\)/);
   assert.match(css,/\.program-task-delete/);
   assert.match(html,/programs-v21\.css\?v=3\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -275,7 +275,7 @@ test('paragraf + problem bölümü seçili öğrencinin çalışma verilerini ca
   assert.match(css,/\.pp-tempo-bars/);
   assert.match(css,/\.pp-rhythm-heat/);
   assert.match(css,/\.pp-coach-history-row/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
 
 
@@ -299,5 +299,24 @@ test('Paragraf + Problem ekranı kişisel profil yerine çalışma performansın
   for(const heading of ['Son 14 gün','Performans sinyalleri','Son 7 gün ↔ önceki 7 gün','30 günlük ritim','GÜNLÜK DÖKÜM','Geçmiş oturumlar'])assert.ok(ppHtml.includes(heading),heading);
   assert.match(css,/\.pp-coach-kind-main/);
   assert.match(css,/\.pp-compare-row/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.45/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
+});
+
+
+test('Takip & Rapor ayrıntılı koçluk analitiği gösterir',()=>{
+  const html=read('index.html'),js=read('app-reset.js'),css=read('reports-v21.css');
+  for(const id of ['reportAttentionList','reportStudentRisk','reportActivityTrend','reportActivityChart','reportStudentSignals','reportPpSummary','reportSubjectBreakdown','reportExamTrend','reportTopicFocus','reportOpenPp'])assert.match(html,new RegExp('id="'+id+'"'));
+  for(const fn of ['reportDailyRows','reportPpSummaryMetrics','reportSubjectRows','reportRiskScore','reportStudentSignals'])assert.match(js,new RegExp('function '+fn));
+  assert.match(js,/progress\?\.daily14/);
+  assert.match(js,/progress\?\.subjects7/);
+  assert.match(js,/w\.completedCounts\[i\]/);
+  assert.match(js,/reportRiskMeta\(reportRiskScore\(row\)\)/);
+  assert.match(js,/showCoachPage\("paragraphProblem"\)/);
+  assert.match(css,/\.report-activity-bars/);
+  assert.match(css,/\.report-signal-list/);
+  assert.match(css,/\.report-pp-summary/);
+  assert.match(css,/\.report-subject-row/);
+  assert.match(css,/\.report-attention-list/);
+  assert.match(html,/reports-v21\.css\?v=4\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.46/);
 });
