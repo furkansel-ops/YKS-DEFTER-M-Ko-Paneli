@@ -296,7 +296,7 @@ test('Paragraf + Problem ekranı kişisel profil yerine çalışma performansın
   assert.doesNotMatch(ppHtml,/ÖĞRENCİ BİLGİLERİ|Hedef bilgisi yok|ppCoachStudentAvatar|ppCoachStudentTarget|ppCoachStudentMeta/);
   assert.doesNotMatch(ppJs,/renderParagraphProblemStudentInfo|profile\.targetUniversity|profile\.targetDepartment|profile\.targetNetTYT|profile\.targetNetAYT/);
   for(const label of ['BUGÜN TOPLAM','BUGÜN NET','7 GÜNLÜK HACİM','AKTİF SERİ'])assert.match(ppJs,new RegExp(label));
-  for(const heading of ['Son 14 gün','Performans sinyalleri','Son 7 gün ↔ önceki 7 gün','30 günlük ritim','Günlük döküm','Geçmiş oturumlar'])assert.ok(ppHtml.includes(heading),heading);
+  for(const heading of ['Son 14 gün','Performans sinyalleri','Son 7 gün ↔ önceki 7 gün','30 günlük ritim','GÜNLÜK DÖKÜM','Geçmiş oturumlar'])assert.ok(ppHtml.includes(heading),heading);
   assert.match(css,/\.pp-coach-kind-main/);
   assert.match(css,/\.pp-compare-row/);
   assert.match(html,/app-reset\.js\?v=1\.0\.45/);
