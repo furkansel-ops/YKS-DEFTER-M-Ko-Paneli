@@ -514,7 +514,7 @@ function renderStudentReport(row){
     '<div><span>Soru</span><strong>'+Math.round(pp.total)+'</strong><small>Paragraf '+Math.round(pp.paragraph)+' · Problem '+Math.round(pp.problem)+'</small></div>'+
     '<div><span>Net</span><strong>'+paragraphProblemFmtNet(pp.net)+'</strong><small>Son 7 gün</small></div>'+
     '<div><span>Doğruluk</span><strong>'+Math.round(pp.accuracy)+'%</strong><small>'+Math.round(pp.correct)+' doğru · '+Math.round(pp.wrong)+' yanlış</small></div>'+
-    '<div><span>Aktif gün</span><strong>'+pp.activeDays+'/7</strong><small>'+pp.activeDays?"Düzenli kayıt":"Henüz kayıt yok"+'</small></div>';
+    '<div><span>Aktif gün</span><strong>'+pp.activeDays+'/7</strong><small>'+(pp.activeDays?"Düzenli kayıt":"Henüz kayıt yok")+'</small></div>';
 
   const dayReviews=studentDayReviews(row).slice(0,7),latestReview=dayReviews[0]||null,latestMood=dayReviewMoodMeta(latestReview?.mood);
   $("reportDayReviewLatest").textContent=latestReview?latestMood.icon+" "+latestMood.label:"—";
