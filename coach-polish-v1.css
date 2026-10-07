@@ -1,0 +1,389 @@
+/* YKS Defterim Koç Paneli · Global polish v1.0
+   Görsel katman: veri akışı ve sayfa mantığına dokunmaz. */
+:root{
+  --coach-surface:#ffffff;
+  --coach-surface-soft:#f8fafc;
+  --coach-canvas:#f3f6fa;
+  --coach-border:#e1e8f0;
+  --coach-border-strong:#d6e0eb;
+  --coach-text:#14243a;
+  --coach-muted:#738198;
+  --coach-blue:#2873f0;
+  --coach-blue-soft:#edf5ff;
+  --coach-success:#2d8a69;
+  --coach-warning:#b9782b;
+  --coach-danger:#bd5960;
+  --coach-radius:18px;
+  --coach-shadow:0 12px 34px rgba(26,45,72,.055);
+  --coach-shadow-hover:0 18px 42px rgba(26,45,72,.085);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(circle at 82% -10%,rgba(40,115,240,.055),transparent 28rem),
+    var(--coach-canvas);
+  color:var(--coach-text);
+}
+::selection{background:#dceaff;color:#17345f}
+
+.coach-reset-canvas{
+  background:
+    radial-gradient(circle at 85% 0,rgba(40,115,240,.04),transparent 32rem),
+    linear-gradient(180deg,#f7f9fc 0,#f3f6fa 260px,#f3f6fa 100%);
+}
+
+.dashboard-page,
+.students-page,
+.programs-page,
+.reports-page,
+.pp-coach-page,
+.exams-page,
+.topics-page,
+.errors-page,
+.messages-page,
+.settings-page{
+  width:100%;
+  animation:coach-page-in .18s ease-out both;
+}
+
+.dashboard-head,
+.students-head,
+.programs-head,
+.reports-head,
+.pp-coach-head,
+.exams-head,
+.topics-head,
+.errors-head,
+.messages-head,
+.settings-head{
+  margin-bottom:24px;
+}
+
+.dashboard-head h1,
+.students-head h1,
+.programs-head h1,
+.reports-head h1,
+.pp-coach-head h1,
+.exams-head h1,
+.topics-head h1,
+.errors-head h1,
+.messages-head h1,
+.settings-head h1{
+  color:#142238;
+  font-weight:800;
+  letter-spacing:-.045em;
+  text-wrap:balance;
+}
+
+.dashboard-head p,
+.students-head p,
+.programs-head p,
+.reports-head p,
+.pp-coach-head p,
+.exams-head p,
+.topics-head p,
+.errors-head p,
+.messages-head p,
+.settings-head p{
+  color:#738198;
+  line-height:1.55;
+}
+
+.dashboard-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.15em;
+  color:#2873f0;
+}
+.dashboard-eyebrow:before{
+  content:"";
+  width:18px;
+  height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#2873f0,#79b4ff);
+}
+
+/* Ortak yüzey dili */
+:where(
+  .stat-card,.dash-panel,.students-card,.program-workspace,
+  .report-card,.report-selector-card,.report-student-hero,
+  .pp-coach-card,.pp-coach-controls,.exam-card,.exam-control-card,
+  .topic-card,.topic-control-card,.error-card,.error-control-card,
+  .messages-shell,.settings-sidebar,.settings-section
+){
+  border-color:var(--coach-border);
+  box-shadow:var(--coach-shadow);
+}
+
+:where(
+  .stat-card,.dash-panel,.report-card,.pp-coach-card,.exam-card,
+  .topic-card,.error-card,.settings-section
+){
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+@media(hover:hover){
+  :where(
+    .stat-card,.dash-panel,.report-card,.pp-coach-card,.exam-card,
+    .topic-card,.error-card
+  ):hover{
+    transform:translateY(-1px);
+    border-color:#d8e2ee;
+    box-shadow:var(--coach-shadow-hover);
+  }
+}
+
+/* Kart başlıkları */
+:where(
+  .panel-title,.report-card-head,.pp-coach-card-head,.exam-card-head,
+  .topic-card-head,.error-card-head,.settings-section-head
+){
+  border-bottom-color:#edf1f6;
+}
+:where(
+  .panel-title,.report-card-head,.pp-coach-card-head,.exam-card-head,
+  .topic-card-head,.error-card-head
+) h2{
+  color:#21344c;
+  font-weight:800;
+  letter-spacing:-.015em;
+}
+:where(
+  .report-card-head,.pp-coach-card-head,.exam-card-head,
+  .topic-card-head,.error-card-head
+)>div>span{
+  color:#2873f0;
+  letter-spacing:.11em;
+}
+
+/* KPI kartları daha okunur */
+:where(.stat-card,.report-kpi,.pp-coach-kpi,.exam-kpi,.topic-kpi,.error-kpi){
+  background:linear-gradient(180deg,#fff 0%,#fcfdff 100%);
+}
+:where(.stat-card,.report-kpi,.pp-coach-kpi,.exam-kpi,.topic-kpi,.error-kpi) strong{
+  color:#172940;
+}
+.stat-icon{
+  background:linear-gradient(145deg,#edf5ff,#e5f0ff);
+  box-shadow:inset 0 0 0 1px rgba(40,115,240,.05);
+}
+
+/* Butonlar */
+:where(
+  .students-add,.program-primary,.report-refresh,.pp-coach-refresh,
+  .exam-refresh,.topic-refresh,.error-refresh,.message-refresh,
+  .report-link-button
+){
+  transition:transform .16s ease,box-shadow .16s ease,background .16s ease,border-color .16s ease;
+}
+@media(hover:hover){
+  :where(
+    .students-add,.program-primary,.report-refresh,.pp-coach-refresh,
+    .exam-refresh,.topic-refresh,.error-refresh,.message-refresh,
+    .report-link-button
+  ):hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 18px rgba(36,77,132,.10);
+  }
+}
+:where(button,[role="button"]):active{transform:translateY(0) scale(.985)}
+
+/* Form alanları */
+:where(
+  .student-search,.program-search,.report-search,.report-select-wrap,
+  .topic-control-fields label,.exam-control-fields label,
+  .pp-coach-control-fields label,.error-control-fields label,
+  .message-search
+){
+  border-color:#dfe6ef;
+  background:#fafcff;
+}
+:where(input,select,textarea)::placeholder{color:#9aa7b7}
+:where(input,select,textarea):focus{
+  outline:none;
+  border-color:#8bb8f6;
+  box-shadow:0 0 0 3px rgba(40,115,240,.08);
+}
+
+/* Satır / tablo hareketleri */
+:where(
+  .student-row,.report-student-row,.exam-recent-row,.topic-student-row,
+  .error-student-row,.message-student-item,.dashboard-flow-row,
+  .dashboard-student-row,.dashboard-day-review-row
+){
+  transition:background .14s ease,border-color .14s ease,transform .14s ease;
+}
+@media(hover:hover){
+  :where(
+    .student-row,.report-student-row,.exam-recent-row,.topic-student-row,
+    .error-student-row,.message-student-item,.dashboard-flow-row,
+    .dashboard-student-row,.dashboard-day-review-row
+  ):hover{
+    background:#f7faff;
+  }
+}
+
+/* Sidebar */
+.coach-sidebar-v20{
+  background:
+    radial-gradient(circle at 15% 0,rgba(61,139,255,.14),transparent 18rem),
+    linear-gradient(180deg,#0d192b 0%,#0a1423 100%);
+  border-right-color:#17263a;
+  box-shadow:10px 0 34px rgba(9,20,35,.05);
+}
+.coach-brand-v20{padding-top:3px}
+.coach-brand-v20 .brand-mark{
+  box-shadow:0 10px 24px rgba(47,121,235,.26),inset 0 0 0 1px rgba(255,255,255,.16);
+}
+.coach-nav-item{
+  min-height:42px;
+  border:1px solid transparent;
+}
+.coach-nav-item:hover{
+  background:#14243a;
+  border-color:#1b304c;
+}
+.coach-nav-item.on{
+  background:linear-gradient(90deg,#17385f,#142d4c);
+  border-color:#1c426f;
+  box-shadow:0 8px 20px rgba(0,0,0,.08),inset 3px 0 #4ab8ff;
+}
+.coach-profile-v20{
+  border-color:#1d3049;
+  background:linear-gradient(145deg,#111f33,#0f1b2d);
+}
+
+/* Dashboard */
+.dashboard-date{
+  border-color:var(--coach-border);
+  border-radius:12px;
+  box-shadow:0 7px 18px rgba(27,46,73,.035);
+}
+.quick-actions button{
+  min-height:66px;
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease;
+}
+@media(hover:hover){
+  .quick-actions button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(38,80,137,.07);
+  }
+}
+
+/* Öğrenciler */
+.students-summary div{
+  border-color:var(--coach-border);
+  box-shadow:0 8px 22px rgba(28,48,78,.035);
+}
+.student-filters{
+  border:1px solid #e8edf4;
+  background:#f5f7fa;
+}
+.student-filters button.active{
+  box-shadow:0 3px 9px rgba(26,43,69,.07);
+}
+
+/* Program */
+.program-workspace{
+  border-radius:19px;
+  box-shadow:0 12px 34px rgba(28,48,78,.05);
+}
+.program-toolbar{
+  background:linear-gradient(180deg,#fff,#fcfdff);
+}
+.program-secondary:hover{border-color:#bfd3eb;background:#f7faff}
+.program-primary:hover{background:#1e67df}
+
+/* Rapor / konu / deneme seçicileri */
+.report-selector-card,
+.topic-control-card,
+.exam-control-card,
+.pp-coach-controls,
+.error-control-card{
+  border-radius:17px;
+  background:linear-gradient(180deg,#fff,#fcfdff);
+}
+
+/* Mesajlaşma */
+.messages-shell{
+  border-radius:20px;
+  box-shadow:0 18px 48px rgba(25,47,78,.075);
+}
+.message-students{background:#fcfdff}
+.message-student-item.active{
+  background:linear-gradient(90deg,#edf5ff,#f7faff);
+}
+
+/* Ayarlar */
+.settings-sidebar,.settings-section{border-radius:20px}
+.settings-nav button.active{
+  background:linear-gradient(90deg,#edf5ff,#f6f9ff);
+}
+.settings-nav button.active>span{
+  box-shadow:inset 0 0 0 1px rgba(40,115,240,.08);
+}
+
+/* İnce scrollbar */
+*{scrollbar-width:thin;scrollbar-color:#c7d3e0 transparent}
+*::-webkit-scrollbar{width:8px;height:8px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:#c7d3e0;border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:#aebdcd;background-clip:padding-box}
+
+/* Mobil cilası */
+@media(max-width:1000px){
+  .dashboard-page,.students-page,.programs-page,.reports-page,
+  .pp-coach-page,.exams-page,.topics-page,.errors-page,
+  .messages-page,.settings-page{
+    padding-top:66px;
+  }
+  .coach-mobile-menu-reset{
+    border-radius:12px;
+    box-shadow:0 10px 28px rgba(24,43,70,.12);
+    backdrop-filter:blur(10px);
+  }
+}
+@media(max-width:720px){
+  .dashboard-page,.students-page,.programs-page,.reports-page,
+  .pp-coach-page,.exams-page,.topics-page,.errors-page,
+  .messages-page,.settings-page{
+    padding-left:14px;
+    padding-right:14px;
+    padding-bottom:32px;
+  }
+  .dashboard-head,.students-head,.programs-head,.reports-head,
+  .pp-coach-head,.exams-head,.topics-head,.errors-head,
+  .messages-head,.settings-head{
+    align-items:flex-start;
+    gap:13px;
+  }
+  :where(
+    .stat-card,.dash-panel,.students-card,.program-workspace,
+    .report-card,.pp-coach-card,.exam-card,.topic-card,.error-card,
+    .settings-sidebar,.settings-section
+  ){border-radius:16px}
+}
+@media(max-width:480px){
+  .dashboard-eyebrow{font-size:8px}
+  .dashboard-head h1,.students-head h1,.programs-head h1,
+  .reports-head h1,.pp-coach-head h1,.exams-head h1,
+  .topics-head h1,.errors-head h1,.messages-head h1,.settings-head h1{
+    font-size:27px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+}
+@keyframes coach-page-in{
+  from{opacity:.01;transform:translateY(3px)}
+  to{opacity:1;transform:none}
+}
