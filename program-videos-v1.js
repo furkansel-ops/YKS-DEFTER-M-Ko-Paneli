@@ -120,7 +120,7 @@
     "Milli Edebiyat":["milli edebiyat"],
     "Cumhuriyet Dönemi":["cumhuriyet dönemi","cumhuriyet donemi"]
   };
-  const state={scope:"TYT",subject:"Matematik",topic:"",teacher:"",category:"all",mode:"videos",query:"",busy:false,items:[],cache:new Map(),hasMore:false,archive:null,loadedPages:new Set(),selectedPlaylist:null};
+  const state={scope:"TYT",subject:"Matematik",topic:"",teacher:"",category:"all",mode:"videos",query:"",playlistVideoQuery:"",busy:false,items:[],cache:new Map(),hasMore:false,archive:null,loadedPages:new Set(),selectedPlaylist:null};
 
   const $=id=>document.getElementById(id);
   function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
@@ -171,28 +171,28 @@
   function bind(){
     $("coachVideoScope")?.addEventListener("click",event=>{
       const b=event.target.closest("[data-scope]");if(!b||state.busy)return;
-      state.scope=b.dataset.scope||"TYT";state.selectedPlaylist=null;
+      state.scope=b.dataset.scope||"TYT";state.selectedPlaylist=null;state.playlistVideoQuery="";
       document.querySelectorAll("#coachVideoScope [data-scope]").forEach(x=>x.classList.toggle("active",x===b));
       rebuildSubjects();void load(true);
     });
-    $("coachVideoSubject")?.addEventListener("change",event=>{state.subject=event.target.value;state.topic="";state.selectedPlaylist=null;rebuildTopics();rebuildTeachers();void load(true);});
-    $("coachVideoTopic")?.addEventListener("change",event=>{state.topic=event.target.value;state.selectedPlaylist=null;void load(true);});
-    $("coachVideoTeacher")?.addEventListener("change",event=>{state.teacher=event.target.value;state.selectedPlaylist=null;syncChannelLink();void load(true);});
+    $("coachVideoSubject")?.addEventListener("change",event=>{state.subject=event.target.value;state.topic="";state.selectedPlaylist=null;state.playlistVideoQuery="";rebuildTopics();rebuildTeachers();void load(true);});
+    $("coachVideoTopic")?.addEventListener("change",event=>{state.topic=event.target.value;state.selectedPlaylist=null;state.playlistVideoQuery="";void load(true);});
+    $("coachVideoTeacher")?.addEventListener("change",event=>{state.teacher=event.target.value;state.selectedPlaylist=null;state.playlistVideoQuery="";syncChannelLink();void load(true);});
     $("coachVideoMode")?.addEventListener("click",event=>{
       const b=event.target.closest("[data-mode]");if(!b||state.busy)return;
-      state.mode=b.dataset.mode||"videos";state.selectedPlaylist=null;
+      state.mode=b.dataset.mode||"videos";state.selectedPlaylist=null;state.playlistVideoQuery="";
       document.querySelectorAll("#coachVideoMode [data-mode]").forEach(x=>x.classList.toggle("active",x===b));
       void load(true);
     });
     $("coachVideoCategories")?.addEventListener("click",event=>{
       const b=event.target.closest("[data-category]");if(!b||state.busy)return;
-      state.category=b.dataset.category||"all";state.selectedPlaylist=null;
+      state.category=b.dataset.category||"all";state.selectedPlaylist=null;state.playlistVideoQuery="";
       document.querySelectorAll("#coachVideoCategories [data-category]").forEach(x=>x.classList.toggle("active",x===b));
       void load(true);
     });
     let timer=0;
     $("coachVideoSearch")?.addEventListener("input",event=>{
-      clearTimeout(timer);state.query=compact(event.target.value);state.selectedPlaylist=null;timer=setTimeout(()=>void load(true),350);
+      clearTimeout(timer);state.query=compact(event.target.value);state.selectedPlaylist=null;state.playlistVideoQuery="";timer=setTimeout(()=>void load(true),350);
     });
     $("coachVideoRefresh")?.addEventListener("click",()=>{state.cache.clear();void load(true,true);});
     $("coachVideoMore")?.addEventListener("click",()=>void load(false));
@@ -203,9 +203,9 @@
     });
     $("coachVideoResults")?.addEventListener("click",event=>{
       const back=event.target.closest("[data-playlist-back]");
-      if(back){state.selectedPlaylist=null;render();return;}
+      if(back){state.selectedPlaylist=null;state.playlistVideoQuery="";render();return;}
       const view=event.target.closest("[data-playlist-view]");
-      if(view){const item=state.items[Number(view.dataset.playlistView)];if(item){state.selectedPlaylist=item;render();}return;}
+      if(view){const item=state.items[Number(view.dataset.playlistView)];if(item){state.selectedPlaylist=item;state.playlistVideoQuery="";render();}return;}
       const playlistRecommend=event.target.closest("[data-playlist-recommend]");
       if(playlistRecommend&&state.selectedPlaylist){recommendResource(state.selectedPlaylist);return;}
       const playlistVideoRecommend=event.target.closest("[data-playlist-video-recommend]");
@@ -219,6 +219,12 @@
       const add=event.target.closest("[data-video-add]"),open=event.target.closest("[data-video-open]");
       if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item);}
       if(open){const item=state.items[Number(open.dataset.videoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");}
+    });
+    $("coachVideoResults")?.addEventListener("input",event=>{
+      const input=event.target.closest("#coachPlaylistVideoSearch");if(!input)return;
+      state.playlistVideoQuery=String(input.value||"");
+      renderPlaylistDetail(true);
+      const next=$("coachPlaylistVideoSearch");if(next){next.focus({preventScroll:true});next.setSelectionRange(next.value.length,next.value.length);}
     });
   }
 
@@ -465,20 +471,24 @@
     setStatus("Video arşivi bağlantısı kurulamadı.");
     $("coachVideoMore")?.classList.add("hidden");
   }
-  function renderPlaylistDetail(){
+  function renderPlaylistDetail(keepSearchFocus=false){
     const host=$("coachVideoResults"),more=$("coachVideoMore"),item=state.selectedPlaylist;if(!host||!item)return;
     more?.classList.add("hidden");
-    const videos=Array.isArray(item.videos)?item.videos:[];
+    const videos=Array.isArray(item.videos)?item.videos:[],query=norm(state.playlistVideoQuery);
+    const rows=videos.map((video,index)=>({video,index})).filter(row=>!query||norm([row.video.title,row.video.by||state.teacher].join(" ")).includes(query));
     const total=Number(item.videoCount||videos.length)||videos.length;
     const note=item.contentComplete?(total+" video · listenin tamamı"):(videos.length+" önizleme · tam liste YouTube bağlantısında");
-    const cards=videos.map((video,index)=>'<article class="coach-video-card">'+
+    const cards=rows.map(({video,index})=>'<article class="coach-video-card">'+
       '<button type="button" class="coach-video-thumb" data-playlist-video-open="'+index+'" aria-label="Videoyu aç"><img src="'+esc(video.thumb||("https://i.ytimg.com/vi/"+video.id+"/hqdefault.jpg"))+'" alt="" loading="lazy" referrerpolicy="no-referrer"><span>Video</span></button>'+
       '<div class="coach-video-card-body"><small>'+esc(video.by||state.teacher)+'</small><b>'+esc(video.title)+'</b><em>'+esc(video.meta||state.scope+" · "+state.subject+(state.topic?" · "+state.topic:""))+'</em></div>'+
       '<div class="coach-video-card-actions"><button type="button" data-playlist-video-open="'+index+'">Aç ↗</button><button type="button" class="recommend" data-playlist-video-recommend="'+index+'">Öğrenciye öner</button><button type="button" class="primary" data-playlist-video-add="'+index+'">Programa ekle</button></div>'+
     '</article>').join("");
+    const search=videos.length?'<div class="coach-playlist-video-search-row"><label class="coach-playlist-video-search"><span>⌕</span><input id="coachPlaylistVideoSearch" type="search" autocomplete="off" value="'+esc(state.playlistVideoQuery)+'" placeholder="Bu playlistte video ara…"></label><span>'+rows.length+" / "+videos.length+' video</span></div>':"";
+    const empty=query?'<div class="coach-video-empty compact"><span>⌕</span><b>Eşleşen video bulunamadı</b><p>Başka bir konu veya video adı dene.</p></div>':'<div class="coach-video-empty"><span>▶</span><b>Playlist bağlantısı hazır</b><p>Bu eski arşiv kaydında video kartları eksik. Tam listeyi YouTube’dan açabilirsin; yeni arşiv yenilendiğinde videolar burada tek tek görünecek.</p><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">Tam listeyi aç ↗</a></div>';
     host.innerHTML='<div class="coach-playlist-detail-head"><button type="button" data-playlist-back>‹ Playlistlere dön</button><div><small>'+esc(state.teacher)+'</small><b>'+esc(item.title)+'</b><span>'+esc(note)+'</span></div><div class="coach-playlist-detail-actions"><button type="button" class="recommend" data-playlist-recommend>Öğrenciye öner</button><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">YouTube’da tam liste ↗</a></div></div>'+
-      (cards||'<div class="coach-video-empty"><span>▶</span><b>Playlist bağlantısı hazır</b><p>Bu eski arşiv kaydında video kartları eksik. Tam listeyi YouTube’dan açabilirsin; yeni arşiv yenilendiğinde videolar burada tek tek görünecek.</p><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">Tam listeyi aç ↗</a></div>');
-    setStatus(state.teacher+" · "+item.title+" · "+note);
+      search+(cards||empty);
+    if(keepSearchFocus){const next=$("coachPlaylistVideoSearch");if(next){next.focus({preventScroll:true});next.setSelectionRange(next.value.length,next.value.length);}}
+    setStatus(state.teacher+" · "+item.title+" · "+(query?rows.length+" / "+videos.length+" video eşleşti":note));
   }
 
   function render(){
