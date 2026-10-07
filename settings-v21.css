@@ -17,3 +17,463 @@ body.coach-hide-quick-messages .message-quickbar{display:none!important}body.coa
 .appearance-toggle-card{min-height:74px;padding:13px 14px;border:1px solid #e1e7ef;border-radius:13px;background:#fafbfd;display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:12px}.appearance-toggle-icon{width:38px;height:38px;border-radius:11px;background:#eef5ff;color:#2873f0;display:grid;place-items:center;font-size:15px;font-weight:800}.appearance-toggle-copy b,.appearance-toggle-copy small{display:block}.appearance-toggle-copy b{font-size:12px;color:#3b4f67}.appearance-toggle-copy small{font-size:10px;color:#909cad;margin-top:3px}
 .appearance-live-card{margin:22px;padding:18px;border:1px solid #dfe6ef;border-radius:15px;background:linear-gradient(180deg,#fbfcfe,#f6f8fb)}.appearance-live-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:13px}.appearance-live-head span{font-size:9px;font-weight:900;letter-spacing:.08em;color:#2873f0}.appearance-live-head h3{font-size:14px;margin:4px 0 0;color:#34485f}.appearance-live-head small{font-size:9px;color:#98a4b3}.appearance-live-preview{height:245px;display:grid;grid-template-columns:23% 1fr;border:1px solid #dce4ed;border-radius:13px;background:#fff;overflow:hidden;box-shadow:0 10px 24px rgba(35,55,80,.05);transition:.18s}.appearance-live-preview aside{background:#14223a;padding:18px 13px;display:grid;align-content:start;gap:11px}.preview-brand{height:19px;width:70%;border-radius:6px;background:rgba(255,255,255,.2);margin-bottom:9px}.appearance-live-preview aside i{height:12px;border-radius:5px;background:rgba(255,255,255,.1)}.appearance-live-preview aside i.on{background:rgba(76,145,255,.35)}.appearance-live-preview main{padding:24px}.preview-heading b{display:block;width:32%;height:18px;border-radius:6px;background:#dce8f7}.preview-heading span{display:block;width:48%;height:9px;border-radius:5px;background:#eef2f6;margin-top:8px}.preview-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:21px 0}.preview-kpis i{height:57px;border-radius:10px;background:#f1f5f9;border:1px solid #e7edf3}.preview-content{display:grid;grid-template-columns:1.4fr .8fr;gap:10px}.preview-content span{height:82px;border-radius:10px;background:#f7f9fb;border:1px solid #e9eef3}.appearance-live-preview.compact main{padding:17px}.appearance-live-preview.compact .preview-kpis{gap:7px;margin:14px 0}.appearance-live-preview.compact .preview-kpis i{height:46px}.appearance-live-preview.compact .preview-content{gap:7px}.appearance-live-preview.compact .preview-content span{height:68px}.appearance-live-preview.compact aside{padding:14px 11px;gap:8px}
 @media(max-width:760px){.appearance-density-grid{grid-template-columns:1fr}.appearance-live-preview{height:205px}.appearance-live-preview main{padding:16px}.preview-kpis{grid-template-columns:1fr 1fr;margin:14px 0}.preview-kpis i{height:38px}.preview-content{grid-template-columns:1fr}.preview-content span:last-child{display:none}.appearance-toggle-card{grid-template-columns:38px 1fr auto}}
+
+/* Settings v3 — YKS Defterim ile aynı bilgi mimarisi */
+.settings-page{
+  padding:34px clamp(20px,4vw,54px) 56px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.settings-head{
+  width:min(840px,100%);
+  margin:0 auto 18px;
+  align-items:flex-end;
+}
+.settings-head h1{
+  margin:6px 0 4px;
+  font-size:32px;
+  line-height:1.15;
+  font-weight:700;
+  letter-spacing:-.04em;
+}
+.settings-head p{font-size:12.5px}
+.settings-page[data-settings-view="detail"] .settings-head{display:none}
+
+.coach-settings-wrap{
+  width:min(840px,100%);
+  margin:0 auto 28px;
+  color:#14243a;
+}
+.coach-settings-overview[hidden],
+.coach-settings-detail[hidden]{display:none!important}
+
+.coach-settings-search{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+  padding:0 15px;
+  border:1px solid transparent;
+  border-radius:15px;
+  background:#eef2f7;
+  color:#71809a;
+}
+.coach-settings-search:focus-within{
+  border-color:#2873f0;
+  box-shadow:0 0 0 3px rgba(40,115,240,.06);
+}
+.coach-settings-search svg{
+  width:21px;
+  height:21px;
+  flex:none;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+}
+.coach-settings-search input{
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  padding:14px 0;
+  margin:0;
+  border:0!important;
+  border-radius:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  color:#14243a;
+  font-size:14px;
+  font-weight:400;
+}
+.coach-settings-search input::placeholder{color:#71809a}
+
+.coach-settings-profile,
+.coach-settings-category-list{
+  background:#fff;
+  border:1px solid #e1e7ef;
+  border-radius:20px;
+  box-shadow:0 4px 18px rgba(29,57,101,.025);
+}
+.coach-settings-profile{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  width:100%;
+  margin:0 0 16px;
+  padding:20px;
+  text-align:left;
+  color:inherit;
+  cursor:pointer;
+}
+.coach-settings-avatar{
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  flex:none;
+  border-radius:50%;
+  background:#eaf2ff;
+  color:#2873f0;
+  font-size:20px;
+  font-weight:700;
+}
+.coach-settings-profile-copy{
+  display:grid;
+  gap:5px;
+  min-width:0;
+  flex:1;
+}
+.coach-settings-profile-copy b{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-.025em;
+  overflow-wrap:anywhere;
+}
+.coach-settings-profile-copy small{
+  font-size:13px;
+  color:#71809a;
+}
+.coach-settings-chevron{
+  flex:none;
+  color:#8a97a8;
+  font-size:25px;
+  font-weight:300;
+  line-height:1;
+}
+.coach-settings-category-list{
+  overflow:hidden;
+  padding:0 18px;
+}
+.coach-settings-category{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  width:100%;
+  min-height:80px;
+  padding:17px 0;
+  border:0;
+  border-bottom:1px solid #e6ebf2;
+  border-radius:0;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.coach-settings-category:last-child{border-bottom:0}
+.coach-settings-category-icon{
+  display:grid;
+  place-items:center;
+  width:30px;
+  flex:none;
+  color:#14243a;
+  font-size:23px;
+  font-weight:500;
+}
+.coach-settings-category-copy{
+  display:grid;
+  gap:5px;
+  min-width:0;
+  flex:1;
+}
+.coach-settings-category-copy b{
+  font-size:14px;
+  font-weight:650;
+  letter-spacing:-.015em;
+}
+.coach-settings-category-copy small{
+  font-size:12px;
+  line-height:1.45;
+  color:#71809a;
+}
+.coach-settings-profile:hover,
+.coach-settings-category:hover{
+  background:#f8fbff;
+}
+.coach-settings-profile:focus-visible,
+.coach-settings-category:focus-visible,
+.coach-settings-back:focus-visible{
+  outline:2px solid #2873f0;
+  outline-offset:3px;
+}
+
+.coach-settings-app-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:15px 17px;
+  margin-top:14px;
+  border-radius:15px;
+  background:#eef2f7;
+  color:#71809a;
+  font-size:12px;
+}
+.coach-settings-app-row>span:nth-child(2){flex:1;color:#53647b;font-weight:650}
+.coach-settings-app-row small{font-size:11px;color:#8f9cad}
+.coach-settings-no-results{
+  margin:18px 0;
+  padding:24px;
+  text-align:center;
+  border:1px solid #e1e7ef;
+  border-radius:18px;
+  background:#fff;
+  color:#71809a;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.coach-settings-back{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  min-height:36px;
+  padding:8px 0;
+  margin:0 0 10px;
+  border:0;
+  background:transparent;
+  color:#2873f0;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+.coach-settings-back:first-letter{font-size:21px}
+.coach-settings-detail-heading{margin-bottom:21px}
+.coach-settings-detail-heading h2{
+  margin:0 0 7px;
+  font-size:25px;
+  font-weight:700;
+  letter-spacing:-.035em;
+  line-height:1.2;
+  color:#14243a;
+}
+.coach-settings-detail-heading p{
+  margin:0;
+  max-width:540px;
+  color:#71809a;
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* Detay ekranı: öğrenci uygulamasındaki kart düzeni */
+.coach-settings-detail .settings-section{
+  display:grid;
+  gap:16px;
+  min-width:0;
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.coach-settings-detail .settings-section.hidden{display:none!important}
+.coach-settings-detail .settings-group{
+  padding:19px;
+  border:1px solid #e1e7ef;
+  border-radius:20px;
+  background:#fff;
+}
+.coach-settings-detail .settings-group+.settings-group{border-top:1px solid #e1e7ef}
+.coach-settings-detail .settings-group-title{padding:0 0 7px}
+.coach-settings-detail .settings-group-title h3{
+  margin:0;
+  font-size:13px;
+  font-weight:650;
+  color:#14243a;
+}
+.coach-settings-detail .settings-group-title p{
+  margin:5px 0 0;
+  font-size:12px;
+  line-height:1.5;
+  color:#71809a;
+}
+.coach-settings-detail .settings-select-row,
+.coach-settings-detail .settings-toggle-row{
+  min-height:auto;
+  padding:14px 0;
+  border-top:1px solid #e6ebf2;
+}
+.coach-settings-detail .settings-group-title+.settings-select-row,
+.coach-settings-detail .settings-group-title+.settings-toggle-row{border-top:0}
+.coach-settings-detail .settings-select-row b,
+.coach-settings-detail .settings-toggle-row b{
+  font-size:13px;
+  font-weight:600;
+  color:#14243a;
+}
+.coach-settings-detail .settings-select-row small,
+.coach-settings-detail .settings-toggle-row small{
+  margin-top:5px;
+  font-size:12px;
+  line-height:1.5;
+  color:#71809a;
+}
+.coach-settings-detail .settings-select-row select{
+  min-width:210px;
+  min-height:44px;
+  border-color:#e1e7ef;
+  border-radius:12px;
+  background:#eef2f7;
+  font-size:13px;
+}
+
+/* Profil kartı */
+.coach-settings-detail #coachSettingsForm{
+  padding:19px;
+  border:1px solid #e1e7ef;
+  border-radius:20px;
+  background:#fff;
+}
+.coach-settings-detail .settings-profile-hero{
+  padding:0 0 18px;
+  margin-bottom:18px;
+}
+.coach-settings-detail .settings-profile-avatar{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#eaf2ff;
+  font-size:18px;
+}
+.coach-settings-detail .settings-profile-hero h3{
+  font-size:17px;
+  font-weight:700;
+  color:#14243a;
+}
+.coach-settings-detail .settings-profile-hero p{
+  margin-top:5px;
+  font-size:12px;
+  color:#71809a;
+}
+.coach-settings-detail .settings-form-grid{gap:14px}
+.coach-settings-detail .settings-field{gap:7px}
+.coach-settings-detail .settings-field>span{
+  font-size:12px;
+  font-weight:600;
+  color:#53647b;
+}
+.coach-settings-detail .settings-field input,
+.coach-settings-detail .settings-field textarea{
+  border-color:#e1e7ef;
+  border-radius:12px;
+  background:#eef2f7;
+  font-size:14px;
+}
+.coach-settings-detail .settings-field input{height:46px}
+.coach-settings-detail .settings-field>small{
+  font-size:11px;
+  line-height:1.45;
+  color:#8492a5;
+}
+.coach-settings-detail .settings-form-footer{
+  margin-top:18px;
+  padding-top:16px;
+}
+.coach-settings-detail .settings-form-footer button{
+  min-height:44px;
+  height:auto;
+  padding:10px 15px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:600;
+}
+
+/* Mesaj / görünüm / hesap kartları */
+.coach-settings-detail .settings-info-box,
+.coach-settings-detail .appearance-block,
+.coach-settings-detail .appearance-live-card,
+.coach-settings-detail .settings-account-card,
+.coach-settings-detail .settings-account-list,
+.coach-settings-detail .settings-session-card{
+  margin:0;
+  padding:19px;
+  border:1px solid #e1e7ef;
+  border-radius:20px;
+  background:#fff;
+}
+.coach-settings-detail .settings-info-box h3,
+.coach-settings-detail .appearance-block-head h3,
+.coach-settings-detail .appearance-live-head h3,
+.coach-settings-detail .settings-session-card h3{
+  color:#14243a;
+}
+.coach-settings-detail .settings-info-box p,
+.coach-settings-detail .appearance-block-head p,
+.coach-settings-detail .settings-session-card p{
+  font-size:12px;
+  line-height:1.55;
+  color:#71809a;
+}
+.coach-settings-detail .appearance-density-grid{gap:12px}
+.coach-settings-detail .appearance-density-card{
+  border-radius:16px;
+  box-shadow:none;
+}
+.coach-settings-detail .appearance-toggle-card{
+  border-radius:14px;
+  background:#f7f9fc;
+}
+.coach-settings-detail .appearance-live-card{
+  background:#fff;
+}
+.coach-settings-detail .settings-account-list{
+  padding:3px 19px;
+}
+.coach-settings-detail .settings-account-list div:last-child{border-bottom:0}
+.coach-settings-detail .settings-session-card{
+  border-color:#f0d4d4;
+  background:#fffafa;
+}
+.coach-settings-detail .settings-session-card button{
+  min-height:44px;
+  border-radius:12px;
+}
+.coach-settings-detail .settings-switch{width:46px;height:28px}
+.coach-settings-detail .settings-switch i:after{width:22px;height:22px}
+.coach-settings-detail .settings-switch input:checked+i:after{transform:translateX(18px)}
+
+@media(max-width:1000px){
+  .settings-page{padding:72px 18px 34px}
+}
+@media(max-width:620px){
+  .settings-page{padding-left:14px;padding-right:14px}
+  .settings-head{align-items:flex-start;flex-direction:column;gap:10px}
+  .settings-status-pill{width:auto;justify-content:flex-start}
+  .coach-settings-wrap{margin-top:10px}
+  .coach-settings-profile{padding:18px;gap:13px}
+  .coach-settings-avatar{width:56px;height:56px}
+  .coach-settings-category-list{padding:0 16px}
+  .coach-settings-category{gap:13px;min-height:77px}
+  .coach-settings-category-copy small{font-size:11.5px}
+  .coach-settings-detail-heading h2{font-size:24px}
+  .coach-settings-detail .settings-group,
+  .coach-settings-detail #coachSettingsForm,
+  .coach-settings-detail .settings-info-box,
+  .coach-settings-detail .appearance-block,
+  .coach-settings-detail .appearance-live-card,
+  .coach-settings-detail .settings-account-card,
+  .coach-settings-detail .settings-account-list,
+  .coach-settings-detail .settings-session-card{padding:17px}
+  .coach-settings-detail .settings-select-row,
+  .coach-settings-detail .settings-toggle-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .coach-settings-detail .settings-select-row select{width:100%;min-width:0}
+  .coach-settings-detail .settings-form-grid{grid-template-columns:1fr}
+  .coach-settings-detail .settings-field-wide{grid-column:auto}
+  .coach-settings-detail .settings-form-footer{align-items:stretch;flex-direction:column}
+  .coach-settings-detail .settings-form-footer button{width:100%}
+  .coach-settings-detail .appearance-density-grid{grid-template-columns:1fr}
+  .coach-settings-detail .settings-account-card{align-items:flex-start;flex-wrap:wrap}
+  .coach-settings-detail .settings-active-badge{margin-left:auto}
+  .coach-settings-detail .settings-session-card{align-items:stretch;flex-direction:column}
+  .coach-settings-detail .settings-session-card button{width:100%}
+}
+@media(max-width:360px){
+  .coach-settings-profile-copy b{font-size:16px}
+  .coach-settings-profile{padding:16px}
+  .coach-settings-category-list{padding:0 14px}
+}
