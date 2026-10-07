@@ -62,7 +62,65 @@
     {n:"Tonguç Akademi",d:["Türkçe","Matematik","Matematik (AYT)","Geometri","Geometri (AYT)","Fizik","Fizik (AYT)","Kimya","Kimya (AYT)","Biyoloji","Biyoloji (AYT)","Tarih","Tarih (AYT)","Coğrafya","Coğrafya (AYT)","Felsefe","Din Kültürü","Edebiyat"],id:"UCm3vDH7Uvz_qwql5Qih4yGw",searchOnly:true}
   ];
 
-  const state={scope:"TYT",subject:"Matematik",teacher:"",category:"all",mode:"videos",query:"",busy:false,items:[],cache:new Map(),hasMore:false,archive:null,loadedPages:new Set(),selectedPlaylist:null};
+  const TOPICS={
+    "TYT|Türkçe":["Paragraf","Sözcükte Anlam","Cümlede Anlam","Dil Bilgisi","Yazım Kuralları","Noktalama"],
+    "TYT|Matematik":["Temel Kavramlar","Sayı Basamakları","Problemler","Kümeler","Fonksiyonlar","Olasılık"],
+    "TYT|Geometri":["Üçgenler","Dörtgenler","Çember","Analitik Geometri"],
+    "TYT|Fizik":["Fizik Bilimine Giriş","Hareket ve Kuvvet","Enerji","Isı ve Sıcaklık","Elektrik","Optik"],
+    "TYT|Kimya":["Kimya Bilimi","Atom","Periyodik Sistem","Kimyasal Türler","Maddenin Halleri","Karışımlar"],
+    "TYT|Biyoloji":["Canlıların Ortak Özellikleri","Hücre","Canlıların Sınıflandırılması","Ekoloji","Kalıtım"],
+    "TYT|Tarih":["Tarih Bilimi","İlk Uygarlıklar","İlk Türk Devletleri","İslam Tarihi","Osmanlı Devleti","Kurtuluş Savaşı","Atatürk ve İnkılaplar"],
+    "TYT|Coğrafya":["Harita Bilgisi","İklim","İç Kuvvetler","Dış Kuvvetler","Nüfus","Göç","Ekonomik Faaliyetler"],
+    "TYT|Felsefe":["Felsefeye Giriş","Bilgi Felsefesi","Varlık Felsefesi","Ahlak Felsefesi","Din Felsefesi","Siyaset Felsefesi","Mantık"],
+    "TYT|Din Kültürü":["Bilgi ve İnanç","Din ve İslam","İslam ve İbadet","Ahlak","Hz. Muhammed","Kur'an"],
+    "AYT|Matematik":["Fonksiyonlar","Polinomlar","Trigonometri","Logaritma","Diziler","Limit","Türev","İntegral"],
+    "AYT|Geometri":["Üçgenler","Dörtgenler","Çember","Analitik Geometri"],
+    "AYT|Fizik":["Vektörler","Kuvvet ve Hareket","Elektrik ve Manyetizma","Çembersel Hareket","Dalgalar","Modern Fizik"],
+    "AYT|Kimya":["Modern Atom Teorisi","Gazlar","Çözeltiler","Tepkimelerde Enerji","Kimyasal Denge","Organik Kimya"],
+    "AYT|Biyoloji":["Sinir Sistemi","Endokrin Sistem","Duyu Organları","Destek ve Hareket","Sindirim","Dolaşım","Solunum","Boşaltım","Üreme","Genetik","Ekoloji"],
+    "AYT|Edebiyat":["Şiir Bilgisi","Halk Edebiyatı","Divan Edebiyatı","Tanzimat Edebiyatı","Servetifünun","Milli Edebiyat","Cumhuriyet Dönemi","Roman ve Hikâye"],
+    "AYT|Tarih":["Osmanlı Devleti","Avrupa Tarihi","XX. Yüzyıl Başlarında Osmanlı","Milli Mücadele","Atatürkçülük ve İnkılaplar","Çağdaş Türk ve Dünya Tarihi"],
+    "AYT|Coğrafya":["Ekosistem","Nüfus Politikaları","Yerleşmeler","Türkiye Ekonomisi","Küresel Ticaret","Çevre ve Toplum"]
+  };
+  const TOPIC_ALIASES={
+    "Temel Kavramlar":["temel kavram","sayı kümeleri","sayi kumeleri"],
+    "Sayı Basamakları":["sayı basamak","sayi basamak"],
+    "Problemler":["problem","problemler"],
+    "Fonksiyonlar":["fonksiyon"],
+    "Üçgenler":["üçgen","ucgen"],
+    "Dörtgenler":["dörtgen","dortgen"],
+    "Çember":["çember","cember","daire"],
+    "Analitik Geometri":["analitik geometri","analitik"],
+    "Hareket ve Kuvvet":["hareket","kuvvet"],
+    "Kuvvet ve Hareket":["kuvvet","hareket"],
+    "Isı ve Sıcaklık":["ısı","isi","sıcaklık","sicaklik"],
+    "Elektrik ve Manyetizma":["elektrik","manyetizma"],
+    "Periyodik Sistem":["periyodik"],
+    "Kimyasal Türler":["kimyasal tür","kimyasal tur"],
+    "Maddenin Halleri":["maddenin halleri","katı","kati","sıvı","sivi","gaz"],
+    "Canlıların Sınıflandırılması":["sınıflandır","siniflandir"],
+    "Kalıtım":["kalıtım","kalitim"],
+    "Genetik":["genetik","kalıtım","kalitim"],
+    "Sinir Sistemi":["sinir sistemi","sinir"],
+    "Endokrin Sistem":["endokrin","hormon"],
+    "Duyu Organları":["duyu organ"],
+    "Destek ve Hareket":["destek ve hareket","iskelet","kas"],
+    "Boşaltım":["boşaltım","bosaltim","üriner","uriner"],
+    "Modern Atom Teorisi":["modern atom","atom teor"],
+    "Çözeltiler":["çözelti","cozelti"],
+    "Kimyasal Denge":["kimyasal denge","denge"],
+    "Organik Kimya":["organik"],
+    "Türev":["türev","turev"],
+    "İntegral":["integral"],
+    "İç Kuvvetler":["iç kuvvet","ic kuvvet"],
+    "Dış Kuvvetler":["dış kuvvet","dis kuvvet"],
+    "Atatürk ve İnkılaplar":["atatürk","ataturk","inkılap","inkilap"],
+    "Milli Mücadele":["milli mücadele","milli mucadele","kurtuluş","kurtulus"],
+    "Servetifünun":["servetifünun","servet-i fünun","servetifun"],
+    "Milli Edebiyat":["milli edebiyat"],
+    "Cumhuriyet Dönemi":["cumhuriyet dönemi","cumhuriyet donemi"]
+  };
+  const state={scope:"TYT",subject:"Matematik",topic:"",teacher:"",category:"all",mode:"videos",query:"",busy:false,items:[],cache:new Map(),hasMore:false,archive:null,loadedPages:new Set(),selectedPlaylist:null};
 
   const $=id=>document.getElementById(id);
   function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
@@ -92,6 +150,7 @@
       '<div class="coach-video-filters">'+
         '<div class="coach-video-seg" id="coachVideoScope"><button type="button" data-scope="TYT" class="active">TYT</button><button type="button" data-scope="AYT">AYT</button></div>'+
         '<label><span>Ders</span><select id="coachVideoSubject"></select></label>'+
+        '<label class="coach-video-topic-field"><span>Konu</span><select id="coachVideoTopic"><option value="">Tüm konular</option></select></label>'+
         '<label class="coach-video-teacher-field"><span>Hoca</span><select id="coachVideoTeacher"></select></label>'+
         '<div class="coach-video-seg" id="coachVideoMode"><button type="button" data-mode="videos" class="active">Videolar</button><button type="button" data-mode="playlists">Oynatma listeleri</button></div>'+
       '</div>'+
@@ -116,7 +175,8 @@
       document.querySelectorAll("#coachVideoScope [data-scope]").forEach(x=>x.classList.toggle("active",x===b));
       rebuildSubjects();void load(true);
     });
-    $("coachVideoSubject")?.addEventListener("change",event=>{state.subject=event.target.value;state.selectedPlaylist=null;rebuildTeachers();void load(true);});
+    $("coachVideoSubject")?.addEventListener("change",event=>{state.subject=event.target.value;state.topic="";state.selectedPlaylist=null;rebuildTopics();rebuildTeachers();void load(true);});
+    $("coachVideoTopic")?.addEventListener("change",event=>{state.topic=event.target.value;state.selectedPlaylist=null;void load(true);});
     $("coachVideoTeacher")?.addEventListener("change",event=>{state.teacher=event.target.value;state.selectedPlaylist=null;syncChannelLink();void load(true);});
     $("coachVideoMode")?.addEventListener("click",event=>{
       const b=event.target.closest("[data-mode]");if(!b||state.busy)return;
@@ -166,7 +226,14 @@
     const select=$("coachVideoSubject"),subjects=availableSubjects();if(!select)return;
     const wanted=subjects.includes(state.subject)?state.subject:subjects[0]||"Matematik";state.subject=wanted;
     select.innerHTML=subjects.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join("");select.value=wanted;
+    rebuildTopics();
     rebuildTeachers();
+  }
+  function rebuildTopics(){
+    const select=$("coachVideoTopic");if(!select)return;
+    const topics=TOPICS[state.scope+"|"+state.subject]||[],wanted=topics.includes(state.topic)?state.topic:"";state.topic=wanted;
+    select.innerHTML='<option value="">Tüm konular</option>'+topics.map(topic=>'<option value="'+esc(topic)+'">'+esc(topic)+'</option>').join("");
+    select.value=wanted;select.disabled=!topics.length;
   }
   function rebuildTeachers(){
     const select=$("coachVideoTeacher"),teachers=availableTeachers();if(!select)return;
@@ -182,14 +249,14 @@
 
   function queryText(){
     const t=teacherByName(),category=CATEGORIES[state.category]?.term||"",base=t?.q||t?.n||"";
-    return [base,state.scope,state.subject,category,state.query].filter(Boolean).join(" ");
+    return [base,state.scope,state.subject,state.topic,category,state.query].filter(Boolean).join(" ");
   }
-  function cacheKey(){return [state.mode,state.scope,state.subject,state.teacher,state.category,state.query].join("|");}
+  function cacheKey(){return [state.mode,state.scope,state.subject,state.topic,state.teacher,state.category,state.query].join("|");}
   function setStatus(text){const n=$("coachVideoStatus");if(n)n.textContent=text;}
   function setBusy(on){
     state.busy=on;
     const root=$(ROOT_ID);root?.classList.toggle("loading",on);
-    ["coachVideoSubject","coachVideoTeacher","coachVideoRefresh","coachVideoSearch"].forEach(id=>{const n=$(id);if(n)n.disabled=on;});
+    ["coachVideoSubject","coachVideoTopic","coachVideoTeacher","coachVideoRefresh","coachVideoSearch"].forEach(id=>{const n=$(id);if(n)n.disabled=on;});
   }
   function norm(value){
     return String(value??"").toLocaleLowerCase("tr-TR").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
@@ -241,7 +308,7 @@
   }
   function normalizeVideo(item,media){
     const id=videoId(item);if(!id)return null;
-    return {kind:"video",id,title:compact(item?.title||"YouTube videosu"),thumb:String(item?.thumbnail||("https://i.ytimg.com/vi/"+id+"/hqdefault.jpg")),by:compact(item?.channel||media?.channelName||state.teacher),meta:state.scope+" · "+state.subject,url:String(item?.url||("https://www.youtube.com/watch?v="+encodeURIComponent(id)))};
+    return {kind:"video",id,title:compact(item?.title||"YouTube videosu"),thumb:String(item?.thumbnail||("https://i.ytimg.com/vi/"+id+"/hqdefault.jpg")),by:compact(item?.channel||media?.channelName||state.teacher),meta:state.scope+" · "+state.subject+(state.topic?" · "+state.topic:""),url:String(item?.url||("https://www.youtube.com/watch?v="+encodeURIComponent(id)))};
   }
   function normalizePlaylist(item,media){
     const id=playlistId(item);if(!id)return null;
@@ -274,11 +341,22 @@
     const otherExplicit=SUBJECTS.some(subject=>subject!==state.subject&&hasSubject(title,subject));
     return !otherExplicit;
   }
+  function topicTerms(topic){
+    if(!topic)return[];
+    const aliases=TOPIC_ALIASES[topic]||[];
+    const words=norm(topic).split(" ").filter(word=>word.length>=4&&!["sistemi","dönemi","donemi","bilgisi"].includes(word));
+    return [...new Set([norm(topic),...aliases.map(norm),...words])].filter(Boolean);
+  }
+  function topicMatches(title){
+    const terms=topicTerms(state.topic);if(!terms.length)return true;
+    return terms.some(term=>title.includes(term));
+  }
   function titleMatches(item){
     const title=norm(item?.title||"");
     const query=norm(state.query);
     if(query&&!title.includes(query))return false;
     if(!subjectMatches(title))return false;
+    if(!topicMatches(title))return false;
     const categoryTerms={
       konu:["konu","anlatım","anlatim","ders"],
       kamp:["kamp","gün","gun"],
@@ -395,7 +473,7 @@
     const note=item.contentComplete?(total+" video · listenin tamamı"):(videos.length+" önizleme · tam liste YouTube bağlantısında");
     const cards=videos.map((video,index)=>'<article class="coach-video-card">'+
       '<button type="button" class="coach-video-thumb" data-playlist-video-open="'+index+'" aria-label="Videoyu aç"><img src="'+esc(video.thumb||("https://i.ytimg.com/vi/"+video.id+"/hqdefault.jpg"))+'" alt="" loading="lazy" referrerpolicy="no-referrer"><span>Video</span></button>'+
-      '<div class="coach-video-card-body"><small>'+esc(video.by||state.teacher)+'</small><b>'+esc(video.title)+'</b><em>'+esc(video.meta||state.scope+" · "+state.subject)+'</em></div>'+
+      '<div class="coach-video-card-body"><small>'+esc(video.by||state.teacher)+'</small><b>'+esc(video.title)+'</b><em>'+esc(video.meta||state.scope+" · "+state.subject+(state.topic?" · "+state.topic:""))+'</em></div>'+
       '<div class="coach-video-card-actions"><button type="button" data-playlist-video-open="'+index+'">Aç ↗</button><button type="button" class="recommend" data-playlist-video-recommend="'+index+'">Öğrenciye öner</button><button type="button" class="primary" data-playlist-video-add="'+index+'">Programa ekle</button></div>'+
     '</article>').join("");
     host.innerHTML='<div class="coach-playlist-detail-head"><button type="button" data-playlist-back>‹ Playlistlere dön</button><div><small>'+esc(state.teacher)+'</small><b>'+esc(item.title)+'</b><span>'+esc(note)+'</span></div><div class="coach-playlist-detail-actions"><button type="button" class="recommend" data-playlist-recommend>Öğrenciye öner</button><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">YouTube’da tam liste ↗</a></div></div>'+
@@ -417,7 +495,7 @@
       const isPlaylist=item.kind==="playlist";
       return '<article class="coach-video-card">'+
         '<button type="button" class="coach-video-thumb" '+(isPlaylist?'data-playlist-view="'+index+'"':'data-video-open="'+index+'"')+' aria-label="'+(isPlaylist?'Playlist videolarını göster':'Videoyu aç')+'">'+thumb+'<span>'+(isPlaylist?"Liste":"Video")+'</span></button>'+
-        '<div class="coach-video-card-body"><small>'+esc(item.by||state.teacher)+'</small><b>'+esc(item.title)+'</b><em>'+esc(item.meta||state.scope+" · "+state.subject)+'</em></div>'+
+        '<div class="coach-video-card-body"><small>'+esc(item.by||state.teacher)+'</small><b>'+esc(item.title)+'</b><em>'+esc(item.meta||state.scope+" · "+state.subject+(state.topic?" · "+state.topic:""))+'</em></div>'+
         '<div class="coach-video-card-actions"><button type="button" '+(isPlaylist?'data-playlist-view="'+index+'"':'data-video-open="'+index+'"')+'>'+(isPlaylist?'Videoları gör':'Aç ↗')+'</button><button type="button" class="recommend" data-video-recommend="'+index+'">Öğrenciye öner</button><button type="button" class="primary" data-video-add="'+index+'">Programa ekle</button></div>'+
       '</article>';
     }).join("");
@@ -435,6 +513,7 @@
       url:String(item.url||"").slice(0,600),
       teacher:compact(state.teacher).slice(0,100),
       subject:compact(state.subject).slice(0,80),
+      topic:compact(state.topic).slice(0,120),
       scope:compact(state.scope).slice(0,10),
       thumb:String(item.thumb||"").slice(0,600)
     };
@@ -454,7 +533,8 @@
       $("programCustomTab")?.click();
       const text=$("programTaskText"),video=$("programTaskVideo");
       const prefix=item.kind==="playlist"?"Oynatma listesi":"Video izle";
-      if(text){text.value=(prefix+" · "+state.teacher+" · "+item.title).slice(0,600);text.dispatchEvent(new Event("input",{bubbles:true}));}
+      const topicPart=state.topic?" · "+state.topic:"";
+      if(text){text.value=(prefix+" · "+state.teacher+" · "+state.subject+topicPart+" · "+item.title).slice(0,600);text.dispatchEvent(new Event("input",{bubbles:true}));}
       if(video){video.value=item.url;video.dispatchEvent(new Event("input",{bubbles:true}));}
       backdrop.scrollIntoView({block:"center",behavior:"smooth"});
       setStatus(item.kind==="playlist"?"Oynatma listesi görev penceresine eklendi.":"Video görev penceresine eklendi.");
