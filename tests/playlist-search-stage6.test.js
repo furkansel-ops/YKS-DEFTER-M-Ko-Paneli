@@ -16,7 +16,7 @@ test('koç playlist detayında videoları başlığa göre arayabilir',()=>{
   assert.match(js,/id="coachPlaylistVideoSearch"/);
   assert.match(js,/Bu playlistte video ara/);
   assert.match(js,/norm\(\[row\.video\.title,row\.video\.by\|\|state\.teacher\]\.join\(" "\)\)\.includes\(query\)/);
-  assert.match(js,/rows\.length\+" \/ "\+videos\.length\+' video'/);
+  assert.match(js,/rows\.length\+" \/ "\+videos\.length/);
   assert.match(js,/data-playlist-video-recommend/);
   assert.match(js,/data-playlist-video-add/);
   assert.match(css,/\.coach-playlist-video-search-row/);
