@@ -1588,8 +1588,8 @@ window.addEventListener("yks:coach-resource-recommend",async event=>{
   if(!id||!title||!/^https?:\/\//i.test(url)){reply(false,"Kaynak bilgisi geçersiz olduğu için öneri gönderilemedi.");return}
   try{
     await addDoc(collection(db,"coachingActions"),{
-      studentUid:row.studentUid,coachUid:user.uid,type:"resource_recommendation",
-      payload:{kind,id,title,url,teacher,subject,scope,thumb},
+      studentUid:row.studentUid,coachUid:user.uid,type:"coach_note",
+      payload:{operation:"resource_recommendation",text:"Kaynak önerisi · "+title,kind,id,title,url,teacher,subject,scope,thumb},
       status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
     });
     reply(true,"Öneri öğrenciye gönderildi ✓");
