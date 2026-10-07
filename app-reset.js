@@ -1577,6 +1577,27 @@ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!$("student
 
 let selectedProgramStudentUid="";
 let selectedProgramWeekStart="";
+
+window.addEventListener("yks:coach-resource-recommend",async event=>{
+  const detail=event.detail||{},row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser;
+  const reply=(ok,message)=>window.dispatchEvent(new CustomEvent("yks:coach-resource-recommend-result",{detail:{ok,message}}));
+  if(!row||!user){reply(false,"Önce önerinin gönderileceği öğrenciyi seç.");return}
+  const kind=detail.kind==="playlist"?"playlist":"video";
+  const id=String(detail.id||"").trim().slice(0,120),title=String(detail.title||"").trim().slice(0,180),url=String(detail.url||"").trim().slice(0,600);
+  const teacher=String(detail.teacher||"").trim().slice(0,100),subject=String(detail.subject||"").trim().slice(0,80),scope=String(detail.scope||"").trim().slice(0,10),thumb=String(detail.thumb||"").trim().slice(0,600);
+  if(!id||!title||!/^https?:\/\//i.test(url)){reply(false,"Kaynak bilgisi geçersiz olduğu için öneri gönderilemedi.");return}
+  try{
+    await addDoc(collection(db,"coachingActions"),{
+      studentUid:row.studentUid,coachUid:user.uid,type:"resource_recommendation",
+      payload:{kind,id,title,url,teacher,subject,scope,thumb},
+      status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+    });
+    reply(true,"Öneri öğrenciye gönderildi ✓");
+  }catch(error){
+    console.error("Kaynak önerisi",error);
+    reply(false,"Öneri gönderilemedi: "+String(error?.message||"Bilinmeyen hata"));
+  }
+});
 function shiftProgramWeek(start,amount){
   const base=/^\d{4}-\d{2}-\d{2}$/.test(String(start||""))?new Date(start+"T12:00:00"):new Date(programCurrentWeekStart()+"T12:00:00");
   base.setDate(base.getDate()+amount*7);return base.toISOString().slice(0,10);
