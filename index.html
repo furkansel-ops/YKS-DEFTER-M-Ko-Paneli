@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="./topics-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./errors-v21.css?v=1.0.1">
   <link rel="stylesheet" href="./messages-v21.css?v=2.0.0">
-  <link rel="stylesheet" href="./settings-v21.css?v=2.1.0">
+  <link rel="stylesheet" href="./settings-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./coach-polish-v1.css?v=1.0.0">
 </head>
 <body>
@@ -1015,36 +1015,66 @@
           <div>
             <span class="dashboard-eyebrow">AYARLAR</span>
             <h1>Ayarlar</h1>
-            <p>Koç panelini kendi çalışma düzenine göre ayarla.</p>
+            <p>Koç panelini kendine göre ayarla.</p>
           </div>
           <div class="settings-status-pill" id="settingsSaveState"><i></i><span>Hazır</span></div>
         </header>
 
-        <section class="settings-shell">
-          <aside class="settings-sidebar">
-            <div class="settings-user-card">
-              <div class="settings-user-avatar" id="settingsMiniAvatar">K</div>
-              <div>
+        <div class="coach-settings-wrap">
+          <div id="coachSettingsOverview" class="coach-settings-overview">
+            <label class="coach-settings-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+              <input id="coachSettingsSearch" type="search" placeholder="Ayarlarda ara" aria-label="Ayarlarda ara" autocomplete="off">
+            </label>
+
+            <button class="coach-settings-profile" type="button" data-settings-tab="profile" data-settings-search="profil koç ad soyad unvan uzmanlık">
+              <span class="coach-settings-avatar" id="settingsMiniAvatar">K</span>
+              <span class="coach-settings-profile-copy">
                 <b id="settingsMiniName">Koç</b>
-                <span id="settingsMiniTitle">YKS Koçu</span>
-              </div>
+                <small id="settingsMiniTitle">YKS Koçu</small>
+              </span>
+              <span class="coach-settings-chevron" aria-hidden="true">›</span>
+            </button>
+
+            <div class="coach-settings-category-list">
+              <button class="coach-settings-category" type="button" data-settings-tab="general" data-settings-search="genel panel açılış varsayılan ekran çalışma alanı kompakt">
+                <span class="coach-settings-category-icon">⌂</span>
+                <span class="coach-settings-category-copy"><b>Panel ve çalışma</b><small>Açılış ekranı ve çalışma alanı tercihleri</small></span>
+                <span class="coach-settings-chevron" aria-hidden="true">›</span>
+              </button>
+              <button class="coach-settings-category" type="button" data-settings-tab="messaging" data-settings-search="mesajlar mesajlaşma ctrl enter hızlı mesaj">
+                <span class="coach-settings-category-icon">✉</span>
+                <span class="coach-settings-category-copy"><b>Mesajlar</b><small>Mesajlaşma ve hızlı yanıt tercihleri</small></span>
+                <span class="coach-settings-chevron" aria-hidden="true">›</span>
+              </button>
+              <button class="coach-settings-category" type="button" data-settings-tab="appearance" data-settings-search="görünüm ekran yoğunluğu kompakt standart hareket animasyon">
+                <span class="coach-settings-category-icon">◫</span>
+                <span class="coach-settings-category-copy"><b>Görünüm</b><small>Ekran yoğunluğu ve hareket seçenekleri</small></span>
+                <span class="coach-settings-chevron" aria-hidden="true">›</span>
+              </button>
+              <button class="coach-settings-category" type="button" data-settings-tab="account" data-settings-search="hesap oturum google firebase e posta çıkış">
+                <span class="coach-settings-category-icon">◎</span>
+                <span class="coach-settings-category-copy"><b>Hesap ve oturum</b><small>Google hesabın, senkron ve oturum bilgileri</small></span>
+                <span class="coach-settings-chevron" aria-hidden="true">›</span>
+              </button>
             </div>
 
-            <nav class="settings-nav" aria-label="Ayar bölümleri">
-              <button class="active" type="button" data-settings-tab="general"><span>⌂</span><div><b>Genel</b><small>Panel davranışı</small></div></button>
-              <button type="button" data-settings-tab="profile"><span>◉</span><div><b>Profil</b><small>Koç bilgileri</small></div></button>
-              <button type="button" data-settings-tab="messaging"><span>✉</span><div><b>Mesajlar</b><small>Mesajlaşma tercihleri</small></div></button>
-              <button type="button" data-settings-tab="appearance"><span>◫</span><div><b>Görünüm</b><small>Yoğunluk ve hareket</small></div></button>
-              <button type="button" data-settings-tab="account"><span>⌁</span><div><b>Hesap</b><small>Oturum ve hesap bilgisi</small></div></button>
-            </nav>
-          </aside>
+            <div class="coach-settings-app-row">
+              <span>ⓘ</span>
+              <span>YKS Defterim · Koç Paneli</span>
+              <small>Tercihler bu tarayıcıda saklanır</small>
+            </div>
+            <p class="coach-settings-no-results hidden" id="coachSettingsNoResults">Bu aramayla eşleşen ayar yok.<br>“Görünüm”, “mesaj” veya “hesap” arayabilirsin.</p>
+          </div>
 
-          <div class="settings-main">
-            <section class="settings-section" data-settings-panel="general">
-              <div class="settings-section-head">
-                <div><span>GENEL</span><h2>Panel davranışı</h2><p>Koç panelinin açılış ve çalışma biçimini belirle.</p></div>
-              </div>
+          <div id="coachSettingsDetail" class="coach-settings-detail hidden">
+            <button class="coach-settings-back" id="coachSettingsBack" type="button">‹ <span>Ayarlar</span></button>
+            <div class="coach-settings-detail-heading">
+              <h2 id="coachSettingsDetailTitle">Ayarlar</h2>
+              <p id="coachSettingsDetailDescription"></p>
+            </div>
 
+            <section class="settings-section hidden" data-settings-panel="general">
               <div class="settings-group">
                 <div class="settings-group-title"><h3>Açılış</h3><p>Panele girdiğinde ilk göreceğin ekranı seç.</p></div>
                 <label class="settings-select-row">
@@ -1072,16 +1102,12 @@
             </section>
 
             <section class="settings-section hidden" data-settings-panel="profile">
-              <div class="settings-section-head">
-                <div><span>PROFİL</span><h2>Koç profili</h2><p>Öğrencilerin bağlantı ekranlarında gördüğü bilgileri düzenle.</p></div>
-              </div>
-
               <form id="coachSettingsForm">
                 <div class="settings-profile-hero">
                   <div class="settings-profile-avatar" id="settingsAvatarLarge">K</div>
                   <div>
                     <h3 id="settingsProfileNamePreview">Koç</h3>
-                    <p>Profil görseli yerine adının baş harfi kullanılıyor.</p>
+                    <p>Öğrencilerin bağlantı ekranlarında gördüğü koç bilgilerin.</p>
                   </div>
                 </div>
 
@@ -1111,10 +1137,6 @@
             </section>
 
             <section class="settings-section hidden" data-settings-panel="messaging">
-              <div class="settings-section-head">
-                <div><span>MESAJLAR</span><h2>Mesajlaşma tercihleri</h2><p>Mesaj ekranının günlük kullanım şeklini belirle.</p></div>
-              </div>
-
               <div class="settings-group">
                 <div class="settings-group-title"><h3>Yazma alanı</h3><p>Mesaj gönderirken kullanacağın yardımcı davranışlar.</p></div>
                 <label class="settings-toggle-row">
@@ -1128,17 +1150,13 @@
               </div>
 
               <div class="settings-info-box">
-                <span>MEVCUT MESAJ SİSTEMİ</span>
-                <h3>Koçtan öğrenciye not gönderimi</h3>
-                <p>Koç ve öğrenci artık aynı konuşma üzerinden iki yönlü mesajlaşabilir.</p>
+                <span>MESAJ SİSTEMİ</span>
+                <h3>Koç ↔ öğrenci iletişimi</h3>
+                <p>Koç ve öğrenci aynı konuşma üzerinden iki yönlü mesajlaşabilir.</p>
               </div>
             </section>
 
             <section class="settings-section hidden" data-settings-panel="appearance">
-              <div class="settings-section-head">
-                <div><span>GÖRÜNÜM</span><h2>Panel görünümü</h2><p>İçerik yoğunluğunu ve hareket davranışını kendi kullanımına göre ayarla.</p></div>
-              </div>
-
               <div class="appearance-block">
                 <div class="appearance-block-head">
                   <div><h3>Ekran yoğunluğu</h3><p>Panelde aynı anda ne kadar içerik görmek istediğini seç.</p></div>
@@ -1174,7 +1192,6 @@
                 <div class="appearance-block-head">
                   <div><h3>Hareket ve geçişler</h3><p>Arayüz animasyonlarını istediğin seviyede tut.</p></div>
                 </div>
-
                 <label class="appearance-toggle-card">
                   <div class="appearance-toggle-icon">↝</div>
                   <div class="appearance-toggle-copy">
@@ -1205,10 +1222,6 @@
             </section>
 
             <section class="settings-section hidden" data-settings-panel="account">
-              <div class="settings-section-head">
-                <div><span>HESAP</span><h2>Hesap ve oturum</h2><p>Panelde açık olan Google hesabını ve oturum durumunu gör.</p></div>
-              </div>
-
               <div class="settings-account-card">
                 <div class="settings-account-avatar" id="settingsAccountAvatar">K</div>
                 <div class="settings-account-copy">
@@ -1232,11 +1245,12 @@
               </div>
             </section>
           </div>
-        </section>
+        </div>
+      </section>
       </section>
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.50"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.51"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
