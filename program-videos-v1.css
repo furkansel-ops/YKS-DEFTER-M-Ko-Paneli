@@ -31,9 +31,9 @@
 .coach-video-card-body small{font-size:6.5px;color:#2873f0;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .coach-video-card-body b{font-size:8.5px;line-height:1.45;color:#3c5067;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .coach-video-card-body em{font-style:normal;font-size:6.5px;color:#9aa5b3}
-.coach-video-card-actions{display:grid;grid-template-columns:.7fr 1.3fr;gap:5px;padding:0 9px 9px}
+.coach-video-card-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:0 9px 9px}
 .coach-video-card-actions button{height:28px;border:1px solid #dfe7f0;border-radius:7px;background:#fff;color:#66788e;font-size:6.7px;font-weight:850;cursor:pointer}
-.coach-video-card-actions button.primary{border-color:#2873f0;background:#2873f0;color:#fff}
+.coach-video-card-actions button.recommend{border-color:#cfe0fb;background:#edf5ff;color:#2873f0}.coach-video-card-actions button.primary{border-color:#2873f0;background:#2873f0;color:#fff}
 .coach-video-more-row{display:flex;justify-content:center;padding:7px 16px 14px}.coach-video-more{height:32px;border:1px solid #dce5ef;border-radius:9px;background:#fff;color:#52657b;padding:0 16px;font-size:7.5px;font-weight:850;cursor:pointer}.coach-video-more.hidden{display:none}
 .coach-video-empty{grid-column:1/-1;min-height:150px;border:1px dashed #dce5ef;border-radius:11px;background:#fafcfe;display:grid;place-items:center;align-content:center;text-align:center;padding:22px;color:#78879a}
 .coach-video-empty>span{width:34px;height:34px;border-radius:10px;background:#edf5ff;color:#2873f0;display:grid;place-items:center;font-size:14px}.coach-video-empty b{margin-top:8px;font-size:9px;color:#4c6077}.coach-video-empty p{margin:4px 0 8px;max-width:370px;font-size:7.5px;line-height:1.5}.coach-video-empty a{font-size:7.5px;font-weight:850;color:#2873f0;text-decoration:none}
@@ -49,3 +49,8 @@
 .coach-playlist-detail-head>div{min-width:0;display:grid;gap:2px}.coach-playlist-detail-head small{font-size:6.5px;color:#2873f0;font-weight:850}.coach-playlist-detail-head b{font-size:10px;color:#33485f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.coach-playlist-detail-head span{font-size:7px;color:#8290a3}
 .coach-playlist-detail-head>a{font-size:7px;font-weight:850;color:#2873f0;text-decoration:none;white-space:nowrap}
 @media(max-width:620px){.coach-playlist-detail-head{grid-template-columns:1fr}.coach-playlist-detail-head>a{justify-self:start}.coach-playlist-detail-head b{white-space:normal}}
+
+.coach-playlist-detail-actions{display:flex;align-items:center;gap:6px}
+.coach-playlist-detail-actions .recommend{height:31px;border:1px solid #cfe0fb;border-radius:8px;background:#edf5ff;color:#2873f0;padding:0 10px;font-size:7px;font-weight:850;cursor:pointer;white-space:nowrap}
+.coach-playlist-detail-actions a{font-size:7px;font-weight:850;color:#2873f0;text-decoration:none;white-space:nowrap}
+@media(max-width:620px){.coach-playlist-detail-actions{justify-content:flex-start;flex-wrap:wrap}}
