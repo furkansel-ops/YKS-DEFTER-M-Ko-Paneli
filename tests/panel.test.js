@@ -263,7 +263,7 @@ test('paragraf + problem bölümü seçili öğrencinin çalışma verilerini ca
   assert.match(html,/id="paragraphProblemPage"/);
   for(const id of ['ppCoachStudentSelect','ppCoachKpis','ppCoachKinds','ppCoachTempo','ppCoachSignals','ppCoachCompare','ppCoachRhythm','ppCoachDaily','ppCoachHistory'])assert.ok(html.includes('id="'+id+'"'),id);
   assert.doesNotMatch(html,/ppCoachStudentInfo|ppCoachStudentTarget|ppCoachStudentMeta|ppCoachRangeSelect/);
-  assert.match(html,/paragraph-problem-v1\.css\?v=1\.3\.0/);
+  assert.match(html,/paragraph-problem-v1\.css\?v=1\.2\.0/);
   assert.match(js,/function paragraphProblemEntries/);
   assert.match(js,/share\?\.paragraphProblem\?\.entries/);
   assert.match(js,/function paragraphProblemActiveStreak/);
@@ -364,7 +364,7 @@ test('Paragraf + Problem koç görünümünde doğru yanlış boş ve toplam say
   assert.match(js,/last7\.wrong/);
   assert.match(js,/last7\.blank/);
   assert.match(css,/\.pp-coach-answer-summary/);
-  assert.match(html,/paragraph-problem-v1\.css\?v=1\.3\.0/);
+  assert.match(html,/paragraph-problem-v1\.css\?v=1\.2\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.53/);
 });
 
