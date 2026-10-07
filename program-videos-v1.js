@@ -136,15 +136,26 @@
     });
     $("coachVideoRefresh")?.addEventListener("click",()=>{state.cache.clear();void load(true,true);});
     $("coachVideoMore")?.addEventListener("click",()=>void load(false));
+    window.addEventListener("yks:coach-resource-recommend-result",event=>{
+      const detail=event.detail||{};
+      if(detail.ok)setStatus("Öneri öğrenciye gönderildi ✓");
+      else if(detail.message)setStatus(String(detail.message));
+    });
     $("coachVideoResults")?.addEventListener("click",event=>{
       const back=event.target.closest("[data-playlist-back]");
       if(back){state.selectedPlaylist=null;render();return;}
       const view=event.target.closest("[data-playlist-view]");
       if(view){const item=state.items[Number(view.dataset.playlistView)];if(item){state.selectedPlaylist=item;render();}return;}
+      const playlistRecommend=event.target.closest("[data-playlist-recommend]");
+      if(playlistRecommend&&state.selectedPlaylist){recommendResource(state.selectedPlaylist);return;}
+      const playlistVideoRecommend=event.target.closest("[data-playlist-video-recommend]");
+      if(playlistVideoRecommend){const item=state.selectedPlaylist?.videos?.[Number(playlistVideoRecommend.dataset.playlistVideoRecommend)];if(item)recommendResource(item);return;}
       const playlistAdd=event.target.closest("[data-playlist-video-add]");
       if(playlistAdd){const item=state.selectedPlaylist?.videos?.[Number(playlistAdd.dataset.playlistVideoAdd)];if(item)addToProgram(item);return;}
       const playlistOpen=event.target.closest("[data-playlist-video-open]");
       if(playlistOpen){const item=state.selectedPlaylist?.videos?.[Number(playlistOpen.dataset.playlistVideoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");return;}
+      const recommend=event.target.closest("[data-video-recommend]");
+      if(recommend){const item=state.items[Number(recommend.dataset.videoRecommend)];if(item)recommendResource(item);return;}
       const add=event.target.closest("[data-video-add]"),open=event.target.closest("[data-video-open]");
       if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item);}
       if(open){const item=state.items[Number(open.dataset.videoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");}
@@ -385,9 +396,9 @@
     const cards=videos.map((video,index)=>'<article class="coach-video-card">'+
       '<button type="button" class="coach-video-thumb" data-playlist-video-open="'+index+'" aria-label="Videoyu aç"><img src="'+esc(video.thumb||("https://i.ytimg.com/vi/"+video.id+"/hqdefault.jpg"))+'" alt="" loading="lazy" referrerpolicy="no-referrer"><span>Video</span></button>'+
       '<div class="coach-video-card-body"><small>'+esc(video.by||state.teacher)+'</small><b>'+esc(video.title)+'</b><em>'+esc(video.meta||state.scope+" · "+state.subject)+'</em></div>'+
-      '<div class="coach-video-card-actions"><button type="button" data-playlist-video-open="'+index+'">Aç ↗</button><button type="button" class="primary" data-playlist-video-add="'+index+'">Programa ekle</button></div>'+
+      '<div class="coach-video-card-actions"><button type="button" data-playlist-video-open="'+index+'">Aç ↗</button><button type="button" class="recommend" data-playlist-video-recommend="'+index+'">Öğrenciye öner</button><button type="button" class="primary" data-playlist-video-add="'+index+'">Programa ekle</button></div>'+
     '</article>').join("");
-    host.innerHTML='<div class="coach-playlist-detail-head"><button type="button" data-playlist-back>‹ Playlistlere dön</button><div><small>'+esc(state.teacher)+'</small><b>'+esc(item.title)+'</b><span>'+esc(note)+'</span></div><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">YouTube’da tam liste ↗</a></div>'+
+    host.innerHTML='<div class="coach-playlist-detail-head"><button type="button" data-playlist-back>‹ Playlistlere dön</button><div><small>'+esc(state.teacher)+'</small><b>'+esc(item.title)+'</b><span>'+esc(note)+'</span></div><div class="coach-playlist-detail-actions"><button type="button" class="recommend" data-playlist-recommend>Öğrenciye öner</button><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">YouTube’da tam liste ↗</a></div></div>'+
       (cards||'<div class="coach-video-empty"><span>▶</span><b>Playlist bağlantısı hazır</b><p>Bu eski arşiv kaydında video kartları eksik. Tam listeyi YouTube’dan açabilirsin; yeni arşiv yenilendiğinde videolar burada tek tek görünecek.</p><a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">Tam listeyi aç ↗</a></div>');
     setStatus(state.teacher+" · "+item.title+" · "+note);
   }
@@ -407,11 +418,29 @@
       return '<article class="coach-video-card">'+
         '<button type="button" class="coach-video-thumb" '+(isPlaylist?'data-playlist-view="'+index+'"':'data-video-open="'+index+'"')+' aria-label="'+(isPlaylist?'Playlist videolarını göster':'Videoyu aç')+'">'+thumb+'<span>'+(isPlaylist?"Liste":"Video")+'</span></button>'+
         '<div class="coach-video-card-body"><small>'+esc(item.by||state.teacher)+'</small><b>'+esc(item.title)+'</b><em>'+esc(item.meta||state.scope+" · "+state.subject)+'</em></div>'+
-        '<div class="coach-video-card-actions"><button type="button" '+(isPlaylist?'data-playlist-view="'+index+'"':'data-video-open="'+index+'"')+'>'+(isPlaylist?'Videoları gör':'Aç ↗')+'</button><button type="button" class="primary" data-video-add="'+index+'">Programa ekle</button></div>'+
+        '<div class="coach-video-card-actions"><button type="button" '+(isPlaylist?'data-playlist-view="'+index+'"':'data-video-open="'+index+'"')+'>'+(isPlaylist?'Videoları gör':'Aç ↗')+'</button><button type="button" class="recommend" data-video-recommend="'+index+'">Öğrenciye öner</button><button type="button" class="primary" data-video-add="'+index+'">Programa ekle</button></div>'+
       '</article>';
     }).join("");
     setStatus(state.teacher+" · "+state.scope+" "+state.subject+" · "+state.items.length+" "+(state.mode==="playlists"?"liste":"video")+" gösteriliyor");
     more?.classList.toggle("hidden",!state.hasMore);
+  }
+
+  function recommendResource(item){
+    const hero=compact($("programHeroName")?.textContent);
+    if(!hero||/seçilmedi/i.test(hero)){setStatus("Önce bir öğrenci seç, sonra kaynağı öner.");return;}
+    const detail={
+      kind:item.kind==="playlist"?"playlist":"video",
+      id:String(item.id||"").slice(0,120),
+      title:compact(item.title||"Koç önerisi").slice(0,180),
+      url:String(item.url||"").slice(0,600),
+      teacher:compact(state.teacher).slice(0,100),
+      subject:compact(state.subject).slice(0,80),
+      scope:compact(state.scope).slice(0,10),
+      thumb:String(item.thumb||"").slice(0,600)
+    };
+    if(!detail.id||!/^https?:\/\//i.test(detail.url)){setStatus("Bu kaynak öneri olarak gönderilemiyor.");return;}
+    setStatus(detail.kind==="playlist"?"Playlist öğrenciye öneriliyor…":"Video öğrenciye öneriliyor…");
+    window.dispatchEvent(new CustomEvent("yks:coach-resource-recommend",{detail}));
   }
 
   function addToProgram(item){
