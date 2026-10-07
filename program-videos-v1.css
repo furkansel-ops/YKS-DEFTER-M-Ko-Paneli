@@ -54,3 +54,14 @@
 .coach-playlist-detail-actions .recommend{height:31px;border:1px solid #cfe0fb;border-radius:8px;background:#edf5ff;color:#2873f0;padding:0 10px;font-size:7px;font-weight:850;cursor:pointer;white-space:nowrap}
 .coach-playlist-detail-actions a{font-size:7px;font-weight:850;color:#2873f0;text-decoration:none;white-space:nowrap}
 @media(max-width:620px){.coach-playlist-detail-actions{justify-content:flex-start;flex-wrap:wrap}}
+
+
+/* Playlist video search v1 — stage 6 */
+.coach-playlist-video-search-row{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin:0 0 2px}
+.coach-playlist-video-search{display:flex;align-items:center;gap:7px;min-width:0;flex:1;height:36px;padding:0 9px;border:1px solid #dfe7f3;border-radius:9px;background:#fff}
+.coach-playlist-video-search:focus-within{border-color:#8eb5f4;box-shadow:0 0 0 3px rgba(40,115,240,.08)}
+.coach-playlist-video-search>span{color:#8491a4;font-size:12px}
+.coach-playlist-video-search input{min-width:0;width:100%;height:100%;border:0;outline:0;background:transparent;color:#142033;font:650 9px inherit}
+.coach-playlist-video-search-row>span{flex:0 0 auto;color:#8491a4;font-size:8px;font-weight:800;white-space:nowrap}
+.coach-video-empty.compact{grid-column:1/-1;min-height:120px;padding:18px}
+@media(max-width:620px){.coach-playlist-video-search-row{align-items:stretch;flex-direction:column}.coach-playlist-video-search{width:100%}.coach-playlist-video-search-row>span{padding-left:2px}}
