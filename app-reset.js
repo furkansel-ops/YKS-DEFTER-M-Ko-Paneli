@@ -1584,12 +1584,12 @@ window.addEventListener("yks:coach-resource-recommend",async event=>{
   if(!row||!user){reply(false,"Önce önerinin gönderileceği öğrenciyi seç.");return}
   const kind=detail.kind==="playlist"?"playlist":"video";
   const id=String(detail.id||"").trim().slice(0,120),title=String(detail.title||"").trim().slice(0,180),url=String(detail.url||"").trim().slice(0,600);
-  const teacher=String(detail.teacher||"").trim().slice(0,100),subject=String(detail.subject||"").trim().slice(0,80),scope=String(detail.scope||"").trim().slice(0,10),thumb=String(detail.thumb||"").trim().slice(0,600);
+  const teacher=String(detail.teacher||"").trim().slice(0,100),subject=String(detail.subject||"").trim().slice(0,80),topic=String(detail.topic||"").trim().slice(0,120),scope=String(detail.scope||"").trim().slice(0,10),thumb=String(detail.thumb||"").trim().slice(0,600);
   if(!id||!title||!/^https?:\/\//i.test(url)){reply(false,"Kaynak bilgisi geçersiz olduğu için öneri gönderilemedi.");return}
   try{
     await addDoc(collection(db,"coachingActions"),{
       studentUid:row.studentUid,coachUid:user.uid,type:"coach_note",
-      payload:{operation:"resource_recommendation",text:"Kaynak önerisi · "+title,kind,id,title,url,teacher,subject,scope,thumb},
+      payload:{operation:"resource_recommendation",text:"Kaynak önerisi · "+title,kind,id,title,url,teacher,subject,topic,scope,thumb},
       status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
     });
     reply(true,"Öneri öğrenciye gönderildi ✓");
