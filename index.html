@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
   <link rel="stylesheet" href="./programs-v21.css?v=3.4.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.1.0">
-  <link rel="stylesheet" href="./reports-v21.css?v=4.0.0">
+  <link rel="stylesheet" href="./reports-v21.css?v=4.1.0">
   <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.2.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=3.0.0">
@@ -394,6 +394,12 @@
               </article>
             </aside>
           </section>
+          <article class="report-card report-cohort-subject-card">
+            <div class="report-card-head">
+              <div><span>DERS YOĞUNLUĞU</span><h2>Tüm öğrencilerde son 7 gün</h2><p>Hangi derslere daha fazla odaklanıldığını toplam süre ve öğrenci sayısıyla gör.</p></div>
+            </div>
+            <div class="report-cohort-subjects" id="reportCohortSubjects"></div>
+          </article>
         </div>
 
         <div id="reportStudentDetail" class="hidden">
@@ -411,6 +417,17 @@
           </section>
 
           <section class="report-kpis" id="reportStudentKpis"></section>
+
+          <section class="report-pulse-grid">
+            <article class="report-card report-pulse-card">
+              <div class="report-card-head compact"><div><span>ÇALIŞMA NABZI</span><h2>Günlük ritim</h2><p>Bugün, günlük ortalama, en yoğun gün ve aktif seri.</p></div></div>
+              <div class="report-study-pulse" id="reportStudyPulse"></div>
+            </article>
+            <article class="report-card report-subject-focus-card">
+              <div class="report-card-head compact"><div><span>DERS ODAĞI</span><h2>Bu hafta en çok çalışılanlar</h2><p>Ders bazlı odak süresinin ağırlığını hızlıca gör.</p></div></div>
+              <div class="report-subject-focus-bars" id="reportSubjectFocusBars"></div>
+            </article>
+          </section>
 
           <section class="report-detail-grid">
             <article class="report-card report-activity-card">
@@ -1219,6 +1236,6 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.49"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.50"></script><script defer src="./program-videos-v1.js?v=1.5.0"></script>
 </body>
 </html>
