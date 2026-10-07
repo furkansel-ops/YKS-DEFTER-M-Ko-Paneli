@@ -400,6 +400,25 @@ function reportSubjectRows(row){
   const latestExam=reportExamRows(row)[0];(Array.isArray(latestExam?.subjectResults)?latestExam.subjectResults:[]).forEach(item=>{const target=ensure(item?.name);if(target)target.examNet=reportNum(item?.net);});
   return[...map.values()].filter(item=>item.minutes||item.questions||item.wrongs||item.examNet!==null).sort((a,b)=>(b.minutes+b.questions+b.wrongs*20)-(a.minutes+a.questions+a.wrongs*20)).slice(0,10);
 }
+function reportStudyPulse(row){
+  const daily=reportDailyRows(row),last7=daily.slice(-7),period=reportPeriod(last7),today=reportDateOffset(0),todayRow=last7.find(item=>item.date===today)||{minutes:0,questions:0};
+  const best=[...last7].sort((a,b)=>b.minutes-a.minutes||b.questions-a.questions)[0]||null;
+  let streak=0;
+  for(let offset=0;offset<14;offset++){
+    const date=reportDateOffset(-offset),item=daily.find(entry=>entry.date===date);
+    if(item&&(item.minutes>0||item.questions>0))streak++;else break;
+  }
+  return{todayMinutes:todayRow.minutes,todayQuestions:todayRow.questions,avgMinutes:Math.round(period.minutes/7),avgQuestions:Math.round(period.questions/7),best,streak};
+}
+function reportCohortSubjectRows(rows){
+  const map=new Map();
+  rows.filter(row=>row?.share).forEach(row=>reportSubjectRows(row).forEach(item=>{
+    const key=String(item.name||"").trim();if(!key)return;
+    if(!map.has(key))map.set(key,{name:key,minutes:0,questions:0,students:0});
+    const target=map.get(key);target.minutes+=Math.max(0,reportNum(item.minutes));target.questions+=Math.max(0,reportNum(item.questions));if(item.minutes>0||item.questions>0)target.students++;
+  }));
+  return[...map.values()].filter(item=>item.minutes||item.questions).sort((a,b)=>b.minutes-a.minutes||b.questions-a.questions).slice(0,8);
+}
 function reportRiskScore(row){
   if(!row?.share)return 100;
   const progress=row.share.progress||{},w=weekStats(row.share.program),fresh=reportFreshnessHours(row),review=studentDayReviews(row)[0],pp=reportPpSummaryMetrics(row);
@@ -465,7 +484,9 @@ function renderReportOverview(){
     '<div><span>Ortalama soru</span><strong>'+Math.round(rows.length?questions/rows.length:0)+'</strong></div>'+
     '<div><span>Paragraf + Problem</span><strong>'+Math.round(ppTotal)+' soru</strong></div>'+
     '<div><span>Geciken konu toplamı</span><strong>'+Math.round(overdueTotal)+'</strong></div>';
-  const freshest=withShare.map(row=>({row,ms:reportUpdatedMs(row.share?.updatedAt)})).sort((a,b)=>b.ms-a.ms)[0]?.row;
+  const cohortSubjects=reportCohortSubjectRows(rows),cohortMax=Math.max(1,...cohortSubjects.map(item=>item.minutes));
+  $("reportCohortSubjects").innerHTML=cohortSubjects.length?cohortSubjects.map(item=>'<div class="report-cohort-subject-row"><span><b>'+escHtml(item.name)+'</b><small>'+item.students+' öğrenci · '+Math.round(item.questions)+' soru</small></span><i><em style="width:'+Math.round(item.minutes/cohortMax*100)+'%"></em></i><strong>'+escHtml(reportMinutes(item.minutes))+'</strong></div>').join(""):'<div class="report-mini-empty">Ders bazlı odak verisi geldikçe yoğunluk burada oluşacak.</div>';
+    const freshest=withShare.map(row=>({row,ms:reportUpdatedMs(row.share?.updatedAt)})).sort((a,b)=>b.ms-a.ms)[0]?.row;
   $("reportSyncBox").innerHTML=freshest?'<b>'+escHtml(reportTimestamp(freshest.share?.updatedAt))+'</b><span>En son '+escHtml(studentName(freshest))+' verisi güncellendi</span>':'<b>Veri bekleniyor</b><span>Henüz paylaşım alınmadı</span>';
   document.querySelectorAll("[data-report-student]").forEach(btn=>btn.addEventListener("click",()=>{
     if($("reportStudentSelect"))$("reportStudentSelect").value=btn.dataset.reportStudent;
@@ -489,6 +510,15 @@ function renderStudentReport(row){
     kpi("AKTİF GÜN",daily.length?current7.activeDays+" / 7":"—",daily.length?"Çalışma veya soru kaydı":"Yeni senkron bekleniyor")+
     kpi("PROGRAM UYUMU",w.total?w.ratio+"%":"—",w.total?w.completed+" / "+w.total+" görev":"Program verisi yok",w.total&&w.ratio<60?"warn":"")+
     kpi("GECİKEN KONU",String(Math.round(reportNum(progress.overdueTopics))),"Takip bekleyen",reportNum(progress.overdueTopics)?"warn":"");
+
+  const pulse=reportStudyPulse(row),bestDay=pulse.best?new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric"}).format(new Date(pulse.best.date+"T12:00:00")):"—";
+  $("reportStudyPulse").innerHTML=
+    '<div><span>Bugün</span><strong>'+escHtml(reportMinutes(pulse.todayMinutes))+'</strong><small>'+Math.round(pulse.todayQuestions)+' soru</small></div>'+
+    '<div><span>Günlük ort.</span><strong>'+escHtml(reportMinutes(pulse.avgMinutes))+'</strong><small>'+Math.round(pulse.avgQuestions)+' soru/gün</small></div>'+
+    '<div><span>En yoğun gün</span><strong>'+escHtml(bestDay)+'</strong><small>'+(pulse.best?escHtml(reportMinutes(pulse.best.minutes))+' · '+Math.round(pulse.best.questions)+' soru':"Veri yok")+'</small></div>'+
+    '<div><span>Aktif seri</span><strong>'+pulse.streak+' gün</strong><small>'+(pulse.streak?"Kesintisiz çalışma":"Bugün kayıt yok")+'</small></div>';
+  const focusSubjects=reportSubjectRows(row).filter(item=>item.minutes>0).slice(0,6),focusMax=Math.max(1,...focusSubjects.map(item=>item.minutes));
+  $("reportSubjectFocusBars").innerHTML=focusSubjects.length?focusSubjects.map((item,index)=>'<div class="report-subject-focus-row"><span><b>'+escHtml(item.name)+'</b><small>'+(index===0?"En çok çalışılan · ":"")+Math.round(item.questions)+' soru</small></span><i><em style="width:'+Math.round(item.minutes/focusMax*100)+'%"></em></i><strong>'+escHtml(reportMinutes(item.minutes))+'</strong></div>').join(""):'<div class="report-mini-empty">Ders bazlı odak süresi yeni senkronla burada görünecek.</div>';
 
   const trend=$("reportActivityTrend");
   if(daily.length>=14&&previous7.minutes>0){const pct=Math.round((current7.minutes-previous7.minutes)/previous7.minutes*100);trend.textContent=(pct>=0?"+":"")+pct+"% süre";trend.className="report-trend-pill "+(pct>=0?"good":"warn");}
