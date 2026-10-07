@@ -86,6 +86,7 @@ function showCoachPage(page){
   document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
   if(page==="home"){try{refreshDashboardGreeting();renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
+  if(page==="settings"){try{openCoachSettingsOverview()}catch(error){console.error("Ayarlar görünümü",error)}}
   closeSidebar();
 }
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
@@ -1292,11 +1293,53 @@ function settingsDirty(){
   updateSettingsPill("Kaydedilmemiş değişiklik","dirty");
   if($("settingsProfileStatus"))$("settingsProfileStatus").textContent="Kaydedilmemiş değişiklik";
 }
-document.querySelectorAll("[data-settings-tab]").forEach(button=>button.addEventListener("click",()=>{
-  const tab=button.dataset.settingsTab;
-  document.querySelectorAll("[data-settings-tab]").forEach(x=>x.classList.toggle("active",x===button));
+const COACH_SETTINGS_META={
+  profile:{title:"Profil",description:"Koç bilgilerini ve öğrencilerin gördüğü profilini düzenle."},
+  general:{title:"Panel ve çalışma",description:"Açılış ekranını ve panelin çalışma biçimini belirle."},
+  messaging:{title:"Mesajlar",description:"Mesaj yazma ve hızlı yanıt tercihlerini düzenle."},
+  appearance:{title:"Görünüm",description:"Ekran yoğunluğunu ve hareket davranışını kendine göre ayarla."},
+  account:{title:"Hesap ve oturum",description:"Google hesabını, senkron durumunu ve oturum bilgilerini gör."}
+};
+function openCoachSettingsOverview(){
+  const page=$("settingsPage"),overview=$("coachSettingsOverview"),detail=$("coachSettingsDetail");
+  if(page)page.dataset.settingsView="overview";
+  overview?.classList.remove("hidden");
+  detail?.classList.add("hidden");
+  document.querySelectorAll("[data-settings-panel]").forEach(panel=>panel.classList.add("hidden"));
+  document.querySelectorAll("[data-settings-tab]").forEach(button=>button.classList.remove("active"));
+  const search=$("coachSettingsSearch");
+  if(search){search.value="";search.dispatchEvent(new Event("input"))}
+  try{window.scrollTo({top:0,behavior:"instant"})}catch{}
+}
+function openCoachSettingsTab(tab){
+  const meta=COACH_SETTINGS_META[tab];if(!meta)return;
+  const page=$("settingsPage"),overview=$("coachSettingsOverview"),detail=$("coachSettingsDetail");
+  if(page)page.dataset.settingsView="detail";
+  overview?.classList.add("hidden");
+  detail?.classList.remove("hidden");
+  document.querySelectorAll("[data-settings-tab]").forEach(button=>button.classList.toggle("active",button.dataset.settingsTab===tab));
   document.querySelectorAll("[data-settings-panel]").forEach(panel=>panel.classList.toggle("hidden",panel.dataset.settingsPanel!==tab));
-}));
+  if($("coachSettingsDetailTitle"))$("coachSettingsDetailTitle").textContent=meta.title;
+  if($("coachSettingsDetailDescription"))$("coachSettingsDetailDescription").textContent=meta.description;
+  try{window.scrollTo({top:0,behavior:"instant"})}catch{}
+}
+document.querySelectorAll("[data-settings-tab]").forEach(button=>button.addEventListener("click",()=>openCoachSettingsTab(button.dataset.settingsTab)));
+$("coachSettingsBack")?.addEventListener("click",openCoachSettingsOverview);
+$("coachSettingsSearch")?.addEventListener("input",event=>{
+  const query=String(event.currentTarget.value||"").trim().toLocaleLowerCase("tr-TR");
+  const buttons=[...document.querySelectorAll("[data-settings-search]")];
+  let visible=0;
+  buttons.forEach(button=>{
+    const hay=(String(button.dataset.settingsSearch||"")+" "+String(button.textContent||"")).toLocaleLowerCase("tr-TR");
+    const match=!query||hay.includes(query);
+    button.classList.toggle("hidden",!match);
+    if(match)visible++;
+  });
+  const list=document.querySelector(".coach-settings-category-list");
+  if(list)list.classList.toggle("hidden",query&&![...list.querySelectorAll("[data-settings-search]")].some(button=>!button.classList.contains("hidden")));
+  const empty=$("coachSettingsNoResults");if(empty)empty.classList.toggle("hidden",visible>0);
+  document.querySelector(".coach-settings-app-row")?.classList.toggle("hidden",Boolean(query));
+});
 ["settingsDisplayName","settingsCoachTitle","settingsSpecialization"].forEach(id=>$(id)?.addEventListener("input",()=>{
   settingsDirty();
   if(id==="settingsDisplayName"&&$("settingsProfileNamePreview"))$("settingsProfileNamePreview").textContent=$("settingsDisplayName").value.trim()||"Koç";
