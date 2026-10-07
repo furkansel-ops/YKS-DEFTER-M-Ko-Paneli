@@ -7,8 +7,8 @@ const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 
 test('programlar ekranında güncel hoca ve video kütüphanesi yüklenir',()=>{
   const html=read('index.html'),js=read('program-videos-v1.js'),css=read('program-videos-v1.css');
-  assert.match(html,/program-videos-v1\.css\?v=1\.2\.0/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.6\.0/);
+  assert.match(html,/program-videos-v1\.css\?v=1\.3\.0/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.7\.0/);
   assert.match(js,/HOCALAR &amp; VİDEOLAR/);
   assert.match(js,/data-scope="TYT"/);
   assert.match(js,/data-scope="AYT"/);
