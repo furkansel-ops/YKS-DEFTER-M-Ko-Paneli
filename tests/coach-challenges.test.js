@@ -42,6 +42,6 @@ test("koç paneli yeni modül ve öğrenci olay bağlantılarını içerir",()=>
  assert.match(app,/yks:coach-challenges-students/);
  assert.match(module,/where\("studentUid","==",studentUid\)/);
  assert.match(module,/status==="approved"/);
- assert.match(module,/runTransaction\(db/);
- assert.match(module,/transaction\.set\(refs\[open\]/);
+ assert.match(module,/for\(const slot of \["0","1","2"\]\)/);
+ assert.match(module,/await setDoc\(doc\(db,"coachChallenges"/);
 });
