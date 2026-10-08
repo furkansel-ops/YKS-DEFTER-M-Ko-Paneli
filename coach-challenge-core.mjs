@@ -18,7 +18,10 @@ export function challengeId(studentUid,coachUid,week,slot){
   if(!studentUid||!coachUid)throw Error("Öğrenci/koç eksik");
   dateFromKey(week);
   if(!/^(?:[012]|free-[A-Za-z0-9]{8,24})$/.test(String(slot)))throw Error("Geçersiz görev bölümü");
-  return studentUid+"_"+coachUid+"_"+week+"_"+slot;
+  // A rewarded slot is student-scoped across ALL coaches. Unrewarded stays coach-scoped.
+  return /^[012]$/.test(String(slot))?
+    studentUid+"_"+week+"_"+slot:
+    studentUid+"_"+coachUid+"_"+week+"_"+slot;
 }
 export function availableRewardSlot(existing,studentUid,coachUid,week){
   const used=new Set(existing.filter(x=>x.studentUid===studentUid&&x.coachUid===coachUid&&
