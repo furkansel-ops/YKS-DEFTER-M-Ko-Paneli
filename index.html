@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="./messages-v21.css?v=2.0.0">
   <link rel="stylesheet" href="./settings-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./coach-polish-v1.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-challenges.css?v=0.1.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -59,6 +60,7 @@
         <button class="coach-nav-item" type="button" data-coach-page="exams"><span>▤</span><b>Deneme Analizi</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="topics"><span>◫</span><b>Konular</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="errors"><span>✎</span><b>Hata Defteri</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="challenges"><span>🏆</span><b>Başarımlar & Görevler</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="messages"><span>✉</span><b>Mesajlar</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="settings"><span>⚙</span><b>Ayarlar</b></button>
       </nav>
@@ -890,6 +892,49 @@
           </section>
         </div>
       </section>
+      <section class="coach-challenges-page hidden" id="challengesPage">
+        <header class="students-head">
+          <div><span class="dashboard-eyebrow">KOÇ PANELİ · OYUNLAŞTIRMA</span>
+            <h1>Başarımlar & Görevler</h1>
+            <p>Öğrencine özel görev ata, çalışma ilerlemesini takip et ve ödevleri onayla.</p></div>
+        </header>
+        <div class="cg-layout">
+          <section class="cg-card">
+            <h2>Özel görev oluştur</h2>
+            <form id="cgForm" class="cg-form">
+              <label>Öğrenci<select id="cgStudent" required></select></label>
+              <label>Görev başlığı<input id="cgTitle" required maxlength="120" placeholder="Fizik — Hareket çalışması"></label>
+              <label>Ders / kapsam<input id="cgSubject" maxlength="100" placeholder="TYT|Fizik ya da boş bırak"></label>
+              <label>Görev türü<select id="cgKind">
+                <option value="both">Süre ve soru</option><option value="minutes">Sadece süre</option>
+                <option value="questions">Sadece soru</option><option value="manual">Koç onaylı ödev</option>
+              </select></label>
+              <div class="cg-grid-two">
+                <label>Süre hedefi (dk)<input id="cgMinutes" type="number" min="0" max="480" value="60"></label>
+                <label>Soru hedefi<input id="cgQuestions" type="number" min="0" max="300" value="40"></label>
+              </div>
+              <div class="cg-grid-two">
+                <label>Başlangıç<input id="cgStart" type="date" required></label>
+                <label>Son tarih<input id="cgDue" type="date" required></label>
+              </div>
+              <div class="cg-grid-two">
+                <label>Zorluk<select id="cgDifficulty"><option value="easy">Kolay · 20 XP</option>
+                  <option value="normal" selected>Normal · 35 XP</option><option value="hard">Zor · 50 XP</option></select></label>
+                <label>Ödül<select id="cgReward"><option value="yes">XP ödüllü</option>
+                  <option value="no">Ödülsüz görev</option></select></label>
+              </div>
+              <label>Not / açıklama<textarea id="cgNote" rows="3" maxlength="500" placeholder="Görevin detayları"></textarea></label>
+              <p class="cg-help">Ödüllü görevler öğrenci başına haftada en fazla 3 adettir. İlk çalışma günü en erken yarın. Süre ve soru takibi yalnız ilgili kayıtlarla doğrulanır.</p>
+              <button class="cg-primary" type="submit" id="cgSubmit">Öğrenciye görev gönder</button>
+              <p id="cgStatus" class="cg-status" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+          <section class="cg-card"><h2>Öğrenci görev takibi</h2>
+            <p class="cg-help">Özel ödevlerde koç onayı gerekir. Görev XP'si aynı öğrenciye ikinci kez verilmez.</p>
+            <div id="cgList" class="cg-list"><p class="cg-empty">Öğrenci seçildiğinde görevleri burada göreceksin.</p></div>
+          </section>
+        </div>
+      </section>
       <section class="messages-page hidden" id="messagesPage">
         <header class="messages-head">
           <div>
@@ -1250,6 +1295,7 @@
     </main>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.53"></script><script defer src="./program-videos-v1.js?v=1.8.0"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",challenges:"challengesPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#challengesPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.53"></script><script defer src="./program-videos-v1.js?v=1.8.0"></script>
+  <script type="module" src="./coach-challenges.mjs?v=0.1.0"></script>
 </body>
 </html>
