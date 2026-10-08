@@ -10,7 +10,7 @@ const $=id=>document.getElementById(id);
 const n=(tag,cls="",txt="")=>{
   const e=document.createElement(tag);if(cls)e.className=cls;if(txt)e.textContent=txt;return e;
 };
-let coachUid="",tasks=[],stop=null,studentUid="",busy=false;
+let coachUid="",tasks=[],stop=null,studentUid="",busy=false,watchKey="";
 const context=()=>window.YKSCoachChallengeContext;
 function notice(value,error=false){
   const el=$("cgStatus");if(el){el.textContent=value;el.dataset.error=String(error);}
@@ -28,6 +28,7 @@ function updateOptions(){
   }
   select.value=students().some(s=>s.uid===previous)?previous:select.options[0]?.value??"";
   studentUid=select.value;
+  watchSelected();
   draw();
 }
 function formValue(){
@@ -43,7 +44,7 @@ function statusName(x){
 function draw(){
   const root=$("cgList");if(!root)return;
   root.replaceChildren();
-  const list=tasks.filter(t=>t.studentUid===studentUid)
+  const list=tasks.filter(t=>t.studentUid===studentUid&&t.coachUid===coachUid)
     .sort((a,b)=>String(b.startDay).localeCompare(String(a.startDay))||String(b.id).localeCompare(String(a.id)));
   if(!list.length){root.append(n("p","cg-empty","Bu öğrenciye henüz özel görev verilmedi."));return;}
   for(const task of list.slice(0,100)){
@@ -114,15 +115,25 @@ async function createChallenge(event){
   }catch(error){notice("Görev gönderilemedi: "+String(error?.message||error),true);}
   finally{busy=false;if(button)button.disabled=false;}
 }
-function startListening(uid){
-  if(stop){stop();stop=null;}tasks=[];coachUid=uid;
-  if(!uid){draw();return;}
-  stop=onSnapshot(query(collection(db,"coachChallenges"),where("coachUid","==",uid)),snapshot=>{
+function watchSelected(){
+  const key=coachUid+"|"+studentUid;
+  if(key===watchKey)return;
+  if(stop){stop();stop=null;}tasks=[];watchKey=key;
+  if(!coachUid||!studentUid||!students().some(x=>x.uid===studentUid)){draw();return;}
+  stop=onSnapshot(query(collection(db,"coachChallenges"),
+    where("coachUid","==",coachUid),where("studentUid","==",studentUid)),snapshot=>{
     tasks=snapshot.docs.map(doc=>({id:doc.id,...doc.data()}));
     draw();
-  },error=>notice("Görevler alınamadı: "+String(error.message||error),true));
+  },error=>notice("Öğrenci görevleri okunamadı: "+String(error.message||error),true));
 }
-$("cgStudent")?.addEventListener("change",event=>{studentUid=event.target.value;draw();});
+function startListening(uid){
+  coachUid=uid;
+  watchKey="";
+  if(stop){stop();stop=null;}
+  tasks=[];
+  watchSelected();
+}
+$("cgStudent")?.addEventListener("change",event=>{studentUid=event.target.value;watchSelected();draw();});
 $("cgForm")?.addEventListener("submit",event=>void createChallenge(event));
 $("cgKind")?.addEventListener("change",()=>{
   const kind=$("cgKind").value;
