@@ -78,12 +78,12 @@ $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
 $("overlay")?.addEventListener("click",closeSidebar);
 
-const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",challenges:"challengesPage",messages:"messagesPage",settings:"settingsPage"};
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#challengesPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
   if(page==="home"){try{refreshDashboardGreeting();renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
   if(page==="settings"){try{openCoachSettingsOverview()}catch(error){console.error("Ayarlar görünümü",error)}}
@@ -127,6 +127,13 @@ document.querySelectorAll("[data-student-filter]").forEach(button=>button.addEve
 
 
 let coachReportRows=[];
+/* Aşama 4 yalnız bağlı öğrenci kimliklerini yeni görev modülüne açar. */
+window.YKSCoachChallengeContext={
+  getStudents:()=>coachReportRows.filter(row=>row?.studentUid&&row?.link?.active===true)
+    .map(row=>({uid:row.studentUid,name:text(row?.share?.profile?.name||
+      row?.profile?.displayName||"Öğrenci",80)}))
+};
+
 let coachShareStops=[],coachRealtimeRenderTimer=null;
 function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null}
 function renderCoachRealtimeViews(){
@@ -134,6 +141,7 @@ function renderCoachRealtimeViews(){
   try{renderDashboardDayReviews()}catch(error){console.error("Canlı gün sonu notları",error)}
   try{renderStudentsPage()}catch(error){console.error("Canlı öğrenci görünümü",error)}
   try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
+  window.dispatchEvent(new Event("yks:coach-challenges-students"));
   try{renderReport($("reportStudentSelect")?.value||"all")}catch(error){console.error("Canlı rapor görünümü",error)}
   try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"")}catch(error){console.error("Canlı paragraf/problem görünümü",error)}
 }
@@ -349,6 +357,7 @@ async function loadCoachReports(coachUid){
     try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Programlar render",error)}
     try{renderMessageStudents()}catch(error){console.error("Mesaj öğrenci listesi",error)}
     startCoachShareRealtime();
+    window.dispatchEvent(new Event("yks:coach-challenges-students"));
   }catch(error){
     console.error("Takip raporları",error);
     if($("reportErrorText"))$("reportErrorText").textContent=String(error?.message||"Rapor verileri alınamadı.");
