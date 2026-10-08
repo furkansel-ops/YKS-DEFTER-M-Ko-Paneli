@@ -1,6 +1,6 @@
 import{getApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,collection,doc,query,where,onSnapshot,setDoc,updateDoc,runTransaction,serverTimestamp}
+import{getFirestore,collection,doc,query,where,onSnapshot,setDoc,updateDoc,serverTimestamp}
  from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{challengeId,dayKey,plusDays,mondayOf,
  validateChallengeInput,nextState,rewardByDifficulty}from"./coach-challenge-core.mjs";
@@ -107,19 +107,22 @@ async function createChallenge(event){
       minutesDone:0,questionsDone:0,createdAt:serverTimestamp(),updatedAt:serverTimestamp()
     });
     if(rewardMode){
-      // All coaches share the same three immutable slots for this student's week.
-      // Firestore transactions avoid accidentally overwriting a different coach's slot.
-      await runTransaction(db,async transaction=>{
-        const refs=["0","1","2"].map(slot=>doc(db,"coachChallenges",
-          challengeId(studentUid,coachUid,payload.weekStart,slot)));
-        let open=-1;
-        for(let i=0;i<refs.length;i++){
-          const snapshot=await transaction.get(refs[i]);
-          if(!snapshot.exists()){open=i;break;}
+      // A slot is an immutable student/week document. A concurrent setDoc can
+      // only CREATE; overwrite is rejected by Firestore Rules. No missing-doc
+      // get/read is necessary (and nonexistent docs would be permission denied).
+      let created=false,lastError;
+      for(const slot of ["0","1","2"]){
+        try{
+          await setDoc(doc(db,"coachChallenges",
+            challengeId(studentUid,coachUid,payload.weekStart,slot)),build(slot));
+          created=true;break;
+        }catch(error){
+          lastError=error;
+          if(error?.code!=="permission-denied"&&error?.code!=="already-exists")throw error;
         }
-        if(open<0)throw Error("Öğrencinin bu haftaki 3 XP ödüllü görevi dolu. Ödülsüz görev gönderebilirsin.");
-        transaction.set(refs[open],build(String(open)));
-      });
+      }
+      if(!created)throw Error("Bu öğrencinin haftalık XP yuvaları dolu veya yetkin yok. "+
+        String(lastError?.message||"Ödülsüz görev seçebilirsin."));
     }else{
       const slot="free-"+crypto.randomUUID().replaceAll("-","").slice(0,16);
       await setDoc(doc(db,"coachChallenges",challengeId(studentUid,coachUid,payload.weekStart,slot)),build(slot));
