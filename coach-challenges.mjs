@@ -1,8 +1,8 @@
 import{getApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,collection,doc,query,where,onSnapshot,setDoc,updateDoc,serverTimestamp}
+import{getFirestore,collection,doc,query,where,onSnapshot,setDoc,updateDoc,runTransaction,serverTimestamp}
  from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import{availableRewardSlot,challengeId,dayKey,plusDays,mondayOf,
+import{challengeId,dayKey,plusDays,mondayOf,
  validateChallengeInput,nextState,rewardByDifficulty}from"./coach-challenge-core.mjs";
 
 const app=getApp("yks-coach-panel"),auth=getAuth(app),db=getFirestore(app);
@@ -90,19 +90,15 @@ async function createChallenge(event){
   if(!coachUid||!studentUid||!students().some(s=>s.uid===studentUid)){
     notice("Önce bağlı bir öğrenci seç.",true);return;
   }
-  let payload,slot;
+  let payload;
   const rewardMode=$("cgReward")?.value==="yes";
   try{
     payload=validateChallengeInput(formValue());
-    slot=rewardMode?availableRewardSlot(tasks,studentUid,coachUid,payload.weekStart):
-      "free-"+crypto.randomUUID().replaceAll("-","").slice(0,16);
-    if(slot==null)throw Error("Bu öğrenciye bu hafta üç ödüllü görev atanmış. Ödülsüz görev oluşturabilirsin.");
   }catch(error){notice(String(error?.message||error),true);return;}
   busy=true;const button=$("cgSubmit");if(button)button.disabled=true;
   notice("Görev gönderiliyor…");
   try{
-    const id=challengeId(studentUid,coachUid,payload.weekStart,slot);
-    await setDoc(doc(db,"coachChallenges",id),{
+    const build=(slot)=>({
       studentUid,coachUid,weekStart:payload.weekStart,slot,
       title:payload.title,subject:payload.subject,note:payload.note,kind:payload.kind,
       difficulty:payload.difficulty,xp:rewardMode?rewardByDifficulty[payload.difficulty]:0,
@@ -110,6 +106,24 @@ async function createChallenge(event){
       startDay:payload.startDay,dueDay:payload.dueDay,status:"assigned",
       minutesDone:0,questionsDone:0,createdAt:serverTimestamp(),updatedAt:serverTimestamp()
     });
+    if(rewardMode){
+      // All coaches share the same three immutable slots for this student's week.
+      // Firestore transactions avoid accidentally overwriting a different coach's slot.
+      await runTransaction(db,async transaction=>{
+        const refs=["0","1","2"].map(slot=>doc(db,"coachChallenges",
+          challengeId(studentUid,coachUid,payload.weekStart,slot)));
+        let open=-1;
+        for(let i=0;i<refs.length;i++){
+          const snapshot=await transaction.get(refs[i]);
+          if(!snapshot.exists()){open=i;break;}
+        }
+        if(open<0)throw Error("Öğrencinin bu haftaki 3 XP ödüllü görevi dolu. Ödülsüz görev gönderebilirsin.");
+        transaction.set(refs[open],build(String(open)));
+      });
+    }else{
+      const slot="free-"+crypto.randomUUID().replaceAll("-","").slice(0,16);
+      await setDoc(doc(db,"coachChallenges",challengeId(studentUid,coachUid,payload.weekStart,slot)),build(slot));
+    }
     notice("Görev öğrencinin hesabına gönderildi. Bağlantı geldiğinde görünecek.");
     $("cgTitle").value="";$("cgNote").value="";
   }catch(error){notice("Görev gönderilemedi: "+String(error?.message||error),true);}
