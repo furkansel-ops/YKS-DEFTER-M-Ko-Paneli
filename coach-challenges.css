@@ -28,3 +28,20 @@
 .cg-actions .cg-approve{background:#e5f6ed;color:#16784d;border-color:#b8e6ce}
 @media(max-width:1000px){.cg-layout{grid-template-columns:1fr}}
 @media(max-width:600px){.coach-challenges-page{padding:14px}.cg-card{padding:14px}.cg-grid-two{grid-template-columns:1fr}}
+
+/* iPad split view + Android landscape: larger hit areas without horizontal scroll. */
+.cg-layout,.cg-card,.cg-form,.cg-list,.cg-item{max-width:100%;box-sizing:border-box;min-width:0}
+.cg-item-head>div,.cg-card h2,.cg-item p{overflow-wrap:anywhere}
+.cg-form input,.cg-form select,.cg-form textarea{font-size:16px}
+.cg-primary,.cg-actions button{min-height:44px;touch-action:manipulation}
+.cg-actions{flex-wrap:wrap}
+@media(min-width:601px) and (max-width:1100px){
+  .coach-challenges-page{padding:18px}
+  .cg-layout{grid-template-columns:minmax(0,1fr)}
+  .cg-card{width:100%}
+}
+@media(max-width:380px){
+  .coach-challenges-page{padding:10px}
+  .cg-layout{gap:12px}
+  .cg-card{padding:12px}
+}
