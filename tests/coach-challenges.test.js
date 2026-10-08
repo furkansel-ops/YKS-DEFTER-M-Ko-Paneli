@@ -11,7 +11,8 @@ test("koç haftası ve üç ödüllü görev kimliği sabitlenir",async()=>{
    {studentUid:uid,coachUid:coach,weekStart:week,slot:"1",xp:50}];
  assert.equal(c.availableRewardSlot(rows,uid,coach,week),"2");
  assert.equal(c.availableRewardSlot([...rows,{...rows[0],slot:"2"}],uid,coach,week),null);
- assert.equal(c.challengeId(uid,coach,week,"2"),"studentABC_coachXYZ_2026-10-05_2");
+ assert.equal(c.challengeId(uid,coach,week,"2"),"studentABC_2026-10-05_2");
+ assert.equal(c.challengeId(uid,coach,week,"free-12345678"),"studentABC_coachXYZ_2026-10-05_free-12345678");
  assert.throws(()=>c.challengeId(uid,coach,week,"5"),/bölümü/);
  assert.throws(()=>c.challengeId(uid,coach,"2026-10-32","0"),/Tarih/);
 });
@@ -41,4 +42,6 @@ test("koç paneli yeni modül ve öğrenci olay bağlantılarını içerir",()=>
  assert.match(app,/yks:coach-challenges-students/);
  assert.match(module,/where\("studentUid","==",studentUid\)/);
  assert.match(module,/status==="approved"/);
+ assert.match(module,/runTransaction\(db/);
+ assert.match(module,/transaction\.set\(refs\[open\]/);
 });
