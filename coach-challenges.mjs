@@ -52,6 +52,7 @@ function draw(){
     info.append(n("strong","",task.title),n("small","",task.subject||"Genel çalışma"));
     head.append(info,n("b","",task.xp?"+"+task.xp+" XP":"Ödülsüz"));
     article.appendChild(head);
+    if(task.relatedDaily)article.append(n("small","","↔ Günlük görevlerle ilişkili"));
     article.append(n("p","",task.note||(
       task.kind==="manual"?"Koç onayı gerektiren özel görev":
       (task.goalMinutes?task.minutesDone+" / "+task.goalMinutes+" dk":"")+
@@ -105,6 +106,7 @@ async function createChallenge(event){
     await setDoc(doc(db,"coachChallenges",id),{
       studentUid,coachUid,weekStart:payload.weekStart,slot,
       title:payload.title,subject:payload.subject,note:payload.note,kind:payload.kind,
+      relatedDaily:Boolean($("cgLinkDaily")?.checked),
       difficulty:payload.difficulty,xp:rewardMode?rewardByDifficulty[payload.difficulty]:0,
       goalMinutes:payload.goalMinutes,goalQuestions:payload.goalQuestions,
       startDay:payload.startDay,dueDay:payload.dueDay,status:"assigned",
