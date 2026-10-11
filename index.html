@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="./coach-polish-v1.css?v=1.0.0">
   <link rel="stylesheet" href="./program-classic-v1.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-fast-planner.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-week-visual-v6.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -201,7 +202,7 @@
           </footer>
         </section>
       </div>
-      <section class="programs-page classic-program-page hidden" id="programsPage">
+      <section class="programs-page classic-program-page hidden" id="programsPage" data-coach-week-view="visual">
         <header class="programs-head">
           <div>
             <span class="dashboard-eyebrow">PROGRAM YÖNETİMİ</span>
@@ -237,7 +238,12 @@
               </div>
             </div>
 
-            <div class="program-student-shell" id="programWeekBoard" aria-label="Öğrencinin haftalık programı"></div>
+            <div class="coach-v6-view-switch" role="group" aria-label="Program görünümü seçimi">
+              <button type="button" id="coachWeekVisualMode" aria-pressed="true">▦ Haftalık Plan</button>
+              <button type="button" id="coachWeekClassicMode" aria-pressed="false">▤ Klasik Görünüm</button>
+            </div>
+            <div id="coachVisualWeekBoard" class="coach-v6-host" aria-label="Yeni haftalık plan görünümü"></div>
+            <div class="program-student-shell" id="programWeekBoard" aria-label="Öğrencinin haftalık klasik programı"></div>
 
             <div class="program-main-empty" id="programMainEmpty">
               <span>▣</span><div><b>Bir öğrenci seç</b><p>Yukarıdaki Öğrencilerim alanından bir öğrenci seçtiğinde rutinleri ve ders programı burada açılacak.</p></div>
@@ -1212,6 +1218,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.56"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.57"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
 </body>
 </html>
