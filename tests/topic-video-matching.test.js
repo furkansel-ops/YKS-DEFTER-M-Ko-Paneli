@@ -14,7 +14,7 @@ test('Hocalar ve Videolar konu bazlı eşleşme ve öneri bilgisini korur',()=>{
 
   assert.match(html,/program-videos-v1\.js\?v=1\.8\.2/);
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.57/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.58/);
 
   assert.match(videos,/const TOPICS=/);
   assert.match(videos,/const TOPIC_ALIASES=/);

@@ -1887,35 +1887,188 @@ function coachV6TaskLabel(value){
     .replace(/^Koç\s*·\s*(?:Deneme sonrası\s*·\s*)?/i,"")
     .replace(/\s+—\s+https?:\/\/\S+\s*$/i,"").trim();
 }
+
+/* v7 / safe per-student-and-week draft workspace.
+   Only a confirmed send writes coachingActions; drafts remain in this browser tab. */
+const coachV7DraftCache=new Map(),coachV7SendingKeys=new Set(),coachV7Notices=new Map();
+let coachV7ComposerScope="",coachV7ComposerDays=new Set([0]),coachV7EditingId=null,coachV7Drag=null;
+let coachV7Sequence=0;
+const COACH_V7_DAY_NAMES=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+function coachV7Key(studentUid,weekStart,coachUid=auth.currentUser?.uid){
+  return String(coachUid||"")+"|"+String(studentUid||"")+"|"+String(weekStart||"");
+}
+function coachV7StoreKey(key){return "yks-coach-week-draft-v7:"+key}
+function coachV7ValidTime(value){return typeof value==="string"&&/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)}
+function coachV7Time(value){
+  const match=String(value||"").match(/\s+·\s+Saat\s+((?:[01]\d|2[0-3]):[0-5]\d)(?=\s+—\s+https?:\/\/|$)/i);
+  return match?match[1]:"";
+}
+function coachV7ComposeText(item){
+  return item.text.trim()+(item.time?" · Saat "+item.time:"")+(item.url?" — "+item.url:"");
+}
+function coachV7Drafts(key){
+  if(coachV7DraftCache.has(key))return coachV7DraftCache.get(key);
+  let found=[];
+  try{
+    const parsed=JSON.parse(window.sessionStorage.getItem(coachV7StoreKey(key))||"[]");
+    if(Array.isArray(parsed))found=parsed.slice(0,100).filter(x=>
+      x&&typeof x.id==="string"&&/^[a-z0-9-]{1,64}$/.test(x.id)&&
+      Number.isInteger(x.day)&&x.day>=0&&x.day<7&&
+      typeof x.text==="string"&&x.text.trim().length>0&&x.text.length<=600&&
+      (x.time===""||coachV7ValidTime(x.time))&&
+      typeof x.url==="string"&&x.url.length<=500&&
+      (!x.url||coachV7ValidUrl(x.url))
+    ).map(x=>({id:x.id,day:x.day,text:x.text,time:x.time||"",url:x.url||""}));
+  }catch{}
+  coachV7DraftCache.set(key,found);return found;
+}
+function coachV7ValidUrl(value){
+  try{const url=new URL(value);return (url.protocol==="https:"||url.protocol==="http:")&&Boolean(url.hostname)}
+  catch{return false}
+}
+function coachV7Persist(key){
+  const draft=coachV7Drafts(key);
+  try{window.sessionStorage.setItem(coachV7StoreKey(key),JSON.stringify(draft))}catch{}
+}
+function coachV7Context(studentUid,weekStart){
+  return selectedProgramStudentUid===studentUid&&selectedProgramWeekStart===weekStart&&
+    Boolean(auth.currentUser?.uid);
+}
+function coachV7ComposerContext(key){
+  if(coachV7ComposerScope===key)return;
+  coachV7ComposerScope=key;coachV7EditingId=null;coachV7Drag=null;
+  coachV7ComposerDays=new Set([0]);
+}
+function coachV7SetNotice(key,message,kind="info"){
+  coachV7Notices.set(key,{message,kind});
+  const node=$("coachV7DraftStatus");
+  if(node&&coachV7ComposerScope===key){node.textContent=message;node.dataset.kind=kind}
+}
+function coachV7FormError(message){const n=$("coachV7FormError");if(n)n.textContent=message}
+function coachV7DraftPanel(key,week){
+  coachV7ComposerContext(key);
+  const pending=coachV7Drafts(key),notice=coachV7Notices.get(key),editing=pending.find(x=>x.id===coachV7EditingId);
+  const chips=COACH_V7_DAY_NAMES.map((label,day)=>
+    '<button type="button" data-v7-pick-day="'+day+'" aria-pressed="'+coachV7ComposerDays.has(day)+'" aria-label="'+label+' için taslak seç">'+label+'</button>').join("");
+  const escaped=escHtml;
+  return '<section class="coach-v7-panel" aria-label="Göndermeden önce haftayı planla">'
+    +'<div class="coach-v7-panel-head"><div><span class="coach-v7-kicker">2. AŞAMA · GÜVENLİ PLANLAMA</span><h3>Haftalık taslak <small>'+pending.length+' çalışma</small></h3><p>Görevleri önce buraya ekle, günlerini ve saatlerini düzenle. Sen onaylamadan öğrenciye gönderilmez.</p></div>'
+    +'<div class="coach-v7-panel-actions"><button type="button" data-v7-clear '+(!pending.length?'disabled':'')+'>Taslağı temizle</button><button type="button" data-v7-send '+(!pending.length||coachV7SendingKeys.has(key)?'disabled':'')+'>Taslağı Gönder ('+pending.length+')</button></div></div>'
+    +'<div class="coach-v7-form"><div class="coach-v7-form-grid">'
+    +'<label class="coach-v7-wide">Çalışma adı<input type="text" id="coachV7DraftText" maxlength="550" placeholder="Örn. TYT Matematik · Problemler 30 soru" value="'+escaped(editing?.text||"")+'"></label>'
+    +'<label>Başlangıç saati <small>İsteğe bağlı</small><input type="time" id="coachV7DraftTime" value="'+escaped(editing?.time||"")+'"></label>'
+    +'<label class="coach-v7-wide">Video bağlantısı <small>İsteğe bağlı</small><input type="url" id="coachV7DraftUrl" maxlength="500" placeholder="https://youtu.be/..." value="'+escaped(editing?.url||"")+'"></label>'
+    +'</div><div class="coach-v7-days-picker"><strong>Hangi günler?</strong><div role="group" aria-label="Taslak gün seçimi">'+chips+'</div></div>'
+    +'<div class="coach-v7-form-footer"><span id="coachV7FormError" role="alert"></span><button type="button" data-v7-cancel-edit '+(!editing?'hidden':'')+'>Düzenlemeyi bırak</button><button type="button" data-v7-add>'+ (editing?"Taslağı güncelle":"＋ Taslağa Ekle") +'</button></div></div>'
+    +'<p class="coach-v7-note">Saat seçersen görev metnine “Saat 09:00” gibi eklenir; öğrencinin programında saatli ayrı bir veri alanı henüz yok. Taslaklar yalnız bu sekmede saklanır.</p>'
+    +'<p id="coachV7DraftStatus" class="coach-v7-status" data-kind="'+escaped(notice?.kind||"info")+'" role="status" aria-live="polite">'+escaped(notice?.message||"")+'</p></section>';
+}
+function coachV7DraftCard(item,key){
+  const lesson=coachV6Subject({id:"s-0-"+item.day,text:item.text});
+  const days=COACH_V7_DAY_NAMES.map((label,day)=>'<option value="'+day+'" '+(item.day===day?'selected':'')+'>'+label+'</option>').join("");
+  return '<article class="coach-v7-draft" data-v7-draft-id="'+escHtml(item.id)+'" data-subject="'+lesson.key+'" draggable="true">'
+    +'<span class="coach-v7-draft-icon">'+coachV6Symbol(lesson.key)+'</span>'
+    +'<div class="coach-v7-draft-main"><strong>'+escHtml(lesson.title)+' <small>GÖNDERİLMEDİ</small></strong><span>'+escHtml(item.text)+'</span>'+(item.time?'<em>◷ '+escHtml(item.time)+'</em>':'')+'</div>'
+    +'<div class="coach-v7-draft-controls"><label><span>Gün</span><select data-v7-move aria-label="Taslak çalışmayı günler arasında taşı">'+days+'</select></label><button type="button" data-v7-edit aria-label="Taslağı düzenle">✎</button><button type="button" data-v7-remove aria-label="Taslağı sil">×</button></div></article>';
+}
+function coachV7AddDraft(key){
+  if(coachV7SendingKeys.has(key))return;
+  const text=String($("coachV7DraftText")?.value||"").trim(),time=String($("coachV7DraftTime")?.value||""),url=String($("coachV7DraftUrl")?.value||"").trim();
+  if(!text||text.length>550){coachV7FormError("Çalışma adı 1–550 karakter olmalı.");return}
+  if(time&&!coachV7ValidTime(time)){coachV7FormError("Geçerli bir saat seç.");return}
+  if(url&&!coachV7ValidUrl(url)){coachV7FormError("Bağlantı http veya https adresi olmalı.");return}
+  if(!coachV7ComposerDays.size){coachV7FormError("Önce en az bir gün seç.");return}
+  if(coachV7ComposeText({text,time,url}).length>600){coachV7FormError("Gönderilecek görev bağlantı ve saat dahil 600 karakteri geçemez.");return}
+  const draft=coachV7Drafts(key);
+  const edit=draft.find(x=>x.id===coachV7EditingId);
+  if(!edit&&draft.length+coachV7ComposerDays.size>100){coachV7FormError("Bir haftanın taslağı en fazla 100 çalışma içerebilir.");return}
+  if(edit){
+    edit.text=text;edit.time=time;edit.url=url;edit.day=[...coachV7ComposerDays][0];
+  }else{
+    for(const day of [...coachV7ComposerDays].sort((a,b)=>a-b)){
+      draft.push({id:(Date.now().toString(36)+"-"+(++coachV7Sequence).toString(36)),day,text,time,url});
+    }
+  }
+  coachV7EditingId=null;coachV7ComposerDays=new Set([0]);coachV7Persist(key);
+  coachV7SetNotice(key,(edit?"Çalışma güncellendi.":"Çalışma taslağa eklendi.")+" Henüz öğrenciye gönderilmedi.","success");
+  renderProgramWorkspace();
+}
+function coachV7DraftChange(key,id,change){
+  if(coachV7SendingKeys.has(key))return;
+  const task=coachV7Drafts(key).find(x=>x.id===id);
+  if(!task)return;
+  if("day" in change&&( !Number.isInteger(change.day)||change.day<0||change.day>6))return;
+  Object.assign(task,change);coachV7Persist(key);renderProgramWorkspace();
+}
+async function coachV7SendDraft(key,weekStart,studentUid){
+  if(coachV7SendingKeys.has(key)||!coachV7Context(studentUid,weekStart))return;
+  const coachUid=auth.currentUser.uid,list=coachV7Drafts(key);
+  if(!list.length)return;
+  if(!confirm(list.length+" çalışmayı "+COACH_V7_DAY_NAMES.length+" günlük haftanın seçili günlerine göndermek istiyor musun?"))return;
+  coachV7SendingKeys.add(key);coachV7SetNotice(key,"Gönderim başladı: çalışmalar sırayla kuyruğa alınıyor…","info");
+  const queued=list.map(x=>({...x}));
+  try{
+    for(const item of queued){
+      if(!coachV7Context(studentUid,weekStart)||auth.currentUser?.uid!==coachUid){coachV7Notices.set(key,{message:"Öğrenci veya hafta değişti. Kalan taslaklar gönderilmedi.",kind:"warning"});return}
+      // Keep the existing student protocol: individual program_task actions with {text,date}.
+      await addDoc(collection(db,"coachingActions"),{
+        studentUid,coachUid,type:"program_task",
+        payload:{text:coachV7ComposeText(item),date:programDayDate(weekStart,item.day)},
+        status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+      });
+      const index=list.findIndex(x=>x.id===item.id);
+      if(index>=0){list.splice(index,1);coachV7Persist(key)}
+      coachV7SetNotice(key,(queued.length-list.length)+"/"+queued.length+" görev kuyruğa alındı…","info");
+    }
+    coachV7Notices.set(key,{message:queued.length+" çalışma kuyruğa alındı. Öğrenci uygulamasında işlenmesi bekleniyor.",kind:"success"});
+  }catch(error){
+    console.error("Haftalık taslak gönderimi",error);
+    coachV7Notices.set(key,{message:"Gönderim kesildi; kalan "+list.length+" çalışma taslakta tutuluyor. Öncekiler tekrarlanmaz. "+String(error?.message||""),kind:"error"});
+  }finally{
+    coachV7SendingKeys.delete(key);
+    if(coachV7Context(studentUid,weekStart))renderProgramWorkspace();
+  }
+}
+
 function renderCoachVisualWeek(program,week,row){
   const stats=coachV6WeekStats(program,week),today=todayIsoLocal(),names=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+  const draftKey=coachV7Key(row.studentUid,week.week),drafts=coachV7Drafts(draftKey);
   const metric=(key,value,label,detail,symbol)=>'<div class="coach-v6-metric" data-stat="'+key+'"><div class="coach-v6-metric-icon">'+coachV6Symbol(symbol)+'</div><div><span>'+label+'</span><strong>'+value+'</strong><small>'+detail+'</small></div></div>';
   const metrics='<div class="coach-v6-metrics">'
     +metric("total",stats.total,"Toplam Görev","Bu haftanın çalışmaları","exam")
     +metric("done",stats.percent+"%","Haftalık İlerleme",stats.done+"/"+stats.total+" tamamlandı","routine")
     +metric("subjects",stats.subjects,"Ders Çeşidi","Farklı ders grubu","biology")
     +metric("average",String(stats.average).replace(".",","),"Günlük Ortalama","Çalışma / gün","math")+'</div>';
-  const tasksFor=(item,day)=>item.tasks.map(task=>{
+  const tasksFor=(item,day)=>[...item.tasks].sort((a,b)=>{
+    const ta=coachV7Time(a.text),tb=coachV7Time(b.text);
+    return ta&&tb?ta.localeCompare(tb):ta?-1:tb?1:0;
+  }).map(task=>{
     const lesson=coachV6Subject(task),done=programTaskDone(week.data||{},task,day);
     const short=coachV6TaskLabel(task.text);
     const chunks=short.split(/\s+·\s+/),details=chunks.length>1?chunks.slice(1).join(" · "):short;
-    const moved=Boolean(week.data?.mv?.[task.id]);
-    return '<article class="coach-v6-task program-task-card" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
+    const moved=Boolean(week.data?.mv?.[task.id]),clock=coachV7Time(task.text);
+    return '<article class="coach-v6-task program-task-card" draggable="true" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
       +'<span class="coach-v6-task-symbol">'+coachV6Symbol(lesson.key)+'</span><div class="coach-v6-task-copy"><strong>'+escHtml(lesson.title)+'</strong><span>'+escHtml(details)+'</span>'
+      +(clock?'<small class="coach-v7-time-badge">◷ '+escHtml(clock)+'</small>':'')
       +(moved?'<small>Başka günden taşındı</small>':'')+(done?'<small>✓ Tamamlandı</small>':'')+'</div>'
       +'<div class="coach-v6-task-actions"><button type="button" data-program-edit aria-label="'+escHtml(short)+' düzenle" title="Düzenle">✎</button><button type="button" data-program-select aria-label="'+escHtml(short)+' başka güne taşı" title="Başka güne taşı">↗</button></div>'
       +'</article>';
   }).join("");
   const days=stats.days.map((item,day)=>{
     const date=programDayDate(week.week,day),isToday=date===today;
+    const draftsForDay=drafts.filter(item=>item.day===day).sort((a,b)=>
+      a.time&&b.time?a.time.localeCompare(b.time):a.time?-1:b.time?1:0
+    );
     return '<section class="coach-v6-day'+(isToday?' is-today':'')+'" data-day="'+day+'"><header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(programDayLabel(week.week,day).split(" · ")[1]||date)+'</span>'
       +'<small>'+item.done+'/'+item.tasks.length+' tamamlandı</small></header>'
-      +'<div class="coach-v6-day-tasks">'+(item.tasks.length?tasksFor(item,day):'<div class="coach-v6-day-empty">Bu güne çalışma eklenmemiş.</div>')+'</div>'
+      +'<div class="coach-v6-day-tasks">'+(item.tasks.length?tasksFor(item,day):'')
+      +draftsForDay.map(task=>coachV7DraftCard(task,draftKey)).join("")
+      +(!item.tasks.length&&!draftsForDay.length?'<div class="coach-v6-day-empty">Bu güne çalışma eklenmemiş.</div>':'')+'</div>'
       +'<button type="button" class="coach-v6-add-day" data-coach-add-day="'+day+'" aria-label="'+names[day]+' gününe çalışma ekle">＋ Ekle</button></section>';
   }).join("");
   return '<section class="coach-v6" aria-label="Koç haftalık plan çalışma alanı">'
     +'<header class="coach-v6-title"><span class="coach-v6-logo">'+coachV6Symbol("exam")+'</span><div><span class="coach-v6-kicker">YKS DEFTERİM · KOÇ PANELİ</span><h2>Haftalık Plan</h2><p>'+escHtml(studentName(row))+' öğrencisinin planını görüntüle, düzenle ve yeni çalışmalar ekle.</p></div><span class="coach-v6-sync">Öğrencinin paylaştığı program</span></header>'
-    +metrics+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
+    +metrics+coachV7DraftPanel(draftKey,week)+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
     +'<div class="coach-v6-sheet-tabs" role="group" aria-label="Hafta veya liste görünümü"><button type="button" data-coach-v6-layout="list" aria-pressed="'+(coachWeekVisualLayout==="list")+'">☷ Liste</button><button type="button" data-coach-v6-layout="week" aria-pressed="'+(coachWeekVisualLayout==="week")+'">▦ Hafta</button></div></div>'
     +'<div class="coach-v6-days" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section>'
     +'<section class="coach-v6-quick"><div><h3>Hızlı İşlemler</h3><p>Koçunla haftanın çalışmalarını daha hızlı hazırlayın.</p></div><div class="coach-v6-quick-actions">'
@@ -1926,6 +2079,84 @@ function renderCoachVisualWeek(program,week,row){
 }
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
+  const studentUid=selectedProgramStudentUid,key=coachV7Key(studentUid,weekStart);
+  root.querySelectorAll("[data-v7-pick-day]").forEach(button=>button.addEventListener("click",()=>{
+    if(coachV7SendingKeys.has(key))return;
+    const day=Number(button.dataset.v7PickDay);
+    if(coachV7EditingId)coachV7ComposerDays=new Set([day]);
+    else if(coachV7ComposerDays.has(day))coachV7ComposerDays.delete(day);
+    else coachV7ComposerDays.add(day);
+    root.querySelectorAll("[data-v7-pick-day]").forEach(node=>
+      node.setAttribute("aria-pressed",String(coachV7ComposerDays.has(Number(node.dataset.v7PickDay)))));
+  }));
+  root.querySelector("[data-v7-add]")?.addEventListener("click",()=>{
+    if(coachV7Context(studentUid,weekStart))coachV7AddDraft(key);
+  });
+  root.querySelector("[data-v7-cancel-edit]")?.addEventListener("click",()=>{
+    coachV7EditingId=null;coachV7ComposerDays=new Set([0]);renderProgramWorkspace();
+  });
+  root.querySelector("[data-v7-clear]")?.addEventListener("click",()=>{
+    if(coachV7SendingKeys.has(key)||!coachV7Drafts(key).length)return;
+    if(!confirm("Bu öğrencinin bu haftaki gönderilmemiş taslağını temizlemek istiyor musun?"))return;
+    coachV7DraftCache.set(key,[]);coachV7EditingId=null;coachV7Persist(key);renderProgramWorkspace();
+  });
+  root.querySelector("[data-v7-send]")?.addEventListener("click",()=>{
+    void coachV7SendDraft(key,weekStart,studentUid);
+  });
+  root.querySelectorAll(".coach-v7-draft").forEach(card=>{
+    const id=card.dataset.v7DraftId;
+    card.querySelector("[data-v7-remove]")?.addEventListener("click",()=>{
+      if(coachV7SendingKeys.has(key))return;
+      coachV7DraftCache.set(key,coachV7Drafts(key).filter(item=>item.id!==id));
+      if(coachV7EditingId===id)coachV7EditingId=null;
+      coachV7Persist(key);renderProgramWorkspace();
+    });
+    card.querySelector("[data-v7-edit]")?.addEventListener("click",()=>{
+      if(coachV7SendingKeys.has(key))return;
+      const item=coachV7Drafts(key).find(x=>x.id===id);
+      if(!item)return;
+      coachV7EditingId=id;coachV7ComposerDays=new Set([item.day]);renderProgramWorkspace();
+      $("coachV7DraftText")?.focus({preventScroll:true});
+    });
+    card.querySelector("[data-v7-move]")?.addEventListener("change",event=>{
+      if(coachV7Context(studentUid,weekStart))coachV7DraftChange(key,id,{day:Number(event.target.value)});
+    });
+  });
+  // Dragging a draft edits only the local draft. Existing cells use the tested
+  // coach move action and require confirmation before the student-facing queue.
+  root.querySelectorAll(".coach-v6-task[draggable],.coach-v7-draft[draggable]").forEach(card=>{
+    card.addEventListener("dragstart",event=>{
+      if(event.target.closest("button,input,select")){event.preventDefault();return}
+      coachV7Drag=card.classList.contains("coach-v7-draft")
+        ?{kind:"draft",key,id:card.dataset.v7DraftId,sourceDay:Number(card.closest("[data-day]")?.dataset.day)}
+        :{kind:"existing",key,id:card.dataset.programTaskId,sourceDay:Number(card.dataset.programTaskDay)};
+      if(event.dataTransfer){event.dataTransfer.effectAllowed="move";event.dataTransfer.setData("text/plain",card.dataset.v7DraftId||card.dataset.programTaskId||"")}
+      card.classList.add("is-dragging");
+    });
+    card.addEventListener("dragend",()=>{coachV7Drag=null;card.classList.remove("is-dragging")});
+  });
+  root.querySelectorAll(".coach-v6-day[data-day]").forEach(section=>{
+    section.addEventListener("dragover",event=>{
+      if(!coachV7Drag||coachV7Drag.key!==key||!coachV7Context(studentUid,weekStart))return;
+      event.preventDefault();
+      if(event.dataTransfer)event.dataTransfer.dropEffect="move";
+      section.classList.add("is-drop-target");
+    });
+    section.addEventListener("dragleave",event=>{
+      if(!section.contains(event.relatedTarget))section.classList.remove("is-drop-target");
+    });
+    section.addEventListener("drop",event=>{
+      section.classList.remove("is-drop-target");
+      const drag=coachV7Drag;coachV7Drag=null;
+      if(!drag||drag.key!==key||!coachV7Context(studentUid,weekStart))return;
+      event.preventDefault();const day=Number(section.dataset.day);
+      if(!Number.isInteger(day)||day<0||day>6||day===drag.sourceDay)return;
+      if(drag.kind==="draft"){coachV7DraftChange(key,drag.id,{day});return}
+      if(drag.kind==="existing"&&confirm("Bu çalışmayı "+COACH_V7_DAY_NAMES[day]+" gününe taşımak istiyor musun?")){
+        void saveCoachProgramMove(weekStart,drag.id,day);
+      }
+    });
+  });
   root.querySelectorAll("[data-program-edit]").forEach(button=>button.addEventListener("click",event=>{
     const card=event.currentTarget.closest("[data-program-task-id]");if(card)openCoachProgramEdit(weekStart,card.dataset.programTaskId||"");
   }));
