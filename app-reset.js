@@ -1945,6 +1945,90 @@ function coachV7SetNotice(key,message,kind="info"){
   if(node&&coachV7ComposerScope===key){node.textContent=message;node.dataset.kind=kind}
 }
 function coachV7FormError(message){const n=$("coachV7FormError");if(n)n.textContent=message}
+
+/* v8 quick composer is shared by drafts and the original direct-send dialog.
+   Presets populate plain editable text; they never write or send automatically. */
+const COACH_V8_PRESETS=[
+  {id:"reading",title:"Paragraf",subject:"Paragraf",detail:"20 soru",scoped:false},
+  {id:"math",title:"Matematik",subject:"Matematik",detail:"Problemler · 30 soru",scoped:true},
+  {id:"geometry",title:"Geometri",subject:"Geometri",detail:"Üçgenler · 20 soru",scoped:true},
+  {id:"physics",title:"Fizik",subject:"Fizik",detail:"Konu tekrarı · 20 soru",scoped:true},
+  {id:"chemistry",title:"Kimya",subject:"Kimya",detail:"Konu tekrarı · 20 soru",scoped:true},
+  {id:"biology",title:"Biyoloji",subject:"Biyoloji",detail:"Konu tekrarı · 20 soru",scoped:true},
+  {id:"turkish",title:"Türkçe",subject:"Türkçe",detail:"Dil bilgisi · 20 soru",scoped:true},
+  {id:"exam",title:"Deneme",subject:"Deneme",detail:"Yanlış analizi",scoped:false}
+];
+const coachV8Levels={v7:"TYT",modal:"TYT"};
+function coachV8PresetText(id,level){
+  const item=COACH_V8_PRESETS.find(p=>p.id===id);if(!item)return"";
+  return (item.scoped?(level==="AYT"?"AYT":"TYT")+" ":"")+item.subject+" · "+item.detail;
+}
+function coachV8Picker(mode){
+  const level=coachV8Levels[mode]||"TYT";
+  return '<section class="coach-v8-picker" aria-label="Hızlı ders seçimi"><div class="coach-v8-picker-heading"><div><strong>Dersi hızlı seç</strong><span>Hazır çalışmaya dokun, konu ve soru sayısını istersen değiştir.</span></div>'
+    +'<div class="coach-v8-level" role="group" aria-label="Çalışmanın sınav türü">'
+    +["TYT","AYT"].map(value=>'<button type="button" data-v8-level="'+value+'" aria-pressed="'+(level===value)+'">'+value+'</button>').join("")
+    +'</div></div><div class="coach-v8-preset-grid">'
+    +COACH_V8_PRESETS.map(p=>'<button type="button" data-v8-preset="'+p.id+'" data-subject="'+p.id+'">'+coachV6Symbol(p.id==="turkish"?"reading":p.id)+'<span>'+p.title+'</span></button>').join("")
+    +'</div></section>';
+}
+function coachV8BindPicker(root,mode,inputId){
+  if(!root)return;
+  root.querySelectorAll("[data-v8-level]").forEach(button=>button.addEventListener("click",()=>{
+    coachV8Levels[mode]=button.dataset.v8Level==="AYT"?"AYT":"TYT";
+    root.querySelectorAll("[data-v8-level]").forEach(node=>node.setAttribute("aria-pressed",String(node.dataset.v8Level===coachV8Levels[mode])));
+  }));
+  root.querySelectorAll("[data-v8-preset]").forEach(button=>button.addEventListener("click",()=>{
+    if(mode==="modal"&&coachProgramEditContext)return;
+    const text=coachV8PresetText(button.dataset.v8Preset,coachV8Levels[mode]);
+    const input=$(inputId);if(!input||!text)return;
+    input.value=text;input.dispatchEvent(new Event("input",{bubbles:true}));
+    input.focus({preventScroll:true});
+    // Editing the suggestion directly is faster than returning to a second form.
+    const topicStart=text.indexOf(" · ");
+    if(typeof input.setSelectionRange==="function"&&topicStart>=0)input.setSelectionRange(topicStart+3,text.length);
+  }));
+}
+function coachV8UpdateDraftCount(){
+  const node=$("coachV8DraftCount");if(!node)return;
+  const total=coachV7ComposerDays.size;
+  node.textContent=coachV7EditingId?"1 çalışma düzenlenecek":total?total+" güne "+total+" çalışma eklenecek":"En az bir gün seç";
+}
+function coachV8PickDays(days){
+  if(coachV7EditingId)coachV7ComposerDays=new Set(days.length?[days[0]]:[]);
+  else coachV7ComposerDays=new Set(days);
+  const root=$("coachVisualWeekBoard");
+  root?.querySelectorAll("[data-v7-pick-day]").forEach(node=>
+    node.setAttribute("aria-pressed",String(coachV7ComposerDays.has(Number(node.dataset.v7PickDay)))));
+  coachV8UpdateDraftCount();
+}
+function coachV8AddModalToDraft(){
+  if(coachProgramEditContext)return;
+  const row=coachReportRows.find(x=>x.studentUid===coachProgramModalStudentUid);
+  if(!row||selectedProgramStudentUid!==row.studentUid||!auth.currentUser?.uid)return;
+  const text=coachProgramTaskText(),url=coachProgramResource(),days=[...coachWeeklySelectedDates].sort();
+  if(!text||text.length>550){setProgramTaskStatus("Çalışma 1–550 karakter olmalı.","error");return}
+  if(url===null){setProgramTaskStatus("Geçerli bir http/https video adresi gir.","error");return}
+  if(!days.length){setProgramTaskStatus("Taslağa eklemek için en az bir gün seç.","error");return}
+  const week=coachWeeklyDraftWeek;
+  if(!week||days.some(day=>coachWeekStartForDate(day)!==week)){setProgramTaskStatus("Seçilen günler aynı haftada olmalı.","error");return}
+  if(coachV7ComposeText({text,time:"",url}).length>600){setProgramTaskStatus("Video dahil görev 600 karakteri geçemez.","error");return}
+  const key=coachV7Key(row.studentUid,week),draft=coachV7Drafts(key);
+  if(coachV7SendingKeys.has(key)){setProgramTaskStatus("Gönderim bitince tekrar dene.","error");return}
+  if(draft.length+days.length>100){setProgramTaskStatus("Haftalık taslakta en fazla 100 çalışma olabilir.","error");return}
+  for(const date of days){
+    const day=Math.round((new Date(date+"T12:00:00")-new Date(week+"T12:00:00"))/86400000);
+    draft.push({id:Date.now().toString(36)+"-"+(++coachV7Sequence).toString(36),day,text,time:"",url:url||""});
+  }
+  coachV7Persist(key);
+  coachV7Notices.set(key,{message:days.length+" çalışma taslağa eklendi. Öğrenciye henüz gönderilmedi.",kind:"success"});
+  closeProgramTaskModal();
+  selectedProgramWeekStart=week;
+  coachSetWeekView("visual");
+  renderProgramWorkspace();
+  $("coachV7DraftText")?.focus({preventScroll:true});
+}
+
 function coachV7DraftPanel(key,week){
   coachV7ComposerContext(key);
   const pending=coachV7Drafts(key),notice=coachV7Notices.get(key),editing=pending.find(x=>x.id===coachV7EditingId);
@@ -1954,11 +2038,14 @@ function coachV7DraftPanel(key,week){
   return '<section class="coach-v7-panel" aria-label="Göndermeden önce haftayı planla">'
     +'<div class="coach-v7-panel-head"><div><span class="coach-v7-kicker">2. AŞAMA · GÜVENLİ PLANLAMA</span><h3>Haftalık taslak <small>'+pending.length+' çalışma</small></h3><p>Görevleri önce buraya ekle, günlerini ve saatlerini düzenle. Sen onaylamadan öğrenciye gönderilmez.</p></div>'
     +'<div class="coach-v7-panel-actions"><button type="button" data-v7-clear '+(!pending.length?'disabled':'')+'>Taslağı temizle</button><button type="button" data-v7-send '+(!pending.length||coachV7SendingKeys.has(key)?'disabled':'')+'>Taslağı Gönder ('+pending.length+')</button></div></div>'
-    +'<div class="coach-v7-form"><div class="coach-v7-form-grid">'
+    +'<div class="coach-v7-form">'+coachV8Picker("v7")+'<div class="coach-v7-form-grid">'
     +'<label class="coach-v7-wide">Çalışma adı<input type="text" id="coachV7DraftText" maxlength="550" placeholder="Örn. TYT Matematik · Problemler 30 soru" value="'+escaped(editing?.text||"")+'"></label>'
     +'<label>Başlangıç saati <small>İsteğe bağlı</small><input type="time" id="coachV7DraftTime" value="'+escaped(editing?.time||"")+'"></label>'
     +'<label class="coach-v7-wide">Video bağlantısı <small>İsteğe bağlı</small><input type="url" id="coachV7DraftUrl" maxlength="500" placeholder="https://youtu.be/..." value="'+escaped(editing?.url||"")+'"></label>'
     +'</div><div class="coach-v7-days-picker"><strong>Hangi günler?</strong><div role="group" aria-label="Taslak gün seçimi">'+chips+'</div></div>'
+    +'<div class="coach-v8-day-tools"><div class="coach-v8-shortcuts">'
+    +'<button type="button" data-v8-days="weekdays">Hafta içi</button><button type="button" data-v8-days="all">7 gün</button><button type="button" data-v8-days="alternate">Pzt · Çrş · Cum</button><button type="button" data-v8-days="clear">Temizle</button>'
+    +'</div><span id="coachV8DraftCount" role="status">'+(coachV7EditingId?"1 çalışma düzenlenecek":coachV7ComposerDays.size+" güne "+coachV7ComposerDays.size+" çalışma eklenecek")+'</span></div>'
     +'<div class="coach-v7-form-footer"><span id="coachV7FormError" role="alert"></span><button type="button" data-v7-cancel-edit '+(!editing?'hidden':'')+'>Düzenlemeyi bırak</button><button type="button" data-v7-add>'+ (editing?"Taslağı güncelle":"＋ Taslağa Ekle") +'</button></div></div>'
     +'<p class="coach-v7-note">Saat seçersen görev metnine “Saat 09:00” gibi eklenir; öğrencinin programında saatli ayrı bir veri alanı henüz yok. Taslaklar yalnız bu sekmede saklanır.</p>'
     +'<p id="coachV7DraftStatus" class="coach-v7-status" data-kind="'+escaped(notice?.kind||"info")+'" role="status" aria-live="polite">'+escaped(notice?.message||"")+'</p></section>';
@@ -1989,7 +2076,7 @@ function coachV7AddDraft(key){
       draft.push({id:(Date.now().toString(36)+"-"+(++coachV7Sequence).toString(36)),day,text,time,url});
     }
   }
-  coachV7EditingId=null;coachV7ComposerDays=new Set([0]);coachV7Persist(key);
+  coachV7EditingId=null;coachV7Persist(key);
   coachV7SetNotice(key,(edit?"Çalışma güncellendi.":"Çalışma taslağa eklendi.")+" Henüz öğrenciye gönderilmedi.","success");
   renderProgramWorkspace();
 }
@@ -2080,6 +2167,12 @@ function renderCoachVisualWeek(program,week,row){
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
   const studentUid=selectedProgramStudentUid,key=coachV7Key(studentUid,weekStart);
+  coachV8BindPicker(root,"v7","coachV7DraftText");
+  root.querySelectorAll("[data-v8-days]").forEach(button=>button.addEventListener("click",()=>{
+    if(coachV7SendingKeys.has(key))return;
+    const value=button.dataset.v8Days;
+    coachV8PickDays(value==="weekdays"?[0,1,2,3,4]:value==="all"?[0,1,2,3,4,5,6]:value==="alternate"?[0,2,4]:[]);
+  }));
   root.querySelectorAll("[data-v7-pick-day]").forEach(button=>button.addEventListener("click",()=>{
     if(coachV7SendingKeys.has(key))return;
     const day=Number(button.dataset.v7PickDay);
@@ -2088,12 +2181,13 @@ function bindCoachVisualWeekActions(weekStart){
     else coachV7ComposerDays.add(day);
     root.querySelectorAll("[data-v7-pick-day]").forEach(node=>
       node.setAttribute("aria-pressed",String(coachV7ComposerDays.has(Number(node.dataset.v7PickDay)))));
+    coachV8UpdateDraftCount();
   }));
   root.querySelector("[data-v7-add]")?.addEventListener("click",()=>{
     if(coachV7Context(studentUid,weekStart))coachV7AddDraft(key);
   });
   root.querySelector("[data-v7-cancel-edit]")?.addEventListener("click",()=>{
-    coachV7EditingId=null;coachV7ComposerDays=new Set([0]);renderProgramWorkspace();
+    coachV7EditingId=null;renderProgramWorkspace();
   });
   root.querySelector("[data-v7-clear]")?.addEventListener("click",()=>{
     if(coachV7SendingKeys.has(key)||!coachV7Drafts(key).length)return;
@@ -2331,6 +2425,8 @@ function openProgramTaskModal(prefill="",options={}){
   if($("programTaskDate"))$("programTaskDate").value=date;
   coachSetWeekDraft(date,!edit&&Boolean(options.bulk));
   if($("programTaskKeepOpen"))$("programTaskKeepOpen").checked=false;
+  if(!edit)coachV8Levels.modal="TYT";
+  $("coachV8ModalPicker")?.querySelectorAll("[data-v8-level]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.v8Level===coachV8Levels.modal)));
   const parsed=edit?coachProgramSplitExisting(prefill):{text:prefill,resource:"",prefix:""};
   if(edit&&coachProgramEditContext)coachProgramEditContext.prefix=parsed.prefix;
   if($("programTaskText"))$("programTaskText").value=parsed.text;if($("programTaskVideo"))$("programTaskVideo").value=parsed.resource;
@@ -2360,6 +2456,8 @@ $("programTaskDate")?.addEventListener("input",event=>{if(coachProgramEditContex
 $("programDaysWeekdays")?.addEventListener("click",()=>coachWeekPreset([0,1,2,3,4]));
 $("programDaysAll")?.addEventListener("click",()=>coachWeekPreset([0,1,2,3,4,5,6]));
 $("programDaysClear")?.addEventListener("click",()=>coachWeekPreset([]));
+if($("coachV8ModalPicker")){$("coachV8ModalPicker").innerHTML=coachV8Picker("modal");coachV8BindPicker($("coachV8ModalPicker"),"modal","programTaskText")}
+$("programTaskAddDraft")?.addEventListener("click",coachV8AddModalToDraft);
 $("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});
 $("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTaskBackdrop")?.addEventListener("keydown",event=>{

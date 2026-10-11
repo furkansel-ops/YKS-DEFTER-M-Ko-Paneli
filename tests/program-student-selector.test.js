@@ -14,7 +14,7 @@ test('Programlar öğrenci seçici üst barda ve tablo tam genişlikte çalış�
   assert.doesNotMatch(html,/class="program-students"/);
   assert.doesNotMatch(html,/id="programStudentList"/);
   assert.match(html,/programs-v21\.css\?v=3\.5\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.58/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.59/);
 
   assert.match(css,/student-program-scroller/);
   assert.match(css,/student-program-grid/);

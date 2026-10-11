@@ -262,3 +262,88 @@ test('v7 existing task with an explicit start time shows a real time badge; old 
   assert.match(h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"] .coach-v7-time-badge').textContent,/11:35/);
   assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-time-badge').length,1);
 });
+
+
+test('v8 TYT/AYT and eight subject shortcuts fill the editable draft title without sending',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelectorAll('[data-v8-preset]').length,8);
+  root.querySelector('[data-v8-level="AYT"]').click();
+  root.querySelector('[data-v8-preset="physics"]').click();
+  assert.equal(h.$('coachV7DraftText').value,'AYT Fizik · Konu tekrarı · 20 soru');
+  v7Input(h,'coachV7DraftText','AYT Fizik · Elektrik Alan · 35 soru');
+  root.querySelector('[data-v8-days="alternate"]').click();
+  assert.equal(h.$('coachV8DraftCount').textContent,'3 güne 3 çalışma eklenecek');
+  assert.equal(root.querySelectorAll('[data-v7-pick-day][aria-pressed="true"]').length,3);
+  root.querySelector('[data-v7-add]').click();
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,3);
+  assert.equal(h.writes.length,0);
+});
+
+test('v8 repeated drafting keeps selected days, allowing multiple subjects without seven repetitive clicks',t=>{
+  const h=harness(t);let root=h.$('coachVisualWeekBoard');
+  root.querySelector('[data-v8-days="weekdays"]').click();
+  root.querySelector('[data-v8-preset="reading"]').click();
+  root.querySelector('[data-v7-add]').click();
+  root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelectorAll('.coach-v7-draft').length,5);
+  assert.equal(root.querySelectorAll('[data-v7-pick-day][aria-pressed="true"]').length,5);
+  assert.equal(h.$('coachV8DraftCount').textContent,'5 güne 5 çalışma eklenecek');
+  root.querySelector('[data-v8-preset="math"]').click();
+  root.querySelector('[data-v7-add]').click();
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,10);
+  assert.equal(h.writes.length,0);
+  const tasks=JSON.parse(h.w.sessionStorage.getItem(h.w.sessionStorage.key(0)));
+  assert.equal(tasks.filter(x=>x.text.includes('Paragraf')).length,5);
+  assert.equal(tasks.filter(x=>x.text.includes('Matematik')).length,5);
+});
+
+test('v8 modal quick presets allow draft-first bulk planning without any Firestore action',t=>{
+  const h=harness(t);
+  h.$('programAddWeekBtn').click();
+  const picker=h.$('coachV8ModalPicker');
+  assert.equal(picker.querySelectorAll('[data-v8-preset]').length,8);
+  picker.querySelector('[data-v8-level="AYT"]').click();
+  picker.querySelector('[data-v8-preset="biology"]').click();
+  assert.equal(h.$('programTaskText').value,'AYT Biyoloji · Konu tekrarı · 20 soru');
+  h.$('programTaskAddDraft').click();
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true);
+  assert.equal(h.writes.length,0);
+  const draft=h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft');
+  assert.equal(draft.length,5);
+  assert.deepEqual([...draft].map(x=>Number(x.closest('[data-day]').dataset.day)),[0,1,2,3,4]);
+  assert.match(h.$('coachV7DraftStatus').textContent,/henüz gönderilmedi/);
+});
+
+test('v8 modal draft selection targets the chosen week even when its date differs from the visible week',t=>{
+  const h=harness(t);
+  h.$('programAddTaskBtn').click();
+  v7Input(h,'programTaskDate','2026-10-15');
+  h.$('coachV8ModalPicker').querySelector('[data-v8-preset="math"]').click();
+  h.$('programTaskAddDraft').click();
+  assert.equal(h.w.coachV6Test.context().week,'2026-10-12');
+  const root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(root.querySelector('.coach-v7-draft').closest('[data-day]').dataset.day,'3');
+  assert.equal(h.writes.length,0);
+});
+
+test('v8 modal direct-send action still uses the original protocol after choosing a quick lesson',async t=>{
+  const h=harness(t);
+  h.$('programAddTaskBtn').click();
+  v7Input(h,'programTaskDate','2026-10-05');
+  h.$('coachV8ModalPicker').querySelector('[data-v8-preset="reading"]').click();
+  h.$('programTaskSend').click();await v7Settle();
+  assert.equal(h.writes.length,1);
+  assert.equal(h.writes[0].type,'program_task');
+  assert.deepEqual(h.writes[0].payload,{text:'Paragraf · 20 soru',date:'2026-10-05'});
+});
+
+test('v8 editing existing student tasks cannot use the new draft action',t=>{
+  const h=harness(t);
+  h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"] [data-program-edit]').click();
+  assert.equal(h.$('programTaskBackdrop').hasAttribute('data-editing'),true);
+  assert.match(read('coach-lesson-composer-v8.css'),/#programTaskAddDraft\{display:none!important\}/);
+  h.$('programTaskAddDraft').click();
+  assert.equal(h.writes.length,0);
+  assert.equal(h.w.coachV6Test.context().edit.taskId,'s-0-1');
+});
