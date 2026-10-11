@@ -2032,33 +2032,43 @@ async function coachV7SendDraft(key,weekStart,studentUid){
 
 function renderCoachVisualWeek(program,week,row){
   const stats=coachV6WeekStats(program,week),today=todayIsoLocal(),names=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+  const draftKey=coachV7Key(row.studentUid,week.week),drafts=coachV7Drafts(draftKey);
   const metric=(key,value,label,detail,symbol)=>'<div class="coach-v6-metric" data-stat="'+key+'"><div class="coach-v6-metric-icon">'+coachV6Symbol(symbol)+'</div><div><span>'+label+'</span><strong>'+value+'</strong><small>'+detail+'</small></div></div>';
   const metrics='<div class="coach-v6-metrics">'
     +metric("total",stats.total,"Toplam Görev","Bu haftanın çalışmaları","exam")
     +metric("done",stats.percent+"%","Haftalık İlerleme",stats.done+"/"+stats.total+" tamamlandı","routine")
     +metric("subjects",stats.subjects,"Ders Çeşidi","Farklı ders grubu","biology")
     +metric("average",String(stats.average).replace(".",","),"Günlük Ortalama","Çalışma / gün","math")+'</div>';
-  const tasksFor=(item,day)=>item.tasks.map(task=>{
+  const tasksFor=(item,day)=>[...item.tasks].sort((a,b)=>{
+    const ta=coachV7Time(a.text),tb=coachV7Time(b.text);
+    return ta&&tb?ta.localeCompare(tb):ta?-1:tb?1:0;
+  }).map(task=>{
     const lesson=coachV6Subject(task),done=programTaskDone(week.data||{},task,day);
     const short=coachV6TaskLabel(task.text);
     const chunks=short.split(/\s+·\s+/),details=chunks.length>1?chunks.slice(1).join(" · "):short;
-    const moved=Boolean(week.data?.mv?.[task.id]);
-    return '<article class="coach-v6-task program-task-card" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
+    const moved=Boolean(week.data?.mv?.[task.id]),clock=coachV7Time(task.text);
+    return '<article class="coach-v6-task program-task-card" draggable="true"' data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
       +'<span class="coach-v6-task-symbol">'+coachV6Symbol(lesson.key)+'</span><div class="coach-v6-task-copy"><strong>'+escHtml(lesson.title)+'</strong><span>'+escHtml(details)+'</span>'
+      +(clock?'<small class="coach-v7-time-badge">◷ '+escHtml(clock)+'</small>':'')
       +(moved?'<small>Başka günden taşındı</small>':'')+(done?'<small>✓ Tamamlandı</small>':'')+'</div>'
       +'<div class="coach-v6-task-actions"><button type="button" data-program-edit aria-label="'+escHtml(short)+' düzenle" title="Düzenle">✎</button><button type="button" data-program-select aria-label="'+escHtml(short)+' başka güne taşı" title="Başka güne taşı">↗</button></div>'
       +'</article>';
   }).join("");
   const days=stats.days.map((item,day)=>{
     const date=programDayDate(week.week,day),isToday=date===today;
+    const draftsForDay=drafts.filter(item=>item.day===day).sort((a,b)=>
+      a.time&&b.time?a.time.localeCompare(b.time):a.time?-1:b.time?1:0
+    );
     return '<section class="coach-v6-day'+(isToday?' is-today':'')+'" data-day="'+day+'"><header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(programDayLabel(week.week,day).split(" · ")[1]||date)+'</span>'
       +'<small>'+item.done+'/'+item.tasks.length+' tamamlandı</small></header>'
-      +'<div class="coach-v6-day-tasks">'+(item.tasks.length?tasksFor(item,day):'<div class="coach-v6-day-empty">Bu güne çalışma eklenmemiş.</div>')+'</div>'
+      +'<div class="coach-v6-day-tasks">'+(item.tasks.length?tasksFor(item,day):'')
+      +draftsForDay.map(task=>coachV7DraftCard(task,draftKey)).join("")
+      +(!item.tasks.length&&!draftsForDay.length?'<div class="coach-v6-day-empty">Bu güne çalışma eklenmemiş.</div>':'')+'</div>'
       +'<button type="button" class="coach-v6-add-day" data-coach-add-day="'+day+'" aria-label="'+names[day]+' gününe çalışma ekle">＋ Ekle</button></section>';
   }).join("");
   return '<section class="coach-v6" aria-label="Koç haftalık plan çalışma alanı">'
     +'<header class="coach-v6-title"><span class="coach-v6-logo">'+coachV6Symbol("exam")+'</span><div><span class="coach-v6-kicker">YKS DEFTERİM · KOÇ PANELİ</span><h2>Haftalık Plan</h2><p>'+escHtml(studentName(row))+' öğrencisinin planını görüntüle, düzenle ve yeni çalışmalar ekle.</p></div><span class="coach-v6-sync">Öğrencinin paylaştığı program</span></header>'
-    +metrics+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
+    +metrics+coachV7DraftPanel(draftKey,week)+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
     +'<div class="coach-v6-sheet-tabs" role="group" aria-label="Hafta veya liste görünümü"><button type="button" data-coach-v6-layout="list" aria-pressed="'+(coachWeekVisualLayout==="list")+'">☷ Liste</button><button type="button" data-coach-v6-layout="week" aria-pressed="'+(coachWeekVisualLayout==="week")+'">▦ Hafta</button></div></div>'
     +'<div class="coach-v6-days" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section>'
     +'<section class="coach-v6-quick"><div><h3>Hızlı İşlemler</h3><p>Koçunla haftanın çalışmalarını daha hızlı hazırlayın.</p></div><div class="coach-v6-quick-actions">'
