@@ -1,0 +1,689 @@
+/* Classic Programım table, isolated from the current coach panel shell. */
+#programsPage.classic-program-page,
+#programsPage.classic-program-page .program-layout,
+#programsPage.classic-program-page .program-workspace {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#programsPage.classic-program-page .program-toolbar > div {
+  min-width: 0;
+}
+
+#programsPage.classic-program-page .program-toolbar h2,
+#programsPage.classic-program-page .program-toolbar small {
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard.program-student-shell {
+  --classic-bg: #101927;
+  --classic-line: #2a374c;
+  --classic-text: #e8edf5;
+  --classic-muted: #a2afc3;
+  --classic-accent: #73a7ff;
+  --classic-accent-soft: #1a2b45;
+  --classic-ok: #68d7a0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 16px;
+  padding: 16px;
+  border: 1px solid var(--classic-line);
+  border-radius: 18px;
+  background: var(--classic-bg);
+  color: var(--classic-text);
+  color-scheme: dark;
+}
+
+#programWeekBoard .student-program-live-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 11px 13px;
+  border: 1px solid #34d39938;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10b98114, #3b82f609);
+}
+
+#programWeekBoard .student-program-live-strip > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+#programWeekBoard .student-program-live-strip > div > span {
+  min-width: 0;
+}
+
+#programWeekBoard .student-program-live-strip > div > i {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 5px #34d3991a;
+}
+
+#programWeekBoard .student-program-live-strip b {
+  display: block;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard .student-program-live-strip small {
+  display: block;
+  margin-top: 3px;
+  color: var(--classic-muted);
+  font-size: 10px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard .student-program-view-state {
+  flex: none;
+  padding: 6px 9px;
+  border: 1px solid #73a7ff26;
+  border-radius: 999px;
+  background: #73a7ff0b;
+  color: #a9caff;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#programWeekBoard .student-program-title {
+  padding: 0 3px;
+  color: #a0c0f2;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+#programWeekBoard .student-program-week-overview {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--classic-line);
+  border-radius: 15px;
+  background: linear-gradient(145deg, #111b2c, #0f1827);
+}
+
+#programWeekBoard .student-program-week-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#programWeekBoard .student-program-week-top > div {
+  min-width: 0;
+}
+
+#programWeekBoard .student-program-week-top span {
+  display: block;
+  color: var(--classic-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+#programWeekBoard .student-program-week-top b {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard .student-program-week-top strong {
+  flex: none;
+  color: var(--classic-accent);
+  font-size: 22px;
+  letter-spacing: -.03em;
+}
+
+#programWeekBoard .student-program-week-bar {
+  height: 7px;
+  margin: 10px 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ffffff0d;
+}
+
+#programWeekBoard .student-program-week-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--classic-ok);
+}
+
+#programWeekBoard .student-program-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+#programWeekBoard .student-program-summary span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 46px;
+  padding: 6px;
+  border: 1px solid #ffffff0b;
+  border-radius: 11px;
+  background: #ffffff05;
+  color: var(--classic-muted);
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard .student-program-summary b {
+  margin-bottom: 1px;
+  color: var(--classic-text);
+  font-size: 14px;
+}
+
+#programWeekBoard .student-program-day-chips {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  min-width: 0;
+}
+
+#programWeekBoard .student-program-day-chip {
+  min-width: 0;
+  padding: 7px 3px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #ffffff05;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard .student-program-day-chip.today {
+  border-color: var(--classic-accent);
+  background: var(--classic-accent-soft);
+}
+
+#programWeekBoard .student-program-day-chip.all-done {
+  background: #68d7a014;
+}
+
+#programWeekBoard .student-program-day-chip.day-marked {
+  box-shadow: inset 0 0 0 1px #68d7a048;
+}
+
+#programWeekBoard .student-program-day-chip span,
+#programWeekBoard .student-program-day-chip b,
+#programWeekBoard .student-program-day-chip small {
+  display: block;
+}
+
+#programWeekBoard .student-program-day-chip span {
+  color: var(--classic-muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+#programWeekBoard .student-program-day-chip b {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+#programWeekBoard .student-program-day-chip small {
+  margin-top: 3px;
+  color: #f4c77b;
+  font-size: 9px;
+}
+
+#programWeekBoard .student-program-day-chip i {
+  display: block;
+  height: 3px;
+  margin-top: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #ffffff0d;
+}
+
+#programWeekBoard .student-program-day-chip i em {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--classic-ok);
+}
+
+#programWeekBoard .student-program-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 0 3px;
+  color: var(--classic-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+#programWeekBoard .student-program-legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#programWeekBoard .student-program-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--classic-accent);
+}
+
+#programWeekBoard .student-program-legend i.done {
+  background: var(--classic-ok);
+}
+
+#programWeekBoard .student-program-legend i.moved {
+  background: #f4bc66;
+}
+
+/* Both tables share this scroller so every weekday stays aligned. */
+#programWeekBoard .student-program-scroller {
+  min-width: 0;
+  max-width: 100%;
+  padding-bottom: 7px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: #485b76 transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+#programWeekBoard .student-program-scroller::-webkit-scrollbar-thumb {
+  background: #485b76;
+}
+
+#programWeekBoard .student-program-grid {
+  display: grid;
+  grid-template-columns: 78px repeat(5, minmax(96px, 1fr)) 12px repeat(2, minmax(96px, 1fr));
+  gap: 4px;
+  width: 100%;
+  min-width: 800px;
+}
+
+#programWeekBoard .student-program-study {
+  margin-top: 12px;
+}
+
+#programWeekBoard .student-program-cell {
+  min-width: 0;
+  min-height: 44px;
+  padding: 7px 8px;
+  border: 1px solid #ffffff12;
+  border-radius: 10px;
+  background: #ffffff05;
+  color: var(--classic-text);
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+#programWeekBoard .student-program-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 44px;
+  border-color: transparent;
+  background: #73a7ff15;
+  color: #a9caff;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+#programWeekBoard .student-program-head small {
+  display: block;
+  color: var(--classic-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+#programWeekBoard .student-program-spacer,
+#programWeekBoard .student-program-empty-head {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+#programWeekBoard .student-program-tag,
+#programWeekBoard .student-program-row-label {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: transparent;
+  background: #292824;
+  color: #f4c77b;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+#programWeekBoard .student-program-tag {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+#programWeekBoard .student-program-bar {
+  grid-column: 1 / -1;
+  min-height: 38px;
+  padding: 11px;
+  border-radius: 10px;
+  background: #73a7ff15;
+  color: #a9caff;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#programWeekBoard .student-program-task {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 70px;
+  padding: 8px;
+  background: #ffffff05;
+  text-align: center;
+}
+
+/* Existing task-card action handlers remain; their new-card visuals do not. */
+#programWeekBoard .student-program-task.program-task-card {
+  min-height: 108px;
+  padding: 30px 6px 6px !important;
+  overflow: hidden !important;
+  transition: border-color .15s ease;
+}
+
+#programWeekBoard .student-program-text {
+  width: 100%;
+  min-width: 0;
+  color: var(--classic-text);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#programWeekBoard .student-program-tick {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border: 1.5px solid #71819a;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+#programWeekBoard .student-program-task.is-done {
+  background: #68d7a012;
+}
+
+#programWeekBoard .student-program-task.is-done .student-program-tick {
+  border-color: var(--classic-ok);
+  background: var(--classic-ok);
+  color: #07170f;
+}
+
+#programWeekBoard .student-program-task.is-done .student-program-text {
+  color: #acb9ba;
+  text-decoration: line-through;
+  text-decoration-color: #7aaa95;
+}
+
+#programWeekBoard .student-program-task.is-moved:not(.is-done) {
+  background: #f4bc660d;
+}
+
+#programWeekBoard .student-program-moved {
+  position: absolute;
+  top: 7px;
+  left: 31px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #f4bc6618;
+  color: #f4bc66;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+#programWeekBoard .student-program-empty {
+  color: #758399;
+}
+
+#programWeekBoard .classic-task-status {
+  color: var(--classic-muted);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+#programWeekBoard .student-program-task.is-done .classic-task-status {
+  color: #8fe2b6;
+}
+
+#programWeekBoard .student-program-task.is-moved:not(.is-done) .classic-task-status {
+  color: #f4c77b;
+}
+
+#programWeekBoard .classic-task-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 100%;
+  margin-top: auto;
+}
+
+#programWeekBoard .classic-task-actions button {
+  position: static;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 28px;
+  width: auto;
+  min-height: 28px;
+  height: auto;
+  padding: 4px 6px;
+  border: 1px solid #3b4c65;
+  border-radius: 7px;
+  background: #1a283b;
+  color: #bfd6f8;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+#programWeekBoard .classic-task-actions button:hover {
+  border-color: var(--classic-accent);
+  background: #263b58;
+}
+
+#programWeekBoard .classic-task-actions button:focus-visible,
+#programWeekBoard .student-program-scroller:focus-visible {
+  outline: 2px solid #9dc4ff;
+  outline-offset: 2px;
+}
+
+#programWeekBoard .student-program-task[data-selected] {
+  border-color: var(--classic-accent) !important;
+  box-shadow: inset 0 0 0 1px var(--classic-accent);
+}
+
+#programWeekBoard .student-program-day-done {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 48px;
+  border-color: transparent;
+  color: var(--classic-muted);
+  font-size: 10px;
+  font-weight: 750;
+  text-align: center;
+}
+
+#programWeekBoard .student-program-check-box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 17px;
+  height: 17px;
+  border: 1.6px solid #71819a;
+  border-radius: 6px;
+}
+
+#programWeekBoard .student-program-day-done > span:last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  line-height: 1.2;
+}
+
+#programWeekBoard .student-program-day-done small {
+  color: var(--classic-muted);
+  font-size: 10px;
+}
+
+#programWeekBoard .student-program-day-done.on {
+  background: #68d7a012;
+  color: #8fe2b6;
+}
+
+#programWeekBoard .student-program-day-done.on .student-program-check-box {
+  border-color: var(--classic-ok);
+  background: var(--classic-ok);
+}
+
+#programWeekBoard .student-program-day-done.on .student-program-check-box::after {
+  content: "✓";
+  color: #07170f;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+#programWeekBoard .student-program-head.today-col,
+#programWeekBoard .student-program-task.today-col,
+#programWeekBoard .student-program-day-done.today-col {
+  box-shadow: inset 0 0 0 1px var(--classic-accent);
+}
+
+#programWeekBoard .student-program-head.today-col {
+  background: var(--classic-accent-soft);
+  color: #c4dbff;
+}
+
+#programWeekBoard .student-program-hint {
+  margin: 0;
+  padding: 0 3px;
+  color: var(--classic-muted);
+  font-size: 11px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+/* This dialog is a body-level portal; retain the viewport and focus fix. */
+html.program-task-open { scrollbar-gutter: auto; }
+html.program-task-open body { padding-right: var(--program-scrollbar-width, 0px); }
+.program-task-backdrop .program-classic-modal {
+  width: min(540px, 100%);
+}
+
+.program-classic-modal .program-task-body {
+  gap: 14px;
+}
+
+.program-classic-modal .program-task-body label > span {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.program-classic-modal .program-task-info,
+.program-classic-modal .program-task-status {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  #programsPage.classic-program-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  #programsPage.classic-program-page .program-toolbar {
+    padding: 16px;
+  }
+
+  #programWeekBoard.program-student-shell {
+    gap: 10px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  #programWeekBoard .student-program-live-strip {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  #programWeekBoard .student-program-week-overview {
+    padding: 10px;
+  }
+
+  #programWeekBoard .student-program-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #programWeekBoard .student-program-day-chips {
+    gap: 3px;
+  }
+
+  #programWeekBoard .student-program-day-chip {
+    padding: 6px 2px;
+  }
+
+  #programWeekBoard .student-program-day-chip span,
+  #programWeekBoard .student-program-day-chip small {
+    font-size: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programWeekBoard .student-program-task.program-task-card {
+    transition: none;
+  }
+}

@@ -65,15 +65,14 @@ test('kayıt ekranı minimal reset stilini kullanır',()=>{
 });
 
 
-test('koç program oluşturucu öğrenci Programım alanlarını taşır',()=>{
+test('klasik program oluşturucu sade tarih ve görev alanlarını kullanır',()=>{
   const html=read('index.html');
   const js=read('app-reset.js');
-  for(const id of ['programQuickTab','programCustomTab','programTaskSubject','programTaskTopic','programTaskQuestions','programTaskMinutes','programTaskVideo','programTaskPreview','programTaskDestination'])assert.ok(html.includes('id="'+id+'"'),id);
-  for(const day of ['0','1','2','3','4','5','6'])assert.ok(html.includes('data-program-day="'+day+'"'),'day '+day);
-  assert.match(js,/COACH_PROGRAM_SUBJECTS/);
-  assert.match(js,/Promise\.all\(days\.map/);
-  assert.match(js,/payload:\{text:task,date:coachProgramDateForDay\(day\)\}/);
-  assert.match(js,/weekLabel\+" haftası/);
+  for(const id of ['programTaskDate','programTaskText','programTaskVideo','programTaskCharCount'])assert.ok(html.includes('id="'+id+'"'),id);
+  assert.doesNotMatch(html,/programQuickTab|programCustomTab|programTaskSubject|data-program-day=/);
+  assert.doesNotMatch(js,/COACH_PROGRAM_SUBJECTS/);
+  assert.match(js,/payload:\{text:task,date\}/);
+  assert.match(html,/program-classic-v1\.css\?v=1\.0\.0/);
 });
 
 
@@ -103,7 +102,7 @@ test('program kartlarında sürükleme yerine seç-taşı ve düzenle kontroller
   assert.match(js,/operation:"edit"/);
   assert.match(css,/program-select-task/);
   assert.match(css,/program-edit-task/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 test('koç program düzenleme mevcut hücreyi, günü ve video kaynağını korur',()=>{
@@ -112,12 +111,12 @@ test('koç program düzenleme mevcut hücreyi, günü ve video kaynağını koru
   assert.match(js,/openProgramTaskModal\(cell\.value,\{edit:true,weekStart,day:cell\.day\}\)/);
   assert.match(js,/coachProgramEditContext=\{weekStart,taskId,day:cell\.day,prefix:""\}/);
   assert.match(js,/parsed\.resource/);
-  assert.match(js,/button\.disabled=editing/);
+  assert.match(js,/\$\("programTaskDate"\)\.disabled=editing/);
   assert.match(js,/editing\?"Değişiklikleri kaydet"/);
   assert.match(js,/const editedTask=\(edit\.prefix\|\|""\)\+task/);
   assert.match(js,/if\(!cell\)\{setProgramTaskStatus\("Bu görev artık programda bulunmuyor/);
   assert.match(js,/function closeProgramTaskModal\(\)\{coachProgramEditContext=null/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -131,7 +130,7 @@ test('koç program takvimi kayıtlı hafta sınırına bağlı değildir',()=>{
   assert.match(js,/selectedProgramWeekStart=shiftProgramWeek\(activeProgramWeek\(row\)\.week,1\)/);
   assert.match(js,/selectedProgramWeekStart=programCurrentWeekStart\(\)/);
   assert.doesNotMatch(js,/selectedProgramWeekIndex/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -144,7 +143,7 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -157,7 +156,7 @@ test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
   assert.match(js,/function showApp[\s\S]*finishBoot\(\)/);
   assert.match(css,/\.coach-boot/);
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -172,7 +171,7 @@ test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()
   assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderDashboardDayReviews/);
   assert.match(css,/dashboard-day-review-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -189,7 +188,7 @@ test('gün sonu entegrasyonu ana özet ve öğrenci geçmişi içerir',()=>{
   assert.match(reports,/report-day-review-history/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
   assert.match(html,/reports-v21\.css\?v=4\.1\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -206,7 +205,7 @@ test('koç ana paneli gerçek öğrenci verileriyle dolar',()=>{
   assert.match(css,/dashboard-flow-row/);
   assert.match(css,/dashboard-student-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -221,24 +220,23 @@ test('koç ana ekran selamlaması saate göre otomatik değişir',()=>{
   assert.match(js,/return"İyi akşamlar"/);
   assert.match(js,/return"İyi geceler"/);
   assert.match(js,/setInterval\(refreshDashboardGreeting,60000\)/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
 test('koç programında öğrencinin tamamladığı dersler tek tek görünür',()=>{
-  const html=read('index.html'),js=read('app-reset.js'),css=read('programs-v21.css');
+  const html=read('index.html'),js=read('app-reset.js'),css=read('program-classic-v1.css');
   assert.match(js,/function programTaskDone/);
   assert.match(js,/data\?\.dn\?\.\[task\?\.id\]/);
-  assert.match(js,/completedByDay/);
+  assert.match(js,/function renderClassicProgram/);
   assert.match(js,/data-task-completed/);
-  assert.match(js,/task-complete-badge/);
+  assert.match(js,/classic-task-status/);
   assert.match(js,/✓ Tamamlandı/);
-  assert.match(js,/day-state partial/);
-  assert.match(css,/program-task-card\.completed/);
-  assert.match(css,/task-complete-badge/);
-  assert.match(css,/day-state\.partial/);
+  assert.match(js,/student-program-tick/);
+  assert.match(css,/\.is-done/);
+  assert.match(css,/classic-task-status/);
   assert.match(html,/programs-v21\.css\?v=3\.5\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -253,7 +251,7 @@ test('koçun eklediği program görevi düzenleme ekranından silinebilir',()=>{
   assert.match(js,/confirm\("Bu koç görevi öğrencinin programından silinsin mi\?"\)/);
   assert.match(css,/\.program-task-delete/);
   assert.match(html,/programs-v21\.css\?v=3\.5\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -275,7 +273,7 @@ test('paragraf + problem bölümü seçili öğrencinin çalışma verilerini ca
   assert.match(css,/\.pp-tempo-bars/);
   assert.match(css,/\.pp-rhythm-heat/);
   assert.match(css,/\.pp-coach-history-row/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -299,7 +297,7 @@ test('Paragraf + Problem ekranı kişisel profil yerine çalışma performansın
   for(const heading of ['Son 14 gün','Performans sinyalleri','Son 7 gün ↔ önceki 7 gün','30 günlük ritim','GÜNLÜK DÖKÜM','Geçmiş oturumlar'])assert.ok(ppHtml.includes(heading),heading);
   assert.match(css,/\.pp-coach-kind-main/);
   assert.match(css,/\.pp-compare-row/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -321,7 +319,7 @@ test('Takip & Rapor ayrıntılı koçluk analitiği gösterir',()=>{
   assert.match(css,/\.report-cohort-subject-row/);
   assert.match(css,/\.report-subject-focus-row/);
   assert.match(html,/reports-v21\.css\?v=4\.1\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 test('uzun program görevleri gün kartının dışına taşmaz',()=>{
@@ -349,7 +347,7 @@ test('Konular ekranı koç önceliği, hedef takvimi ve gelişmiş filtrelerle �
   assert.match(css,/\.topic-weak-subjects/);
   assert.match(css,/\.topic-priority-badge/);
   assert.match(html,/topics-v21\.css\?v=3\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -365,7 +363,7 @@ test('Paragraf + Problem koç görünümünde doğru yanlış boş ve toplam say
   assert.match(js,/last7\.blank/);
   assert.match(css,/\.pp-coach-answer-summary/);
   assert.match(html,/paragraph-problem-v1\.css\?v=1\.2\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });
 
 
@@ -381,5 +379,5 @@ test('Konular v3 premium komuta merkezi ilerleme ve haftalık odak kartları gö
   assert.match(css,/\.topic-critical-item/);
   assert.match(css,/\.topic-focus-card/);
   assert.match(html,/topics-v21\.css\?v=3\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
 });

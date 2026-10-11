@@ -46,7 +46,7 @@ function harness(t){
     window.dialogTest={
       seed(rows,studentUid,week){coachReportRows=rows;selectedProgramStudentUid=studentUid;selectedProgramWeekStart=week;hydrateProgramStudents();renderProgramWorkspace();},
       openEdit:openCoachProgramEdit,showPage:showCoachPage,showAuth,
-      context(){return{studentUid:selectedProgramStudentUid,week:selectedProgramWeekStart,days:[...coachProgramDays],edit:coachProgramEditContext};}
+      context(){return{studentUid:selectedProgramStudentUid,week:selectedProgramWeekStart,edit:coachProgramEditContext};}
     };
   `);
   document.getElementById('bootView').classList.add('hidden');
@@ -102,7 +102,7 @@ test('Tab stays inside the composer and background clicks close without losing s
   const backward=h.key('Tab',true);
   assert.equal(backward.defaultPrevented,true);
   assert.equal(h.document.activeElement,h.$('programTaskSend'));
-  h.$('programTaskSubject').click();
+  h.$('programTaskText').click();
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false,'clicking dialog content must not dismiss it');
   h.$('programTaskBackdrop').click();
   assertClosed(h);
@@ -110,20 +110,15 @@ test('Tab stays inside the composer and background clicks close without losing s
   assert.equal(h.w.dialogTest.context().week,week);
 });
 
-test('quick builder still sends only the selected student and chosen days of the selected week',async t=>{
+test('classic composer sends the entered date and text only to the selected student',async t=>{
   const h=harness(t);
   h.click('programAddTaskBtn');
-  h.change('programTaskSubject','TYT · Türkçe','change');
-  h.change('programTaskTopic','Paragraf');
-  h.change('programTaskQuestions','20');
-  for(const button of h.document.querySelectorAll('[data-program-day].active'))button.click();
-  h.document.querySelector('[data-program-day="1"]').click();
-  h.document.querySelector('[data-program-day="4"]').click();
+  h.change('programTaskDate','2026-10-09');
+  h.change('programTaskText','TYT Türkçe · Paragraf · 20 soru');
   h.$('programTaskSend').click();
   await h.settle();
-  assert.equal(h.writes.length,2);
+  assert.equal(h.writes.length,1);
   assert.deepEqual(h.writes.map(x=>({collection:x.collection,studentUid:x.studentUid,coachUid:x.coachUid,type:x.type,payload:x.payload})),[
-    {collection:'coachingActions',studentUid:'student-b',coachUid:'coach-test',type:'program_task',payload:{text:'TYT Türkçe · Paragraf · 20 soru',date:'2026-10-06'}},
     {collection:'coachingActions',studentUid:'student-b',coachUid:'coach-test',type:'program_task',payload:{text:'TYT Türkçe · Paragraf · 20 soru',date:'2026-10-09'}}
   ]);
   h.runTimers();
@@ -137,32 +132,53 @@ test('editing keeps the source task, day, coach prefix and video with exactly on
   editButton.focus();editButton.click();
   assert.equal(h.$('programTaskText').value,'Paragraf tekrarı');
   assert.equal(h.$('programTaskVideo').value,'https://youtu.be/original');
-  assert.deepEqual(plain(h.w.dialogTest.context().days),[2]);
-  assert.equal(h.document.querySelector('[data-program-day="2"]').disabled,true);
+  assert.equal(h.$('programTaskDate').value,'2026-10-07');
+  assert.equal(h.$('programTaskDate').disabled,true);
   h.change('programTaskText','Paragraf yanlışlarının tekrarı');
   h.$('programTaskSend').click();
   await h.settle();
   assert.equal(h.writes.length,1);
   assert.equal(h.writes[0].studentUid,'student-b');
-  assert.deepEqual(h.writes[0].payload,{operation:'edit',sourceWeek:week,taskId:'r-0-2',text:'Koç ·Paragraf yanlışlarının tekrarı — https://youtu.be/original'});
+  assert.deepEqual(h.writes[0].payload,{operation:'edit',sourceWeek:week,taskId:'r-0-2',text:'Koç · Paragraf yanlışlarının tekrarı — https://youtu.be/original'});
   h.runTimers();
   assertClosed(h);
   assert.equal(h.document.activeElement,h.$('programAddTaskBtn'),'saving replaces the edit card, so focus returns to the add button');
 });
 
-test('templates retain custom text and close/reopen returns to adding a new task',t=>{
+test('closing an edit and reopening resets to an empty new-work composer',t=>{
   const h=harness(t);
-  const template=h.document.querySelector('[data-program-template]');
-  template.focus();template.click();
-  assert.equal(h.$('programTaskText').value,template.dataset.programTemplate);
-  assert.equal(h.$('programCustomBuilder').classList.contains('hidden'),false);
+  h.document.querySelector('[data-program-task-id="r-0-2"] [data-program-edit]').click();
+  assert.equal(h.$('programTaskText').value,'Paragraf tekrarı');
   h.click('programTaskCancel');
   assertClosed(h);
   h.click('programAddTaskBtn');
-  assert.equal(h.$('programQuickBuilder').classList.contains('hidden'),false);
+  assert.equal(h.$('programTaskDate').disabled,false);
   assert.equal(h.$('programTaskText').value,'');
+  assert.equal(h.$('programTaskVideo').value,'');
   assert.equal(h.w.dialogTest.context().edit,null);
   assert.equal(h.writes.length,0);
+});
+
+test('invalid date, blank text and unsafe video URL cannot create actions',async t=>{
+  const h=harness(t);
+  h.click('programAddTaskBtn');
+  h.change('programTaskDate','');
+  h.change('programTaskText','Paragraf çöz');
+  h.$('programTaskSend').click();
+  await h.settle();
+  assert.equal(h.writes.length,0);
+  h.change('programTaskDate','2026-10-09');
+  h.change('programTaskText','   ');
+  h.$('programTaskSend').click();
+  await h.settle();
+  assert.equal(h.writes.length,0);
+  h.change('programTaskText','Paragraf çöz');
+  h.change('programTaskVideo','javascript:alert(1)');
+  h.$('programTaskSend').click();
+  await h.settle();
+  assert.equal(h.writes.length,0);
+  assert.equal(h.$('programTaskStatus').classList.contains('error'),true);
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
 });
 
 test('navigation and sign-out hide a body-level dialog and release its scroll lock',t=>{
@@ -197,6 +213,35 @@ test('video-to-program opens and fills the same composer without scrolling the p
   assert.equal(h.w.dialogTest.context().week,week);
   assert.equal(h.scrollCalls.length,0);
   assert.equal(h.writes.length,0);
+});
+
+test('video library mounts on the classic screen and recommendations preserve the selected student and topic',async t=>{
+  const h=harness(t),videoRuntime=read('program-videos-v1.js');
+  const bootStart=videoRuntime.indexOf('  function boot()');
+  assert.ok(bootStart>0);
+  h.w.eval(videoRuntime.slice(0,bootStart)+`
+    window.videoLibraryTest={buildShell,recommendResource,setContext(value){Object.assign(state,value)}};
+  })();`);
+  assert.equal(h.document.querySelector('.program-summary'),null);
+  assert.equal(h.$('programHeroName'),null);
+  h.w.videoLibraryTest.buildShell();
+  h.w.videoLibraryTest.buildShell();
+  assert.equal(h.document.querySelectorAll('#programVideoLibrary').length,1);
+  assert.equal(h.$('programVideoLibrary').closest('#programsPage'),h.$('programsPage'));
+  h.w.videoLibraryTest.setContext({scope:'TYT',teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf'});
+  h.w.videoLibraryTest.recommendResource({kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',thumb:'https://example.test/thumb.jpg'});
+  await h.settle();
+  assert.equal(h.writes.length,1);
+  assert.deepEqual(h.writes[0],{
+    collection:'coachingActions',studentUid:'student-b',coachUid:'coach-test',type:'coach_note',
+    payload:{operation:'resource_recommendation',text:'Kaynak önerisi · Paragraf çözümü',kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf',scope:'TYT',thumb:'https://example.test/thumb.jpg'},
+    status:'pending',createdAt:{serverTimestamp:true},updatedAt:{serverTimestamp:true}
+  });
+  h.w.dialogTest.seed([],'',week);
+  h.w.videoLibraryTest.recommendResource({kind:'playlist',id:'test-list',title:'Paragraf listesi',url:'https://www.youtube.com/playlist?list=test'});
+  await h.settle();
+  assert.equal(h.writes.length,1,'a missing selection cannot dispatch a recommendation to an old student');
+  assert.match(h.$('coachVideoStatus').textContent,/Önce bir öğrenci seç/);
 });
 
 test('missing student keeps the dialog closed and does not lock the page',t=>{
