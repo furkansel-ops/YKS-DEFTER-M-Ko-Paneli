@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="./settings-v21.css?v=3.0.0">
   <link rel="stylesheet" href="./coach-polish-v1.css?v=1.0.0">
   <link rel="stylesheet" href="./program-classic-v1.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-fast-planner.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -216,6 +217,7 @@
             </label>
             <button type="button" class="program-secondary" id="programTemplatesBtn">Şablonlar</button>
             <button type="button" class="program-primary" id="programAddTaskBtn">＋ Çalışma Ekle</button>
+            <button type="button" class="program-secondary" id="programAddWeekBtn">▦ Haftaya Toplu Ekle</button>
           </div>
         </header>
 
@@ -1182,10 +1184,24 @@
         <button type="button" id="programTaskClose" aria-label="Kapat">×</button>
       </header>
       <div class="program-task-body">
-        <label><span>Tarih</span><input id="programTaskDate" type="date" required></label>
+        <label><span>Hafta ve başlangıç tarihi</span><input id="programTaskDate" type="date" required></label>
+        <section class="coach-fast-days" id="programTaskDaysArea" aria-label="Çalışmanın ekleneceği günler">
+          <div class="coach-fast-days-heading">
+            <div><b>Hangi günlerde çalışılacak?</b><small>Birden fazla gün seçebilirsin. Seçili haftanın tarihleri gösterilir.</small></div>
+            <span id="programTaskDayCount" role="status" aria-live="polite">1 gün</span>
+          </div>
+          <div class="coach-fast-day-grid" id="programTaskDayGrid" role="group" aria-label="Haftanın günleri"></div>
+          <div class="coach-fast-shortcuts">
+            <button type="button" id="programDaysWeekdays">Hafta içi</button>
+            <button type="button" id="programDaysAll">7 gün</button>
+            <button type="button" id="programDaysClear">Seçimi temizle</button>
+          </div>
+          <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
+        </section>
         <label><span>Görev</span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
         <label><span>Video bağlantısı · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://youtu.be/..."></label>
-        <div class="program-task-info">Çalışmalar öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle eklenecek.</div>
+        <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderdikten sonra sıradaki çalışmayı ekle <small>Pencere açık kalsın, yeni görevi hızla yaz.</small></span></label>
+        <div class="program-task-info">Çalışmalar öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle gönderilir. Gönderim, öğrenci cihazında uygulandığı anlamına gelmez.</div>
         <div class="program-task-status hidden" id="programTaskStatus"></div>
       </div>
       <footer>
@@ -1196,6 +1212,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.55"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.56"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
 </body>
 </html>
