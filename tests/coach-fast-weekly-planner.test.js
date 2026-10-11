@@ -45,7 +45,7 @@ function harness(t){
   return {w,document,$,writes,
     async settle(){for(let i=0;i<16;i++)await Promise.resolve()},
     change(id,value,type='input'){$(id).value=value;$(id).dispatchEvent(new w.Event(type,{bubbles:true}))},
-    selected:()=>w.fastWeekTest.selected(),
+    selected:()=>Array.from(w.fastWeekTest.selected()),
     failOnWrite(n){failureAt=n},
     deferNextWrite(){let resolve;const promise=new Promise(r=>{resolve=r});pauseNext={promise};return resolve}
   };
