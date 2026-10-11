@@ -17,7 +17,7 @@ test('koç ayarları YKS Defterim ayarları gibi genel görünüm ve detay akı�
   ])assert.match(html,new RegExp('id="'+id+'"'));
 
   assert.match(html,/settings-v21\.css\?v=3\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.55/);
   assert.doesNotMatch(html,/class="settings-sidebar"/);
   assert.doesNotMatch(html,/class="settings-nav"/);
 

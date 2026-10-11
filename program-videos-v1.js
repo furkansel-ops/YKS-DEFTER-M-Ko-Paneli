@@ -140,8 +140,8 @@
   function availableTeachers(){const key=subjectKey();return TEACHERS.filter(t=>t.d.includes(key));}
 
   function buildShell(){
-    const page=$("programsPage"),summary=page?.querySelector(".program-summary");
-    if(!page||!summary||$(ROOT_ID))return;
+    const page=$("programsPage"),programAnchor=$("programMainEmpty")||$("programWeekBoard");
+    if(!page||!programAnchor||$(ROOT_ID))return;
     const section=document.createElement("section");
     section.id=ROOT_ID;
     section.className="coach-video-library";
@@ -158,7 +158,6 @@
       '<div class="coach-video-meta"><span id="coachVideoStatus">Kaynak hazırlanıyor…</span><a id="coachVideoChannel" href="#" target="_blank" rel="noopener noreferrer" class="hidden">YouTube kanalını aç ↗</a></div>'+
       '<div class="coach-video-results" id="coachVideoResults"></div>'+
       '<div class="coach-video-more-row"><button type="button" id="coachVideoMore" class="coach-video-more hidden">Daha fazla getir</button></div>';
-    const programAnchor=$("programMainEmpty")||$("programWeekBoard")||summary;
     programAnchor.insertAdjacentElement("afterend",section);
     const cats=$("coachVideoCategories");
     Object.entries(CATEGORIES).forEach(([key,row])=>{
@@ -514,8 +513,7 @@
   }
 
   function recommendResource(item){
-    const hero=compact($("programHeroName")?.textContent);
-    if(!hero||/seçilmedi/i.test(hero)){setStatus("Önce bir öğrenci seç, sonra kaynağı öner.");return;}
+    if(!$("programStudentSelect")?.value){setStatus("Önce bir öğrenci seç, sonra kaynağı öner.");return;}
     const detail={
       kind:item.kind==="playlist"?"playlist":"video",
       id:String(item.id||"").slice(0,120),
@@ -533,14 +531,12 @@
   }
 
   function addToProgram(item){
-    const hero=compact($("programHeroName")?.textContent);
-    if(!hero||/seçilmedi/i.test(hero)){setStatus("Önce soldan bir öğrenci seç, sonra videoyu programa ekle.");return;}
+    if(!$("programStudentSelect")?.value){setStatus("Önce bir öğrenci seç, sonra videoyu programa ekle.");return;}
     const open=$("programAddTaskBtn");if(!open)return;
     open.click();
     setTimeout(()=>{
       const backdrop=$("programTaskBackdrop");
       if(!backdrop||backdrop.classList.contains("hidden")){setStatus("Çalışma ekleme penceresi açılamadı.");return;}
-      $("programCustomTab")?.click();
       const text=$("programTaskText"),video=$("programTaskVideo");
       const prefix=item.kind==="playlist"?"Oynatma listesi":"Video izle";
       const topicPart=state.topic?" · "+state.topic:"";
