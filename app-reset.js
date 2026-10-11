@@ -1689,7 +1689,8 @@ async function saveCoachProgramMove(weekStart,taskId,targetDay){
   const taskText=String(rows[sourceRow]?.[sourceDay]||"").trim();if(!taskText)return false;
   let targetRow=sourceRow;
   if(String(rows[targetRow]?.[targetDay]||"").trim())targetRow=rows.findIndex(item=>!String(item?.[targetDay]||"").trim());
-  if(targetRow<0){alert("Hedef günde boş çalışma satırı yok.");return false}
+  // Full days grow by one real row: do not reject a move just because the old grid is full.
+  if(targetRow<0)targetRow=rows.length;
   const backup=JSON.parse(JSON.stringify(data)),targetId=blk+"-"+targetRow+"-"+targetDay;
   rows[targetRow]??=Array(7).fill("");
   rows[targetRow][targetDay]=taskText;rows[sourceRow][sourceDay]="";data[blk]=rows;
@@ -1891,7 +1892,7 @@ function coachV6TaskLabel(value){
 /* v7 / safe per-student-and-week draft workspace.
    Only a confirmed send writes coachingActions; drafts remain in this browser tab. */
 const coachV7DraftCache=new Map(),coachV7SendingKeys=new Set(),coachV7Notices=new Map();
-let coachV7ComposerScope="",coachV7ComposerDays=new Set([0]),coachV7EditingId=null,coachV7Drag=null;
+let coachV7ComposerScope="",coachV7ComposerDays=new Set([0]),coachV7EditingId=null,coachV7Drag=null,coachV9ComposerOpen=false;
 let coachV7Sequence=0;
 const COACH_V7_DAY_NAMES=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
 function coachV7Key(studentUid,weekStart,coachUid=auth.currentUser?.uid){
@@ -1911,7 +1912,7 @@ function coachV7Drafts(key){
   let found=[];
   try{
     const parsed=JSON.parse(window.sessionStorage.getItem(coachV7StoreKey(key))||"[]");
-    if(Array.isArray(parsed))found=parsed.slice(0,100).filter(x=>
+    if(Array.isArray(parsed))found=parsed.filter(x=>
       x&&typeof x.id==="string"&&/^[a-z0-9-]{1,64}$/.test(x.id)&&
       Number.isInteger(x.day)&&x.day>=0&&x.day<7&&
       typeof x.text==="string"&&x.text.trim().length>0&&x.text.length<=600&&
@@ -1937,7 +1938,7 @@ function coachV7Context(studentUid,weekStart){
 function coachV7ComposerContext(key){
   if(coachV7ComposerScope===key)return;
   coachV7ComposerScope=key;coachV7EditingId=null;coachV7Drag=null;
-  coachV7ComposerDays=new Set([0]);
+  coachV7ComposerDays=new Set([0]);coachV9ComposerOpen=false;
 }
 function coachV7SetNotice(key,message,kind="info"){
   coachV7Notices.set(key,{message,kind});
@@ -2015,7 +2016,6 @@ function coachV8AddModalToDraft(){
   if(coachV7ComposeText({text,time:"",url}).length>600){setProgramTaskStatus("Video dahil görev 600 karakteri geçemez.","error");return}
   const key=coachV7Key(row.studentUid,week),draft=coachV7Drafts(key);
   if(coachV7SendingKeys.has(key)){setProgramTaskStatus("Gönderim bitince tekrar dene.","error");return}
-  if(draft.length+days.length>100){setProgramTaskStatus("Haftalık taslakta en fazla 100 çalışma olabilir.","error");return}
   for(const date of days){
     const day=Math.round((new Date(date+"T12:00:00")-new Date(week+"T12:00:00"))/86400000);
     draft.push({id:Date.now().toString(36)+"-"+(++coachV7Sequence).toString(36),day,text,time:"",url:url||""});
@@ -2031,14 +2031,14 @@ function coachV8AddModalToDraft(){
 
 function coachV7DraftPanel(key,week){
   coachV7ComposerContext(key);
-  const pending=coachV7Drafts(key),notice=coachV7Notices.get(key),editing=pending.find(x=>x.id===coachV7EditingId);
+  const pending=coachV7Drafts(key),notice=coachV7Notices.get(key),editing=pending.find(x=>x.id===coachV7EditingId),expanded=coachV9ComposerOpen||Boolean(editing);
   const chips=COACH_V7_DAY_NAMES.map((label,day)=>
     '<button type="button" data-v7-pick-day="'+day+'" aria-pressed="'+coachV7ComposerDays.has(day)+'" aria-label="'+label+' için taslak seç">'+label+'</button>').join("");
   const escaped=escHtml;
   return '<section class="coach-v7-panel" aria-label="Göndermeden önce haftayı planla">'
     +'<div class="coach-v7-panel-head"><div><span class="coach-v7-kicker">2. AŞAMA · GÜVENLİ PLANLAMA</span><h3>Haftalık taslak <small>'+pending.length+' çalışma</small></h3><p>Görevleri önce buraya ekle, günlerini ve saatlerini düzenle. Sen onaylamadan öğrenciye gönderilmez.</p></div>'
-    +'<div class="coach-v7-panel-actions"><button type="button" data-v7-clear '+(!pending.length?'disabled':'')+'>Taslağı temizle</button><button type="button" data-v7-send '+(!pending.length||coachV7SendingKeys.has(key)?'disabled':'')+'>Taslağı Gönder ('+pending.length+')</button></div></div>'
-    +'<div class="coach-v7-form">'+coachV8Picker("v7")+'<div class="coach-v7-form-grid">'
+    +'<div class="coach-v7-panel-actions"><button type="button" class="coach-v9-expand" data-v9-toggle aria-controls="coachV7InlineForm" aria-expanded="'+expanded+'">'+(expanded?'− Ders eklemeyi kapat':'＋ Ders ekle')+'</button><button type="button" data-v7-clear '+(!pending.length?'disabled':'')+'>Taslağı temizle</button><button type="button" data-v7-send '+(!pending.length||coachV7SendingKeys.has(key)?'disabled':'')+'>Taslağı Gönder ('+pending.length+')</button></div></div>'
+    +'<div class="coach-v7-form" id="coachV7InlineForm" '+(!expanded?'hidden':'')+'>'+coachV8Picker("v7")+'<div class="coach-v7-form-grid">'
     +'<label class="coach-v7-wide">Çalışma adı<input type="text" id="coachV7DraftText" maxlength="550" placeholder="Örn. TYT Matematik · Problemler 30 soru" value="'+escaped(editing?.text||"")+'"></label>'
     +'<label>Başlangıç saati <small>İsteğe bağlı</small><input type="time" id="coachV7DraftTime" value="'+escaped(editing?.time||"")+'"></label>'
     +'<label class="coach-v7-wide">Video bağlantısı <small>İsteğe bağlı</small><input type="url" id="coachV7DraftUrl" maxlength="500" placeholder="https://youtu.be/..." value="'+escaped(editing?.url||"")+'"></label>'
@@ -2068,7 +2068,6 @@ function coachV7AddDraft(key){
   if(coachV7ComposeText({text,time,url}).length>600){coachV7FormError("Gönderilecek görev bağlantı ve saat dahil 600 karakteri geçemez.");return}
   const draft=coachV7Drafts(key);
   const edit=draft.find(x=>x.id===coachV7EditingId);
-  if(!edit&&draft.length+coachV7ComposerDays.size>100){coachV7FormError("Bir haftanın taslağı en fazla 100 çalışma içerebilir.");return}
   if(edit){
     edit.text=text;edit.time=time;edit.url=url;edit.day=[...coachV7ComposerDays][0];
   }else{
@@ -2167,6 +2166,13 @@ function renderCoachVisualWeek(program,week,row){
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
   const studentUid=selectedProgramStudentUid,key=coachV7Key(studentUid,weekStart);
+  root.querySelector("[data-v9-toggle]")?.addEventListener("click",()=>{
+    coachV9ComposerOpen=!coachV9ComposerOpen;
+    const form=root.querySelector("#coachV7InlineForm"),toggle=root.querySelector("[data-v9-toggle]");
+    if(form)form.hidden=!coachV9ComposerOpen;
+    if(toggle){toggle.setAttribute("aria-expanded",String(coachV9ComposerOpen));toggle.textContent=coachV9ComposerOpen?"− Ders eklemeyi kapat":"＋ Ders ekle"}
+    if(coachV9ComposerOpen)root.querySelector("#coachV7DraftText")?.focus({preventScroll:true});
+  });
   coachV8BindPicker(root,"v7","coachV7DraftText");
   root.querySelectorAll("[data-v8-days]").forEach(button=>button.addEventListener("click",()=>{
     if(coachV7SendingKeys.has(key))return;
@@ -2209,7 +2215,7 @@ function bindCoachVisualWeekActions(weekStart){
       if(coachV7SendingKeys.has(key))return;
       const item=coachV7Drafts(key).find(x=>x.id===id);
       if(!item)return;
-      coachV7EditingId=id;coachV7ComposerDays=new Set([item.day]);renderProgramWorkspace();
+      coachV7EditingId=id;coachV9ComposerOpen=true;coachV7ComposerDays=new Set([item.day]);renderProgramWorkspace();
       $("coachV7DraftText")?.focus({preventScroll:true});
     });
     card.querySelector("[data-v7-move]")?.addEventListener("change",event=>{
@@ -2258,8 +2264,13 @@ function bindCoachVisualWeekActions(weekStart){
     const card=event.currentTarget.closest("[data-program-task-id]");if(card)openCoachMoveMenu(weekStart,card.dataset.programTaskId||"",Number(card.dataset.programTaskDay),button);
   }));
   root.querySelectorAll("[data-coach-add-day]").forEach(button=>button.addEventListener("click",()=>{
-    const date=programDayDate(weekStart,Number(button.dataset.coachAddDay));
-    openProgramTaskModal("",{date});
+    if(!coachV7Context(studentUid,weekStart))return;
+    const day=Number(button.dataset.coachAddDay);
+    if(!Number.isInteger(day)||day<0||day>6)return;
+    coachV7EditingId=null;coachV7ComposerDays=new Set([day]);coachV9ComposerOpen=true;
+    renderProgramWorkspace();
+    $("coachV7InlineForm")?.scrollIntoView?.({block:"nearest"});
+    $("coachV7DraftText")?.focus({preventScroll:true});
   }));
   root.querySelectorAll("[data-coach-v6-layout]").forEach(button=>button.addEventListener("click",()=>{
     coachWeekVisualLayout=button.dataset.coachV6Layout==="list"?"list":"week";
