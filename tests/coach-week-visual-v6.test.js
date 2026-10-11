@@ -40,7 +40,7 @@ function harness(t){
   });
   w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.eval(read('app-reset.js').replace(/^import[^\n]+\n/gm,'')+
-    '\nwindow.coachV6Test={seed(rows,uid,selectedWeek){coachReportRows=rows;selectedProgramStudentUid=uid;selectedProgramWeekStart=selectedWeek;hydrateProgramStudents();renderProgramWorkspace()},stats:coachV6WeekStats,subject:coachV6Subject,context(){return{student:selectedProgramStudentUid,week:selectedProgramWeekStart,edit:coachProgramEditContext}}};');
+    '\nwindow.coachV6Test={seed(rows,uid,selectedWeek){coachReportRows=rows;selectedProgramStudentUid=uid;selectedProgramWeekStart=selectedWeek;hydrateProgramStudents();renderProgramWorkspace()},stats:coachV6WeekStats,subject:coachV6Subject,dropDraftCache(uid,selectedWeek){coachV7DraftCache.delete(coachV7Key(uid,selectedWeek))},context(){return{student:selectedProgramStudentUid,week:selectedProgramWeekStart,edit:coachProgramEditContext}}};');
   document.getElementById('bootView').classList.add('hidden');
   document.getElementById('authView').classList.add('hidden');
   document.getElementById('appView').classList.remove('hidden');
@@ -371,7 +371,7 @@ test('more than 100 studies per week are preserved and rendered without losing a
     id:'lesson-'+i,day:i%7,text:'TYT Matematik · Çalışma '+i,time:'',url:''
   }));
   h.w.sessionStorage.setItem(key,JSON.stringify(large));
-  h.w.eval('coachV7DraftCache.delete(coachV7Key("student-b","2026-10-05"))');
+  h.w.coachV6Test.dropDraftCache('student-b',week);
   h.w.coachV6Test.seed(h.rows,'student-b',week);
   const root=h.$('coachVisualWeekBoard');
   assert.equal(root.querySelectorAll('.coach-v7-draft').length,115);
