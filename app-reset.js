@@ -2047,7 +2047,7 @@ function renderCoachVisualWeek(program,week,row){
     const short=coachV6TaskLabel(task.text);
     const chunks=short.split(/\s+·\s+/),details=chunks.length>1?chunks.slice(1).join(" · "):short;
     const moved=Boolean(week.data?.mv?.[task.id]),clock=coachV7Time(task.text);
-    return '<article class="coach-v6-task program-task-card" draggable="true"' data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
+    return '<article class="coach-v6-task program-task-card" draggable="true" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
       +'<span class="coach-v6-task-symbol">'+coachV6Symbol(lesson.key)+'</span><div class="coach-v6-task-copy"><strong>'+escHtml(lesson.title)+'</strong><span>'+escHtml(details)+'</span>'
       +(clock?'<small class="coach-v7-time-badge">◷ '+escHtml(clock)+'</small>':'')
       +(moved?'<small>Başka günden taşındı</small>':'')+(done?'<small>✓ Tamamlandı</small>':'')+'</div>'
