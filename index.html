@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="./coach-fast-planner.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-week-visual-v6.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-week-drafts-v7.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-lesson-composer-v8.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -1205,6 +1206,7 @@
           </div>
           <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
         </section>
+        <div id="coachV8ModalPicker" class="coach-v8-modal-host"></div>
         <label><span>Görev</span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
         <label><span>Video bağlantısı · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://youtu.be/..."></label>
         <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderdikten sonra sıradaki çalışmayı ekle <small>Pencere açık kalsın, yeni görevi hızla yaz.</small></span></label>
@@ -1214,11 +1216,12 @@
       <footer>
         <button type="button" class="program-task-delete hidden" id="programTaskDelete">Görevi Sil</button>
         <button type="button" class="program-task-cancel" id="programTaskCancel">Vazgeç</button>
+        <button type="button" class="program-task-draft" id="programTaskAddDraft">Önce Taslağa Ekle</button>
         <button type="button" class="program-task-send" id="programTaskSend">Programa ekle</button>
       </footer>
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.58"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.59"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
 </body>
 </html>
