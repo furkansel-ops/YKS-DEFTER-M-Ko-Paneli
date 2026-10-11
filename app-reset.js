@@ -2425,6 +2425,8 @@ function openProgramTaskModal(prefill="",options={}){
   if($("programTaskDate"))$("programTaskDate").value=date;
   coachSetWeekDraft(date,!edit&&Boolean(options.bulk));
   if($("programTaskKeepOpen"))$("programTaskKeepOpen").checked=false;
+  if(!edit)coachV8Levels.modal="TYT";
+  $("coachV8ModalPicker")?.querySelectorAll("[data-v8-level]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.v8Level===coachV8Levels.modal)));
   const parsed=edit?coachProgramSplitExisting(prefill):{text:prefill,resource:"",prefix:""};
   if(edit&&coachProgramEditContext)coachProgramEditContext.prefix=parsed.prefix;
   if($("programTaskText"))$("programTaskText").value=parsed.text;if($("programTaskVideo"))$("programTaskVideo").value=parsed.resource;
@@ -2454,6 +2456,8 @@ $("programTaskDate")?.addEventListener("input",event=>{if(coachProgramEditContex
 $("programDaysWeekdays")?.addEventListener("click",()=>coachWeekPreset([0,1,2,3,4]));
 $("programDaysAll")?.addEventListener("click",()=>coachWeekPreset([0,1,2,3,4,5,6]));
 $("programDaysClear")?.addEventListener("click",()=>coachWeekPreset([]));
+if($("coachV8ModalPicker")){$("coachV8ModalPicker").innerHTML=coachV8Picker("modal");coachV8BindPicker($("coachV8ModalPicker"),"modal","programTaskText")}
+$("programTaskAddDraft")?.addEventListener("click",coachV8AddModalToDraft);
 $("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});
 $("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTaskBackdrop")?.addEventListener("keydown",event=>{
