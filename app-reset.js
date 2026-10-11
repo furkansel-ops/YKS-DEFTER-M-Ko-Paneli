@@ -2079,6 +2079,84 @@ function renderCoachVisualWeek(program,week,row){
 }
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
+  const studentUid=selectedProgramStudentUid,key=coachV7Key(studentUid,weekStart);
+  root.querySelectorAll("[data-v7-pick-day]").forEach(button=>button.addEventListener("click",()=>{
+    if(coachV7SendingKeys.has(key))return;
+    const day=Number(button.dataset.v7PickDay);
+    if(coachV7EditingId)coachV7ComposerDays=new Set([day]);
+    else if(coachV7ComposerDays.has(day))coachV7ComposerDays.delete(day);
+    else coachV7ComposerDays.add(day);
+    root.querySelectorAll("[data-v7-pick-day]").forEach(node=>
+      node.setAttribute("aria-pressed",String(coachV7ComposerDays.has(Number(node.dataset.v7PickDay)))));
+  }));
+  root.querySelector("[data-v7-add]")?.addEventListener("click",()=>{
+    if(coachV7Context(studentUid,weekStart))coachV7AddDraft(key);
+  });
+  root.querySelector("[data-v7-cancel-edit]")?.addEventListener("click",()=>{
+    coachV7EditingId=null;coachV7ComposerDays=new Set([0]);renderProgramWorkspace();
+  });
+  root.querySelector("[data-v7-clear]")?.addEventListener("click",()=>{
+    if(coachV7SendingKeys.has(key)||!coachV7Drafts(key).length)return;
+    if(!confirm("Bu öğrencinin bu haftaki gönderilmemiş taslağını temizlemek istiyor musun?"))return;
+    coachV7DraftCache.set(key,[]);coachV7EditingId=null;coachV7Persist(key);renderProgramWorkspace();
+  });
+  root.querySelector("[data-v7-send]")?.addEventListener("click",()=>{
+    void coachV7SendDraft(key,weekStart,studentUid);
+  });
+  root.querySelectorAll(".coach-v7-draft").forEach(card=>{
+    const id=card.dataset.v7DraftId;
+    card.querySelector("[data-v7-remove]")?.addEventListener("click",()=>{
+      if(coachV7SendingKeys.has(key))return;
+      coachV7DraftCache.set(key,coachV7Drafts(key).filter(item=>item.id!==id));
+      if(coachV7EditingId===id)coachV7EditingId=null;
+      coachV7Persist(key);renderProgramWorkspace();
+    });
+    card.querySelector("[data-v7-edit]")?.addEventListener("click",()=>{
+      if(coachV7SendingKeys.has(key))return;
+      const item=coachV7Drafts(key).find(x=>x.id===id);
+      if(!item)return;
+      coachV7EditingId=id;coachV7ComposerDays=new Set([item.day]);renderProgramWorkspace();
+      $("coachV7DraftText")?.focus({preventScroll:true});
+    });
+    card.querySelector("[data-v7-move]")?.addEventListener("change",event=>{
+      if(coachV7Context(studentUid,weekStart))coachV7DraftChange(key,id,{day:Number(event.target.value)});
+    });
+  });
+  // Dragging a draft edits only the local draft. Existing cells use the tested
+  // coach move action and require confirmation before the student-facing queue.
+  root.querySelectorAll(".coach-v6-task[draggable],.coach-v7-draft[draggable]").forEach(card=>{
+    card.addEventListener("dragstart",event=>{
+      if(event.target.closest("button,input,select")){event.preventDefault();return}
+      coachV7Drag=card.classList.contains("coach-v7-draft")
+        ?{kind:"draft",key,id:card.dataset.v7DraftId,sourceDay:Number(card.closest("[data-day]")?.dataset.day)}
+        :{kind:"existing",key,id:card.dataset.programTaskId,sourceDay:Number(card.dataset.programTaskDay)};
+      if(event.dataTransfer){event.dataTransfer.effectAllowed="move";event.dataTransfer.setData("text/plain",card.dataset.v7DraftId||card.dataset.programTaskId||"")}
+      card.classList.add("is-dragging");
+    });
+    card.addEventListener("dragend",()=>{coachV7Drag=null;card.classList.remove("is-dragging")});
+  });
+  root.querySelectorAll(".coach-v6-day[data-day]").forEach(section=>{
+    section.addEventListener("dragover",event=>{
+      if(!coachV7Drag||coachV7Drag.key!==key||!coachV7Context(studentUid,weekStart))return;
+      event.preventDefault();
+      if(event.dataTransfer)event.dataTransfer.dropEffect="move";
+      section.classList.add("is-drop-target");
+    });
+    section.addEventListener("dragleave",event=>{
+      if(!section.contains(event.relatedTarget))section.classList.remove("is-drop-target");
+    });
+    section.addEventListener("drop",event=>{
+      section.classList.remove("is-drop-target");
+      const drag=coachV7Drag;coachV7Drag=null;
+      if(!drag||drag.key!==key||!coachV7Context(studentUid,weekStart))return;
+      event.preventDefault();const day=Number(section.dataset.day);
+      if(!Number.isInteger(day)||day<0||day>6||day===drag.sourceDay)return;
+      if(drag.kind==="draft"){coachV7DraftChange(key,drag.id,{day});return}
+      if(drag.kind==="existing"&&confirm("Bu çalışmayı "+COACH_V7_DAY_NAMES[day]+" gününe taşımak istiyor musun?")){
+        void saveCoachProgramMove(weekStart,drag.id,day);
+      }
+    });
+  });
   root.querySelectorAll("[data-program-edit]").forEach(button=>button.addEventListener("click",event=>{
     const card=event.currentTarget.closest("[data-program-task-id]");if(card)openCoachProgramEdit(weekStart,card.dataset.programTaskId||"");
   }));
