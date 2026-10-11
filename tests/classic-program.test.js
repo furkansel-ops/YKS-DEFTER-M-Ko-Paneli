@@ -63,7 +63,7 @@ function harness(t){
   const $=id=>document.getElementById(id);
   w.classicTest.seed(fixtures(),'student-b',week);
   return {w,document,$,writes,alerts,
-    task(id){return document.querySelector('[data-program-task-id="'+id+'"]')},
+    task(id){return document.querySelector('#programWeekBoard [data-program-task-id="'+id+'"]')},
     seed(rows,studentUid,selectedWeek=week){w.classicTest.seed(rows,studentUid,selectedWeek)},
     change(id,value,type='input'){$(id).value=value;$(id).dispatchEvent(new w.Event(type,{bubbles:true}))},
     async settle(){await Promise.resolve();await Promise.resolve();await Promise.resolve()},
