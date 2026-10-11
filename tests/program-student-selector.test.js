@@ -13,8 +13,8 @@ test('Programlar öğrenci seçici üst barda ve tablo tam genişlikte çalış�
   assert.match(html,/<span>Öğrencilerim<\/span>/);
   assert.doesNotMatch(html,/class="program-students"/);
   assert.doesNotMatch(html,/id="programStudentList"/);
-  assert.match(html,/programs-v21\.css\?v=3\.4\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.53/);
+  assert.match(html,/programs-v21\.css\?v=3\.5\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.54/);
 
   assert.match(css,/v3\.2 — full-width program board/);
   assert.match(css,/\.program-layout\{display:block\}/);
