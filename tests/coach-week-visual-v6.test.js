@@ -330,6 +330,7 @@ test('v8 modal draft selection targets the chosen week even when its date differ
 test('v8 modal direct-send action still uses the original protocol after choosing a quick lesson',async t=>{
   const h=harness(t);
   h.$('programAddTaskBtn').click();
+  v7Input(h,'programTaskDate','2026-10-05');
   h.$('coachV8ModalPicker').querySelector('[data-v8-preset="reading"]').click();
   h.$('programTaskSend').click();await v7Settle();
   assert.equal(h.writes.length,1);
