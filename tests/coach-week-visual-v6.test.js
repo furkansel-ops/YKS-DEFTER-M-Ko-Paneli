@@ -100,12 +100,15 @@ test('new card edit opens the existing editor and preserves the exact source tas
   assert.equal(h.w.coachV6Test.context().edit.taskId,'s-0-1');
   assert.equal(h.writes.length,0);
 });
-test('each + Ekle opens the real quick composer with that day selected',t=>{
-  const h=harness(t);
-  h.$('coachVisualWeekBoard').querySelector('[data-coach-add-day="4"]').click();
-  assert.equal(h.$('programTaskDate').value,'2026-10-09');
-  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
-  assert.equal(h.$('programTaskDayGrid').querySelectorAll('[aria-pressed="true"]').length,1);
+test('each + Ekle opens the compact inline draft for that day, without opening the old modal',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelector('[data-v9-toggle]').getAttribute('aria-expanded'),'false');
+  assert.equal(h.$('coachV7InlineForm').hidden,true);
+  root.querySelector('[data-coach-add-day="4"]').click();
+  assert.equal(h.$('coachV7InlineForm').hidden,false);
+  assert.equal(h.$('coachVisualWeekBoard').querySelector('[data-v7-pick-day="4"]').getAttribute('aria-pressed'),'true');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-v7-pick-day][aria-pressed="true"]').length,1);
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true);
   assert.equal(h.writes.length,0);
 });
 test('visual quick controls delegate to existing bulk and template actions',t=>{
@@ -346,4 +349,49 @@ test('v8 editing existing student tasks cannot use the new draft action',t=>{
   h.$('programTaskAddDraft').click();
   assert.equal(h.writes.length,0);
   assert.equal(h.w.coachV6Test.context().edit.taskId,'s-0-1');
+});
+
+
+test('compact editor is collapsed by default and can be toggled without erasing the week',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard'),toggle=root.querySelector('[data-v9-toggle]');
+  assert.equal(h.$('coachV7InlineForm').hidden,true);
+  assert.equal(toggle.getAttribute('aria-expanded'),'false');
+  toggle.click();
+  assert.equal(h.$('coachV7InlineForm').hidden,false);
+  toggle.click();
+  assert.equal(h.$('coachV7InlineForm').hidden,true);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v6-day').length,7);
+  assert.equal(h.writes.length,0);
+});
+
+test('more than 100 studies per week are preserved and rendered without losing a column',t=>{
+  const h=harness(t);
+  const key='yks-coach-week-draft-v7:coach-test|student-b|2026-10-05';
+  const large=Array.from({length:115},(_,i)=>({
+    id:'lesson-'+i,day:i%7,text:'TYT Matematik · Çalışma '+i,time:'',url:''
+  }));
+  h.w.sessionStorage.setItem(key,JSON.stringify(large));
+  h.w.eval('coachV7DraftCache.delete(coachV7Key("student-b","2026-10-05"))');
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelectorAll('.coach-v7-draft').length,115);
+  assert.equal(root.querySelector('[data-v7-send]').textContent,'Taslağı Gönder (115)');
+  for(let day=0;day<7;day++)assert.ok(root.querySelector('.coach-v6-day[data-day="'+day+'"] .coach-v7-draft'));
+  assert.match(read('coach-compact-v9.css'),/max-height:340px;overflow-y:auto/);
+  assert.equal(h.writes.length,0);
+});
+
+test('existing-task move to a full day grows an extra row without overwriting other lessons',async t=>{
+  const h=harness(t),weekData=h.rows[1].share.program.weeks[0].data;
+  for(let i=0;i<3;i++)weekData.s[i][4]='Yerinde kalacak '+i;
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const moved=h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"]');
+  moved.dispatchEvent(new h.w.Event('dragstart',{bubbles:true,cancelable:true}));
+  h.$('coachVisualWeekBoard').querySelector('.coach-v6-day[data-day="4"]').dispatchEvent(new h.w.Event('drop',{bubbles:true,cancelable:true}));
+  await v7Settle();
+  assert.equal(h.writes.length,1);
+  assert.deepEqual(h.writes[0].payload,{operation:'move',sourceWeek:week,taskId:'s-0-1',date:'2026-10-09'});
+  for(let i=0;i<3;i++)assert.equal(weekData.s[i][4],'Yerinde kalacak '+i);
+  assert.equal(weekData.s[3][4],'AYT Matematik · Fonksiyonlar');
+  assert.equal(h.$('programWeekBoard').querySelector('[data-program-task-id="s-3-4"]')!==null,true);
 });
