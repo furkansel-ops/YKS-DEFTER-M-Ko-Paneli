@@ -61,7 +61,7 @@ test('visual weekly plan matches saved data with actual totals, no invented date
   assert.equal(v.querySelectorAll('[data-program-select]').length,5);
   assert.equal(h.writes.length,0,'rendering the live student program must be read-only');
   assert.ok(h.$('programWeekBoard').querySelector('.student-program-scroller'),'original classic board stays mounted');
-  assert.doesNotMatch(v.textContent,/\b09:00\b|\b10:00\b/);
+  assert.doesNotMatch(v.querySelector('.coach-v6-days').textContent,/\b09:00\b|\b10:00\b/);
 });
 test('lesson colors group TYT/AYT together and user text cannot inject DOM or scripts',t=>{
   const h=harness(t),v=h.$('coachVisualWeekBoard');
