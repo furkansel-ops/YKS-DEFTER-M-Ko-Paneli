@@ -546,7 +546,6 @@
       const topicPart=state.topic?" · "+state.topic:"";
       if(text){text.value=(prefix+" · "+state.teacher+" · "+state.subject+topicPart+" · "+item.title).slice(0,600);text.dispatchEvent(new Event("input",{bubbles:true}));}
       if(video){video.value=item.url;video.dispatchEvent(new Event("input",{bubbles:true}));}
-      backdrop.scrollIntoView({block:"center",behavior:"smooth"});
       setStatus(item.kind==="playlist"?"Oynatma listesi görev penceresine eklendi.":"Video görev penceresine eklendi.");
     },0);
   }
