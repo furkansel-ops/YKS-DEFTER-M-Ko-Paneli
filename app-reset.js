@@ -1823,13 +1823,149 @@ function renderClassicProgram(program,week,row){
   };
   return '<section class="student-program-live-strip"><div><i></i><span><b>'+escHtml(studentName(row))+' · Programım</b><small>Son senkron: '+escHtml(reportTimestamp(row.share?.updatedAt))+'</small></span></div><span class="student-program-view-state">'+(week.week===programCurrentWeekStart()?'Bu hafta':'Seçili hafta')+'</span></section><div class="student-program-title">Haftalık plan · Klasik</div><section class="student-program-week-overview" aria-label="Haftalık ilerleme"><div class="student-program-week-top"><div><span>Haftalık ilerleme</span><b>'+message+'</b></div><strong>'+ratio+'%</strong></div><div class="student-program-week-bar"><i style="width:'+ratio+'%"></i></div><div class="student-program-summary"><span><b>'+total+'</b> planlanan</span><span><b>'+done+'</b> tamamlanan</span><span><b>'+moved+'</b> taşınan</span><span><b>'+doneDays+'/7</b> tamamlanan gün</span></div><div class="student-program-day-chips">'+chips+'</div></section><div class="student-program-legend"><span><i class="planned"></i>Planlandı</span><span><i class="done"></i>Tamamlandı</span><span><i class="moved"></i>Taşındı</span></div><div class="student-program-scroller" tabindex="0" role="region" aria-label="Haftalık program tablosu; tüm günler için yatay kaydır">'+grid('r')+grid('s')+'</div><p class="student-program-hint">Tamamlanma işaretleri öğrencinin programından gelir. Görevleri hücredeki düzenle ve taşı düğmelerinden yönetebilirsin.</p>';
 }
+
+/* Coach Weekly Plan v6: a read-only visual projection of the same student cells.
+   Classic view and original Firestore actions remain authoritative. */
+let coachWeekVisualLayout="week";
+const COACH_V6_LESSONS=[
+  ["reading","Türkçe",/^(?:paragraf|türkçe|turkce|türk dili(?! ve edebiyatı))(?=\s|·|:|$)/i],
+  ["math","Matematik",/^(?:matematik|mat|problemler|problem)(?=\s|·|:|$)/i],
+  ["physics","Fizik",/^(?:fizik|fiz)(?=\s|·|:|$)/i],
+  ["chemistry","Kimya",/^(?:kimya|kim)(?=\s|·|:|$)/i],
+  ["biology","Biyoloji",/^(?:biyoloji|biyo|bio)(?=\s|·|:|$)/i],
+  ["geometry","Geometri",/^(?:geometri|geo)(?=\s|·|:|$)/i],
+  ["literature","Edebiyat",/^(?:edebiyat|türk dili ve edebiyatı)(?=\s|·|:|$)/i],
+  ["history","Tarih",/^(?:tarih)(?=\s|·|:|$)/i],
+  ["geography","Coğrafya",/^(?:coğrafya|cografya)(?=\s|·|:|$)/i],
+  ["philosophy","Felsefe",/^(?:felsefe)(?=\s|·|:|$)/i],
+  ["religion","Din",/^(?:din kültürü|din)(?=\s|·|:|$)/i],
+  ["english","İngilizce",/^(?:ingilizce|english|ydt)(?=\s|·|:|$)/i],
+  ["exam","Deneme",/^(?:deneme)(?=\s|·|:|$)/i]
+];
+function coachV6Subject(task){
+  const raw=String(task.text||"").replace(/^Koç\s*·\s*(?:Deneme sonrası\s*·\s*)?/i,"").trim();
+  const trimPrefix=value=>String(value||"").replace(/^(?:TYT|AYT|YDT)\s+/i,"").toLocaleLowerCase("tr-TR");
+  for(const value of [raw,task.label]){
+    const candidate=trimPrefix(value);
+    for(const [key,title,pattern] of COACH_V6_LESSONS)
+      if(pattern.test(candidate))return{key,title};
+  }
+  if(task.id?.startsWith("r-"))return{key:"routine",title:"Rutin"};
+  return{key:"other",title:"Çalışma"};
+}
+function coachV6Symbol(key){
+  const paths={
+    reading:'<path d="M12 7v14M3 18V5.5A2.5 2.5 0 0 1 5.5 3H9a3 3 0 0 1 3 3 3 3 0 0 1 3-3h3.5A2.5 2.5 0 0 1 21 5.5V18h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3H3Z"/>',
+    math:'<rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 7h8M9 11h2m3 0h1m-6 4h2m3 0h1m-6 3h2m3 0h1"/>',
+    physics:'<circle cx="12" cy="12" r="1.7"/><ellipse cx="12" cy="12" rx="9" ry="3.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(120 12 12)"/>',
+    chemistry:'<path d="M9 3h6m-5 0v7l-5.8 9a2 2 0 0 0 1.7 3h12.2a2 2 0 0 0 1.7-3L14 10V3M7 16h10"/>',
+    biology:'<path d="M20 4C10 3 4 8 4 15a5 5 0 0 0 5 5c7 0 12-8 11-16Z"/><path d="M6 18c3-4 6-7 12-10"/>',
+    geometry:'<path d="m12 3 10 18H2L12 3Z"/><path d="M12 10v6"/>',
+    literature:'<path d="m15.5 4.5 4 4L9 19l-5 1 1-5L15.5 4.5ZM13 7l4 4"/>',
+    history:'<path d="M3 10h18M5 10v9m5-9v9m4-9v9m5-9v9M2 21h20M3 7l9-5 9 5v3H3V7Z"/>',
+    geography:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3-3 15 0 18M12 3c3 3 3 15 0 18"/>',
+    philosophy:'<path d="M12 18v3m-4 0h8M9 17a7 7 0 1 1 6 0c-1.5 1-1.5 2-3 2s-1.5-1-3-2Z"/>',
+    religion:'<path d="m12 2 2.8 6.4L22 9l-5.4 4.7 1.6 7.3L12 17.2 5.8 21l1.6-7.3L2 9l7.2-.6L12 2Z"/>',
+    english:'<path d="M4 6h13M10 4v2m-4 0c0 6 3 9 8 11m1-11c0 6-3 9-9 11M14 21l4-10 4 10m-7-3h6"/>',
+    exam:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6M8 10h8m-8 4h8m-8 4h5"/>',
+    routine:'<path d="M12 3v9l5 3M4 6a9 9 0 1 1-1 10"/>',
+    other:'<path d="M5 4h14v17H5zM9 9h6m-6 4h6m-6 4h3"/>'
+  };
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[key]||paths.other)+'</svg>';
+}
+function coachV6WeekStats(program,week){
+  const days=Array.from({length:7},(_,day)=>{
+    const tasks=collectProgramDayTasks(program,week,day);
+    return {tasks,done:tasks.filter(task=>programTaskDone(week.data||{},task,day)).length};
+  });
+  const total=days.reduce((sum,item)=>sum+item.tasks.length,0),done=days.reduce((sum,item)=>sum+item.done,0);
+  const subjects=new Set(days.flatMap(item=>item.tasks.map(task=>coachV6Subject(task).key)));
+  return {days,total,done,remaining:total-done,percent:total?Math.round(done/total*100):0,subjects:subjects.size,average:Math.round(total/7*10)/10};
+}
+function coachV6TaskLabel(value){
+  return String(value||"").trim()
+    .replace(/^Koç\s*·\s*(?:Deneme sonrası\s*·\s*)?/i,"")
+    .replace(/\s+—\s+https?:\/\/\S+\s*$/i,"").trim();
+}
+function renderCoachVisualWeek(program,week,row){
+  const stats=coachV6WeekStats(program,week),today=todayIsoLocal(),names=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+  const metric=(key,value,label,detail,symbol)=>'<div class="coach-v6-metric" data-stat="'+key+'"><div class="coach-v6-metric-icon">'+coachV6Symbol(symbol)+'</div><div><span>'+label+'</span><strong>'+value+'</strong><small>'+detail+'</small></div></div>';
+  const metrics='<div class="coach-v6-metrics">'
+    +metric("total",stats.total,"Toplam Görev","Bu haftanın çalışmaları","exam")
+    +metric("done",stats.percent+"%","Haftalık İlerleme",stats.done+"/"+stats.total+" tamamlandı","routine")
+    +metric("subjects",stats.subjects,"Ders Çeşidi","Farklı ders grubu","biology")
+    +metric("average",String(stats.average).replace(".",","),"Günlük Ortalama","Çalışma / gün","math")+'</div>';
+  const tasksFor=(item,day)=>item.tasks.map(task=>{
+    const lesson=coachV6Subject(task),done=programTaskDone(week.data||{},task,day);
+    const short=coachV6TaskLabel(task.text);
+    const chunks=short.split(/\s+·\s+/),details=chunks.length>1?chunks.slice(1).join(" · "):short;
+    const moved=Boolean(week.data?.mv?.[task.id]);
+    return '<article class="coach-v6-task program-task-card" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
+      +'<span class="coach-v6-task-symbol">'+coachV6Symbol(lesson.key)+'</span><div class="coach-v6-task-copy"><strong>'+escHtml(lesson.title)+'</strong><span>'+escHtml(details)+'</span>'
+      +(moved?'<small>Başka günden taşındı</small>':'')+(done?'<small>✓ Tamamlandı</small>':'')+'</div>'
+      +'<div class="coach-v6-task-actions"><button type="button" data-program-edit aria-label="'+escHtml(short)+' düzenle" title="Düzenle">✎</button><button type="button" data-program-select aria-label="'+escHtml(short)+' başka güne taşı" title="Başka güne taşı">↗</button></div>'
+      +'</article>';
+  }).join("");
+  const days=stats.days.map((item,day)=>{
+    const date=programDayDate(week.week,day),isToday=date===today;
+    return '<section class="coach-v6-day'+(isToday?' is-today':'')+'" data-day="'+day+'"><header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(programDayLabel(week.week,day).split(" · ")[1]||date)+'</span>'
+      +'<small>'+item.done+'/'+item.tasks.length+' tamamlandı</small></header>'
+      +'<div class="coach-v6-day-tasks">'+(item.tasks.length?tasksFor(item,day):'<div class="coach-v6-day-empty">Bu güne çalışma eklenmemiş.</div>')+'</div>'
+      +'<button type="button" class="coach-v6-add-day" data-coach-add-day="'+day+'" aria-label="'+names[day]+' gününe çalışma ekle">＋ Ekle</button></section>';
+  }).join("");
+  return '<section class="coach-v6" aria-label="Koç haftalık plan çalışma alanı">'
+    +'<header class="coach-v6-title"><span class="coach-v6-logo">'+coachV6Symbol("exam")+'</span><div><span class="coach-v6-kicker">YKS DEFTERİM · KOÇ PANELİ</span><h2>Haftalık Plan</h2><p>'+escHtml(studentName(row))+' öğrencisinin planını görüntüle, düzenle ve yeni çalışmalar ekle.</p></div><span class="coach-v6-sync">Öğrencinin paylaştığı program</span></header>'
+    +metrics+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
+    +'<div class="coach-v6-sheet-tabs" role="group" aria-label="Hafta veya liste görünümü"><button type="button" data-coach-v6-layout="list" aria-pressed="'+(coachWeekVisualLayout==="list")+'">☷ Liste</button><button type="button" data-coach-v6-layout="week" aria-pressed="'+(coachWeekVisualLayout==="week")+'">▦ Hafta</button></div></div>'
+    +'<div class="coach-v6-days" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section>'
+    +'<section class="coach-v6-quick"><div><h3>Hızlı İşlemler</h3><p>Koçunla haftanın çalışmalarını daha hızlı hazırlayın.</p></div><div class="coach-v6-quick-actions">'
+    +'<button type="button" data-coach-quick="bulk"><strong>▦ Haftaya Toplu Ekle</strong><small>Bir çalışmayı birden fazla güne ekle</small></button>'
+    +'<button type="button" data-coach-quick="templates"><strong>▣ Ders Şablonları</strong><small>Hazır çalışma örnekleri</small></button>'
+    +'<button type="button" data-coach-quick="add"><strong>＋ Yeni Çalışma</strong><small>Tek bir güne görev ekle</small></button>'
+    +'</div></section></section>';
+}
+function bindCoachVisualWeekActions(weekStart){
+  const root=$("coachVisualWeekBoard");if(!root)return;
+  root.querySelectorAll("[data-program-edit]").forEach(button=>button.addEventListener("click",event=>{
+    const card=event.currentTarget.closest("[data-program-task-id]");if(card)openCoachProgramEdit(weekStart,card.dataset.programTaskId||"");
+  }));
+  root.querySelectorAll("[data-program-select]").forEach(button=>button.addEventListener("click",event=>{
+    const card=event.currentTarget.closest("[data-program-task-id]");if(card)openCoachMoveMenu(weekStart,card.dataset.programTaskId||"",Number(card.dataset.programTaskDay),button);
+  }));
+  root.querySelectorAll("[data-coach-add-day]").forEach(button=>button.addEventListener("click",()=>{
+    const date=programDayDate(weekStart,Number(button.dataset.coachAddDay));
+    openProgramTaskModal("",{date});
+  }));
+  root.querySelectorAll("[data-coach-v6-layout]").forEach(button=>button.addEventListener("click",()=>{
+    coachWeekVisualLayout=button.dataset.coachV6Layout==="list"?"list":"week";
+    root.querySelector(".coach-v6-days")?.setAttribute("data-layout",coachWeekVisualLayout);
+    root.querySelectorAll("[data-coach-v6-layout]").forEach(node=>node.setAttribute("aria-pressed",String(node.dataset.coachV6Layout===coachWeekVisualLayout)));
+  }));
+  root.querySelectorAll("[data-coach-quick]").forEach(button=>button.addEventListener("click",()=>{
+    const action=button.dataset.coachQuick;
+    if(action==="bulk")$("programAddWeekBtn")?.click();
+    else if(action==="templates")$("programTemplatesBtn")?.click();
+    else $("programAddTaskBtn")?.click();
+  }));
+}
+function coachSetWeekView(view){
+  const classic=view==="classic",page=$("programsPage");
+  if(!page)return;
+  page.dataset.coachWeekView=classic?"classic":"visual";
+  $("coachWeekClassicMode")?.setAttribute("aria-pressed",String(classic));
+  $("coachWeekVisualMode")?.setAttribute("aria-pressed",String(!classic));
+}
+$("coachWeekClassicMode")?.addEventListener("click",()=>coachSetWeekView("classic"));
+$("coachWeekVisualMode")?.addEventListener("click",()=>coachSetWeekView("visual"));
+
 function renderProgramWorkspace(){
-  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),board=$("programWeekBoard"),empty=$("programMainEmpty");
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),board=$("programWeekBoard"),visual=$("coachVisualWeekBoard"),empty=$("programMainEmpty");
   if(!row){
     if($("programWorkspaceTitle"))$("programWorkspaceTitle").textContent="Bir öğrenci seç";
     if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent="Öğrencinin programı burada açılacak.";
     if($("programWeekLabel"))$("programWeekLabel").textContent="—";
     if(board){board.innerHTML="";board.classList.add("hidden");delete board.dataset.programView}
+    if(visual){visual.replaceChildren();visual.classList.add("hidden");}
     ["programPrevWeek","programNextWeek","programCurrentWeek"].forEach(id=>{if($(id))$(id).disabled=true});
     empty?.classList.remove("hidden");return;
   }
@@ -1843,6 +1979,11 @@ function renderProgramWorkspace(){
     const view=row.studentUid+"|"+week.week,left=board.dataset.programView===view?board.querySelector(".student-program-scroller")?.scrollLeft||0:0;
     board.classList.remove("hidden");board.innerHTML=renderClassicProgram(program,week,row);board.dataset.programView=view;
     const scroller=board.querySelector(".student-program-scroller");if(scroller)scroller.scrollLeft=left;
+  }
+  if(visual){
+    visual.classList.remove("hidden");
+    visual.innerHTML=renderCoachVisualWeek(program,week,row);
+    bindCoachVisualWeekActions(week.week);
   }
   bindCoachProgramCardActions(week.week);
 }
@@ -1955,7 +2096,7 @@ function openProgramTaskModal(prefill="",options={}){
   $("programTaskBackdrop")?.toggleAttribute("data-editing",edit);
   if($("programTaskStudentName"))$("programTaskStudentName").textContent=studentName(row)+(edit?" için mevcut çalışma":" için yeni çalışma");
   const today=todayIsoLocal(),start=week.week||programCurrentWeekStart();
-  const date=edit?programDayDate(options.weekStart||start,editDay):(today>=start&&today<=programDayDate(start,6)?today:start);
+  const date=edit?programDayDate(options.weekStart||start,editDay):(/^\d{4}-\d{2}-\d{2}$/.test(String(options.date||""))?String(options.date):(today>=start&&today<=programDayDate(start,6)?today:start));
   if($("programTaskDate"))$("programTaskDate").value=date;
   coachSetWeekDraft(date,!edit&&Boolean(options.bulk));
   if($("programTaskKeepOpen"))$("programTaskKeepOpen").checked=false;
