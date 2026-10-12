@@ -1,0 +1,255 @@
+/* Coach Programlar / Çalışma Ekle · v20
+   Denser teacher/video browser inside the RIGHT pane only.
+   No styles for the weekly schedule, its cards, or the LEFT lesson form. */
+
+/* Reclaim vertical space before the videos without hiding any filters. */
+.coach-v19-video-pane .coach-v19-pane-intro{
+  padding:11px 14px 9px;
+  gap:2px;
+}
+.coach-v19-video-pane .coach-v19-pane-intro>strong{
+  font-size:15px;
+  line-height:1.25;
+}
+.coach-v19-video-pane .coach-v19-pane-intro>small{
+  font-size:10px;
+  line-height:1.35;
+}
+.coach-v19-video-pane .coach-v19-linked{
+  margin:7px 10px 0;
+  padding:7px 9px;
+  font-size:10px;
+  line-height:1.35;
+}
+.coach-v19-video-pane .coach-video-library{
+  margin:7px 9px 10px;
+  border-radius:11px;
+}
+.coach-v19-video-pane .coach-video-filters{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-areas:
+    "scope mode"
+    "subject topic"
+    "teacher teacher";
+  gap:7px 8px;
+  padding:10px 10px 9px;
+}
+.coach-v19-video-pane #coachVideoScope{
+  grid-area:scope;
+  min-width:0;width:100%;
+}
+.coach-v19-video-pane #coachVideoMode{
+  grid-area:mode;
+  min-width:0;width:100%;
+}
+.coach-v19-video-pane .coach-video-filters>label:nth-of-type(1){grid-area:subject}
+.coach-v19-video-pane .coach-video-filters>label:nth-of-type(2){grid-area:topic}
+.coach-v19-video-pane .coach-video-filters>label:nth-of-type(3){grid-area:teacher}
+.coach-v19-video-pane .coach-video-filters .coach-video-seg{
+  min-width:0;height:32px;
+  padding:2px;
+}
+.coach-v19-video-pane .coach-video-seg button{
+  min-width:0;
+  padding:0 5px;
+  font-size:10px;
+}
+.coach-v19-video-pane .coach-video-filters select{
+  height:32px;
+  font-size:11px;
+  padding:0 8px;
+}
+.coach-v19-video-pane .coach-video-filters label>span{
+  font-size:10px;
+  margin:0 0 3px;
+}
+.coach-v19-video-pane .coach-video-tools{
+  gap:6px;
+  padding:8px 10px;
+}
+.coach-v19-video-pane .coach-video-cats{
+  gap:4px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.coach-v19-video-pane .coach-video-cats button{
+  min-height:27px;
+  height:27px;
+  padding:0 8px;
+  font-size:10px;
+}
+.coach-v19-video-pane .coach-video-search{
+  height:30px;
+}
+.coach-v19-video-pane .coach-video-refresh{
+  height:30px;
+}
+.coach-v19-video-pane .coach-video-meta{
+  padding:8px 10px 0;
+  gap:6px;
+  font-size:10px;
+}
+
+/* Compact two-column results; each card uses a small landscape thumbnail
+   to the left of a readable title, plus an accessible full-width action row. */
+.coach-v19-video-pane .coach-video-results{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  padding:8px 9px 5px;
+  align-items:start;
+}
+.coach-v19-video-pane .coach-video-card:not(.skeleton){
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  grid-template-rows:minmax(68px,auto) auto;
+  min-height:0;
+  min-width:0;
+  border-radius:9px;
+  box-shadow:0 1px 5px #1228470a;
+}
+.coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-thumb{
+  grid-column:1;
+  grid-row:1;
+  align-self:stretch;
+  width:100%;
+  height:100%;
+  min-height:68px;
+  aspect-ratio:auto;
+  border-radius:0;
+}
+.coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.coach-v19-video-pane .coach-video-thumb>span{
+  right:4px;
+  bottom:4px;
+  padding:2px 4px;
+  border-radius:4px;
+  font-size:8px;
+}
+.coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-body{
+  grid-column:2;
+  grid-row:1;
+  display:grid;
+  align-content:start;
+  gap:3px;
+  min-width:0;
+  padding:7px 7px 5px;
+}
+.coach-v19-video-pane .coach-video-card-body small{
+  font-size:9px;
+  line-height:1.2;
+}
+.coach-v19-video-pane .coach-video-card-body b{
+  font-size:10.5px;
+  line-height:1.3;
+  overflow-wrap:anywhere;
+  -webkit-line-clamp:2;
+}
+.coach-v19-video-pane .coach-video-card-body em{
+  display:block;
+  font-size:9px;
+  line-height:1.25;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-actions{
+  grid-column:1/-1;
+  grid-row:2;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px;
+  padding:5px 6px 6px;
+  border-top:1px solid #edf0f7;
+}
+.coach-v19-video-pane .coach-video-card-actions button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-width:0;
+  min-height:31px;
+  height:auto;
+  padding:4px 3px;
+  font-size:9px;
+  line-height:1.15;
+  white-space:normal;
+  text-wrap:balance;
+}
+.coach-v19-video-pane .coach-video-card-actions button:focus-visible,
+.coach-v19-video-pane .coach-video-thumb:focus-visible{
+  outline:2px solid #6e60ec;
+  outline-offset:-2px;
+}
+.coach-v19-video-pane .coach-video-card.skeleton{
+  display:flex;
+  flex-direction:column;
+  min-height:122px;
+  padding:7px;
+  gap:6px;
+}
+.coach-v19-video-pane .coach-video-card.skeleton>div{aspect-ratio:16/9;max-height:62px}
+.coach-v19-video-pane .coach-video-more-row{padding:7px 9px 10px}
+
+/* Keep one-col horizontal cards when the split view has a narrower media pane. */
+@media (min-width:911px) and (max-width:1190px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton){
+    grid-template-columns:104px minmax(0,1fr);
+  }
+}
+
+/* A tablet uses the full-width video tab, allowing two small cards per row. */
+@media (max-width:910px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media (max-width:600px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:minmax(0,1fr);
+    padding:7px 9px;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton){
+    display:grid;
+    grid-template-columns:105px minmax(0,1fr);
+    grid-template-rows:minmax(74px,auto) auto;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-thumb{
+    min-height:74px;
+  }
+  .coach-v19-video-pane .coach-video-card-actions button{
+    min-height:35px;
+    font-size:10px;
+  }
+}
+@media (max-width:375px){
+  .coach-v19-video-pane .coach-video-filters{
+    grid-template-areas:
+      "scope scope"
+      "mode mode"
+      "subject topic"
+      "teacher teacher";
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton){
+    display:grid;
+    grid-template-columns:88px minmax(0,1fr);
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-actions{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .coach-v19-video-pane .coach-video-card-actions button{
+    font-size:9px;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .coach-v19-video-pane .coach-video-card,
+  .coach-v19-video-pane .coach-video-thumb{transition:none}
+}
