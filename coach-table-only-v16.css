@@ -1,0 +1,75 @@
+/* Koç Paneli · v16 / top section + WEEKLY TABLE ONLY.
+   The original table renderer and all program actions remain untouched.
+   No duplicate headings, statistics, draft form or classic matrix are shown. */
+#programsPage #coachFutureProgramTable.coach-v16-table-only{
+ display:block;
+ width:100%;
+ max-width:100%;
+ min-width:0;
+ margin:0;
+ padding:0;
+ grid-template-columns:minmax(0,1fr);
+}
+#programsPage #coachFutureProgramTable .program-workspace{
+ width:100%;
+ min-width:0;
+ margin:0;
+ padding:0;
+ border:0;
+ border-radius:0;
+ background:transparent;
+ box-shadow:none;
+ overflow:visible;
+}
+/* Keep the HTML and existing event listeners for later stages, but show only
+   the actual student program table beneath the already-approved upper design. */
+#programsPage #coachFutureProgramTable .program-toolbar,
+#programsPage #coachFutureProgramTable .coach-v6-view-switch,
+#programsPage #coachFutureProgramTable #programWeekBoard,
+#programsPage #coachFutureProgramTable .coach-v6-title,
+#programsPage #coachFutureProgramTable .coach-v6-metrics,
+#programsPage #coachFutureProgramTable .coach-v7-panel,
+#programsPage #coachFutureProgramTable .coach-v10-bulk,
+#programsPage #coachFutureProgramTable .coach-v6-sheet-head{
+ display:none!important;
+}
+/* Old classic/visual toggles must never hide the only visible timetable when
+   a previous visit switched to classic. Respect .hidden if no student exists. */
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard:not(.hidden){
+ display:block!important;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v6{
+ display:block;
+ min-width:0;
+ margin:0;
+ padding:0;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v6-sheet{
+ display:block;
+ min-width:0;
+ margin:0;
+ padding:0;
+ border:0;
+ border-radius:0;
+ background:transparent;
+ box-shadow:none;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week{
+ margin:0;
+ min-width:0;
+ width:100%;
+ max-width:100%;
+}
+#programsPage #coachFutureProgramTable #programMainEmpty:not(.hidden){
+ margin:4px 0 0;
+ min-height:84px;
+}
+@media(max-width:780px){
+ #programsPage #coachFutureProgramTable.coach-v16-table-only{
+  width:100%;
+  min-width:0;
+ }
+ #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week{
+  overflow-x:auto;
+ }
+}
