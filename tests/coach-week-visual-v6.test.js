@@ -645,7 +645,7 @@ test('v13 teacher and video section is hidden by CSS without deleting any featur
   const js=read('program-videos-v1.js');
   const html=read('index.html');
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.0/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.1/);
   assert.match(css,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
   assert.match(js,/const ROOT_ID="programVideoLibrary"/);
   assert.match(js,/function boot\(\)\{\s*buildShell\(\)/);
@@ -946,7 +946,7 @@ test('composer stylesheet changes only the new modal, not the weekly board',()=>
  assert.doesNotMatch(css,/#coachVisualWeekBoard|\.coach-v14-week|\.coach-v12-card-stack/);
 });
 
-test('split composer mounts the existing teacher-video library inside the dialog, lazily',async t=>{
+test('hidden video library stays dormant but can be reactivated without losing the existing integration',async t=>{
   const h=harness(t),w=h.w;
   const feed={teachers:{MatMan:{
     channelName:'MatMan',
@@ -962,10 +962,18 @@ test('split composer mounts the existing teacher-video library inside the dialog
   assert.equal(h.$('coachV19VideoPane').contains(host),true);
   assert.equal(h.$('programsPage').contains(host),false,'no duplicate panel below the weekly table');
   assert.equal(requests,0,'closed modal does not make unnecessary video fetches');
+  assert.equal(h.$('coachV19VideoPane').hidden,true);
   h.$('programAddTaskBtn').click();
   for(let i=0;i<24;i++)await Promise.resolve();
   assert.equal(h.$('coachV19Workbench').dataset.activePane,'program');
-  assert.ok(requests>=1,'only opening editor starts video fetch');
+  assert.equal(requests,0,'hidden media must not load while opening lesson composer');
+  h.$('programTaskCancel').click();
+  // Re-enable only in this regression test to protect the archived video flow.
+  h.$('coachV19VideoPane').hidden=false;
+  h.$('coachV19ShowVideos').closest('nav').hidden=false;
+  h.$('programAddTaskBtn').click();
+  for(let i=0;i<24;i++)await Promise.resolve();
+  assert.ok(requests>=1,'unhiding the archived panel reactivates the original feed');
   assert.ok(host.querySelector('[data-video-add="0"]'),'actual existing video render is reused');
   host.querySelector('[data-video-add="0"]').click();
   assert.equal(h.$('programTaskVideo').value,'https://www.youtube.com/watch?v=abc123XYZ99');
@@ -985,6 +993,8 @@ test('custom coach text survives video selection and compact tabs retain their o
   const feed={teachers:{MatMan:{videos:[{id:'abc123XYZ99',title:'TYT Matematik tekrar',url:'https://www.youtube.com/watch?v=abc123XYZ99'}]}}};
   w.fetch=async()=>({ok:true,json:async()=>feed});
   w.eval(read('program-videos-v1.js'));h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  h.$('coachV19VideoPane').hidden=false;
+  h.$('coachV19ShowVideos').closest('nav').hidden=false;
   h.$('programAddTaskBtn').click();
   for(let i=0;i<20;i++)await Promise.resolve();
   h.$('programTaskText').value='Özgün çalışma görevim';
@@ -1004,7 +1014,7 @@ test('new video workspace styles stay scoped to modal and preserve the hidden le
   const html=read('index.html'),css=read('coach-split-composer-v19.css'),old=read('program-videos-v1.css');
   assert.match(html,/coach-split-composer-v19\.css\?v=1\.0\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.68/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.0/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.1/);
   assert.match(html,/id="coachV19Workbench"/);
   assert.match(html,/id="coachV19VideoPane"/);
   assert.match(css,/\.coach-v19-workbench/);
