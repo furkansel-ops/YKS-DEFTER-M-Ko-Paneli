@@ -653,3 +653,70 @@ test('v13 teacher and video section is hidden by CSS without deleting any featur
   assert.match(js,/recommendResource/);
   assert.match(html,/id="programsPage"/);
 });
+
+
+test('phase 1 renders seven preview-style day shells with factual completion bars',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  const table=root.querySelector('.coach-v14-week');
+  assert.ok(table,'the phase-one weekly table is present');
+  assert.equal(table.querySelectorAll('.coach-v14-day').length,7);
+  assert.equal(table.querySelectorAll('.coach-v14-progress').length,7);
+  assert.equal(table.querySelectorAll('.coach-v6-add-day').length,7);
+  assert.equal(table.querySelectorAll('.coach-v12-card-stack').length,7);
+  const monday=table.querySelector('.coach-v14-day[data-day="0"]');
+  assert.match(monday.querySelector('.coach-v6-day-head').textContent,/Pazartesi/);
+  assert.match(monday.querySelector('.coach-v6-day-head').textContent,/2\/3 tamamlandı/);
+  assert.equal(monday.querySelector('.coach-v14-progress').getAttribute('aria-valuenow'),'67');
+  assert.equal(monday.querySelector('.coach-v14-progress span').style.width,'67%');
+  const tuesday=table.querySelector('.coach-v14-day[data-day="1"]');
+  assert.equal(tuesday.querySelector('.coach-v14-progress').getAttribute('aria-valuenow'),'0');
+  assert.equal(tuesday.querySelector('.coach-v14-progress span').style.width,'0%');
+  const blank=table.querySelector('.coach-v14-day[data-day="2"]');
+  assert.match(blank.querySelector('.coach-v6-day-head').textContent,/0\/0 tamamlandı/);
+  assert.equal(blank.querySelector('.coach-v14-progress').getAttribute('aria-valuenow'),'0');
+  assert.equal(table.querySelectorAll('.coach-v11-task').length,5);
+  assert.equal(h.writes.length,0);
+});
+
+test('phase 1 completion progress updates from real student data, never from draft-only tasks',t=>{
+  const h=harness(t);
+  const weekData=h.rows[1].share.program.weeks[0].data;
+  weekData.dn={'r-0-0':1,'s-0-0':1,'s-1-0':1};
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const monday=h.$('coachVisualWeekBoard').querySelector('.coach-v14-day[data-day="0"]');
+  assert.equal(monday.querySelector('.coach-v14-progress').getAttribute('aria-valuenow'),'100');
+  assert.equal(monday.querySelector('.coach-v14-progress span').style.width,'100%');
+  v7Add(h,'AYT Matematik · Tekrar',{days:[0]});
+  const mondayAgain=h.$('coachVisualWeekBoard').querySelector('.coach-v14-day[data-day="0"]');
+  assert.equal(mondayAgain.querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(mondayAgain.querySelector('.coach-v14-progress').getAttribute('aria-valuenow'),'100');
+  assert.equal(h.writes.length,0);
+});
+
+test('phase 1 does not alter program task IDs, actions or existing layouts',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  const oldIds=[...root.querySelectorAll('[data-program-task-id]')].map(node=>node.dataset.programTaskId);
+  assert.deepEqual(oldIds.sort(),['r-0-0','s-0-0','s-0-1','s-1-0','s-2-3']);
+  assert.equal(root.querySelectorAll('[data-program-edit]').length,5);
+  assert.equal(root.querySelectorAll('[data-program-select]').length,5);
+  root.querySelector('[data-coach-v6-layout="list"]').click();
+  assert.equal(root.querySelector('.coach-v14-week').dataset.layout,'list');
+  assert.equal(root.querySelectorAll('.coach-v14-progress').length,7);
+  root.querySelector('[data-coach-v6-layout="week"]').click();
+  assert.equal(root.querySelector('.coach-v14-week').dataset.layout,'week');
+  assert.ok(h.$('programWeekBoard').querySelector('.student-program-scroller'));
+  assert.equal(h.writes.length,0);
+});
+
+test('phase 1 CSS adjusts only table skeleton, not the teacher library, task card style or sidebar',()=>{
+  const css=read('coach-week-skeleton-v14.css');
+  const html=read('index.html');
+  assert.match(html,/coach-week-skeleton-v14\.css\?v=1\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.65/);
+  assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v14-week/);
+  assert.match(css,/grid-template-columns:repeat\(7,minmax\(170px,1fr\)\)/);
+  assert.match(css,/\.coach-v14-progress span/);
+  assert.match(css,/\.coach-v14-day \.coach-v6-add-day/);
+  assert.match(css,/\.coach-v14-week\[data-layout="list"\]/);
+  assert.doesNotMatch(css,/\.coach-v11-task(?:[{\s.]|$)|\.coach-v7-draft(?:[{\s.]|$)|#programVideoLibrary|#coachNav|#homePage|#settingsPage/);
+});
