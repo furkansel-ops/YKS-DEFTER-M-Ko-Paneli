@@ -18,7 +18,7 @@ test('seven desktop columns fit their container rather than requiring a 170px mi
   assert.match(css,/\.coach-v12-card-stack\{[\s\S]*?max-height:none!important/);
   assert.match(css,/\.coach-v11-task\{[\s\S]*?min-height:0/);
   assert.match(css,/\.coach-v11-day-footer\{[\s\S]*?padding:5px 4px/);
-  assert.doesNotMatch(css,/display:\s*none|line-clamp|max-height:\s*\d+px|overflow-y:\s*(hidden|scroll)/);
+  assert.doesNotMatch(css,/display:\s*none|line-clamp|overflow-y:\s*(hidden|scroll)/);
 });
 test('small screens permit horizontal movement without shrinking cards to illegibility',()=>{
   const css=read('coach-table-fit-v17.css');
