@@ -517,7 +517,7 @@ function renderReportProgramDetails(row,details){
 /* v30 · Read-only evidence, not a study recommender or a diagnosis.
    Coaching shares expose exam SUBJECT net scores, never topic-level exam errors. */
 function reportEvidenceAnalysis(row){
-  const share=row?.share||{},norm=value=>String(value||"").replace(/\\s+/g," ").trim().toLocaleLowerCase("tr-TR");
+  const share=row?.share||{},norm=value=>String(value||"").replace(/\s+/g," ").trim().toLocaleLowerCase("tr-TR");
   const items=Array.isArray(share.topics?.items)?share.topics.items:[];
   const topics=new Map(),today=reportDateOffset(0);
   for(const item of items){
@@ -534,7 +534,7 @@ function reportEvidenceAnalysis(row){
     if(!subject||!topic||!Number.isFinite(count)||count<=0)continue;
     const key=norm(subject)+"|"+norm(topic),entry=grouped.get(key)||{subject,topic,wrong:0,lastDate:""};
     entry.wrong+=Math.max(1,Math.floor(count));
-    if(/^\\d{4}-\\d{2}-\\d{2}$/.test(String(item.date||""))&&item.date>entry.lastDate)entry.lastDate=item.date;
+    if(/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||""))&&item.date>entry.lastDate)entry.lastDate=item.date;
     grouped.set(key,entry);
   }
   const stageLabel=st=>st>=3?"Pekiştirildi":st===2?"Soru çözüldü":st===1?"İşlendi":"Başlanmadı";
@@ -544,7 +544,7 @@ function reportEvidenceAnalysis(row){
   }).sort((a,b)=>b.wrong-a.wrong||b.lastDate.localeCompare(a.lastDate)||a.subject.localeCompare(b.subject,"tr")||a.topic.localeCompare(b.topic,"tr"));
   const delayed=items.filter(item=>{
     const deadline=String(item?.deadline||"");
-    return/^\\d{4}-\\d{2}-\\d{2}$/.test(deadline)&&deadline<today&&reportNum(item?.st)<3;
+    return/^\d{4}-\d{2}-\d{2}$/.test(deadline)&&deadline<today&&reportNum(item?.st)<3;
   }).map(item=>({subject:String(item.subject||"Ders"),topic:String(item.topic||"Konu"),deadline:item.deadline,
     stage:stageLabel(reportNum(item?.st))}))
     .sort((a,b)=>a.deadline.localeCompare(b.deadline)||a.subject.localeCompare(b.subject,"tr"));
