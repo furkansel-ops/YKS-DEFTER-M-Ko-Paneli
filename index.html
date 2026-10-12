@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="./coach-week-preview-table-v11.css?v=1.0.2">
   <link rel="stylesheet" href="./coach-week-skeleton-v14.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-preview-upper-v15.css?v=1.0.1">
+  <link rel="stylesheet" href="./coach-table-only-v16.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -248,8 +249,8 @@
           </div>
         </div>
 
-        <!-- Aşama: sadece üst tasarım. Haftalık tablo kodu ileride açılmak üzere korunur. -->
-        <section class="program-layout" id="coachFutureProgramTable" hidden>
+        <!-- Aşama: üst tasarımın altında yalnızca 7 günlük program tablosu. Diğer eski program panelleri kodda kalır. -->
+        <section class="program-layout coach-v16-table-only" id="coachFutureProgramTable" aria-label="Haftalık program tablosu">
           <section class="program-workspace">
             <div class="program-toolbar">
               <div>
