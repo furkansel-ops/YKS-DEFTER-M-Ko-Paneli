@@ -113,14 +113,18 @@ test('one-click day + Ekle shows only a tiny inline editor, not the long form or
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true);
   assert.equal(h.writes.length,0);
 });
-test('visual quick controls delegate to existing bulk and template actions',t=>{
-  const h=harness(t);
-  h.$('coachVisualWeekBoard').querySelector('[data-coach-quick="bulk"]').click();
-  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
-  assert.equal(h.$('programTaskDayGrid').querySelectorAll('[aria-pressed="true"]').length,5);
-  h.$('programTaskCancel').click();
-  h.$('coachVisualWeekBoard').querySelector('[data-coach-quick="templates"]').click();
-  assert.equal(h.$('programTemplatePopover').classList.contains('hidden'),false);
+test('weekly quick actions section is removed without affecting existing lesson entry controls',t=>{
+  const h=harness(t),visual=h.$('coachVisualWeekBoard');
+  assert.equal(visual.querySelector('.coach-v6-quick'),null);
+  assert.equal(visual.querySelector('.coach-v6-quick-actions'),null);
+  assert.equal(visual.querySelector('[data-coach-quick]'),null);
+  assert.equal(visual.textContent.includes('Hızlı İşlemler'),false);
+  assert.equal(visual.querySelectorAll('[data-coach-add-day]').length,7);
+  assert.ok(visual.querySelector('[data-v10-bulk-toggle]'));
+  assert.ok(h.$('programAddWeekBtn'));
+  assert.ok(h.$('programTemplatesBtn'));
+  assert.ok(h.$('programAddTaskBtn'));
+  assert.equal(h.writes.length,0);
 });
 test('visual board re-renders for the new student and selected week without stale tasks',t=>{
   const h=harness(t);
