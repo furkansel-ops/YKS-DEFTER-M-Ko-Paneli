@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="./coach-quick-entry-v10.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-week-preview-table-v11.css?v=1.0.2">
   <link rel="stylesheet" href="./coach-week-skeleton-v14.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-preview-upper-v15.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -209,24 +210,43 @@
         </section>
       </div>
       <section class="programs-page classic-program-page hidden" id="programsPage" data-coach-week-view="visual">
-        <header class="programs-head">
-          <div>
-            <span class="dashboard-eyebrow">PROGRAM YÖNETİMİ</span>
-            <h1>Programlar</h1>
-            <p>Öğrencinin YKS Defterim'de hazırladığı haftalık programı gerçek zamanlı görüntüle ve koç görevi ekle.</p>
+        <header class="programs-head coach-v15-header">
+          <nav class="coach-v15-breadcrumb" aria-label="Program konumu">
+            <span>Programlar</span><span aria-hidden="true">›</span><strong>Haftalık Plan</strong>
+          </nav>
+          <div class="coach-v15-header-main">
+            <div class="coach-v15-title-group">
+              <span class="coach-v15-title-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-10 4h5m-5 4h3"/></svg></span>
+              <div>
+                <h1>Haftalık Plan</h1>
+                <p id="coachV15Subtitle">Öğrencinin haftalık programını oluştur, düzenle ve gönder.</p>
+              </div>
+            </div>
+            <div class="coach-v15-header-tools">
+              <label class="program-student-picker coach-v15-student">
+                <span>ÖĞRENCİ SEÇ</span>
+                <select id="programStudentSelect" aria-label="Programı gösterilecek öğrenci">
+                  <option value="">Öğrenci seç</option>
+                </select>
+              </label>
+              <div class="week-nav coach-v15-week-nav" aria-label="Hafta seçimi">
+                <button type="button" id="programPrevWeek" aria-label="Önceki hafta">‹</button>
+                <strong id="programWeekLabel">—</strong>
+                <button type="button" id="programNextWeek" aria-label="Sonraki hafta">›</button>
+                <button type="button" class="week-nav-today" id="programCurrentWeek">▢ Bu Hafta</button>
+              </div>
+            </div>
           </div>
-          <div class="program-head-actions">
-            <label class="program-student-picker">
-              <span>Öğrencilerim</span>
-              <select id="programStudentSelect" aria-label="Programı gösterilecek öğrenci">
-                <option value="">Öğrenci seç</option>
-              </select>
-            </label>
-            <button type="button" class="program-secondary" id="programTemplatesBtn">Şablonlar</button>
+        </header>
+        <div class="coach-v15-overview" id="coachV15Overview" aria-label="Seçili öğrencinin haftalık istatistikleri" aria-live="polite"></div>
+        <div class="coach-v15-actions" aria-label="Program işlemleri">
+          <div class="coach-v15-action-heading"><strong>Program işlemleri</strong><span>Çalışmaları düzenle ve haftanı planla</span></div>
+          <div class="program-head-actions coach-v15-action-buttons">
+            <button type="button" class="program-secondary" id="programTemplatesBtn">▤ Şablonlar</button>
             <button type="button" class="program-primary" id="programAddTaskBtn">＋ Çalışma Ekle</button>
             <button type="button" class="program-secondary" id="programAddWeekBtn">▦ Haftaya Toplu Ekle</button>
           </div>
-        </header>
+        </div>
 
         <section class="program-layout">
           <section class="program-workspace">
@@ -235,12 +255,6 @@
                 <span class="program-week-label">HAFTALIK PROGRAM</span>
                 <h2 id="programWorkspaceTitle">Bir öğrenci seç</h2>
                 <small id="programWorkspaceMeta">Öğrencinin programı burada açılacak.</small>
-              </div>
-              <div class="week-nav">
-                <button type="button" id="programPrevWeek" aria-label="Önceki hafta">‹</button>
-                <button type="button" class="week-nav-today" id="programCurrentWeek">Bu hafta</button>
-                <strong id="programWeekLabel">—</strong>
-                <button type="button" id="programNextWeek" aria-label="Sonraki hafta">›</button>
               </div>
             </div>
 
@@ -1226,6 +1240,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.65"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.66"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
 </body>
 </html>
