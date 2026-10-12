@@ -84,7 +84,7 @@ const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
-  closeProgramTaskModal();closeCoachMoveMenu();
+  closeProgramTaskModal();closeCoachVideoPicker();closeCoachMoveMenu();
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
   document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
