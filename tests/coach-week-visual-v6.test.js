@@ -1025,3 +1025,55 @@ test('new video workspace styles stay scoped to modal and preserve the hidden le
   assert.doesNotMatch(css,/#programsPage|\.coach-v14-week/);
   assert.match(old,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
 });
+
+test('completion badges clearly distinguish completed tasks from pending tasks without changing student data',t=>{
+  const h=harness(t),board=h.$('coachVisualWeekBoard');
+  const finished=board.querySelector('[data-program-task-id="s-0-0"]');
+  const pending=board.querySelector('[data-program-task-id="s-1-0"]');
+  assert.equal(finished.getAttribute('data-task-completed'),'true');
+  assert.equal(finished.getAttribute('data-task-status'),'done');
+  assert.match(finished.querySelector('.coach-v27-task-status').textContent,/✓ Tamamlandı/);
+  assert.equal(finished.querySelector('.coach-v27-task-status').classList.contains('is-complete'),true);
+  assert.equal(pending.getAttribute('data-task-completed'),'false');
+  assert.equal(pending.getAttribute('data-task-status'),'pending');
+  assert.match(pending.querySelector('.coach-v27-task-status').textContent,/Bekliyor/);
+  assert.equal(pending.querySelector('.coach-v27-task-status').classList.contains('is-pending'),true);
+  assert.match(board.querySelector('.coach-v6-day[data-day="0"] .coach-v27-day-status').textContent,/2\/3 tamamlandı/);
+  assert.equal(board.querySelectorAll('.coach-v27-task-status').length,5);
+  assert.equal(h.writes.length,0);
+});
+
+test('student finishing task updates visual and classic badges on next sync, but does not send coach actions',t=>{
+  const h=harness(t);
+  const data=h.rows[1].share.program.weeks[0].data;
+  data.dn['s-1-0']=1;
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const monday=h.$('coachVisualWeekBoard').querySelector('.coach-v6-day[data-day="0"]');
+  assert.equal(monday.querySelector('.coach-v27-day-status').getAttribute('data-all-done'),'true');
+  assert.match(monday.querySelector('.coach-v27-day-status').textContent,/Gün tamamlandı/);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v27-task-status.is-complete').length,3);
+  const classic=h.$('programWeekBoard').querySelector('[data-program-task-id="s-1-0"]');
+  assert.equal(classic.getAttribute('data-task-completed'),'true');
+  assert.equal(classic.querySelector('.classic-task-status').dataset.completionStatus,'done');
+  assert.match(classic.querySelector('.classic-task-status').textContent,/Tamamlandı/);
+  // Updating completion is a student data sync, not a coach action or coach-toggled checkbox.
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-coach-mark-done]').length,0);
+  assert.equal(h.writes.length,0);
+  data.dn['s-1-0']=0;
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v27-task-status.is-complete').length,2);
+  assert.equal(h.$('programWeekBoard').querySelector('[data-program-task-id="s-1-0"] .classic-task-status').dataset.completionStatus,'pending');
+  assert.equal(h.writes.length,0);
+});
+
+test('completion styles use a clear green done state without enlarging or clipping task rows',()=>{
+  const css=read('coach-task-completion-v27.css'),html=read('index.html');
+  assert.match(html,/coach-task-completion-v27\.css\?v=1\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70/);
+  assert.match(css,/\.coach-v11-task\[data-task-completed="true"\]/);
+  assert.match(css,/\.coach-v27-task-status\.is-complete/);
+  assert.match(css,/\.coach-v27-task-status\.is-pending/);
+  assert.match(css,/\.coach-v11-task-menu\[open\][\s\S]*grid-row:3/);
+  assert.match(css,/\.classic-task-status\[data-completion-status="done"\]/);
+  assert.doesNotMatch(css,/\.coach-v7-draft|\.program-task-modal|#coachVideoPickerBackdrop/);
+});
