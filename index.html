@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="./programs-v21.css?v=3.5.0">
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.4.1">
   <link rel="stylesheet" href="./reports-v21.css?v=4.1.0">
+  <link rel="stylesheet" href="./coach-reports-v29.css?v=1.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.2.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=3.0.0">
@@ -415,6 +416,13 @@
                 <strong class="report-score" id="reportProgramScore">—</strong>
               </div>
               <div class="report-week-days" id="reportWeekDays"></div>
+            </article>
+
+            <article class="report-card report-v29-program-card">
+              <div class="report-card-head compact">
+                <div><span>GÖREV DETAYI</span><h2>Haftalık görev analizi</h2><p>Ders bazında tamamlanma ve öğrencinin bitirmediği çalışmalar.</p></div>
+              </div>
+              <div id="reportProgramDetails" class="report-v29-detail" aria-live="polite"></div>
             </article>
 
             <article class="report-card report-pp-card">
@@ -1324,6 +1332,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.70"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.70-r29"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
 </html>
