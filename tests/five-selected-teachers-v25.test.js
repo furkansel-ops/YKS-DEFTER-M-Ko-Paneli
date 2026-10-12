@@ -4,19 +4,19 @@ const fs=require('node:fs');
 const path=require('node:path');
 const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 
-test('personal video library includes exactly the five selected YouTube channels',()=>{
+test('personal video library includes the five original channels and three Turkish teachers',()=>{
   const js=read('program-videos-v1.js');
   const block=js.slice(js.indexOf('const TEACHERS=['),js.indexOf('const TOPICS='));
-  for(const name of ['Eyüp B.','3D Yayınları','Ferrum','Biosem','Özcan Aykın']){
+  for(const name of ['Eyüp B.','3D Yayınları','Ferrum','Biosem','Özcan Aykın','Kadir Gümüş','Aker Kartal','Deniz Hoca']){
     assert.ok(block.includes('n:"'+name+'"'),name);
   }
-  assert.equal([...block.matchAll(/\{n:"/g)].length,5,'unrequested teachers must stay hidden');
-  for(const name of ['@EyupB','@3DYayınları','@yferrum','@Biosem','@ÖzcanAykınFİZİK-y2k']){
+  assert.equal([...block.matchAll(/\{n:"/g)].length,8,'only the eight explicitly selected teachers are available');
+  for(const name of ['@EyupB','@3DYayınları','@yferrum','@Biosem','@ÖzcanAykınFİZİK-y2k','@kadirgumustürkçe','@akerkartall','@DenizHoca']){
     assert.ok(block.includes(name),name+' is the channel given by the user');
   }
   assert.match(js,/USER_TEACHERS_FEED="media\/my-teachers-feed.json"/);
   assert.match(js,/teachers-v2-feed.json/,'keep legacy media as a fallback');
-  assert.match(read('index.html'),/program-videos-v1\.js\?v=1\.9\.3/);
+  assert.match(read('index.html'),/program-videos-v1\.js\?v=1\.9\.4/);
 });
 
 test('all public videos are indexed in pages, not silently clipped to 240 or 500',()=>{

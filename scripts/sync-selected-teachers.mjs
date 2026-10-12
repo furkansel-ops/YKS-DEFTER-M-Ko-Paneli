@@ -10,11 +10,34 @@ const FOLDER=resolve(ROOT,"media/my-teachers");
 const PAGE_SIZE=80,CONCURRENT_PLAYLISTS=5;
 const CHANNELS=[
   {name:"Eyüp B.",handle:"@EyupB",id:"UCbv-0vMCnLqwlZXUWoI4a5w",subjects:["Matematik","Geometri"]},
-  {name:"3D Yayınları",handle:"@3DYayınları",id:"",subjects:["Matematik","Geometri","Türkçe","Edebiyat","Fizik","Kimya","Biyoloji","Tarih","Coğrafya","Felsefe","Din Kültürü"]},
+  {name:"3D Yayınları",handle:"@3DYayınları",id:"",subjects:["Matematik","Geometri"]},
   {name:"Ferrum",handle:"@yferrum",id:"UC0yco2kB3xW3WI__8E8HaKw",subjects:["Kimya"]},
   {name:"Biosem",handle:"@Biosem",id:"",subjects:["Biyoloji"]},
-  {name:"Özcan Aykın",handle:"@ÖzcanAykınFİZİK-y2k",id:"UC_IRxSYYyDa4Li9lxAM4xbQ",subjects:["Fizik"]}
+  {name:"Özcan Aykın",handle:"@ÖzcanAykınFİZİK-y2k",id:"UC_IRxSYYyDa4Li9lxAM4xbQ",subjects:["Fizik"]},
+  {name:"Kadir Gümüş",handle:"@kadirgumustürkçe",id:"",subjects:["Türkçe","Edebiyat"]},
+  {name:"Aker Kartal",handle:"@akerkartall",id:"",subjects:["Türkçe","Edebiyat"]},
+  {name:"Deniz Hoca",handle:"@DenizHoca",id:"UC_ke4VQZo9TewOf-p-LSx_Q",subjects:["Türkçe","Edebiyat"]}
 ];
+/* These are grounded public YouTube playlist IDs. Channel tab scans are not
+   exhaustive; including verified YKS lists prevents accidentally omitting
+   complete TYT/AYT courses from a sparse YouTube /playlists response. */
+const PINNED_YKS_PLAYLISTS={
+  "Biosem":[
+    {id:"PLqLwBmByktJWbDXnjbl5CMRrm5nEwMFOg",title:"39 Günde TYT Biyolojiyi Bitir · YKS 2027"}
+  ],
+  "Özcan Aykın":[
+    {id:"PLhhV4F6NB0-uEPdZncMf_qb0tSKyBM-Lf",title:"2027 · 55 Günde TYT Fizik Kampı"},
+    {id:"PLhhV4F6NB0-tU__PwCFhnaK-Gg_I3JG_4",title:"2027 · 88 Günde AYT Fizik Kampı"}
+  ],
+  "Kadir Gümüş":[
+    {id:"PL5kIOunpmSBOJBHFmxRmCCG1BFofMPx2n",title:"TYT Türkçe · Kadir Gümüş · Dil Bilgisi"},
+    {id:"PL5kIOunpmSBPFrbXu7HKrE56gF8gXCw6j",title:"TYT Türkçe · Kadir Gümüş · Kısa Kamp"}
+  ],
+  "Aker Kartal":[
+    {id:"PL5w_hbb3voMkxc2sU0JxNY88-kZ8bVmxq",title:"TYT Türkçe · Aker Kartal"},
+    {id:"PL5w_hbb3voMmqux0of19HHOOcQT4j_Wzg",title:"AYT Edebiyat · Aker Kartal"}
+  ]
+};
 const CHANNEL_TIMEOUT=210000,PLAYLIST_TIMEOUT=65000;
 function idOf(entry){
   const value=String(entry?.id||entry?.url||"");
@@ -28,6 +51,16 @@ function playlistId(entry){
 }
 function validChannelVideo(entry,channel){
   const id=String(entry?.channel_id||entry?.uploader_id||"");
+  const by=String(entry?.channel||entry?.uploader||"").toLocaleLowerCase("tr-TR");
+  // Playlist authors can curate videos from other channels. Keep the Biosem
+  // shelf to Biosem's videos; do not silently misattribute foreign content.
+  if(channel.name==="Biosem"&&by&&!by.includes("biosem"))return false;
+  if(channel.name==="Kadir Gümüş"&&by&&!by.includes("kadir")&&!by.includes("benim hocam")){
+    return false;
+  }
+  if(channel.name==="Aker Kartal"&&by&&!by.includes("aker")&&!by.includes("retro")){
+    return false;
+  }
   return !channel.id||!id||id===channel.id;
 }
 function asVideo(item,channel){
@@ -77,7 +110,9 @@ async function pool(rows,limit,handler){
 }
 function slug(name){
   return {"Eyüp B.":"eyup-b","3D Yayınları":"3d-yayinlari","Ferrum":"ferrum",
-    "Biosem":"biosem","Özcan Aykın":"ozcan-aykin"}[name];
+    "Biosem":"biosem","Özcan Aykın":"ozcan-aykin",
+    "Kadir Gümüş":"kadir-gumus","Aker Kartal":"aker-kartal",
+    "Deniz Hoca":"deniz-hoca"}[name];
 }
 async function snapshot(channel,previous){
   const name=channel.name,handle="https://www.youtube.com/"+encodeURI(channel.handle);
@@ -91,6 +126,11 @@ async function snapshot(channel,previous){
     const response=await ytdlp(primary+"/playlists",CHANNEL_TIMEOUT);
     playlists=unique(safeRows(response).map(asPlaylist));
   }catch(e){errors.push("listeler: "+String(e?.message||e));}
+  // Pin separately verified teacher playlists when YouTube's /playlists page
+  // returns only a few items, including for TYT/AYT physics and biology.
+  playlists=unique([...(PINNED_YKS_PLAYLISTS[name]||[]).map(item=>({
+    ...item,url:"https://www.youtube.com/playlist?list="+item.id
+  })),...playlists]);
   const old=previous?.teachers?.[name];
   const priorIndex=old?.archiveIndex?await readJson(resolve(ROOT,old.archiveIndex)):null;
   // Never replace a previously verified archive with an empty/failed scan.
