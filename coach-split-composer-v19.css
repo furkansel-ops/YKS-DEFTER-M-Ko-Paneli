@@ -1,0 +1,198 @@
+/* v19 · Scoped two-panel coach task composer.
+   The weekly grid and existing student data are untouched. */
+.program-task-backdrop .coach-v19-modal{
+  width:min(1470px,calc(100vw - 32px));
+  max-width:100%;height:min(900px,calc(100dvh - 26px));
+  max-height:calc(100dvh - 16px);
+  display:flex;flex-direction:column;
+  border-radius:17px;overflow:hidden;
+}
+.coach-v19-modal>header{flex:0 0 auto;padding:15px 22px}
+.coach-v19-workbench{
+  display:grid;grid-template-columns:minmax(0,56fr) minmax(0,44fr);
+  flex:1 1 auto;min-width:0;min-height:0;
+  overflow:hidden;background:#fff;
+}
+.coach-v19-left{
+  display:flex;flex-direction:column;
+  min-width:0;min-height:0;overflow:hidden;
+}
+.coach-v19-left>.program-task-body{
+  min-width:0;min-height:0;overflow:auto;
+  overscroll-behavior:contain;
+  display:grid;align-content:start;gap:12px;
+  padding:18px 22px;
+}
+.coach-v19-left>footer{
+  display:flex;gap:8px;align-items:center;
+  flex:0 0 auto;justify-content:flex-end;
+  padding:13px 20px;background:#fff;
+  border-top:1px solid #e7ebf4;
+}
+.coach-v19-left>footer button{
+  min-height:38px;font-size:11px;padding:0 12px;
+}
+.coach-v19-left>footer #programTaskSend{
+  background:#6654ed;border:1px solid #6654ed;
+  border-radius:9px;color:#fff;font-weight:800;
+}
+.coach-v19-left>footer #programTaskDelete{margin-right:auto}
+.coach-v19-video-pane{
+  display:flex;flex-direction:column;gap:0;
+  min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;
+  background:#f8faff;border-left:1px solid #e2e8f4;
+  scrollbar-width:thin;scrollbar-color:#cbd6e8 transparent;
+}
+.coach-v19-pane-intro{
+  display:grid;gap:4px;align-content:start;
+  padding:18px 18px 12px;
+  background:linear-gradient(130deg,#f4f2ff,#f9fbff);
+  border-bottom:1px solid #e4e7f3;
+}
+.coach-v19-pane-intro>span{font-size:9px;letter-spacing:.09em;color:#6d5bdd;font-weight:850}
+.coach-v19-pane-intro>strong{font-size:17px;color:#203250;font-weight:850;letter-spacing:-.025em}
+.coach-v19-pane-intro>small{font-size:11px;line-height:1.4;color:#6a7b96}
+.coach-v19-linked{
+  margin:10px 15px 0;padding:8px 10px;
+  background:#fff;border:1px solid #e0e6f4;
+  border-radius:9px;font-size:10px;line-height:1.5;
+  color:#7988a2;overflow-wrap:anywhere;
+}
+.coach-v19-linked[data-linked="true"]{border-color:#c0e5d5;background:#effaf4;color:#227f5b}
+.coach-v19-video-pane .coach-video-library{
+  display:block;
+  margin:8px 10px 15px;
+  flex:0 0 auto;min-width:0;overflow:visible;
+  box-shadow:none;border:1px solid #e1e8f4;border-radius:12px;
+}
+.coach-v19-video-pane .coach-video-head{display:none}
+.coach-v19-video-pane .coach-video-filters{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;padding:12px;
+  align-items:end;
+}
+.coach-v19-video-pane #coachVideoScope{
+  grid-column:1/-1;justify-self:start;
+}
+.coach-v19-video-pane #coachVideoMode{
+  grid-column:1/-1;width:100%;
+}
+.coach-v19-video-pane .coach-video-seg button{
+  flex:1;font-size:11px;font-weight:800;
+}
+.coach-v19-video-pane .coach-video-filters label{min-width:0}
+.coach-v19-video-pane .coach-video-filters label>span{
+  font-size:10px;letter-spacing:0;margin-bottom:5px;
+}
+.coach-v19-video-pane .coach-video-filters select{
+  width:100%;font-size:11px;font-weight:650;height:35px;
+}
+.coach-v19-video-pane .coach-video-tools{
+  padding:9px 12px;flex-wrap:wrap;
+}
+.coach-v19-video-pane .coach-video-cats{width:100%;min-width:0;gap:4px}
+.coach-v19-video-pane .coach-video-cats button{
+  font-size:10px;min-height:28px;
+}
+.coach-v19-video-pane .coach-video-search{
+  min-width:0;flex:1;height:33px;margin-left:0;
+}
+.coach-v19-video-pane .coach-video-search input{
+  min-width:0;font-size:11px;
+}
+.coach-v19-video-pane .coach-video-refresh{flex:none;font-size:10px}
+.coach-v19-video-pane .coach-video-meta{
+  padding:10px 12px 0;font-size:10px;flex-wrap:wrap;
+}
+.coach-v19-video-pane .coach-video-results{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;padding:10px 12px;
+}
+.coach-v19-video-pane .coach-video-card{min-width:0;box-shadow:0 2px 8px #1228470c}
+.coach-v19-video-pane .coach-video-card-body{padding:10px;gap:4px}
+.coach-v19-video-pane .coach-video-card-body small,
+.coach-v19-video-pane .coach-video-card-body em{font-size:9px}
+.coach-v19-video-pane .coach-video-card-body b{font-size:11px;line-height:1.4}
+.coach-v19-video-pane .coach-video-card-actions{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px;padding:0 7px 8px;
+}
+.coach-v19-video-pane .coach-video-card-actions button{
+  min-height:33px;height:auto;font-size:9px;padding:4px 2px;white-space:normal;
+}
+.coach-v19-video-pane .coach-video-more-row button{font-size:11px}
+.coach-v19-video-pane .coach-playlist-detail-head{
+  grid-column:1/-1;grid-template-columns:1fr;
+  padding:10px;gap:8px;
+}
+.coach-v19-video-pane .coach-playlist-detail-head>button{justify-self:start}
+.coach-v19-video-pane .coach-playlist-detail-actions{flex-wrap:wrap}
+.coach-v19-video-pane .coach-playlist-detail-actions button{
+  min-height:31px;height:auto;
+  border:1px solid #cfc8fa;border-radius:7px;
+  background:#f2efff;color:#5e4acb;
+  padding:5px 8px;font-size:10px;font-weight:780;cursor:pointer;
+}
+.coach-v19-video-pane .coach-playlist-detail-actions a{font-size:10px}
+.coach-v19-video-pane .coach-video-empty{padding:15px;min-height:135px}
+.coach-v19-video-pane .coach-video-empty b{font-size:11px}
+.coach-v19-video-pane .coach-video-empty p{font-size:10px}
+.coach-v19-mobile-tabs{display:none}
+@media(max-width:1250px) and (min-width:911px){
+  .coach-v19-workbench{grid-template-columns:minmax(0,55fr) minmax(0,45fr)}
+  .coach-v19-video-pane .coach-video-results{grid-template-columns:minmax(0,1fr)}
+  .coach-v19-video-pane .coach-video-card{
+    display:grid;grid-template-columns:125px minmax(0,1fr);
+  }
+  .coach-v19-video-pane .coach-video-thumb{grid-row:1/3;height:100%;aspect-ratio:auto}
+  .coach-v19-video-pane .coach-video-card-actions{grid-column:2}
+}
+@media(max-width:910px){
+  .program-task-backdrop .coach-v19-modal{
+    width:calc(100vw - 16px);height:calc(100dvh - 16px);
+    max-height:calc(100dvh - 16px);border-radius:12px;
+  }
+  .coach-v19-modal>header{padding:11px 13px}
+  .coach-v19-workbench{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .coach-v19-mobile-tabs{
+    grid-row:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:5px;padding:7px 10px;background:#fff;
+    border-bottom:1px solid #e6ebf6;
+  }
+  .coach-v19-mobile-tabs button{
+    border:1px solid #dfe4f0;border-radius:9px;
+    padding:9px 7px;background:#fff;color:#60718d;
+    font-size:11px;font-weight:790;cursor:pointer;
+  }
+  .coach-v19-mobile-tabs button[aria-pressed="true"]{
+    border-color:#a9a0f4;background:#f2efff;color:#5b4bd0;
+  }
+  .coach-v19-left,.coach-v19-video-pane{grid-row:2;min-height:0}
+  .coach-v19-workbench[data-active-pane="program"] .coach-v19-video-pane{display:none}
+  .coach-v19-workbench[data-active-pane="videos"] .coach-v19-left{display:none}
+  .coach-v19-left>.program-task-body{padding:12px}
+  .coach-v19-left>footer{padding:9px 11px;flex-wrap:wrap}
+  .coach-v19-left>footer button{flex:1;font-size:10px;min-width:0;padding:0 6px}
+  .coach-v19-left>footer #programTaskDelete{flex:1 1 100%}
+  .coach-v19-video-pane{border-left:0}
+  .coach-v19-video-pane .coach-video-results{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:540px){
+  .coach-v19-video-pane .coach-video-results{grid-template-columns:minmax(0,1fr)}
+  .coach-v19-video-pane .coach-video-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .coach-v19-video-pane .coach-video-card{
+    display:grid;grid-template-columns:118px minmax(0,1fr)
+  }
+  .coach-v19-video-pane .coach-video-thumb{grid-row:1/3;height:100%;aspect-ratio:auto}
+  .coach-v19-video-pane .coach-video-card-actions{grid-column:2;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .coach-v19-video-pane .coach-video-card-actions button.primary{grid-column:1/-1}
+}
+@media(max-width:375px){
+  .coach-v19-video-pane .coach-video-card{
+    display:flex;
+  }
+  .coach-v19-video-pane .coach-video-thumb{aspect-ratio:16/9}
+  .coach-v19-video-pane .coach-video-card-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .coach-v19-video-pane .coach-video-card-actions button.primary{grid-column:auto}
+}
