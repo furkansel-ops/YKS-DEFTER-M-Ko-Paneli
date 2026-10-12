@@ -21,11 +21,33 @@
      not out of source history; new channels can be added intentionally. */
   const TEACHERS=[
     {n:"Eyüp B.",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],id:"UCbv-0vMCnLqwlZXUWoI4a5w",h:"@EyupB"},
-    {n:"3D Yayınları",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)","Türkçe","Edebiyat","Fizik","Fizik (AYT)","Kimya","Kimya (AYT)","Biyoloji","Biyoloji (AYT)","Tarih","Tarih (AYT)","Coğrafya","Coğrafya (AYT)","Felsefe","Din Kültürü"],h:"@3DYayınları"},
+    {n:"3D Yayınları",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],h:"@3DYayınları"},
     {n:"Ferrum",d:["Kimya","Kimya (AYT)"],id:"UC0yco2kB3xW3WI__8E8HaKw",h:"@yferrum"},
     {n:"Biosem",d:["Biyoloji","Biyoloji (AYT)"],h:"@Biosem"},
-    {n:"Özcan Aykın",d:["Fizik","Fizik (AYT)"],id:"UC_IRxSYYyDa4Li9lxAM4xbQ",h:"@ÖzcanAykınFİZİK-y2k"}
+    {n:"Özcan Aykın",d:["Fizik","Fizik (AYT)"],id:"UC_IRxSYYyDa4Li9lxAM4xbQ",h:"@ÖzcanAykınFİZİK-y2k"},
+    {n:"Kadir Gümüş",d:["Türkçe","Edebiyat"],h:"@kadirgumustürkçe"},
+    {n:"Aker Kartal",d:["Türkçe","Edebiyat"],h:"@akerkartall"},
+    {n:"Deniz Hoca",d:["Türkçe","Edebiyat"],id:"UC_ke4VQZo9TewOf-p-LSx_Q",h:"@DenizHoca"}
   ];
+  /* Verified YouTube playlist IDs. A pinned playlist is shown as a genuine
+     YouTube link even when the archive scan fails. Never invent links. */
+  const FEATURED_PLAYLISTS={
+    "Biosem":[
+      {id:"PLqLwBmByktJWbDXnjbl5CMRrm5nEwMFOg",title:"39 Günde TYT Biyolojiyi Bitir · YKS 2027"}
+    ],
+    "Özcan Aykın":[
+      {id:"PLhhV4F6NB0-uEPdZncMf_qb0tSKyBM-Lf",title:"2027 · 55 Günde TYT Fizik Kampı"},
+      {id:"PLhhV4F6NB0-tU__PwCFhnaK-Gg_I3JG_4",title:"2027 · 88 Günde AYT Fizik Kampı"}
+    ],
+    "Kadir Gümüş":[
+      {id:"PL5kIOunpmSBOJBHFmxRmCCG1BFofMPx2n",title:"TYT Türkçe · Kadir Gümüş · Dil Bilgisi"},
+      {id:"PL5kIOunpmSBPFrbXu7HKrE56gF8gXCw6j",title:"TYT Türkçe · Kadir Gümüş · Kısa Kamp"}
+    ],
+    "Aker Kartal":[
+      {id:"PL5w_hbb3voMkxc2sU0JxNY88-kZ8bVmxq",title:"TYT Türkçe · Aker Kartal"},
+      {id:"PL5w_hbb3voMmqux0of19HHOOcQT4j_Wzg",title:"AYT Edebiyat · Aker Kartal"}
+    ]
+  };
 
   const TOPICS={
     "TYT|Türkçe":["Paragraf","Sözcükte Anlam","Cümlede Anlam","Dil Bilgisi","Yazım Kuralları","Noktalama"],
@@ -383,15 +405,38 @@
   }
   async function buildTeacherItems(force=false,loadMore=false){
     const feed=await loadFeed(force),media=teacherMedia(feed,state.teacher);
-    if(!media)throw new Error("Bu hoca canlı medya akışında bulunamadı");
+    if(!media){
+      // Newly added teachers may not have a published scan yet.
+      // Never substitute another teacher's playlist from the legacy feed.
+      if(state.mode==="playlists"&&(FEATURED_PLAYLISTS[state.teacher]||[]).length){
+        state.archive=null;state.hasMore=false;
+        return filtered(FEATURED_PLAYLISTS[state.teacher].map(item=>normalizePlaylist(item,{channelName:state.teacher})).filter(Boolean));
+      }
+      throw new Error("Bu hocanın arşivi yenileniyor; doğrulanmamış başka kanallar gösterilmiyor");
+    }
     let archive=null;
     try{archive=await loadArchive(media,force);}catch(error){console.warn("[coach-video-archive]",error);}
     state.archive=archive;
     if(state.mode==="playlists"){
       const raw=Array.isArray(archive?.meta?.playlists)?archive.meta.playlists:(Array.isArray(media.playlists)?media.playlists:[]);
-      const items=raw.map(item=>normalizePlaylist(item,archive?.meta||media)).filter(Boolean);
+      const featured=FEATURED_PLAYLISTS[state.teacher]||[];
+      const all=dedupe([
+        ...featured.map(item=>normalizePlaylist({...item,url:"https://www.youtube.com/playlist?list="+item.id},archive?.meta||media)),
+        ...raw.map(item=>normalizePlaylist(item,archive?.meta||media))
+      ]);
+      // YKS view: no 9th–11th grade-only or miscellaneous playlists.
+      // Prefer the indexed copy when it holds real playlist videos.
+      const byId=new Map();
+      for(const item of all){
+        if(!item)continue;
+        const existing=byId.get(item.id);
+        if(!existing||item.videos.length>existing.videos.length)byId.set(item.id,item);
+      }
       state.hasMore=false;
-      return filtered(items);
+      return filtered([...byId.values()].filter(item=>
+        /(?:tyt|ayt|yks|\bkamp\b|\bdeneme\b|konu|soru|dil bilgisi)/i.test(item.title)&&
+        !/(?:^|\\s)(?:9\\.?|10\\.?|11\\.?|12\\.?)\\s*s[ıi]n[ıi]f/i.test(item.title)
+      ));
     }
     if(archive&&archive.meta.pages.length){
       const next=nextArchiveIndex(archive);
