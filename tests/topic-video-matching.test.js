@@ -12,7 +12,7 @@ test('Hocalar ve Videolar konu bazlı eşleşme ve öneri bilgisini korur',()=>{
   const app=read('app-reset.js');
   const css=read('program-videos-v1.css');
 
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.2/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.3/);
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
   assert.match(html,/app-reset\.js\?v=1\.0\.69/);
 
@@ -22,7 +22,7 @@ test('Hocalar ve Videolar konu bazlı eşleşme ve öneri bilgisini korur',()=>{
   assert.match(videos,/function rebuildTopics\(\)/);
   assert.match(videos,/function topicTerms\(topic\)/);
   assert.match(videos,/function topicMatches\(title\)/);
-  assert.match(videos,/if\(!topicMatches\(title\)\)return false/);
+  assert.match(videos,/if\(!topicMatches\(playlistText\)\)return false/);
   assert.match(videos,/state\.mode,state\.scope,state\.subject,state\.topic,state\.teacher/);
   assert.match(videos,/topic:compact\(state\.topic\)\.slice\(0,120\)/);
   assert.match(videos,/topic:state\.topic,scope:state\.scope/);
