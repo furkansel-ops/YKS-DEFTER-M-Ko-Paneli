@@ -77,6 +77,8 @@ test("program insights count student completion flags, keep future work pending 
 
 test("report shows real pending tasks and the correct daily chart including empty calendar dates",t=>{
   const h=fixture(t),api=h.w.reportV29Test;
+  h.row.share.progress.minutes7=40;
+  h.row.share.progress.questions7=6;
   h.row.share.progress.daily14=[
     {date:api.date(-10),minutes:80,questions:20},
     {date:api.date(0),minutes:40,questions:6}
