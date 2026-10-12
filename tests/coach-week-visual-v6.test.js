@@ -100,14 +100,16 @@ test('new card edit opens the existing editor and preserves the exact source tas
   assert.equal(h.w.coachV6Test.context().edit.taskId,'s-0-1');
   assert.equal(h.writes.length,0);
 });
-test('each + Ekle opens the compact inline draft for that day, without opening the old modal',t=>{
+test('one-click day + Ekle shows only a tiny inline editor, not the long form or old modal',t=>{
   const h=harness(t),root=h.$('coachVisualWeekBoard');
   assert.equal(root.querySelector('[data-v9-toggle]').getAttribute('aria-expanded'),'false');
   assert.equal(h.$('coachV7InlineForm').hidden,true);
+  assert.equal(root.querySelector('[data-v10-inline="4"]').hidden,true);
   root.querySelector('[data-coach-add-day="4"]').click();
-  assert.equal(h.$('coachV7InlineForm').hidden,false);
-  assert.equal(h.$('coachVisualWeekBoard').querySelector('[data-v7-pick-day="4"]').getAttribute('aria-pressed'),'true');
-  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-v7-pick-day][aria-pressed="true"]').length,1);
+  assert.equal(root.querySelector('[data-v10-inline="4"]').hidden,false);
+  assert.equal(root.querySelectorAll('[data-v10-inline]:not([hidden])').length,1);
+  assert.equal(root.querySelector('[data-coach-add-day="4"]').getAttribute('aria-expanded'),'true');
+  assert.equal(h.$('coachV7InlineForm').hidden,true);
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true);
   assert.equal(h.writes.length,0);
 });
@@ -394,4 +396,115 @@ test('existing-task move to a full day grows an extra row without overwriting ot
   for(let i=0;i<3;i++)assert.equal(weekData.s[i][4],'Yerinde kalacak '+i);
   assert.equal(weekData.s[3][4],'AYT Matematik · Fonksiyonlar');
   assert.equal(h.$('programWeekBoard').querySelector('[data-program-task-id="s-3-4"]')!==null,true);
+});
+
+
+function v10DayOpen(h,day){
+  h.$('coachVisualWeekBoard').querySelector('[data-coach-add-day="'+day+'"]').click();
+  return h.$('coachVisualWeekBoard').querySelector('[data-v10-inline="'+day+'"]');
+}
+function v10DayType(h,day,value,enter=true){
+  const node=h.$('coachVisualWeekBoard').querySelector('[data-v10-input="'+day+'"]');
+  node.value=value;
+  if(enter)node.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+}
+test('v10 one-field quick entry supports repeated Enter, grows a single day and never sends to student',t=>{
+  const h=harness(t);
+  v10DayOpen(h,3);
+  v10DayType(h,3,'TYT Matematik · Problemler · 25 soru');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(h.$('coachVisualWeekBoard').querySelector('[data-v10-inline="3"]').hidden,false);
+  assert.equal(h.$('coachVisualWeekBoard').querySelector('[data-v10-input="3"]').value,'');
+  v10DayType(h,3,'TYT Kimya · Atom · 30 soru');
+  const root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelectorAll('.coach-v7-draft').length,2);
+  assert.equal(root.querySelector('.coach-v6-day[data-day="3"]').querySelectorAll('.coach-v7-draft').length,2);
+  assert.equal(root.querySelector('[data-v10-inline="3"]').hidden,false);
+  assert.match(root.querySelector('[data-v7-send]').textContent,/2/);
+  assert.equal(h.writes.length,0);
+});
+test('v10 day presets fill the lesson, editable topic and enter save without duplicate dialogs',t=>{
+  const h=harness(t),part=v10DayOpen(h,2);
+  const select=part.querySelector('[data-v10-subject="2"]');
+  select.value='math|AYT';
+  select.dispatchEvent(new h.w.Event('change',{bubbles:true}));
+  assert.equal(part.querySelector('[data-v10-input="2"]').value,'AYT Matematik · Problemler · 30 soru');
+  v10DayType(h,2,'AYT Matematik · Fonksiyonlar · 20 soru');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,1);
+  assert.match(h.$('coachVisualWeekBoard').querySelector('.coach-v7-draft').textContent,/Fonksiyonlar/);
+  assert.equal(h.writes.length,0);
+});
+test('v10 day editor can switch target day and escape without touching the draft',t=>{
+  const h=harness(t);
+  v10DayOpen(h,5);
+  v10DayOpen(h,0);
+  assert.equal(h.$('coachVisualWeekBoard').querySelector('[data-v10-inline="5"]').hidden,true);
+  const input=h.$('coachVisualWeekBoard').querySelector('[data-v10-input="0"]');
+  input.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-v10-inline]:not([hidden])').length,0);
+  assert.equal(h.writes.length,0);
+});
+test('v10 seven-day paste adds mixed counts atomically with correct day and no Firestore writes',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  assert.equal(h.$('coachV10Bulk').hidden,true);
+  root.querySelector('[data-v10-bulk-toggle]').click();
+  assert.equal(h.$('coachV10Bulk').hidden,false);
+  root.querySelector('[data-v10-bulk-day="0"]').value='TYT Matematik · Problemler\nParagraf · 20 soru';
+  root.querySelector('[data-v10-bulk-day="3"]').value='\nAYT Biyoloji · Sinir Sistemi\n\n';
+  root.querySelector('[data-v10-bulk-day="6"]').value='Deneme analizi';
+  root.querySelector('[data-v10-bulk-add]').click();
+  const result=h.$('coachVisualWeekBoard');
+  assert.equal(result.querySelectorAll('.coach-v7-draft').length,4);
+  assert.equal(result.querySelector('.coach-v6-day[data-day="0"]').querySelectorAll('.coach-v7-draft').length,2);
+  assert.equal(result.querySelector('.coach-v6-day[data-day="3"]').querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(result.querySelector('.coach-v6-day[data-day="6"]').querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(h.$('coachV10Bulk').hidden,true);
+  assert.match(result.querySelector('#coachV7DraftStatus').textContent,/4 çalışma taslağa eklendi/);
+  assert.equal(h.writes.length,0);
+});
+test('v10 bulk validation is all-or-nothing; preserves text and never sends malformed work',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  root.querySelector('[data-v10-bulk-toggle]').click();
+  root.querySelector('[data-v10-bulk-day="0"]').value='Matematik · Problemler';
+  root.querySelector('[data-v10-bulk-day="1"]').value='x'.repeat(551);
+  root.querySelector('[data-v10-bulk-add]').click();
+  assert.equal(root.querySelectorAll('.coach-v7-draft').length,0);
+  assert.match(root.querySelector('[data-v10-bulk-error]').textContent,/550 karakter/);
+  assert.equal(root.querySelector('[data-v10-bulk-day="0"]').value,'Matematik · Problemler');
+  assert.equal(h.writes.length,0);
+  root.querySelector('[data-v10-bulk-day="1"]').value='Fizik · Hareket';
+  root.querySelector('[data-v10-bulk-add]').click();
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,2);
+});
+test('v10 bulk input handles more than the former 100 task cap and retains each record',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard');
+  root.querySelector('[data-v10-bulk-toggle]').click();
+  root.querySelector('[data-v10-bulk-day="2"]').value=Array.from({length:120},(_,i)=>'TYT Matematik · Tekrar '+(i+1)).join('\n');
+  root.querySelector('[data-v10-bulk-add]').click();
+  const board=h.$('coachVisualWeekBoard');
+  assert.equal(board.querySelectorAll('.coach-v7-draft').length,120);
+  assert.match(board.querySelector('[data-v7-send]').textContent,/120/);
+  assert.equal(h.writes.length,0);
+});
+test('v10 per-day draft stays bound to the selected student and week',t=>{
+  const h=harness(t);
+  v10DayOpen(h,1);
+  v10DayType(h,1,'TYT Fizik · Kuvvet');
+  h.w.coachV6Test.seed(h.rows,'student-a',week);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,0);
+  h.w.coachV6Test.seed(h.rows,'student-b','2026-10-12');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,0);
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(h.writes.length,0);
+});
+test('v10 quick-entry text escapes markup and does not create active DOM scripts',t=>{
+  const h=harness(t);
+  v10DayOpen(h,1);
+  v10DayType(h,1,'Fizik · <img src=x onerror="window.hacked=true">');
+  const root=h.$('coachVisualWeekBoard');
+  assert.equal(root.querySelector('.coach-v7-draft img'),null);
+  assert.match(root.querySelector('.coach-v7-draft').textContent,/<img/);
+  assert.equal(h.w.hacked,undefined);
+  assert.equal(h.writes.length,0);
 });
