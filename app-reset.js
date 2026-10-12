@@ -2403,9 +2403,39 @@ function coachSetWeekView(view){
 $("coachWeekClassicMode")?.addEventListener("click",()=>coachSetWeekView("classic"));
 $("coachWeekVisualMode")?.addEventListener("click",()=>coachSetWeekView("visual"));
 
+/* Preview upper region v15. Does not modify or rearrange any weekly table data.
+   All displayed numbers are derived from the selected student's selected week. */
+function coachV15RenderTop(row,program,week){
+  const host=$("coachV15Overview"),subtitle=$("coachV15Subtitle");
+  if(!host)return;
+  if(!row||!week){
+    host.innerHTML='<div class="coach-v15-empty"><span aria-hidden="true">▦</span><div><strong>Haftalık özet hazır</strong><small>Öğrenci seçildiğinde gerçek program verileri burada görünecek.</small></div></div>';
+    if(subtitle)subtitle.textContent="Öğrencinin haftalık programını oluştur, düzenle ve gönder.";
+    return;
+  }
+  const stats=coachV6WeekStats(program,week);
+  if(subtitle)subtitle.textContent=studentName(row)+" · Haftalık planı görüntüle, düzenle ve gönder.";
+  const prev=programWeeks(row).find(w=>w.week===shiftProgramWeek(week.week,-1));
+  const oldCount=prev?coachV6WeekStats(program,prev).total:null;
+  const difference=oldCount===null?"Bu haftanın planlanan çalışmaları":
+    (stats.total===oldCount?"Geçen haftayla aynı":
+    ((stats.total>oldCount?"+":"")+String(stats.total-oldCount)+" geçen haftaya göre"));
+  const metric=(key,icon,label,value,detail,extra="")=>
+    '<article class="coach-v15-stat" data-coach-summary="'+key+'"><span class="coach-v15-stat-icon '+key+'" aria-hidden="true">'+icon+'</span>'
+    +'<div class="coach-v15-stat-body"><span class="coach-v15-stat-label">'+label+'</span><strong>'+value+'</strong><small>'+detail+'</small></div>'+extra+'</article>';
+  const icon=key=>coachV6Symbol(key);
+  const ring='<span class="coach-v15-progress-ring" role="img" aria-label="'+stats.percent+'% tamamlandı" style="--coach-v15-percent:'+stats.percent+'%"></span>';
+  host.innerHTML=
+    metric("total",icon("exam"),"Toplam Görev",stats.total,escHtml(difference))
+    +metric("progress",icon("routine"),"Haftalık İlerleme",stats.percent+"%",stats.done+" / "+stats.total+" görev",ring)
+    +metric("subjects",icon("biology"),"Ders Çeşidi",stats.subjects,"Farklı ders grubu")
+    +metric("average",icon("math"),"Ortalama Günlük",String(stats.average).replace(".",","),"görev / gün");
+}
+
 function renderProgramWorkspace(){
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),board=$("programWeekBoard"),visual=$("coachVisualWeekBoard"),empty=$("programMainEmpty");
   if(!row){
+    coachV15RenderTop(null,null,null);
     if($("programWorkspaceTitle"))$("programWorkspaceTitle").textContent="Bir öğrenci seç";
     if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent="Öğrencinin programı burada açılacak.";
     if($("programWeekLabel"))$("programWeekLabel").textContent="—";
@@ -2415,6 +2445,7 @@ function renderProgramWorkspace(){
     empty?.classList.remove("hidden");return;
   }
   const program=row.share?.program||{},weeks=programWeeks(row),week=activeProgramWeek(row);
+  coachV15RenderTop(row,program,week);
   if($("programWorkspaceTitle"))$("programWorkspaceTitle").textContent=studentName(row);
   if($("programWorkspaceMeta"))$("programWorkspaceMeta").textContent=weeks.length?weeks.length+" kayıtlı hafta · rutinler ve ders programı":"Henüz kayıtlı hafta yok · istediğin tarihe çalışma ekleyebilirsin";
   if($("programWeekLabel"))$("programWeekLabel").textContent=formatProgramWeek(week.week);
