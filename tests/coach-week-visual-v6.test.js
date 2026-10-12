@@ -264,12 +264,17 @@ test('v7 draggable draft changes day locally; existing task drop uses confirmed 
   assert.equal(h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"]'),null);
   assert.ok(h.$('programWeekBoard').querySelector('[data-program-task-id="s-0-6"]'));
 });
-test('v7 existing task with an explicit start time shows a real time badge; old tasks stay unscheduled',t=>{
+test('v12 keeps recorded lesson times for editing but hides the clock in the weekly table',t=>{
   const h=harness(t),row=h.rows[1];
   row.share.program.weeks[0].data.s[0][1]='AYT Matematik · Fonksiyonlar · Saat 11:35';
   h.w.coachV6Test.seed(h.rows,'student-b',week);
-  assert.match(h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"] .coach-v7-time-badge').textContent,/11:35/);
-  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-time-badge').length,1);
+  const card=h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"]');
+  assert.ok(card);
+  assert.doesNotMatch(card.textContent,/11:35|Saat /);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-time-badge').length,0);
+  card.querySelector('[data-program-edit]').click();
+  assert.equal(h.$('programTaskText').value,'AYT Matematik · Fonksiyonlar · Saat 11:35');
+  assert.equal(h.writes.length,0);
 });
 
 
@@ -514,90 +519,120 @@ test('v10 quick-entry text escapes markup and does not create active DOM scripts
 });
 
 
-test('v11 weekly preview renders a real shared time axis, seven aligned days and one add slot per day',t=>{
-  const h=harness(t),root=h.$('coachVisualWeekBoard');
-  const table=root.querySelector('.coach-v11-week-table');
-  assert.ok(table,'the screenshot-style timetable is mounted');
+test('v12 weekly table has seven moderate-size day columns with no clock axis',t=>{
+  const h=harness(t),table=h.$('coachVisualWeekBoard').querySelector('.coach-v12-week-table');
+  assert.ok(table);
   assert.equal(table.dataset.layout,'week');
-  assert.equal(table.querySelectorAll('.coach-v11-time-hour').length,13);
-  assert.equal(table.querySelector('.coach-v11-time-hour').textContent,'09:00');
-  assert.equal(table.querySelectorAll('.coach-v6-day').length,7);
-  assert.equal(table.querySelectorAll('.coach-v11-hour-slot').length,7*13);
+  assert.equal(table.querySelectorAll('.coach-v11-time-rail,.coach-v11-time-hour,.coach-v11-hour-slot').length,0);
+  assert.equal(table.querySelectorAll('.coach-v11-day').length,7);
+  assert.equal(table.querySelectorAll('.coach-v12-card-stack').length,7);
   assert.equal(table.querySelectorAll('.coach-v6-add-day').length,7);
   assert.equal(table.querySelectorAll('.coach-v11-task').length,5);
   assert.equal(table.querySelectorAll('.coach-v11-task-menu').length,5);
   assert.equal(table.querySelectorAll('[data-program-edit]').length,5);
   assert.equal(table.querySelectorAll('[data-program-select]').length,5);
-  assert.equal(table.dataset.hasUntimed,'true');
-  assert.ok(root.querySelector('.coach-v11-unscheduled:not([hidden])'));
+  assert.doesNotMatch(table.textContent,/Saati yok|\b09:00\b|\b21:00\b/);
   assert.equal(h.writes.length,0);
 });
-test('v11 original studies without explicit time stay in an honest unscheduled lane',t=>{
-  const h=harness(t),root=h.$('coachVisualWeekBoard');
-  assert.ok(root.querySelector('.coach-v11-time-untimed'));
-  assert.equal(root.querySelector('.coach-v11-time-untimed').textContent,'Saati yok');
-  assert.equal(root.querySelectorAll('.coach-v11-unscheduled .coach-v11-task').length,5);
-  assert.equal(root.querySelectorAll('.coach-v11-hour-slot .coach-v11-task').length,0);
-  assert.equal(root.querySelectorAll('.coach-v11-time-hour').length,13);
+
+test('v12 keeps all tasks for each day, in their own scrollable stack with stable task identities',t=>{
+  const h=harness(t),root=h.$('coachVisualWeekBoard'),table=root.querySelector('.coach-v12-week-table');
+  assert.equal(table.querySelectorAll('[data-task-count]').length,7);
+  assert.equal(table.querySelector('[data-program-task-id="s-0-1"]').dataset.programTaskDay,'1');
+  assert.equal(table.querySelector('.coach-v11-day[data-day="0"] .coach-v12-card-stack').dataset.taskCount,'3');
+  assert.equal(table.querySelector('.coach-v11-day[data-day="1"] .coach-v12-card-stack').dataset.taskCount,'1');
+  assert.equal(table.querySelector('.coach-v11-day[data-day="3"] .coach-v12-card-stack').dataset.taskCount,'1');
+  assert.equal(table.querySelectorAll('.coach-v11-day .coach-v11-day-footer').length,7);
+  assert.equal(h.$('programWeekBoard').querySelector('.student-program-scroller')!==null,true);
+  assert.equal(h.writes.length,0);
 });
-test('v11 real hour and minutes display in only the correct day-hour slot',t=>{
+
+test('v12 tasks with 06:45, 11:05 and 23:20 keep their correct dates but show no clock labels',t=>{
   const h=harness(t),raw=h.rows[1].share.program.weeks[0].data;
   raw.s[0][1]='AYT Matematik · Fonksiyonlar · Saat 11:35';
-  raw.s[1][0]='TYT Fizik · Hareket · Saat 11:05';
+  raw.s[1][0]='TYT Fizik · Hareket · Saat 23:20';
   raw.s[2][3]='TYT Biyoloji · Hücre · Saat 06:45';
   h.w.coachV6Test.seed(h.rows,'student-b',week);
-  const root=h.$('coachVisualWeekBoard'),table=root.querySelector('.coach-v11-week-table');
-  const dated=table.querySelector('.coach-v6-day[data-day="1"] .coach-v11-hour-slot[data-hour="11"]');
-  assert.equal(dated.querySelector('[data-program-task-id="s-0-1"]').dataset.subject,'math');
-  assert.match(dated.textContent,/11:35/);
-  assert.equal(table.querySelector('.coach-v6-day[data-day="0"] .coach-v11-hour-slot[data-hour="11"] [data-program-task-id="s-1-0"]').dataset.subject,'physics');
-  assert.ok(table.querySelector('.coach-v6-day[data-day="3"] .coach-v11-hour-slot[data-hour="06"] [data-program-task-id="s-2-3"]'));
-  assert.equal(table.querySelector('.coach-v11-time-hour').textContent,'06:00');
+  const table=h.$('coachVisualWeekBoard').querySelector('.coach-v12-week-table');
+  assert.equal(table.querySelector('.coach-v11-day[data-day="1"] [data-program-task-id="s-0-1"]').dataset.subject,'math');
+  assert.equal(table.querySelector('.coach-v11-day[data-day="0"] [data-program-task-id="s-1-0"]').dataset.subject,'physics');
+  assert.equal(table.querySelector('.coach-v11-day[data-day="3"] [data-program-task-id="s-2-3"]').dataset.subject,'biology');
   assert.equal(table.querySelectorAll('.coach-v11-task').length,5);
+  assert.doesNotMatch(table.textContent,/11:35|23:20|06:45|Saat /);
+  assert.equal(raw.s[0][1],'AYT Matematik · Fonksiyonlar · Saat 11:35');
   assert.equal(h.writes.length,0);
 });
-test('v11 draft card with entered time goes into a real hour, without sending the draft',t=>{
+
+test('v12 time-stamped local draft stays in its chosen day as a normal compact card',t=>{
   const h=harness(t);
   v7Add(h,'TYT Kimya · Atom',{time:'10:45',days:[3]});
-  const root=h.$('coachVisualWeekBoard');
-  assert.ok(root.querySelector('.coach-v6-day[data-day="3"] .coach-v11-hour-slot[data-hour="10"] .coach-v7-draft'));
-  assert.equal(root.querySelector('.coach-v6-day[data-day="3"] .coach-v11-unscheduled .coach-v7-draft'),null);
+  const root=h.$('coachVisualWeekBoard'),day=root.querySelector('.coach-v11-day[data-day="3"]');
+  const card=day.querySelector('.coach-v12-card-stack .coach-v7-draft');
+  assert.ok(card);
+  assert.equal(root.querySelectorAll('.coach-v7-draft').length,1);
+  assert.equal(card.querySelector('[data-v7-edit]')!==null,true);
   assert.equal(h.writes.length,0);
+  assert.match(read('coach-week-preview-table-v11.css'),/\.coach-v12-week-table \.coach-v7-draft-main em/);
 });
-test('v11 preview task action menu retains existing edit and move behavior',t=>{
+
+test('v12 expanding the task action menu leaves edit and move controls working',t=>{
   const h=harness(t),root=h.$('coachVisualWeekBoard');
   const card=root.querySelector('[data-program-task-id="s-0-1"]');
   assert.ok(card.querySelector('summary'));
   card.querySelector('summary').click();
   assert.equal(card.querySelector('details').open,true);
+  assert.ok(card.querySelector('[data-program-edit]'));
+  assert.ok(card.querySelector('[data-program-select]'));
   card.querySelector('[data-program-edit]').click();
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
   assert.equal(h.$('programTaskText').value,'AYT Matematik · Fonksiyonlar');
   assert.equal(h.writes.length,0);
 });
-test('v11 week/list and adjustable width only affect the table, not the sidebar or drafts',t=>{
+
+test('v12 week/list and width controls change only weekly table presentation',t=>{
   const h=harness(t),root=h.$('coachVisualWeekBoard');
-  const table=root.querySelector('.coach-v11-week-table');
-  const wide=root.querySelector('[data-v11-width]');
+  const table=root.querySelector('.coach-v12-week-table'),wide=root.querySelector('[data-v11-width]');
   assert.equal(wide.getAttribute('aria-pressed'),'false');
-  wide.click();
-  assert.equal(table.dataset.density,'wide');
+  wide.click();assert.equal(table.dataset.density,'wide');
   root.querySelector('[data-coach-v6-layout="list"]').click();
   assert.equal(table.dataset.layout,'list');
   root.querySelector('[data-coach-v6-layout="week"]').click();
   assert.equal(table.dataset.layout,'week');
   assert.equal(table.querySelectorAll('.coach-v11-day').length,7);
-  assert.equal(h.$('programWeekBoard').querySelector('.student-program-scroller')!==null,true);
+  assert.ok(h.$('programWeekBoard').querySelector('.student-program-scroller'));
   assert.ok(h.$('coachV7DraftText'));
   assert.equal(h.writes.length,0);
 });
-test('v11 CSS is scoped to the weekly table and does not restyle other panel screens',t=>{
+
+test('v12 135 lessons remain available on one day without page-stretching rows or lost tasks',t=>{
+  const h=harness(t);
+  const key='yks-coach-week-draft-v7:coach-test|student-b|2026-10-05';
+  const many=Array.from({length:135},(_,i)=>({
+    id:'lesson-'+i,day:1,text:'AYT Fizik · Çalışma '+i,time:'',url:''
+  }));
+  h.w.sessionStorage.setItem(key,JSON.stringify(many));
+  h.w.coachV6Test.dropDraftCache('student-b',week);
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const table=h.$('coachVisualWeekBoard').querySelector('.coach-v12-week-table');
+  assert.equal(table.querySelectorAll('.coach-v7-draft').length,135);
+  assert.equal(table.querySelector('.coach-v11-day[data-day="1"] .coach-v12-card-stack').dataset.taskCount,'136');
+  assert.ok(table.querySelector('.coach-v11-day[data-day="1"] .coach-v6-add-day'));
+  assert.equal(h.writes.length,0);
+});
+
+test('v12 visual CSS keeps cards in normal flow, fixed table height and scrollable day content',t=>{
   const css=read('coach-week-preview-table-v11.css');
-  assert.match(read('index.html'),/coach-week-preview-table-v11\.css\?v=1\.0\.0/);
-  assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v11-week-table/);
-  assert.match(css,/grid-template-rows:subgrid/);
-  assert.match(css,/grid-template-columns:50px repeat\(7,minmax\(151px,1fr\)\)/);
-  assert.match(css,/\.coach-v11-task-menu/);
-  assert.match(css,/\.coach-v11-task\[data-subject="biology"\]/);
+  assert.match(read('index.html'),/coach-week-preview-table-v11\.css\?v=1\.0\.1/);
+  assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v12-week-table/);
+  assert.match(css,/grid-template-columns:repeat\(7,minmax\(166px,1fr\)\)/);
+  assert.match(css,/height:388px/);
+  assert.match(css,/height:355px/);
+  assert.match(css,/\.coach-v12-card-stack\{/);
+  assert.match(css,/overflow-y:auto/);
+  assert.match(css,/grid-auto-rows:max-content/);
+  assert.match(css,/\.coach-v11-task-menu\[open\]/);
+  assert.match(css,/position:static/);
+  assert.match(css,/min-height:64px/);
+  assert.doesNotMatch(css,/subgrid|coach-v11-time-rail|grid-row:1\/-1/);
   assert.doesNotMatch(css,/dashboardFlow|messagesPage|settingsPage/);
 });
