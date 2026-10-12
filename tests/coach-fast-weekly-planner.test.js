@@ -56,7 +56,7 @@ test('planner is mounted without replacing the original classic week table',t=>{
   assert.ok(h.$('programTaskDayGrid'));
   assert.ok(h.$('programWeekBoard').querySelector('.student-program-scroller'));
   assert.match(read('index.html'),/coach-fast-planner\.css\?v=1\.0\.0/);
-  assert.match(read('index.html'),/app-reset\.js\?v=1\.0\.60/);
+  assert.match(read('index.html'),/app-reset\.js\?v=1\.0\.61/);
   assert.equal(h.writes.length,0);
 });
 test('normal mode picks one day; changing the date moves day selector to another week',async t=>{
