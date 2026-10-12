@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="./coach-table-only-v16.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-table-fit-v17.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-lesson-composer-v18.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-split-composer-v19.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -1208,11 +1209,17 @@
   </div>
 
   <div class="program-task-backdrop hidden" id="programTaskBackdrop" aria-hidden="true">
-    <section class="program-task-modal program-builder-modal program-classic-modal coach-v18-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
+    <section class="program-task-modal program-builder-modal program-classic-modal coach-v18-modal coach-v19-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
       <header>
         <div><span>PROGRAM HAZIRLA</span><h2 id="programTaskTitle" tabindex="-1">Çalışma ekle</h2><p id="programTaskStudentName">Önce bir öğrenci seç.</p></div>
         <button type="button" id="programTaskClose" aria-label="Kapat">×</button>
       </header>
+      <div class="coach-v19-workbench" id="coachV19Workbench" data-active-pane="program">
+      <nav class="coach-v19-mobile-tabs" aria-label="Çalışma ekleme sekmeleri">
+        <button type="button" id="coachV19ShowEditor" aria-pressed="true">Program Hazırla</button>
+        <button type="button" id="coachV19ShowVideos" aria-pressed="false">Hocalar &amp; Videolar</button>
+      </nav>
+      <div class="coach-v19-left">
       <div class="program-task-body">
         <section class="coach-v18-builder" aria-labelledby="coachV18Heading">
           <div class="coach-v18-heading">
@@ -1281,9 +1288,15 @@
         <button type="button" class="program-task-draft" id="programTaskAddDraft">Önce Taslağa Ekle</button>
         <button type="button" class="program-task-send" id="programTaskSend">Programa ekle</button>
       </footer>
+      </div>
+      <aside class="coach-v19-video-pane" id="coachV19VideoPane" aria-label="Hocalar ve videolar">
+        <div class="coach-v19-pane-intro"><span>VİDEO KÜTÜPHANESİ</span><strong>Hocalar &amp; Videolar</strong><small>Bir kaynak seçip soldaki göreve bağla. Görev gönderilene kadar öğrenciye iletilmez.</small></div>
+        <div class="coach-v19-linked" id="coachV19Linked" role="status" aria-live="polite">Henüz video seçilmedi.</div>
+      </aside>
+      </div>
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.67"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.68"></script><script defer src="./program-videos-v1.js?v=1.9.0"></script>
 </body>
 </html>

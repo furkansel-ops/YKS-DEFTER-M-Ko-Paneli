@@ -2520,7 +2520,61 @@ function coachV18SetLevel(level){
   $("coachV8ModalPicker")?.querySelectorAll("[data-v8-level]").forEach(button=>
     button.setAttribute("aria-pressed",String(button.dataset.v8Level===selected)));
   coachV18Topics();
+  coachV19SyncVideoFilters();
 }
+/* Linked media is an unsent form selection, never a coachingAction itself. */
+function coachV19SyncVideoFilters(){
+  if($("programTaskBackdrop")?.classList.contains("hidden"))return;
+  window.dispatchEvent(new CustomEvent("yks:coach-video-filters",{detail:{
+    scope:coachV8Levels.modal,
+    subject:$("programBuilderSubject")?.value||"",
+    topic:String($("programBuilderTopic")?.value||"").trim()
+  }}));
+}
+function coachV19ShowPane(pane="program"){
+  const mode=pane==="videos"?"videos":"program",root=$("coachV19Workbench");
+  if(root)root.dataset.activePane=mode;
+  $("coachV19ShowEditor")?.setAttribute("aria-pressed",String(mode==="program"));
+  $("coachV19ShowVideos")?.setAttribute("aria-pressed",String(mode==="videos"));
+}
+$("coachV19ShowEditor")?.addEventListener("click",()=>coachV19ShowPane("program"));
+$("coachV19ShowVideos")?.addEventListener("click",()=>coachV19ShowPane("videos"));
+function coachV19LinkStatus(title=""){
+  const node=$("coachV19Linked");if(!node)return;
+  const video=String($("programTaskVideo")?.value||"").trim();
+  node.textContent=video?(title?"Seçilen kaynak: "+title:"Video bağlantısı göreve bağlandı."):"Henüz video seçilmedi.";
+  node.dataset.linked=String(Boolean(video));
+}
+window.addEventListener("yks:coach-video-attach",event=>{
+  const detail=event.detail||{},modal=$("programTaskBackdrop");
+  if(!modal||modal.classList.contains("hidden")||!coachProgramModalStudentUid||
+     coachProgramModalStudentUid!==selectedProgramStudentUid)return;
+  const url=String(detail.url||"").trim();
+  let parsed;
+  try{parsed=new URL(url)}catch{setProgramTaskStatus("Seçilen video bağlantısı geçersiz.","error");return}
+  if(!["https:","http:"].includes(parsed.protocol)||!parsed.hostname||url.length>500){
+    setProgramTaskStatus("Video adresi en fazla 500 karakterlik bir http/https bağlantısı olmalı.","error");return;
+  }
+  const video=$("programTaskVideo"),input=$("programTaskText");
+  if(!video||!input)return;
+  if(!input.value.trim()){
+    const subject=$("programBuilderSubject"),name=String(detail.subject||"");
+    if(!coachProgramEditContext&&subject&&Array.from(subject.options).some(o=>o.value===name)){
+      subject.value=name;coachV18SetLevel(detail.scope==="AYT"?"AYT":"TYT");
+    }
+    const description=[detail.scope==="AYT"?"AYT":"TYT",name].filter(Boolean).join(" ");
+    const title=String(detail.title||"Video izle").replace(/\s+/g," ").trim();
+    const label=(description?description+" · ":"")+(detail.kind==="playlist"?"Oynatma listesi":"Video izle")+
+      " · "+title;
+    input.value=label.slice(0,Math.max(20,600-url.length-3));
+    coachV18LastAutoText=input.value;
+    input.dispatchEvent(new Event("input",{bubbles:true}));
+  }
+  video.value=url;video.dispatchEvent(new Event("input",{bubbles:true}));
+  coachV19LinkStatus(String(detail.title||""));
+  coachV19ShowPane("program");
+  setProgramTaskStatus("Video bağlantısı eklendi. Görev, yalnız 'Görevi gönder' ile öğrenciye iletilir.","success");
+});
 function coachV18Topics(){
   const list=$("programBuilderTopicSuggestions");if(!list)return;
   list.replaceChildren();
@@ -2586,9 +2640,10 @@ function coachV18ReflectPreset(id,level,text){
 }
 $("programBuilderLevel")?.querySelectorAll("[data-plan-level]").forEach(button=>
   button.addEventListener("click",()=>{coachV18SetLevel(button.dataset.planLevel);coachV18Apply()}));
-$("programBuilderSubject")?.addEventListener("change",()=>{coachV18Topics();coachV18Apply()});
+$("programBuilderSubject")?.addEventListener("change",()=>{coachV18Topics();coachV18Apply();coachV19SyncVideoFilters()});
 ["programBuilderTopic","programBuilderActivity","programBuilderCount"].forEach(id=>
   $(id)?.addEventListener("input",()=>coachV18Apply()));
+$("programBuilderTopic")?.addEventListener("change",coachV19SyncVideoFilters);
 $("programBuilderApply")?.addEventListener("click",()=>coachV18Apply(true));
 
 function coachProgramTaskText(){return String($("programTaskText")?.value||"").trim()}
@@ -2684,11 +2739,20 @@ function openProgramTaskModal(prefill="",options={}){
   coachV18Reset();
   if($("programTaskTitle"))$("programTaskTitle").textContent=edit?"Çalışmayı düzenle":"Çalışma ekle";
   if($("programTaskStatus")){$("programTaskStatus").className="program-task-status hidden";$("programTaskStatus").textContent=""}updateCoachProgramBuilder();
+  coachV19LinkStatus();
+  coachV19ShowPane("program");
+  window.dispatchEvent(new CustomEvent("yks:coach-program-editor-open",{detail:{
+    edit,scope:coachV8Levels.modal,
+    subject:$("programBuilderSubject")?.value||"",
+    topic:$("programBuilderTopic")?.value||""
+  }}));
   const body=$("programTaskBackdrop")?.querySelector(".program-task-body");if(body)body.scrollTop=0;
   $("programTaskTitle")?.focus({preventScroll:true});
 }
 function closeProgramTaskModal(){coachProgramEditContext=null;
   coachProgramModalStudentUid="";coachWeeklySelectedDates.clear();coachWeeklyDraftWeek="";
+  coachV19LinkStatus();
+
   const backdrop=$("programTaskBackdrop"),wasOpen=backdrop&&!backdrop.classList.contains("hidden");
   backdrop?.classList.add("hidden");backdrop?.removeAttribute("data-editing");backdrop?.setAttribute("aria-hidden","true");
   document.documentElement.classList.remove("program-task-open");
@@ -2705,6 +2769,8 @@ function closeProgramTaskModal(){coachProgramEditContext=null;
 }
 function setProgramTaskStatus(message,type=""){const node=$("programTaskStatus");if(!node)return;node.textContent=message;node.className="program-task-status "+type;node.classList.toggle("hidden",!message)}
 ["programTaskText","programTaskVideo"].forEach(id=>$(id)?.addEventListener("input",updateCoachProgramBuilder));
+$("programTaskVideo")?.addEventListener("input",()=>coachV19LinkStatus());
+
 $("programTaskDate")?.addEventListener("input",event=>{if(coachProgramEditContext)return;coachSetWeekDraft(event.target.value);});
 $("programDaysWeekdays")?.addEventListener("click",()=>coachWeekPreset([0,1,2,3,4]));
 $("programDaysAll")?.addEventListener("click",()=>coachWeekPreset([0,1,2,3,4,5,6]));
@@ -2790,6 +2856,7 @@ $("programTaskSend")?.addEventListener("click",async()=>{
       if(keepOpen){
         if($("programTaskText"))$("programTaskText").value="";
         if($("programTaskVideo"))$("programTaskVideo").value="";
+        coachV19LinkStatus();
         coachV18LastAutoText="";updateCoachProgramBuilder();
         $("programTaskText")?.focus({preventScroll:true});
       }else setTimeout(closeProgramTaskModal,850);

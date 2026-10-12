@@ -12,9 +12,9 @@ test('Hocalar ve Videolar konu bazlı eşleşme ve öneri bilgisini korur',()=>{
   const app=read('app-reset.js');
   const css=read('program-videos-v1.css');
 
-  assert.match(html,/program-videos-v1\.js\?v=1\.8\.2/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.0/);
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.67/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.68/);
 
   assert.match(videos,/const TOPICS=/);
   assert.match(videos,/const TOPIC_ALIASES=/);
@@ -25,7 +25,7 @@ test('Hocalar ve Videolar konu bazlı eşleşme ve öneri bilgisini korur',()=>{
   assert.match(videos,/if\(!topicMatches\(title\)\)return false/);
   assert.match(videos,/state\.mode,state\.scope,state\.subject,state\.topic,state\.teacher/);
   assert.match(videos,/topic:compact\(state\.topic\)\.slice\(0,120\)/);
-  assert.match(videos,/const topicPart=state\.topic\?/);
+  assert.match(videos,/topic:state\.topic,scope:state\.scope/);
 
   assert.match(app,/topic=String\(detail\.topic\|\|""\)/);
   assert.match(app,/subject,topic,scope,thumb/);
