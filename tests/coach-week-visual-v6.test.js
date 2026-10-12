@@ -648,7 +648,7 @@ test('v13 teacher and video section is hidden by CSS without deleting any featur
   assert.match(html,/program-videos-v1\.js\?v=1\.9\.0/);
   assert.match(css,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
   assert.match(js,/const ROOT_ID="programVideoLibrary"/);
-  assert.match(js,/function boot\(\)\{buildShell\(\)/);
+  assert.match(js,/function boot\(\)\{\s*buildShell\(\)/);
   assert.match(js,/TEACHERS=/);
   assert.match(js,/recommendResource/);
   assert.match(html,/id="programsPage"/);
