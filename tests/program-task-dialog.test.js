@@ -279,6 +279,7 @@ test('Video Ekle opens its own teacher library and sends only after explicit con
   assert.equal(h.$('coachVideoLibraryHost').contains(h.$('programVideoLibrary')),true);
   assert.ok(requests>0,'existing real teacher feed is loaded only on opening');
   assert.ok(h.$('coachVideoResults').querySelector('[data-video-add="0"]'));
+  assert.equal(h.$('coachVideoResults').querySelector('[data-video-add="0"]').textContent,'Seç');
   assert.equal(h.$('coachVideoPickerSave').disabled,true);
   assert.equal(h.writes.length,0);
   h.$('coachVideoResults').querySelector('[data-video-add="0"]').click();
