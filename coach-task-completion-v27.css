@@ -1,0 +1,101 @@
+/* v27 · Completion states for real student program data only.
+   The coach cannot mark tasks complete here; no Firebase writes are added.
+   Scoped to weekly cards, leaving add/edit/drag and student list untouched. */
+
+#programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"]{
+  opacity:1!important;
+  background:#f0faf5!important;
+  border:1px solid #73c8a0!important;
+  box-shadow:inset 3px 0 0 #24a574,0 2px 7px rgba(19,118,76,.07);
+}
+#programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"] .coach-v6-task-symbol{
+  background:#def5e8;
+  color:#177f53;
+}
+#programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"] .coach-v6-task-copy strong{
+  color:#1d7652;
+}
+#programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"] .coach-v6-task-copy>span{
+  color:#587469;
+}
+/* This is a status label, not a clickable completion toggle. */
+#programsPage #coachVisualWeekBoard .coach-v27-task-status{
+  grid-column:1 / -1;
+  grid-row:2;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  justify-self:start;
+  gap:3px;
+  max-width:100%;
+  min-height:21px;
+  padding:3px 7px;
+  border:1px solid #dce3ed;
+  border-radius:6px;
+  background:#fff;
+  color:#617089;
+  font-size:9px;
+  font-weight:800;
+  line-height:1.2;
+  white-space:normal;
+}
+#programsPage #coachVisualWeekBoard .coach-v27-task-status>span{
+  display:inline-grid;
+  place-items:center;
+  font-size:12px;
+  line-height:1;
+}
+#programsPage #coachVisualWeekBoard .coach-v27-task-status.is-complete{
+  border-color:#a7dec1;
+  background:#d9f5e5;
+  color:#136d48;
+}
+#programsPage #coachVisualWeekBoard .coach-v27-task-status.is-pending{
+  border-color:#e0e5ee;
+  background:#f7f9fc;
+  color:#65758e;
+}
+/* Expanded edit/move controls must stack BELOW the completion status. */
+#programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task-menu[open]{
+  grid-row:3;
+}
+#programsPage #coachVisualWeekBoard .coach-v27-day-status[data-all-done="true"]{
+  color:#177c54!important;
+  font-weight:850!important;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day:has(> .coach-v6-day-head .coach-v27-day-status[data-all-done="true"]){
+  border-color:#a9dec3!important;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v27-day-status{
+  line-height:1.35;
+}
+
+/* Existing classic grid: same true/false flags and unmistakable labels. */
+#programsPage #programWeekBoard .student-program-task[data-task-completed="true"]{
+  opacity:1;
+  border-color:#4fa67e!important;
+  box-shadow:inset 3px 0 0 #31ad77;
+}
+#programsPage #programWeekBoard .student-program-task .classic-task-status[data-completion-status="done"]{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  max-width:100%;
+  padding:4px 7px;
+  border:1px solid #5aad87;
+  border-radius:7px;
+  background:#113a2a;
+  color:#9ff3c7;
+  font-size:10px;
+  font-weight:850;
+}
+#programsPage #programWeekBoard .student-program-task .classic-task-status[data-completion-status="pending"]{
+  font-size:10px;
+  font-weight:750;
+}
+@media(max-width:770px){
+  #programsPage #coachVisualWeekBoard .coach-v27-task-status{
+    font-size:10px;
+    min-height:23px;
+  }
+}

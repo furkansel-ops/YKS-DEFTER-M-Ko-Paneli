@@ -1948,8 +1948,8 @@ function renderClassicProgram(program,week,row){
     const task={id,text:value},complete=Boolean(value)&&programTaskDone(data,task,day),moved=Boolean(value&&data.mv?.[id]);
     const classes='student-program-cell student-program-task'+(isToday?' today-col':'')+(complete?' is-done completed':'')+(moved?' is-moved':'');
     if(!value)return '<div class="'+classes+'" data-program-cell="'+id+'"><span class="student-program-empty">—</span></div>';
-    const status=complete?'✓ Tamamlandı':moved?'Önceki günden taşındı':'Planlandı';
-    return '<div class="'+classes+' program-task-card" data-program-cell="'+id+'" data-program-task-id="'+id+'" data-program-task-day="'+day+'" data-task-completed="'+complete+'"><span class="student-program-tick" aria-hidden="true">'+(complete?'✓':'')+'</span>'+(moved?'<span class="student-program-moved" aria-hidden="true">→</span>':'')+'<span class="student-program-text">'+escHtml(value)+'</span><small class="classic-task-status">'+status+'</small><div class="classic-task-actions"><button type="button" data-program-select aria-label="Görevi başka güne taşı">→</button><button type="button" data-program-edit aria-label="Görevi düzenle">✎</button></div></div>';
+    const status=complete?'✓ Tamamlandı':moved?'Önceki günden taşındı':'○ Bekliyor';
+    return '<div class="'+classes+' program-task-card" data-program-cell="'+id+'" data-program-task-id="'+id+'" data-program-task-day="'+day+'" data-task-completed="'+complete+'"><span class="student-program-tick" aria-hidden="true">'+(complete?'✓':'')+'</span>'+(moved?'<span class="student-program-moved" aria-hidden="true">→</span>':'')+'<span class="student-program-text">'+escHtml(value)+'</span><small class="classic-task-status" data-completion-status="'+(complete?'done':'pending')+'">'+status+'</small><div class="classic-task-actions"><button type="button" data-program-select aria-label="Görevi başka güne taşı">→</button><button type="button" data-program-edit aria-label="Görevi düzenle">✎</button></div></div>';
   };
   const grid=kind=>{
     const rows=programRowList(data[kind]),labels=program.rowLabels?.[kind]||[];
@@ -2349,13 +2349,15 @@ function renderCoachVisualWeek(program,week,row){
     const short=coachV6TaskLabel(task.text).replace(/\s+·\s+Saat\s+(?:[01]\d|2[0-3]):[0-5]\d\b/gi,"");
     const chunks=short.split(/\s+·\s+/),details=chunks.length>1?chunks.slice(1).join(" · "):short;
     const moved=Boolean(week.data?.mv?.[task.id]);
-    return '<article class="coach-v6-task coach-v11-task program-task-card" draggable="true" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-subject="'+lesson.key+'">'
+    const taskStatus=done?"✓ Tamamlandı":"○ Bekliyor";
+    return '<article class="coach-v6-task coach-v11-task program-task-card" draggable="true" data-program-task-id="'+escHtml(task.id)+'" data-program-task-day="'+day+'" data-task-completed="'+done+'" data-task-status="'+(done?'done':'pending')+'" data-subject="'+lesson.key+'" aria-label="'+escHtml(lesson.title+' · '+taskStatus)+'">'
       +'<span class="coach-v6-task-symbol">'+coachV6Symbol(lesson.key)+'</span>'
       +'<div class="coach-v6-task-copy"><strong>'+escHtml(lesson.title)+'</strong><span title="'+escHtml(details)+'">'+escHtml(details)+'</span>'
-      +(moved?'<small>Başka günden taşındı</small>':'')+(done?'<small>✓ Tamamlandı</small>':'')+'</div>'
+      +(moved?'<small>Başka günden taşındı</small>':'')+'</div>'
       +'<details class="coach-v11-task-menu"><summary aria-label="'+escHtml(short)+' işlemleri" title="Görev işlemleri">⋮</summary>'
       +'<div class="coach-v11-task-menu-items"><button type="button" data-program-edit aria-label="'+escHtml(short)+' düzenle">✎ Düzenle</button>'
       +'<button type="button" data-program-select aria-label="'+escHtml(short)+' başka güne taşı">↗ Taşı</button></div></details>'
+      +'<span class="coach-v27-task-status '+(done?'is-complete':'is-pending')+'" aria-label="'+(done?'Öğrenci tarafından tamamlandı':'Öğrenci henüz tamamlamadı')+'"><span aria-hidden="true">'+(done?'✓':'○')+'</span> '+(done?'Tamamlandı':'Bekliyor')+'</span>'
       +'</article>';
   };
   const days=stats.days.map((item,day)=>{
@@ -2369,7 +2371,7 @@ function renderCoachVisualWeek(program,week,row){
     const completion=item.tasks.length?Math.round(item.done/item.tasks.length*100):0;
     return '<section class="coach-v6-day coach-v11-day coach-v14-day'+(isToday?' is-today':'')+'" data-day="'+day+'">'
       +'<header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span>'
-      +'<small>'+item.done+'/'+item.tasks.length+' tamamlandı</small>'
+      +'<small class="coach-v27-day-status" data-all-done="'+Boolean(item.tasks.length&&item.done===item.tasks.length)+'">'+(item.tasks.length&&item.done===item.tasks.length?'✓ Gün tamamlandı':item.done+'/'+item.tasks.length+' tamamlandı')+'</small>'
       +'<div class="coach-v14-progress" role="progressbar" aria-label="'+names[day]+' tamamlanma oranı" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+completion+'"><span style="width:'+completion+'%"></span></div></header>'
       +'<div class="coach-v6-day-tasks coach-v12-card-stack" tabindex="0" role="region" aria-label="'+names[day]+' çalışmaları" data-task-count="'+totalCards+'">'
       +taskCards+draftCards
