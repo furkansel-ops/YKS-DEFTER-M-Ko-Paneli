@@ -2134,7 +2134,7 @@ function coachV10InlineAdd(day){
     +COACH_V8_PRESETS.flatMap(p=>p.scoped?
       ["TYT","AYT"].map(level=>'<option value="'+p.id+'|'+level+'">'+level+' '+escHtml(p.title)+'</option>'):
       ['<option value="'+p.id+'|TYT">'+escHtml(p.title)+'</option>']).join("");
-  return '<div class="coach-v10-inline" data-v10-inline="'+day+'" '+(coachV10ActiveDay!==day?'hidden':'')+'>'
+  return '<div class="coach-v10-inline" id="coachV10InlineDay'+day+'" data-v10-inline="'+day+'" '+(coachV10ActiveDay!==day?'hidden':'')+'>'
     +'<label><span class="coach-v10-sr">Hazır ders</span><select data-v10-subject="'+day+'" aria-label="'+names[day]+' hazır ders seç">'+options+'</select></label>'
     +'<div class="coach-v10-inline-line"><input data-v10-input="'+day+'" maxlength="550" placeholder="Çalışmayı yaz → Enter" aria-label="'+names[day]+' yeni çalışma"/>'
     +'<button type="button" data-v10-add="'+day+'" aria-label="'+names[day]+' taslağına ekle">Ekle ↵</button></div>'
@@ -2222,7 +2222,7 @@ function renderCoachVisualWeek(program,week,row){
       +draftsForDay.map(task=>coachV7DraftCard(task,draftKey)).join("")
       +(!item.tasks.length&&!draftsForDay.length?'<div class="coach-v6-day-empty">Bu güne çalışma eklenmemiş.</div>':'')+'</div>'
       +coachV10InlineAdd(day)
-      +'<button type="button" class="coach-v6-add-day" data-coach-add-day="'+day+'" aria-controls="coachV10Bulk" aria-expanded="'+(coachV10ActiveDay===day)+'" aria-label="'+names[day]+' gününe çalışma ekle">＋ Ekle</button></section>';
+      +'<button type="button" class="coach-v6-add-day" data-coach-add-day="'+day+'" aria-controls="coachV10InlineDay'+day+'" aria-expanded="'+(coachV10ActiveDay===day)+'" aria-label="'+names[day]+' gününe çalışma ekle">＋ Ekle</button></section>';
   }).join("");
   return '<section class="coach-v6" aria-label="Koç haftalık plan çalışma alanı">'
     +'<header class="coach-v6-title"><span class="coach-v6-logo">'+coachV6Symbol("exam")+'</span><div><span class="coach-v6-kicker">YKS DEFTERİM · KOÇ PANELİ</span><h2>Haftalık Plan</h2><p>'+escHtml(studentName(row))+' öğrencisinin planını görüntüle, düzenle ve yeni çalışmalar ekle.</p></div><span class="coach-v6-sync">Öğrencinin paylaştığı program</span></header>'
