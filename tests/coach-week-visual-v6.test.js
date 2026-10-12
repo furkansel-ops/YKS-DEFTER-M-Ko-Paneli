@@ -788,7 +788,7 @@ test('upper controls preserve templates, quick entry, classic switch and unchang
 
 test('upper styling hides only duplicated header summaries, never the weekly lessons',()=>{
   const html=read('index.html'),css=read('coach-preview-upper-v15.css');
-  assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.0/);
+  assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.1/);
   assert.match(html,/app-reset\.js\?v=1\.0\.66/);
   assert.match(css,/#programsPage \.coach-v15-header-main/);
   assert.match(css,/#programsPage \.coach-v15-overview/);
