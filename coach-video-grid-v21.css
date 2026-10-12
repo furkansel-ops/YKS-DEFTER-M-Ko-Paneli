@@ -1,0 +1,117 @@
+/* Koç Paneli v21 — Çalışma Ekle / sağ Hocalar & Videolar.
+   Three to four videos per row on wide desktops, with readable actions.
+   Does not change the program task form or weekly calendar. */
+
+/* Give the library slightly more usable width without removing the editor. */
+@media (min-width:1100px){
+  .coach-v19-workbench{
+    grid-template-columns:minmax(0,49fr) minmax(0,51fr);
+  }
+}
+@media (min-width:1450px){
+  .coach-v19-workbench{
+    grid-template-columns:minmax(0,47fr) minmax(0,53fr);
+  }
+}
+
+/* Three compact horizontal cards across; no hidden task/video controls. */
+@media (min-width:1100px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+    padding:7px 8px 5px;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton){
+    grid-template-columns:68px minmax(0,1fr);
+    grid-template-rows:minmax(66px,auto) auto;
+    min-width:0;
+    min-height:0;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-thumb{
+    width:100%;
+    min-height:66px;
+    height:100%;
+    aspect-ratio:auto;
+    grid-column:1;
+    grid-row:1;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-body{
+    grid-column:2;
+    grid-row:1;
+    min-width:0;
+    gap:2px;
+    padding:6px 5px 4px;
+  }
+  .coach-v19-video-pane .coach-video-card-body b{
+    font-size:10px;
+    line-height:1.25;
+    overflow-wrap:anywhere;
+  }
+  .coach-v19-video-pane .coach-video-card-body small{
+    font-size:9px;
+    line-height:1.2;
+  }
+  .coach-v19-video-pane .coach-video-card-body em{
+    font-size:8px;
+    line-height:1.2;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-actions{
+    grid-column:1/-1;
+    grid-row:2;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:3px;
+    padding:4px;
+  }
+  .coach-v19-video-pane .coach-video-card-actions button{
+    min-width:0;
+    min-height:34px;
+    height:auto;
+    padding:3px 2px;
+    font-size:8.5px;
+    line-height:1.15;
+    overflow-wrap:anywhere;
+    white-space:normal;
+  }
+  .coach-v19-video-pane .coach-video-card.skeleton{
+    min-width:0;
+    min-height:118px;
+  }
+}
+
+/* On sufficiently wide screens, use four cards across instead of three. */
+@media (min-width:1450px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton){
+    grid-template-columns:64px minmax(0,1fr);
+    grid-template-rows:minmax(66px,auto) auto;
+  }
+}
+
+/* Narrow desktop: show two side-by-side rather than oversized single cards. */
+@media (min-width:911px) and (max-width:1099px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton){
+    grid-template-columns:70px minmax(0,1fr);
+    grid-template-rows:minmax(66px,auto) auto;
+  }
+  .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-thumb{
+    min-height:66px;
+  }
+}
+
+/* Tablets retain two readable columns; phones remain single-column. */
+@media (max-width:910px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media (max-width:600px){
+  .coach-v19-video-pane .coach-video-results{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
