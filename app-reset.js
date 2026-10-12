@@ -1378,7 +1378,7 @@ $("coachSettingsForm")?.addEventListener("submit",async event=>{
     console.error("Ayarlar kaydedilemedi",error);
     if(status)status.textContent="Kaydedilemedi: "+String(error?.message||"Bilinmeyen hata");
     updateSettingsPill("Kaydedilemedi","dirty");
-  }finally{coachV18SubmitBusy=false;if(button)button.disabled=false}
+  }finally{if(button)button.disabled=false}
 });
 function saveLocalPreference(key,value){
   const prefs=readCoachUiPrefs();prefs[key]=value;writeCoachUiPrefs(prefs);applyCoachUiPrefs();updateSettingsPill("Tercih kaydedildi","saved");
@@ -2511,7 +2511,7 @@ const COACH_V18_TOPICS={
   "TYT|Deneme":["Genel TYT Denemesi","Branş Denemesi"],
   "AYT|Deneme":["Genel AYT Denemesi","Branş Denemesi"]
 };
-let coachV18LastAutoText="",coachV18SubmitBusy=false;
+let coachV18LastAutoText="";
 function coachV18SetLevel(level){
   const selected=level==="AYT"?"AYT":"TYT";
   coachV8Levels.modal=selected;
@@ -2741,7 +2741,7 @@ $("programTaskDelete")?.addEventListener("click",async()=>{
   }finally{if(button)button.disabled=false;if(send)send.disabled=false}
 });
 $("programTaskSend")?.addEventListener("click",async()=>{
-  if(coachV18SubmitBusy)return;
+
   const row=coachReportRows.find(x=>x.studentUid===coachProgramModalStudentUid),user=auth.currentUser,button=$("programTaskSend"),base=coachProgramTaskText(),resource=coachProgramResource();
   if(!row||!user||selectedProgramStudentUid!==coachProgramModalStudentUid)return;
   const date=String($("programTaskDate")?.value||"");
@@ -2764,7 +2764,6 @@ $("programTaskSend")?.addEventListener("click",async()=>{
   }
   const keepOpen=!edit&&Boolean($("programTaskKeepOpen")?.checked);
   const studentUid=row.studentUid,coachUid=user.uid;
-  coachV18SubmitBusy=true;
   if(button)button.disabled=true;
   setProgramTaskStatus(dates.length+" gün için gönderim başlatıldı…","loading");
   const sent=[];
