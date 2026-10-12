@@ -620,19 +620,36 @@ test('v12 135 lessons remain available on one day without page-stretching rows o
   assert.equal(h.writes.length,0);
 });
 
-test('v12 visual CSS keeps cards in normal flow, fixed table height and scrollable day content',t=>{
+test('v13 table grows to reveal every lesson without any independent vertical scrollbar',t=>{
   const css=read('coach-week-preview-table-v11.css');
-  assert.match(read('index.html'),/coach-week-preview-table-v11\.css\?v=1\.0\.1/);
+  const html=read('index.html');
+  assert.match(html,/coach-week-preview-table-v11\.css\?v=1\.0\.2/);
   assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v12-week-table/);
   assert.match(css,/grid-template-columns:repeat\(7,minmax\(166px,1fr\)\)/);
-  assert.match(css,/height:388px/);
-  assert.match(css,/height:355px/);
+  assert.match(css,/min-height:182px;height:auto/);
+  assert.match(css,/min-height:145px/);
   assert.match(css,/\.coach-v12-card-stack\{/);
-  assert.match(css,/overflow-y:auto/);
+  assert.match(css,/max-height:none!important/);
+  assert.match(css,/overflow:visible!important/);
   assert.match(css,/grid-auto-rows:max-content/);
+  assert.match(css,/margin:0;padding:9px 7px!important/);
   assert.match(css,/\.coach-v11-task-menu\[open\]/);
   assert.match(css,/position:static/);
   assert.match(css,/min-height:64px/);
-  assert.doesNotMatch(css,/subgrid|coach-v11-time-rail|grid-row:1\/-1/);
+  assert.doesNotMatch(css,/height:388px|height:355px|height:220px|overflow-y:auto|subgrid|coach-v11-time-rail/);
   assert.doesNotMatch(css,/dashboardFlow|messagesPage|settingsPage/);
+});
+
+test('v13 teacher and video section is hidden by CSS without deleting any feature code or library',t=>{
+  const css=read('program-videos-v1.css');
+  const js=read('program-videos-v1.js');
+  const html=read('index.html');
+  assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.8\.2/);
+  assert.match(css,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
+  assert.match(js,/const ROOT_ID="programVideoLibrary"/);
+  assert.match(js,/function boot\(\)\{buildShell\(\)/);
+  assert.match(js,/TEACHERS=/);
+  assert.match(js,/recommendResource/);
+  assert.match(html,/id="programsPage"/);
 });
