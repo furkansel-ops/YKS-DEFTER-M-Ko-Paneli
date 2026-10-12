@@ -645,7 +645,7 @@ test('v13 teacher and video section is hidden by CSS without deleting any featur
   const js=read('program-videos-v1.js');
   const html=read('index.html');
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.2/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.3/);
   assert.match(css,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
   assert.match(js,/const ROOT_ID="programVideoLibrary"/);
   assert.match(js,/function boot\(\)\{\s*buildShell\(\)/);
@@ -950,8 +950,8 @@ test('composer stylesheet changes only the new modal, not the weekly board',()=>
 
 test('hidden video library stays dormant but can be reactivated without losing the existing integration',async t=>{
   const h=harness(t),w=h.w;
-  const feed={teachers:{MatMan:{
-    channelName:'MatMan',
+  const feed={teachers:{'Eyüp B.':{
+    channelName:'Eyüp B.',
     videos:[{id:'abc123XYZ99',title:'TYT Matematik Problemler 30 soru çözümü',url:'https://www.youtube.com/watch?v=abc123XYZ99'}],
     playlists:[{id:'PLabc123456789',title:'TYT Matematik video kampı',url:'https://www.youtube.com/playlist?list=PLabc123456789'}]
   }}};
@@ -992,7 +992,7 @@ test('hidden video library stays dormant but can be reactivated without losing t
 });
 test('custom coach text survives video selection and compact tabs retain their own state',async t=>{
   const h=harness(t),w=h.w;
-  const feed={teachers:{MatMan:{videos:[{id:'abc123XYZ99',title:'TYT Matematik tekrar',url:'https://www.youtube.com/watch?v=abc123XYZ99'}]}}};
+  const feed={teachers:{'Eyüp B.':{videos:[{id:'abc123XYZ99',title:'TYT Matematik tekrar',url:'https://www.youtube.com/watch?v=abc123XYZ99'}]}}};
   w.fetch=async()=>({ok:true,json:async()=>feed});
   w.eval(read('program-videos-v1.js'));h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
   h.$('coachV19VideoPane').hidden=false;
@@ -1016,7 +1016,7 @@ test('new video workspace styles stay scoped to modal and preserve the hidden le
   const html=read('index.html'),css=read('coach-split-composer-v19.css'),old=read('program-videos-v1.css');
   assert.match(html,/coach-split-composer-v19\.css\?v=1\.0\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.69/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.2/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.3/);
   assert.match(html,/id="coachV19Workbench"/);
   assert.match(html,/id="coachV19VideoPane"/);
   assert.match(css,/\.coach-v19-workbench/);

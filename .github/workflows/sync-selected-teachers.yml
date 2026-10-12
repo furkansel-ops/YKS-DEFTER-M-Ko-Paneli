@@ -1,0 +1,65 @@
+name: Beş YKS kanalının video ve playlist arşivini yenile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/sync-selected-teachers.mjs
+      - .github/workflows/sync-selected-teachers.yml
+  schedule:
+    - cron: "35 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  sync-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Kaynak kodunu al
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Python ve yt-dlp araçlarını hazırla
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: yt-dlp yükle
+        run: python -m pip install --quiet --upgrade yt-dlp
+
+      - name: Kullanıcının seçtiği beş kanalın tam arşivini hazırla
+        run: node scripts/sync-selected-teachers.mjs
+
+      - name: Üretilen arşivi gelecek yayınlar için depola
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media/my-teachers-feed.json media/my-teachers/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(media): refresh chosen YKS teachers [skip ci]"
+            git push origin HEAD:main || echo "::warning::Git push izin verilmedi; arşiv bu dağıtımda yayınlanıyor."
+          fi
+
+      - name: GitHub Pages yapılandırması
+        uses: actions/configure-pages@v5
+
+      - name: Hoca arşivi dahil koç panelini paketle
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Medya arşivini ve koç panelini yayınla
+        id: deployment
+        uses: actions/deploy-pages@v4

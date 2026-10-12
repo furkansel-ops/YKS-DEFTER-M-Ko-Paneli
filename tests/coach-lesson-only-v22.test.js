@@ -50,7 +50,7 @@ test('video URL is hidden for new lessons, available for editing older linked ta
 
 test('media runtime is retained but blocks fetch while the video panel is hidden',()=>{
   const html=read('index.html'),video=read('program-videos-v1.js');
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.2/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.3/);
   assert.match(video,/const ROOT_ID="programVideoLibrary"/);
   assert.match(video,/function buildShell\(\)/);
   assert.match(video,/function recommendResource\(item\)/);
