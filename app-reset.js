@@ -2531,6 +2531,14 @@ function coachV19SyncVideoFilters(){
     topic:String($("programBuilderTopic")?.value||"").trim()
   }}));
 }
+function coachV19ShowPane(pane="program"){
+  const mode=pane==="videos"?"videos":"program",root=$("coachV19Workbench");
+  if(root)root.dataset.activePane=mode;
+  $("coachV19ShowEditor")?.setAttribute("aria-pressed",String(mode==="program"));
+  $("coachV19ShowVideos")?.setAttribute("aria-pressed",String(mode==="videos"));
+}
+$("coachV19ShowEditor")?.addEventListener("click",()=>coachV19ShowPane("program"));
+$("coachV19ShowVideos")?.addEventListener("click",()=>coachV19ShowPane("videos"));
 function coachV19LinkStatus(title=""){
   const node=$("coachV19Linked");if(!node)return;
   const video=String($("programTaskVideo")?.value||"").trim();
@@ -2564,6 +2572,7 @@ window.addEventListener("yks:coach-video-attach",event=>{
   }
   video.value=url;video.dispatchEvent(new Event("input",{bubbles:true}));
   coachV19LinkStatus(String(detail.title||""));
+  coachV19ShowPane("program");
   setProgramTaskStatus("Video bağlantısı eklendi. Görev, yalnız 'Görevi gönder' ile öğrenciye iletilir.","success");
 });
 function coachV18Topics(){
@@ -2731,6 +2740,7 @@ function openProgramTaskModal(prefill="",options={}){
   if($("programTaskTitle"))$("programTaskTitle").textContent=edit?"Çalışmayı düzenle":"Çalışma ekle";
   if($("programTaskStatus")){$("programTaskStatus").className="program-task-status hidden";$("programTaskStatus").textContent=""}updateCoachProgramBuilder();
   coachV19LinkStatus();
+  coachV19ShowPane("program");
   window.dispatchEvent(new CustomEvent("yks:coach-program-editor-open",{detail:{
     edit,scope:coachV8Levels.modal,
     subject:$("programBuilderSubject")?.value||"",
