@@ -533,6 +533,19 @@
   }
 
   function addToProgram(item){
+    const standalone=$("coachVideoPickerBackdrop");
+    if(standalone&&!standalone.classList.contains("hidden")){
+      if(!$("programStudentSelect")?.value){setStatus("Önce programın öğrencisini seç.");return;}
+      const url=String(item?.url||"");
+      if(!/^https?:\/\//i.test(url)||!url)return;
+      window.dispatchEvent(new CustomEvent("yks:coach-video-picked",{detail:{
+        kind:item.kind==="playlist"?"playlist":"video",
+        title:String(item.title||"").slice(0,300),
+        url,teacher:state.teacher,subject:state.subject,topic:state.topic,scope:state.scope
+      }}));
+      setStatus("Kaynak seçildi. Yukarıdaki tarih ve Programa Ekle alanını kullan.");
+      return;
+    }
     const modal=$("programTaskBackdrop");
     if(!modal||modal.classList.contains("hidden")){
       setStatus("Derse bağlamak için Çalışma Ekle penceresini aç.");return;
@@ -569,6 +582,19 @@
   }
   function boot(){
     buildShell();
+    window.addEventListener("yks:coach-video-picker-open",()=>{
+      const target=$("coachVideoLibraryHost"),library=$(ROOT_ID);
+      if(!target)return;
+      if(!library)buildShell();
+      if($(ROOT_ID)&&$(ROOT_ID).parentElement!==target)target.appendChild($(ROOT_ID));
+      state.selectedPlaylist=null;state.playlistVideoQuery="";
+      if(state.busy){pendingReload=true;return;}
+      void load(true);
+    });
+    window.addEventListener("yks:coach-video-picker-close",()=>{
+      const library=$(ROOT_ID),target=$("coachV19VideoPane");
+      if(library&&target&&library.parentElement!==target)target.appendChild(library);
+    });
     window.addEventListener("yks:coach-program-editor-open",event=>{
       // Media library remains installed but inactive until its future dedicated screen.
       if($("coachV19VideoPane")?.hidden)return;
