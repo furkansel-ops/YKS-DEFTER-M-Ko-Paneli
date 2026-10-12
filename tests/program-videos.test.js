@@ -19,13 +19,13 @@ test('programlar ekranında güncel hoca ve video kütüphanesi yüklenir',()=>{
   assert.match(js,/contentComplete/);
   assert.match(js,/playlists/);
   assert.match(js,/konu anlatımı/);
-  assert.match(js,/programMainEmpty/);
+  assert.match(js,/coachV19VideoPane/);
   assert.match(js,/deneme çözümü/);
-  assert.match(js,/programTaskVideo/);
-  assert.match(js,/programTaskText/);
+  assert.match(js,/yks:coach-video-attach/);
+  assert.match(js,/function addToProgram/);
   assert.match(js,/programStudentSelect/);
   assert.doesNotMatch(js,/programCustomTab|programHeroName/);
-  assert.match(js,/Programa ekle/);
+  assert.match(js,/Derse bağla/);
   assert.match(js,/Biosem/);
   assert.match(js,/Senin Biyolojin/);
   assert.match(js,/MEDIA_REPO_PATH/);
