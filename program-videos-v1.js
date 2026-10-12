@@ -4,6 +4,7 @@
   const ROOT_ID="programVideoLibrary";
   const MEDIA_REPO_PATH="/YKS-DEFTER-M-/";
   const MEDIA_FALLBACK_BASE="https://furkansel-ops.github.io/YKS-DEFTER-M-/";
+  const USER_TEACHERS_FEED="media/my-teachers-feed.json";
   let feedCache=null;
   let feedBase="";
   const teacherArchiveCache=new Map();
@@ -16,50 +17,14 @@
     tekrar:{label:"Tekrar",term:"genel tekrar"}
   };
   const SUBJECTS=["Matematik","Geometri","Türkçe","Edebiyat","Fizik","Kimya","Biyoloji","Tarih","Coğrafya","Felsefe","Din Kültürü"];
+  /* The user's own watch list. Keep other teachers out of the selector,
+     not out of source history; new channels can be added intentionally. */
   const TEACHERS=[
-    {n:"MatMan",d:["Matematik","Matematik (AYT)"],id:"UCi3OrIf5uqtIdR7tX9ZZyVA"},
-    {n:"Bıyıklı Matematik",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],id:"UCxHSLxJcuZ8SpF5zgJeQ8Cg"},
-    {n:"Rehber Matematik",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],id:"UCzxj9SKkLuDhdxSDXxcmwqQ"},
-    {n:"Eyüp B.",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],id:"UCbv-0vMCnLqwlZXUWoI4a5w"},
-    {n:"Mert Hoca",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],id:"UCzMVi_CPx_XB9uhMl4uWR9g"},
-    {n:"Matematiğin Güler Yüzü",d:["Matematik","Matematik (AYT)"],id:"UCdj-EiG6PCWM7ZqR5PzNOOw"},
-    {n:"İlyas Güneş",d:["Matematik","Matematik (AYT)"],id:"UCRTxepZJj8vWniao-0Tkp4g"},
-    {n:"SML Hoca",d:["Matematik","Matematik (AYT)"],id:"UCSiatSbaEJZpI_tkQXwRbcw"},
-    {n:"Moz Akademi",d:["Matematik","Matematik (AYT)"],id:"UCSqWGILaJ5qZ_D9149h6RJg"},
-    {n:"Barış Çelenk",d:["Matematik","Matematik (AYT)"],id:"UCpogE5vw7rLYOuzYoDk1Ang"},
-    {n:"Kenan Kara",d:["Geometri","Geometri (AYT)"],id:"UC1X0FciySnrdUZld0O_tDXw"},
-    {n:"Merkeze Teğet Geometri",d:["Geometri","Geometri (AYT)"],id:"UCGlM-klG4Q70q9WkXX9cTWA"},
-    {n:"Nurtaç Hoca",d:["Geometri","Geometri (AYT)"],id:"UCNgmALbCj_-cQpxiIpTqOSQ"},
-    {n:"Rüştü Hoca",d:["Türkçe","Edebiyat"],id:"UCyohoF5P2JFvc3KLLZRwDug"},
-    {n:"Türkçenin Matematiği",d:["Türkçe"],id:"UCCAmWzulVvB1DjnR5IQCTUQ"},
-    {n:"Deniz Hoca",d:["Edebiyat"],id:"UC_ke4VQZo9TewOf-p-LSx_Q"},
-    {n:"Özcan Aykın",d:["Fizik","Fizik (AYT)"],id:"UC_IRxSYYyDa4Li9lxAM4xbQ"},
-    {n:"VIP Fizik",d:["Fizik","Fizik (AYT)"],h:"@vipfizik"},
-    {n:"Umut Öncül",d:["Fizik","Fizik (AYT)"],h:"@umutonculakademi"},
-    {n:"Ertan Sinan Şahin",d:["Fizik","Fizik (AYT)"],id:"UCbIOzYvwXdvFGxt70WD2Y2A"},
-    {n:"Fizikle Barış",d:["Fizik","Fizik (AYT)"],id:"UCooJ3GA5zLWnrV-qWupXakg"},
-    {n:"Altuğ Güneş",d:["Fizik","Fizik (AYT)"],id:"UCx4651yGDx7DR6KiyxG_CUA"},
-    {n:"Fizikfinito",d:["Fizik","Fizik (AYT)"],id:"UC-zDbhn0rWs2EywjGQMrK7A"},
-    {n:"Fizik Evim",d:["Fizik","Fizik (AYT)"],id:"UCkRD9iVmodQfET17HeqxUrg"},
-    {n:"Ferrum",d:["Kimya","Kimya (AYT)"],id:"UC0yco2kB3xW3WI__8E8HaKw"},
-    {n:"Kimya Adası",d:["Kimya","Kimya (AYT)"],h:"@kimyaadasi"},
-    {n:"Meschemy Kimya",d:["Kimya","Kimya (AYT)"],h:"@meschemykimya"},
-    {n:"Paraksilen Kimya",d:["Kimya","Kimya (AYT)"],h:"@paraksilen"},
-    {n:"Kimya Dersleri · Sinan İhtiyaroğlu",d:["Kimya","Kimya (AYT)"],h:"@kimyadersleri"},
-    {n:"Semih Balmuk Kimya",d:["Kimya","Kimya (AYT)"],id:"UCoholQ9DKzOGYK7y9rYgrmA"},
-    {n:"Levent Özdede ile Kimya",d:["Kimya","Kimya (AYT)"],h:"@leventozdede"},
-    {n:"Görkem Şahin · Benim Hocam",d:["Kimya","Kimya (AYT)"],h:"@benimhocam",q:"Görkem Şahin Kimya",searchOnly:true},
-    {n:"Biosem",d:["Biyoloji","Biyoloji (AYT)"],h:"@biosem"},
-    {n:"Dr. Biyoloji",d:["Biyoloji","Biyoloji (AYT)"],id:"UCY7Nh-CV3qqaWTxldlG4RCA"},
-    {n:"Selin Hoca",d:["Biyoloji","Biyoloji (AYT)"],id:"UCl50Dhk1O-5YZYwHrWmuLtw"},
-    {n:"Senin Biyolojin",d:["Biyoloji","Biyoloji (AYT)"],h:"@seninbiyolojin"},
-    {n:"Betül Biyoloji",d:["Biyoloji","Biyoloji (AYT)"],h:"@betulbiyoloji"},
-    {n:"Cici Biyoloji",d:["Biyoloji","Biyoloji (AYT)"],h:"@CiciBiyoloji"},
-    {n:"Yavuz Tuna Coğrafya",d:["Coğrafya","Coğrafya (AYT)"],id:"UCai5DYClxEjy-VH-eqz4MIA"},
-    {n:"Coğrafyanın Kodları",d:["Coğrafya","Coğrafya (AYT)"],id:"UCIvX31CHx2RsFQM46qbjuJA"},
-    {n:"KR Akademi",d:["Tarih","Tarih (AYT)","Coğrafya","Coğrafya (AYT)"],id:"UC1NYzm_kEss5qScWlf-TtwA"},
-    {n:"Hocalara Geldik",d:["Türkçe","Matematik","Matematik (AYT)","Geometri","Geometri (AYT)","Fizik","Fizik (AYT)","Kimya","Kimya (AYT)","Biyoloji","Biyoloji (AYT)","Tarih","Tarih (AYT)","Coğrafya","Coğrafya (AYT)","Felsefe","Din Kültürü","Edebiyat"],id:"UCBcM2J8SHyq8GUSvrhWnwTg",searchOnly:true},
-    {n:"Tonguç Akademi",d:["Türkçe","Matematik","Matematik (AYT)","Geometri","Geometri (AYT)","Fizik","Fizik (AYT)","Kimya","Kimya (AYT)","Biyoloji","Biyoloji (AYT)","Tarih","Tarih (AYT)","Coğrafya","Coğrafya (AYT)","Felsefe","Din Kültürü","Edebiyat"],id:"UCm3vDH7Uvz_qwql5Qih4yGw",searchOnly:true}
+    {n:"Eyüp B.",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)"],id:"UCbv-0vMCnLqwlZXUWoI4a5w",h:"@EyupB"},
+    {n:"3D Yayınları",d:["Matematik","Matematik (AYT)","Geometri","Geometri (AYT)","Türkçe","Edebiyat","Fizik","Fizik (AYT)","Kimya","Kimya (AYT)","Biyoloji","Biyoloji (AYT)","Tarih","Tarih (AYT)","Coğrafya","Coğrafya (AYT)","Felsefe","Din Kültürü"],h:"@3DYayınları"},
+    {n:"Ferrum",d:["Kimya","Kimya (AYT)"],id:"UC0yco2kB3xW3WI__8E8HaKw",h:"@yferrum"},
+    {n:"Biosem",d:["Biyoloji","Biyoloji (AYT)"],h:"@Biosem"},
+    {n:"Özcan Aykın",d:["Fizik","Fizik (AYT)"],id:"UC_IRxSYYyDa4Li9lxAM4xbQ",h:"@ÖzcanAykınFİZİK-y2k"}
   ];
 
   const TOPICS={
@@ -271,6 +236,7 @@
   function mediaBases(){
     const out=[];
     try{out.push(new URL(MEDIA_REPO_PATH,location.origin).href);}catch{}
+    out.unshift(new URL("./",location.href).href);
     out.push(MEDIA_FALLBACK_BASE);
     return [...new Set(out)];
   }
@@ -289,7 +255,8 @@
     let lastError=null;
     for(const base of mediaBases()){
       try{
-        const data=await fetchJsonUrl(new URL("teachers-v2-feed.json",base).href,force);
+        const local=base===new URL("./",location.href).href;
+        const data=await fetchJsonUrl(new URL(local?USER_TEACHERS_FEED:"teachers-v2-feed.json",base).href,force);
         if(!data||typeof data!=="object"||!data.teachers||!Object.keys(data.teachers).length)throw new Error("boş medya akışı");
         feedCache=data;feedBase=base;return data;
       }catch(error){lastError=error;}
@@ -379,11 +346,9 @@
     const checked=items.map(item=>({item,match:titleMatches(item)})).filter(row=>row.match!==false);
     if(!checked.length)return [];
     if(state.scope==="AYT"){
-      const ayt=checked.filter(row=>row.match?.ayt).map(row=>row.item);
-      return ayt.length?ayt:checked.map(row=>row.item);
+      return checked.filter(row=>row.match.ayt||!row.match.tyt).map(row=>row.item);
     }
-    const tytOrNeutral=checked.filter(row=>!row.match?.ayt).map(row=>row.item);
-    return tytOrNeutral.length?tytOrNeutral:checked.map(row=>row.item);
+    return checked.filter(row=>row.match.tyt||!row.match.ayt).map(row=>row.item);
   }
   async function loadArchive(media,force=false){
     if(!media?.archiveIndex)return null;
@@ -426,12 +391,12 @@
       return filtered(items);
     }
     if(archive&&archive.meta.pages.length){
-      const missing=archive.meta.pages.map((_,index)=>index).filter(index=>!archive.loaded.has(index));
-      if(missing.length)await Promise.all(missing.map(index=>loadArchivePage(archive,index,force)));
+      const next=nextArchiveIndex(archive);
+      if(next>=0)await loadArchivePage(archive,next,force);
     }
     const preview=(Array.isArray(media.videos)?media.videos:[]).map(video=>normalizeVideo(video,media)).filter(Boolean);
     const archived=Array.isArray(archive?.videos)?archive.videos:[];
-    state.hasMore=false;
+    state.hasMore=nextArchiveIndex(archive)>=0;
     return filtered(dedupe(preview.concat(archived)));
   }
 
@@ -472,7 +437,7 @@
     setStatus("Video arşivi bağlantısı kurulamadı.");
     $("coachVideoMore")?.classList.add("hidden");
   }
-  function coachVideoPickLabel(){return !$("#coachVideoPickerBackdrop")?.classList.contains("hidden")?"Seç":"Derse bağla";}
+  function coachVideoPickLabel(){return !$("coachVideoPickerBackdrop")?.classList.contains("hidden")?"Seç":"Derse bağla";}
   function renderPlaylistDetail(keepSearchFocus=false){
     const host=$("coachVideoResults"),more=$("coachVideoMore"),item=state.selectedPlaylist;if(!host||!item)return;
     more?.classList.add("hidden");
