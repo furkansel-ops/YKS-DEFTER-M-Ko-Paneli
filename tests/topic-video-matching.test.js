@@ -25,7 +25,7 @@ test('Hocalar ve Videolar konu bazlı eşleşme ve öneri bilgisini korur',()=>{
   assert.match(videos,/if\(!topicMatches\(title\)\)return false/);
   assert.match(videos,/state\.mode,state\.scope,state\.subject,state\.topic,state\.teacher/);
   assert.match(videos,/topic:compact\(state\.topic\)\.slice\(0,120\)/);
-  assert.match(videos,/const topicPart=state\.topic\?/);
+  assert.match(videos,/topic:state\.topic,scope:state\.scope/);
 
   assert.match(app,/topic=String\(detail\.topic\|\|""\)/);
   assert.match(app,/subject,topic,scope,thumb/);
