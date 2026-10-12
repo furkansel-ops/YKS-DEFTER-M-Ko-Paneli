@@ -327,10 +327,13 @@
   }
   function titleMatches(item){
     const title=norm(item?.title||"");
+    const playlistText=item?.kind==="playlist"
+      ?norm([item?.title,...(Array.isArray(item?.videos)?item.videos:[]).map(video=>video.title)].join(" "))
+      :title;
     const query=norm(state.query);
-    if(query&&!title.includes(query))return false;
-    if(!subjectMatches(title))return false;
-    if(!topicMatches(title))return false;
+    if(query&&!playlistText.includes(query))return false;
+    if(!subjectMatches(playlistText))return false;
+    if(!topicMatches(playlistText))return false;
     const categoryTerms={
       konu:["konu","anlatım","anlatim","ders"],
       kamp:["kamp","gün","gun"],
@@ -392,7 +395,17 @@
     }
     if(archive&&archive.meta.pages.length){
       const next=nextArchiveIndex(archive);
-      if(next>=0)await loadArchivePage(archive,next,force);
+      if(next>=0){
+        // Load the full archive for a specific search, topic or content category.
+        // Default browsing pages one chunk at a time to avoid huge first paints.
+        const searching=Boolean(state.topic||state.query||state.category!=="all");
+        if(searching){
+          const remaining=archive.meta.pages.map((_,index)=>index).filter(index=>!archive.loaded.has(index));
+          for(let p=0;p<remaining.length;p+=4){
+            await Promise.all(remaining.slice(p,p+4).map(index=>loadArchivePage(archive,index,force)));
+          }
+        }else await loadArchivePage(archive,next,force);
+      }
     }
     const preview=(Array.isArray(media.videos)?media.videos:[]).map(video=>normalizeVideo(video,media)).filter(Boolean);
     const archived=Array.isArray(archive?.videos)?archive.videos:[];
@@ -476,7 +489,9 @@
         '<div class="coach-video-card-actions"><button type="button" '+(isPlaylist?'data-playlist-view="'+index+'"':'data-video-open="'+index+'"')+'>'+(isPlaylist?'Videoları gör':'Aç ↗')+'</button><button type="button" class="recommend" data-video-recommend="'+index+'">Öğrenciye öner</button><button type="button" class="primary" data-video-add="'+index+'">'+coachVideoPickLabel()+'</button></div>'+
       '</article>';
     }).join("");
-    setStatus(state.teacher+" · "+state.scope+" "+state.subject+" · "+state.items.length+" "+(state.mode==="playlists"?"liste":"video")+" gösteriliyor");
+    const total=Number(state.archive?.meta?.videoCount||state.items.length);
+    const progress=state.mode==="playlists"?"":(state.hasMore?" · Arşivde "+total+" video; devamını aşağıdan getir":"");
+    setStatus(state.teacher+" · "+state.scope+" "+state.subject+" · "+state.items.length+" "+(state.mode==="playlists"?"liste":"video")+" gösteriliyor"+progress);
     more?.classList.toggle("hidden",!state.hasMore);
   }
 
