@@ -712,7 +712,7 @@ test('phase 1 CSS adjusts only table skeleton, not the teacher library, task car
   const css=read('coach-week-skeleton-v14.css');
   const html=read('index.html');
   assert.match(html,/coach-week-skeleton-v14\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.65/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.66/);
   assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v14-week/);
   assert.match(css,/grid-template-columns:repeat\(7,minmax\(170px,1fr\)\)/);
   assert.match(css,/\.coach-v14-progress span/);
