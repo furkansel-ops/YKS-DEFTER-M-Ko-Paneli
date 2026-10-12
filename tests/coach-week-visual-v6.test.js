@@ -771,7 +771,9 @@ test('upper controls preserve templates, quick entry, classic switch and unchang
   const idsBefore=[...h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]')].map(node=>node.dataset.programTaskId).sort();
   assert.deepEqual(idsBefore,['r-0-0','s-0-0','s-0-1','s-1-0','s-2-3']);
   const buttons=page.querySelectorAll('.coach-v15-action-buttons button');
-  assert.equal(buttons.length,3);
+  assert.equal(buttons.length,4);
+  assert.ok(h.$('programAddVideoBtn'),'Video Ekle is beside Çalışma Ekle');
+  assert.equal(h.$('programAddVideoBtn').previousElementSibling,h.$('programAddTaskBtn'));
   assert.ok(h.$('programTemplatesBtn'));
   assert.ok(h.$('programAddTaskBtn'));
   assert.ok(h.$('programAddWeekBtn'));
