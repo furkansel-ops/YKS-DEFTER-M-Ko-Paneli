@@ -798,3 +798,46 @@ test('upper styling hides only duplicated header summaries, never the weekly les
   assert.match(html,/id="coachVisualWeekBoard"/);
   assert.match(html,/id="programWeekBoard"/);
 });
+
+
+test('upper-only stage displays preview header and facts while deliberately withholding the weekly table',t=>{
+  const h=harness(t),page=h.$('programsPage'),workspace=h.$('coachFutureProgramTable');
+  assert.ok(workspace,'original program layout remains for the later stage');
+  assert.equal(workspace.hasAttribute('hidden'),true,'weekly table is not visible yet');
+  assert.ok(workspace.contains(h.$('coachVisualWeekBoard')));
+  assert.ok(workspace.contains(h.$('programWeekBoard')));
+  assert.equal(page.querySelector('.coach-v15-header').contains(h.$('programStudentSelect')),true);
+  assert.equal(page.querySelectorAll('#coachV15Overview .coach-v15-stat').length,4);
+  assert.equal(page.querySelector('.coach-v15-actions').contains(h.$('programAddTaskBtn')),true);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v14-day').length,7,'lesson data and existing table code were not deleted');
+  assert.equal(h.writes.length,0);
+});
+
+test('upper-only stage keeps week navigation and existing add dialog usable outside the hidden table',t=>{
+  const h=harness(t),overview=h.$('coachV15Overview');
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  h.$('programNextWeek').click();
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'0');
+  assert.equal(h.$('coachFutureProgramTable').hasAttribute('hidden'),true);
+  h.$('programPrevWeek').click();
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  h.$('programAddTaskBtn').click();
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
+  assert.equal(h.writes.length,0);
+});
+
+test('upper-only presentation stylesheet visibly hides only deferred table container without removing sources',()=>{
+  const html=read('index.html'),css=read('coach-preview-upper-v15.css'),app=read('app-reset.js');
+  assert.match(html,/<section class="program-layout" id="coachFutureProgramTable" hidden>/);
+  assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.1/);
+  assert.match(css,/#programsPage > #coachFutureProgramTable\[hidden\]\{display:none!important\}/);
+  assert.match(html,/id="coachVisualWeekBoard"/);
+  assert.match(html,/id="programWeekBoard"/);
+  assert.match(html,/id="programStudentSelect"/);
+  assert.match(app,/function renderCoachVisualWeek/);
+  assert.match(app,/function bindCoachVisualWeekActions/);
+  assert.match(app,/function renderProgramWorkspace/);
+  assert.match(html,/id="programAddTaskBtn"/);
+  assert.match(html,/id="programTemplatesBtn"/);
+  assert.match(html,/id="programAddWeekBtn"/);
+});
