@@ -2228,12 +2228,7 @@ function renderCoachVisualWeek(program,week,row){
     +'<header class="coach-v6-title"><span class="coach-v6-logo">'+coachV6Symbol("exam")+'</span><div><span class="coach-v6-kicker">YKS DEFTERİM · KOÇ PANELİ</span><h2>Haftalık Plan</h2><p>'+escHtml(studentName(row))+' öğrencisinin planını görüntüle, düzenle ve yeni çalışmalar ekle.</p></div><span class="coach-v6-sync">Öğrencinin paylaştığı program</span></header>'
     +metrics+coachV7DraftPanel(draftKey,week)+coachV10WeekBulkPanel()+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
     +'<div class="coach-v6-sheet-tabs" role="group" aria-label="Hafta veya liste görünümü"><button type="button" data-coach-v6-layout="list" aria-pressed="'+(coachWeekVisualLayout==="list")+'">☷ Liste</button><button type="button" data-coach-v6-layout="week" aria-pressed="'+(coachWeekVisualLayout==="week")+'">▦ Hafta</button></div></div>'
-    +'<div class="coach-v6-days" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section>'
-    +'<section class="coach-v6-quick"><div><h3>Hızlı İşlemler</h3><p>Koçunla haftanın çalışmalarını daha hızlı hazırlayın.</p></div><div class="coach-v6-quick-actions">'
-    +'<button type="button" data-coach-quick="bulk"><strong>▦ Haftaya Toplu Ekle</strong><small>Bir çalışmayı birden fazla güne ekle</small></button>'
-    +'<button type="button" data-coach-quick="templates"><strong>▣ Ders Şablonları</strong><small>Hazır çalışma örnekleri</small></button>'
-    +'<button type="button" data-coach-quick="add"><strong>＋ Yeni Çalışma</strong><small>Tek bir güne görev ekle</small></button>'
-    +'</div></section></section>';
+    +'<div class="coach-v6-days" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section></section>';
 }
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
@@ -2384,12 +2379,6 @@ function bindCoachVisualWeekActions(weekStart){
     coachWeekVisualLayout=button.dataset.coachV6Layout==="list"?"list":"week";
     root.querySelector(".coach-v6-days")?.setAttribute("data-layout",coachWeekVisualLayout);
     root.querySelectorAll("[data-coach-v6-layout]").forEach(node=>node.setAttribute("aria-pressed",String(node.dataset.coachV6Layout===coachWeekVisualLayout)));
-  }));
-  root.querySelectorAll("[data-coach-quick]").forEach(button=>button.addEventListener("click",()=>{
-    const action=button.dataset.coachQuick;
-    if(action==="bulk")$("programAddWeekBtn")?.click();
-    else if(action==="templates")$("programTemplatesBtn")?.click();
-    else $("programAddTaskBtn")?.click();
   }));
 }
 function coachSetWeekView(view){
