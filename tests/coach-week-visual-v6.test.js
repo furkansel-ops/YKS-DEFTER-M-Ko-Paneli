@@ -720,3 +720,81 @@ test('phase 1 CSS adjusts only table skeleton, not the teacher library, task car
   assert.match(css,/\.coach-v14-week\[data-layout="list"\]/);
   assert.doesNotMatch(css,/\.coach-v11-task(?:[{\s.]|$)|\.coach-v7-draft(?:[{\s.]|$)|#programVideoLibrary|#coachNav|#homePage|#settingsPage/);
 });
+
+
+test('upper preview contains one real student selector and one functioning week navigation',t=>{
+  const h=harness(t),page=h.$('programsPage');
+  assert.ok(page.querySelector('.coach-v15-breadcrumb'));
+  assert.equal(page.querySelector('.coach-v15-title-group h1').textContent,'Haftalık Plan');
+  assert.equal(page.querySelectorAll('#programStudentSelect').length,1);
+  assert.equal(page.querySelectorAll('#programPrevWeek').length,1);
+  assert.equal(page.querySelectorAll('#programNextWeek').length,1);
+  assert.equal(page.querySelectorAll('#programCurrentWeek').length,1);
+  assert.equal(page.querySelectorAll('#programWeekLabel').length,1);
+  assert.equal(h.$('programStudentSelect').value,'student-b');
+  assert.match(h.$('coachV15Subtitle').textContent,/Deniz/);
+  assert.match(h.$('programWeekLabel').textContent,/5\s*(?:–|-)\s*11|5 Eki|5 Ekim/i);
+  assert.equal(h.writes.length,0);
+});
+
+test('upper preview metric cards reflect actual selected-week student data, not screenshot placeholder numbers',t=>{
+  const h=harness(t),overview=h.$('coachV15Overview');
+  assert.equal(overview.querySelectorAll('.coach-v15-stat').length,4);
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  assert.equal(overview.querySelector('[data-coach-summary="progress"] strong').textContent,'40%');
+  assert.equal(overview.querySelector('[data-coach-summary="subjects"] strong').textContent,'4');
+  assert.equal(overview.querySelector('[data-coach-summary="average"] strong').textContent,'0,7');
+  assert.equal(overview.querySelector('.coach-v15-progress-ring').getAttribute('aria-label'),'40% tamamlandı');
+  assert.match(overview.textContent,/2 \/ 5 görev/);
+  assert.doesNotMatch(overview.textContent,/\+4 geçen haftaya göre|Toplam Görev28/);
+  assert.equal(h.writes.length,0);
+});
+
+test('upper overview refreshes when switching students or navigating to a different week',t=>{
+  const h=harness(t),overview=h.$('coachV15Overview');
+  h.w.coachV6Test.seed(h.rows,'student-a',week);
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'0');
+  assert.equal(overview.querySelector('[data-coach-summary="progress"] strong').textContent,'0%');
+  assert.match(h.$('coachV15Subtitle').textContent,/Ada/);
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  h.$('programNextWeek').click();
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'0');
+  assert.equal(overview.querySelector('[data-coach-summary="subjects"] strong').textContent,'0');
+  h.$('programPrevWeek').click();
+  assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  assert.equal(h.writes.length,0);
+});
+
+test('upper controls preserve templates, quick entry, classic switch and unchanged weekly board',t=>{
+  const h=harness(t),page=h.$('programsPage');
+  const idsBefore=[...h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]')].map(node=>node.dataset.programTaskId).sort();
+  assert.deepEqual(idsBefore,['r-0-0','s-0-0','s-0-1','s-1-0','s-2-3']);
+  const buttons=page.querySelectorAll('.coach-v15-action-buttons button');
+  assert.equal(buttons.length,3);
+  assert.ok(h.$('programTemplatesBtn'));
+  assert.ok(h.$('programAddTaskBtn'));
+  assert.ok(h.$('programAddWeekBtn'));
+  h.$('programTemplatesBtn').click();
+  assert.equal(h.$('programTemplatePopover').classList.contains('hidden'),false);
+  h.$('programTemplateClose').click();
+  h.$('coachWeekClassicMode').click();
+  assert.equal(page.dataset.coachWeekView,'classic');
+  h.$('coachWeekVisualMode').click();
+  assert.equal(page.dataset.coachWeekView,'visual');
+  assert.deepEqual([...h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]')].map(node=>node.dataset.programTaskId).sort(),idsBefore);
+  assert.equal(h.writes.length,0);
+});
+
+test('upper styling hides only duplicated header summaries, never the weekly lessons',()=>{
+  const html=read('index.html'),css=read('coach-preview-upper-v15.css');
+  assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.66/);
+  assert.match(css,/#programsPage \.coach-v15-header-main/);
+  assert.match(css,/#programsPage \.coach-v15-overview/);
+  assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v6-title/);
+  assert.match(css,/#programsPage \.program-toolbar\{display:none!important\}/);
+  assert.doesNotMatch(css,/\.coach-v14-week|\.coach-v12-card-stack|\.coach-v11-task|\.coach-v7-draft|#programWeekBoard|#programVideoLibrary/);
+  assert.match(html,/id="coachVisualWeekBoard"/);
+  assert.match(html,/id="programWeekBoard"/);
+});
