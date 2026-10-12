@@ -2220,8 +2220,11 @@ function renderCoachVisualWeek(program,week,row){
       ...task,text:task.text.replace(/\s+·\s+Saat\s+(?:[01]\d|2[0-3]):[0-5]\d\b/gi,"")
     },draftKey)).join("");
     const totalCards=item.tasks.length+drafts.filter(task=>task.day===day).length;
-    return '<section class="coach-v6-day coach-v11-day'+(isToday?' is-today':'')+'" data-day="'+day+'">'
-      +'<header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span><small>'+item.done+'/'+item.tasks.length+' tamamlandı</small></header>'
+    const completion=item.tasks.length?Math.round(item.done/item.tasks.length*100):0;
+    return '<section class="coach-v6-day coach-v11-day coach-v14-day'+(isToday?' is-today':'')+'" data-day="'+day+'">'
+      +'<header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span>'
+      +'<small>'+item.done+'/'+item.tasks.length+' tamamlandı</small>'
+      +'<div class="coach-v14-progress" role="progressbar" aria-label="'+names[day]+' tamamlanma oranı" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+completion+'"><span style="width:'+completion+'%"></span></div></header>'
       +'<div class="coach-v6-day-tasks coach-v12-card-stack" tabindex="0" role="region" aria-label="'+names[day]+' çalışmaları" data-task-count="'+totalCards+'">'
       +taskCards+draftCards
       +(!totalCards?'<div class="coach-v6-day-empty">Henüz çalışma yok.</div>':'')+'</div>'
@@ -2232,7 +2235,7 @@ function renderCoachVisualWeek(program,week,row){
     +'<header class="coach-v6-title"><span class="coach-v6-logo">'+coachV6Symbol("exam")+'</span><div><span class="coach-v6-kicker">YKS DEFTERİM · KOÇ PANELİ</span><h2>Haftalık Plan</h2><p>'+escHtml(studentName(row))+' öğrencisinin planını görüntüle, düzenle ve yeni çalışmalar ekle.</p></div><span class="coach-v6-sync">Öğrencinin paylaştığı program</span></header>'
     +metrics+coachV7DraftPanel(draftKey,week)+coachV10WeekBulkPanel()+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p></div>'
     +'<div class="coach-v6-sheet-tabs" role="group" aria-label="Hafta veya liste görünümü"><button type="button" data-coach-v6-layout="week" aria-pressed="'+(coachWeekVisualLayout==="week")+'">▦ Hafta</button><button type="button" data-coach-v6-layout="list" aria-pressed="'+(coachWeekVisualLayout==="list")+'">☷ Liste</button><button type="button" class="coach-v11-width-toggle" data-v11-width aria-pressed="'+coachV11WideColumns+'">⇥ Kolon Genişliği</button></div></div>'
-    +'<div class="coach-v6-days coach-v11-week-table coach-v12-week-table" role="region" tabindex="0" aria-label="Haftalık program tablosu; yatay kaydırılabilir" data-density="'+(coachV11WideColumns?"wide":"normal")+'" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section></section>';
+    +'<div class="coach-v6-days coach-v11-week-table coach-v12-week-table coach-v14-week" role="region" tabindex="0" aria-label="Haftalık program tablosu; yatay kaydırılabilir" data-density="'+(coachV11WideColumns?"wide":"normal")+'" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section></section>';
 }
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
