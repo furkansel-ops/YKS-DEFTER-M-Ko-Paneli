@@ -257,7 +257,7 @@ test('missing student keeps the dialog closed and does not lock the page',t=>{
 
 test('Video Ekle opens its own teacher library and sends only after explicit confirmation',async t=>{
   const h=harness(t),w=h.w;
-  const feed={teachers:{MatMan:{channelName:'MatMan',videos:[{
+  const feed={teachers:{Eyüp B.:{channelName:'Eyüp B.',videos:[{
     id:'abc123XYZ99',title:'TYT Matematik Problemler Konu anlatımı',
     url:'https://www.youtube.com/watch?v=abc123XYZ99'
   }]}}};
@@ -295,7 +295,7 @@ test('Video Ekle opens its own teacher library and sends only after explicit con
   assert.equal(h.writes[0].type,'program_task');
   assert.deepEqual(Object.keys(h.writes[0].payload).sort(),['date','text']);
   assert.equal(h.writes[0].payload.date,'2026-10-07');
-  assert.match(h.writes[0].payload.text,/TYT Matematik.*MatMan.*Video izle/);
+  assert.match(h.writes[0].payload.text,/TYT Matematik.*Eyüp B..*Video izle/);
   assert.match(h.writes[0].payload.text,/https:\/\/www\.youtube\.com\/watch\?v=abc123XYZ99/);
   h.runTimers();
   assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),true);
