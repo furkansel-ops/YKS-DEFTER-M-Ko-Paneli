@@ -11,7 +11,7 @@ test('koç playlist detayında videoları başlığa göre arayabilir',()=>{
   const js=read('program-videos-v1.js');
   const css=read('program-videos-v1.css');
   assert.match(html,/program-videos-v1\.js\?v=1\.8\.2/);
-  assert.match(html,/program-videos-v1\.css\?v=1\.4\.0/);
+  assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
   assert.match(js,/playlistVideoQuery/);
   assert.match(js,/id="coachPlaylistVideoSearch"/);
   assert.match(js,/Bu playlistte video ara/);
