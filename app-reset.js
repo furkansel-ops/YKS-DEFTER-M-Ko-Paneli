@@ -2236,20 +2236,20 @@ function renderCoachVisualWeek(program,week,row){
   const hasUntimed=preparedDays.some(p=>p.unclockedTasks.length||p.untimedDrafts.length);
   const timeRail='<div class="coach-v11-time-rail" aria-hidden="true"><div class="coach-v11-time-corner"></div>'
     +'<div class="coach-v11-time-untimed" '+(!hasUntimed?'hidden':'')+'>Saati yok</div>'
-    +hours.map(hour=>'<div class="coach-v11-time-hour">'+hour+':00</div>').join("")
-    +'<div class="coach-v11-time-last"></div></div>';
+    +hours.map((hour,index)=>'<div class="coach-v11-time-hour" style="grid-row:'+(index+3)+'">'+hour+':00</div>').join("")
+    +'<div class="coach-v11-time-last" style="grid-row:'+(hours.length+3)+'"></div></div>';
   const days=preparedDays.map(({item,day,unclockedTasks,untimedDrafts,byHour})=>{
     const date=programDayDate(week.week,day),isToday=date===today;
     const dateLabel=programDayLabel(week.week,day).split(" · ")[1]||date;
     const unscheduled=unclockedTasks.map(renderTask).join("")+untimedDrafts.map(task=>coachV7DraftCard(task,draftKey)).join("");
-    const hourSlots=hours.map(hour=>'<div class="coach-v11-hour-slot" data-hour="'+hour+'" aria-label="'+names[day]+' '+hour+':00">'
+    const hourSlots=hours.map((hour,index)=>'<div class="coach-v11-hour-slot" style="grid-row:'+(index+3)+'" data-hour="'+hour+'" aria-label="'+names[day]+' '+hour+':00">'
       +byHour[hour].map(entry=>entry.kind==="task"?renderTask(entry.value):coachV7DraftCard(entry.value,draftKey)).join("")
       +'</div>').join("");
     return '<section class="coach-v6-day coach-v11-day'+(isToday?' is-today':'')+'" data-day="'+day+'">'
       +'<header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span><small>'+item.done+'/'+item.tasks.length+' tamamlandı</small></header>'
       +'<div class="coach-v6-day-tasks coach-v11-unscheduled" '+(!unscheduled?'hidden':'')+'>'+unscheduled+'</div>'
       +hourSlots
-      +'<div class="coach-v11-day-footer">'+coachV10InlineAdd(day)
+      +'<div class="coach-v11-day-footer" style="grid-row:'+(hours.length+3)+'">'+coachV10InlineAdd(day)
       +'<button type="button" class="coach-v6-add-day" data-coach-add-day="'+day+'" aria-controls="coachV10InlineDay'+day+'" aria-expanded="'+(coachV10ActiveDay===day)+'" aria-label="'+names[day]+' gününe çalışma ekle">＋ Ekle</button></div></section>';
   }).join("");
   return '<section class="coach-v6" aria-label="Koç haftalık plan çalışma alanı">'
