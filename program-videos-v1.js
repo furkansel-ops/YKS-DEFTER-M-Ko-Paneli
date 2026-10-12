@@ -570,6 +570,8 @@
   function boot(){
     buildShell();
     window.addEventListener("yks:coach-program-editor-open",event=>{
+      // Media library remains installed but inactive until its future dedicated screen.
+      if($("coachV19VideoPane")?.hidden)return;
       if(!$(ROOT_ID))buildShell();
       const detail=event.detail||{};
       state.scope=detail.scope==="AYT"?"AYT":"TYT";
@@ -582,6 +584,7 @@
       void load(true);
     });
     window.addEventListener("yks:coach-video-filters",event=>{
+      if($("coachV19VideoPane")?.hidden)return;
       if(!$("programTaskBackdrop")||$("programTaskBackdrop").classList.contains("hidden"))return;
       syncEditorFilters(event.detail||{});
     });
