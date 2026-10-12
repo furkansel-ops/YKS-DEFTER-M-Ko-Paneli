@@ -800,37 +800,48 @@ test('upper styling hides only duplicated header summaries, never the weekly les
 });
 
 
-test('upper-only stage displays preview header and facts while deliberately withholding the weekly table',t=>{
+test('table-only stage shows seven actual day columns beneath the approved upper section',t=>{
   const h=harness(t),page=h.$('programsPage'),workspace=h.$('coachFutureProgramTable');
-  assert.ok(workspace,'original program layout remains for the later stage');
-  assert.equal(workspace.hasAttribute('hidden'),true,'weekly table is not visible yet');
+  assert.ok(workspace);
+  assert.equal(workspace.hasAttribute('hidden'),false,'the seven-day table is visible');
+  assert.equal(workspace.classList.contains('coach-v16-table-only'),true);
   assert.ok(workspace.contains(h.$('coachVisualWeekBoard')));
-  assert.ok(workspace.contains(h.$('programWeekBoard')));
+  assert.ok(workspace.contains(h.$('programWeekBoard')),'legacy program code remains');
   assert.equal(page.querySelector('.coach-v15-header').contains(h.$('programStudentSelect')),true);
   assert.equal(page.querySelectorAll('#coachV15Overview .coach-v15-stat').length,4);
-  assert.equal(page.querySelector('.coach-v15-actions').contains(h.$('programAddTaskBtn')),true);
-  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v14-day').length,7,'lesson data and existing table code were not deleted');
+  assert.ok(page.querySelector('.coach-v15-actions').contains(h.$('programAddTaskBtn')));
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v14-week .coach-v14-day').length,7);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v12-card-stack').length,7);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]').length,5);
   assert.equal(h.writes.length,0);
 });
 
-test('upper-only stage keeps week navigation and existing add dialog usable outside the hidden table',t=>{
+test('table-only stage keeps top week navigation, the student timetable and add dialog working',t=>{
   const h=harness(t),overview=h.$('coachV15Overview');
   assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
   h.$('programNextWeek').click();
   assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'0');
-  assert.equal(h.$('coachFutureProgramTable').hasAttribute('hidden'),true);
+  assert.equal(h.$('coachFutureProgramTable').hasAttribute('hidden'),false);
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]').length,0);
   h.$('programPrevWeek').click();
   assert.equal(overview.querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]').length,5);
   h.$('programAddTaskBtn').click();
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
   assert.equal(h.writes.length,0);
 });
 
-test('upper-only presentation stylesheet visibly hides only deferred table container without removing sources',()=>{
-  const html=read('index.html'),css=read('coach-preview-upper-v15.css'),app=read('app-reset.js');
-  assert.match(html,/<section class="program-layout" id="coachFutureProgramTable" hidden>/);
-  assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.1/);
-  assert.match(css,/#programsPage > #coachFutureProgramTable\[hidden\]\{display:none!important\}/);
+test('table-only stylesheet suppresses duplicate panels without deleting old program sources',()=>{
+  const html=read('index.html'),css=read('coach-table-only-v16.css'),app=read('app-reset.js');
+  assert.match(html,/<section class="program-layout coach-v16-table-only" id="coachFutureProgramTable"/);
+  assert.match(html,/coach-table-only-v16\.css\?v=1\.0\.0/);
+  assert.doesNotMatch(html,/<section class="program-layout" id="coachFutureProgramTable" hidden>/);
+  assert.match(css,/#programsPage #coachFutureProgramTable \.coach-v6-sheet-head/);
+  assert.match(css,/#programsPage #coachFutureProgramTable \.coach-v7-panel/);
+  assert.match(css,/#programsPage #coachFutureProgramTable \.coach-v10-bulk/);
+  assert.match(css,/#programsPage #coachFutureProgramTable #programWeekBoard/);
+  assert.match(css,/#coachVisualWeekBoard:not\(\.hidden\)/);
+  assert.match(css,/display:none!important/);
   assert.match(html,/id="coachVisualWeekBoard"/);
   assert.match(html,/id="programWeekBoard"/);
   assert.match(html,/id="programStudentSelect"/);
@@ -840,4 +851,30 @@ test('upper-only presentation stylesheet visibly hides only deferred table conta
   assert.match(html,/id="programAddTaskBtn"/);
   assert.match(html,/id="programTemplatesBtn"/);
   assert.match(html,/id="programAddWeekBtn"/);
+});
+
+
+test('table-only program still provides in-day quick entry, task edit and move without writes',t=>{
+  const h=harness(t),board=h.$('coachVisualWeekBoard');
+  assert.equal(board.querySelectorAll('[data-coach-add-day]').length,7);
+  assert.equal(board.querySelectorAll('[data-program-edit]').length,5);
+  assert.equal(board.querySelectorAll('[data-program-select]').length,5);
+  const day=board.querySelector('[data-coach-add-day="4"]');
+  day.click();
+  assert.equal(board.querySelector('[data-v10-inline="4"]').hidden,false);
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true);
+  board.querySelector('[data-program-task-id="s-0-1"] [data-program-edit]').click();
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
+  assert.equal(h.writes.length,0);
+});
+
+test('table-only student changes retain factual upper numbers and render correct empty state',t=>{
+  const h=harness(t);
+  h.w.coachV6Test.seed(h.rows,'student-a',week);
+  assert.equal(h.$('coachV15Overview').querySelector('[data-coach-summary="total"] strong').textContent,'0');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v14-day').length,7);
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  assert.equal(h.$('coachV15Overview').querySelector('[data-coach-summary="total"] strong').textContent,'5');
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v14-day').length,7);
+  assert.equal(h.writes.length,0);
 });
