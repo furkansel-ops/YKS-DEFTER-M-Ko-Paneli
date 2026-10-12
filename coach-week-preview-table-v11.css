@@ -133,6 +133,9 @@
  padding:4px 0 0;margin:0;
  border:0;box-shadow:none;background:transparent;
 }
+#programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task-menu:not([open]) .coach-v11-task-menu-items{
+ display:none!important;
+}
 #programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task-menu-items button{
  display:block;min-width:0;min-height:31px;
  padding:6px 3px;border:1px solid #ffffffbe;border-radius:7px;
