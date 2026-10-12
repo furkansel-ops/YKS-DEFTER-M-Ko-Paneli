@@ -945,3 +945,71 @@ test('composer stylesheet changes only the new modal, not the weekly board',()=>
  for(const id of ['programBuilderSubject','programBuilderTopic','programBuilderActivity','programBuilderCount','programTaskDayGrid'])assert.ok(html.includes('id="'+id+'"'));
  assert.doesNotMatch(css,/#coachVisualWeekBoard|\.coach-v14-week|\.coach-v12-card-stack/);
 });
+
+test('split composer mounts the existing teacher-video library inside the dialog, lazily',async t=>{
+  const h=harness(t),w=h.w;
+  const feed={teachers:{MatMan:{
+    channelName:'MatMan',
+    videos:[{id:'abc123XYZ99',title:'TYT Matematik Problemler 30 soru çözümü',url:'https://www.youtube.com/watch?v=abc123XYZ99'}],
+    playlists:[{id:'PLabc123456789',title:'TYT Matematik video kampı',url:'https://www.youtube.com/playlist?list=PLabc123456789'}]
+  }}};
+  let requests=0;
+  w.fetch=async()=>{requests++;return{ok:true,json:async()=>feed}};
+  w.eval(read('program-videos-v1.js'));
+  h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  const host=h.$('programVideoLibrary');
+  assert.ok(host,'the original full media library is mounted');
+  assert.equal(h.$('coachV19VideoPane').contains(host),true);
+  assert.equal(h.$('programsPage').contains(host),false,'no duplicate panel below the weekly table');
+  assert.equal(requests,0,'closed modal does not make unnecessary video fetches');
+  h.$('programAddTaskBtn').click();
+  for(let i=0;i<24;i++)await Promise.resolve();
+  assert.equal(h.$('coachV19Workbench').dataset.activePane,'program');
+  assert.ok(requests>=1,'only opening editor starts video fetch');
+  assert.ok(host.querySelector('[data-video-add="0"]'),'actual existing video render is reused');
+  host.querySelector('[data-video-add="0"]').click();
+  assert.equal(h.$('programTaskVideo').value,'https://www.youtube.com/watch?v=abc123XYZ99');
+  assert.match(h.$('programTaskText').value,/Video izle/);
+  assert.equal(h.writes.length,0,'linking media is not a Firebase send');
+  assert.equal(h.$('coachV19Workbench').dataset.activePane,'program');
+  assert.equal(h.$('coachV19Linked').dataset.linked,'true');
+  h.$('programTaskSend').click();
+  for(let i=0;i<20;i++)await Promise.resolve();
+  assert.equal(h.writes.length,1);
+  assert.equal(h.writes[0].collection,'coachingActions');
+  assert.equal(h.writes[0].studentUid,'student-b');
+  assert.match(h.writes[0].payload.text,/https:\/\/www\.youtube\.com\/watch\?v=abc123XYZ99/);
+});
+test('custom coach text survives video selection and compact tabs retain their own state',async t=>{
+  const h=harness(t),w=h.w;
+  const feed={teachers:{MatMan:{videos:[{id:'abc123XYZ99',title:'TYT Matematik tekrar',url:'https://www.youtube.com/watch?v=abc123XYZ99'}]}}};
+  w.fetch=async()=>({ok:true,json:async()=>feed});
+  w.eval(read('program-videos-v1.js'));h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  h.$('programAddTaskBtn').click();
+  for(let i=0;i<20;i++)await Promise.resolve();
+  h.$('programTaskText').value='Özgün çalışma görevim';
+  h.$('programTaskText').dispatchEvent(new w.Event('input',{bubbles:true}));
+  h.$('coachV19ShowVideos').click();
+  assert.equal(h.$('coachV19Workbench').dataset.activePane,'videos');
+  assert.equal(h.$('coachV19ShowVideos').getAttribute('aria-pressed'),'true');
+  h.$('programVideoLibrary').querySelector('[data-video-add="0"]').click();
+  assert.equal(h.$('coachV19Workbench').dataset.activePane,'program');
+  assert.equal(h.$('programTaskText').value,'Özgün çalışma görevim');
+  assert.equal(h.writes.length,0);
+  h.$('programTaskCancel').click();
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true);
+  assert.equal(h.$('programsPage').querySelectorAll('.coach-v14-day').length,7);
+});
+test('new video workspace styles stay scoped to modal and preserve the hidden legacy placement rule',()=>{
+  const html=read('index.html'),css=read('coach-split-composer-v19.css'),old=read('program-videos-v1.css');
+  assert.match(html,/coach-split-composer-v19\.css\?v=1\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.68/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.0/);
+  assert.match(html,/id="coachV19Workbench"/);
+  assert.match(html,/id="coachV19VideoPane"/);
+  assert.match(css,/\.coach-v19-workbench/);
+  assert.match(css,/grid-template-columns:minmax\(0,56fr\) minmax\(0,44fr\)/);
+  assert.match(css,/@media\(max-width:910px\)/);
+  assert.doesNotMatch(css,/#programsPage|\.coach-v14-week/);
+  assert.match(old,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
+});
