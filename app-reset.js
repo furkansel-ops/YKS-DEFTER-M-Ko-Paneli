@@ -497,7 +497,7 @@ function renderReportProgramDetails(row,details){
   if(!details.week){
     host.innerHTML='<div class="report-v29-empty">Öğrencinin paylaşılmış bir haftalık programı henüz yok.</div>';return;
   }
-  const today=reportDateOffset(0),pending=details.pending,subjectMax=Math.max(1,...details.subjects.map(item=>item.total));
+  const today=reportDateOffset(0),pending=details.pending;
   const list=details.subjects.length?details.subjects.map(item=>{
     const pct=item.total?Math.round(item.done/item.total*100):0;
     return '<div class="report-v29-subject"><div><b>'+escHtml(item.name)+'</b><small>'+item.done+' / '+item.total+' tamamlandı</small></div>'
