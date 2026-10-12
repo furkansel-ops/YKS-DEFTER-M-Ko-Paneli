@@ -123,22 +123,6 @@
 #programsPage .coach-v6-days[data-layout="list"] .coach-v6-day-head{display:flex;justify-content:flex-start;gap:9px;min-height:40px;padding:11px 13px}
 #programsPage .coach-v6-days[data-layout="list"] .coach-v6-day-tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px;padding:10px}
 #programsPage .coach-v6-days[data-layout="list"] .coach-v6-add-day{width:auto;margin:5px 10px 10px;align-self:flex-start;padding-inline:15px}
-#programsPage .coach-v6-quick{
- display:grid;gap:12px;padding:18px;border:1px solid var(--cw-line);
- border-radius:15px;background:#fff;box-shadow:0 7px 20px #283a5b0a;
-}
-#programsPage .coach-v6-quick h3{margin:0;font-size:16px;font-weight:830;color:var(--cw-ink)}
-#programsPage .coach-v6-quick p{margin:5px 0 0;font-size:11px;color:var(--cw-muted)}
-#programsPage .coach-v6-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-#programsPage .coach-v6-quick-actions button{
- min-height:68px;display:grid;align-content:center;gap:4px;padding:10px 12px;
- border:1px solid #e1e7f5;border-radius:10px;background:linear-gradient(140deg,#fff,#f9fbff);
- color:#33435b;text-align:left;cursor:pointer;
-}
-#programsPage .coach-v6-quick-actions button:first-child{border-color:#a99cf8;background:linear-gradient(140deg,#faf8ff,#f2eeff)}
-#programsPage .coach-v6-quick-actions button:hover{border-color:#8b7ff7}
-#programsPage .coach-v6-quick-actions strong{font-size:12px;color:#3a3f67}
-#programsPage .coach-v6-quick-actions small{font-size:10px;color:#8490a4;line-height:1.4}
 @media(max-width:1300px){
  #programsPage .coach-v6-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
  #programsPage .coach-v6-days:not([data-layout="list"]){overflow-x:auto;grid-template-columns:repeat(7,minmax(142px,1fr));}
@@ -159,8 +143,6 @@
  #programsPage .coach-v6-day{min-height:145px;border:1px solid var(--cw-line)!important;border-radius:11px;overflow:hidden}
  #programsPage .coach-v6-day-head{min-height:54px}
  #programsPage .coach-v6-day-tasks{padding:8px}
- #programsPage .coach-v6-quick-actions{grid-template-columns:1fr}
- #programsPage .coach-v6-quick-actions button{min-height:55px}
 }
 @media(max-width:490px){
  #programsPage .coach-v6-title h2{font-size:20px}
