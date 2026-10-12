@@ -224,3 +224,7 @@
  #programsPage .coach-v15-progress-ring{width:23px;height:23px;right:8px;top:12px}
  #programsPage .coach-v15-progress-ring::after{inset:5px}
 }
+
+/* Aşama: yalnızca üst bölüm. Tablo DOM'u, veri senkronizasyonu ve olay bağlayıcıları
+   silinmeden tutulur. Tablo aşamasında hidden niteliği ve bu kural kaldırılacak. */
+#programsPage > #coachFutureProgramTable[hidden]{display:none!important}
