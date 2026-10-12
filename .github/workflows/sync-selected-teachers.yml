@@ -15,8 +15,10 @@ permissions:
   pages: write
   id-token: write
 
+# Independent from the normal Pages workflow, which cancels in-progress
+# runs in its own "pages" group after every main push.
 concurrency:
-  group: pages
+  group: selected-teachers-media
   cancel-in-progress: false
 
 jobs:
