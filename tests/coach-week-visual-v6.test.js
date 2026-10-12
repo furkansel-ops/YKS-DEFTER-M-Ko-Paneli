@@ -712,7 +712,7 @@ test('phase 1 CSS adjusts only table skeleton, not the teacher library, task car
   const css=read('coach-week-skeleton-v14.css');
   const html=read('index.html');
   assert.match(html,/coach-week-skeleton-v14\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.69/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70/);
   assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v14-week/);
   assert.match(css,/grid-template-columns:repeat\(7,minmax\(170px,1fr\)\)/);
   assert.match(css,/\.coach-v14-progress span/);
@@ -791,7 +791,7 @@ test('upper controls preserve templates, quick entry, classic switch and unchang
 test('upper styling hides only duplicated header summaries, never the weekly lessons',()=>{
   const html=read('index.html'),css=read('coach-preview-upper-v15.css');
   assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.69/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70/);
   assert.match(css,/#programsPage \.coach-v15-header-main/);
   assert.match(css,/#programsPage \.coach-v15-overview/);
   assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v6-title/);
@@ -943,7 +943,7 @@ test('invalid quantity cannot send; existing editing and quick presets stay inta
 test('composer stylesheet changes only the new modal, not the weekly board',()=>{
  const html=read('index.html'),css=read('coach-lesson-composer-v18.css');
  assert.match(html,/coach-lesson-composer-v18\.css\?v=1\.0\.0/);
- assert.match(html,/app-reset\.js\?v=1\.0\.69/);
+ assert.match(html,/app-reset\.js\?v=1\.0\.70/);
  for(const id of ['programBuilderSubject','programBuilderTopic','programBuilderActivity','programBuilderCount','programTaskDayGrid'])assert.ok(html.includes('id="'+id+'"'));
  assert.doesNotMatch(css,/#coachVisualWeekBoard|\.coach-v14-week|\.coach-v12-card-stack/);
 });
@@ -1015,7 +1015,7 @@ test('custom coach text survives video selection and compact tabs retain their o
 test('new video workspace styles stay scoped to modal and preserve the hidden legacy placement rule',()=>{
   const html=read('index.html'),css=read('coach-split-composer-v19.css'),old=read('program-videos-v1.css');
   assert.match(html,/coach-split-composer-v19\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.69/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70/);
   assert.match(html,/program-videos-v1\.js\?v=1\.9\.4/);
   assert.match(html,/id="coachV19Workbench"/);
   assert.match(html,/id="coachV19VideoPane"/);
