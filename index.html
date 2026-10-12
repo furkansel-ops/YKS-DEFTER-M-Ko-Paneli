@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="./coach-video-grid-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-lesson-only-v22.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-task-one-screen-v23.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-video-picker-v24.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -252,6 +253,7 @@
           <div class="program-head-actions coach-v15-action-buttons">
             <button type="button" class="program-secondary" id="programTemplatesBtn">▤ Şablonlar</button>
             <button type="button" class="program-primary" id="programAddTaskBtn">＋ Çalışma Ekle</button>
+            <button type="button" class="program-secondary coach-video-open-btn" id="programAddVideoBtn">▶ Video Ekle</button>
             <button type="button" class="program-secondary" id="programAddWeekBtn">▦ Haftaya Toplu Ekle</button>
           </div>
         </div>
@@ -1212,6 +1214,26 @@
     </main>
   </div>
 
+  <div class="coach-video-picker-backdrop hidden" id="coachVideoPickerBackdrop" aria-hidden="true">
+    <section class="coach-video-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="coachVideoPickerTitle">
+      <header class="coach-video-picker-header">
+        <div><span>PROGRAMLAR / VİDEO EKLE</span><h2 id="coachVideoPickerTitle" tabindex="-1">Hocalar &amp; Videolar</h2><p id="coachVideoPickerStudent">Bir öğrenci seç.</p></div>
+        <button type="button" id="coachVideoPickerClose" aria-label="Video penceresini kapat">×</button>
+      </header>
+      <div class="coach-video-picker-target">
+        <label><span>Videonun ekleneceği gün</span><input id="coachVideoPickerDate" type="date" required></label>
+        <div id="coachVideoPickerDays" class="coach-video-picker-days" role="group" aria-label="Haftanın günleri"></div>
+        <div class="coach-video-picker-selection" id="coachVideoPickerSelection" role="status" aria-live="polite">Henüz video seçilmedi. Aşağıdaki hoca ve video listesinden bir kaynak seç.</div>
+      </div>
+      <div class="coach-v19-video-pane coach-video-picker-host" id="coachVideoLibraryHost" aria-label="Hoca ve video kütüphanesi"></div>
+      <footer class="coach-video-picker-footer">
+        <span id="coachVideoPickerStatus" role="status" aria-live="polite">Video seçildiğinde seçili güne ekleyebilirsin.</span>
+        <button type="button" id="coachVideoPickerCancel">Vazgeç</button>
+        <button type="button" id="coachVideoPickerSave" disabled>Programa Ekle</button>
+      </footer>
+    </section>
+  </div>
+
   <div class="program-task-backdrop hidden" id="programTaskBackdrop" aria-hidden="true">
     <section class="program-task-modal program-builder-modal program-classic-modal coach-v18-modal coach-v19-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
       <header>
@@ -1301,6 +1323,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.68"></script><script defer src="./program-videos-v1.js?v=1.9.1"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.69"></script><script defer src="./program-videos-v1.js?v=1.9.2"></script>
 </body>
 </html>
