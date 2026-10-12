@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="./coach-preview-upper-v15.css?v=1.0.1">
   <link rel="stylesheet" href="./coach-table-only-v16.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-table-fit-v17.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-lesson-composer-v18.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -1207,13 +1208,53 @@
   </div>
 
   <div class="program-task-backdrop hidden" id="programTaskBackdrop" aria-hidden="true">
-    <section class="program-task-modal program-builder-modal program-classic-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
+    <section class="program-task-modal program-builder-modal program-classic-modal coach-v18-modal" role="dialog" aria-modal="true" aria-labelledby="programTaskTitle">
       <header>
         <div><span>PROGRAM HAZIRLA</span><h2 id="programTaskTitle" tabindex="-1">Çalışma ekle</h2><p id="programTaskStudentName">Önce bir öğrenci seç.</p></div>
         <button type="button" id="programTaskClose" aria-label="Kapat">×</button>
       </header>
       <div class="program-task-body">
-        <label><span>Hafta ve başlangıç tarihi</span><input id="programTaskDate" type="date" required></label>
+        <section class="coach-v18-builder" aria-labelledby="coachV18Heading">
+          <div class="coach-v18-heading">
+            <div><span class="coach-v18-eyebrow">YENİ ÇALIŞMA</span><h3 id="coachV18Heading">Ders bilgileri</h3><p>Alanları seç, görev metni otomatik oluşsun. İstersen aşağıda elle düzenle.</p></div>
+            <div class="coach-v18-level" id="programBuilderLevel" role="group" aria-label="Sınav türü">
+              <button type="button" data-plan-level="TYT" aria-pressed="true">TYT</button>
+              <button type="button" data-plan-level="AYT" aria-pressed="false">AYT</button>
+            </div>
+          </div>
+          <div class="coach-v18-fields">
+            <label><span>Ders <em>Gerekli</em></span>
+              <select id="programBuilderSubject">
+                <option value="">Ders seç</option>
+                <option>Matematik</option><option>Türkçe</option><option>Geometri</option>
+                <option>Fizik</option><option>Kimya</option><option>Biyoloji</option>
+                <option>Edebiyat</option><option>Tarih</option><option>Coğrafya</option>
+                <option>Felsefe</option><option>Din Kültürü</option><option>Paragraf</option><option>Deneme</option>
+              </select>
+            </label>
+            <label><span>Konu <em>İsteğe bağlı</em></span>
+              <input id="programBuilderTopic" type="text" list="programBuilderTopicSuggestions" maxlength="120" autocomplete="off" placeholder="Örn. Problemler">
+              <datalist id="programBuilderTopicSuggestions"></datalist>
+            </label>
+            <label><span>Çalışma türü</span>
+              <select id="programBuilderActivity">
+                <option value="Konu anlatımı">Konu anlatımı</option>
+                <option value="Soru çözümü" selected>Soru çözümü</option>
+                <option value="Tekrar">Tekrar</option>
+                <option value="Deneme analizi">Deneme analizi</option>
+                <option value="Ödev / Diğer">Ödev / Diğer</option>
+              </select>
+            </label>
+            <label><span>Soru sayısı <em>İsteğe bağlı</em></span>
+              <input id="programBuilderCount" type="number" min="1" max="999" step="1" inputmode="numeric" placeholder="Örn. 30">
+            </label>
+          </div>
+          <div class="coach-v18-builder-bottom">
+            <span id="programBuilderHint" role="status" aria-live="polite">Bir ders seçerek başlayabilirsin.</span>
+            <button type="button" id="programBuilderApply">↻ Görev metnini oluştur</button>
+          </div>
+        </section>
+        <label class="coach-v18-date"><span>Hafta ve başlangıç tarihi</span><input id="programTaskDate" type="date" required></label>
         <section class="coach-fast-days" id="programTaskDaysArea" aria-label="Çalışmanın ekleneceği günler">
           <div class="coach-fast-days-heading">
             <div><b>Hangi günlerde çalışılacak?</b><small>Birden fazla gün seçebilirsin. Seçili haftanın tarihleri gösterilir.</small></div>
@@ -1227,8 +1268,8 @@
           </div>
           <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
         </section>
-        <div id="coachV8ModalPicker" class="coach-v8-modal-host"></div>
-        <label><span>Görev</span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
+        <details class="coach-v18-quick"><summary>Hazır çalışma örnekleri <span>İsteğe bağlı</span></summary><div id="coachV8ModalPicker" class="coach-v8-modal-host"></div></details>
+        <label class="coach-v18-task-text"><span>Görev metni <em>Düzenlenebilir</em></span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
         <label><span>Video bağlantısı · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://youtu.be/..."></label>
         <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderdikten sonra sıradaki çalışmayı ekle <small>Pencere açık kalsın, yeni görevi hızla yaz.</small></span></label>
         <div class="program-task-info">Çalışmalar öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle gönderilir. Gönderim, öğrenci cihazında uygulandığı anlamına gelmez.</div>
@@ -1243,6 +1284,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.66"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.67"></script><script defer src="./program-videos-v1.js?v=1.8.2"></script>
 </body>
 </html>

@@ -712,7 +712,7 @@ test('phase 1 CSS adjusts only table skeleton, not the teacher library, task car
   const css=read('coach-week-skeleton-v14.css');
   const html=read('index.html');
   assert.match(html,/coach-week-skeleton-v14\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.66/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.67/);
   assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v14-week/);
   assert.match(css,/grid-template-columns:repeat\(7,minmax\(170px,1fr\)\)/);
   assert.match(css,/\.coach-v14-progress span/);
@@ -789,7 +789,7 @@ test('upper controls preserve templates, quick entry, classic switch and unchang
 test('upper styling hides only duplicated header summaries, never the weekly lessons',()=>{
   const html=read('index.html'),css=read('coach-preview-upper-v15.css');
   assert.match(html,/coach-preview-upper-v15\.css\?v=1\.0\.1/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.66/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.67/);
   assert.match(css,/#programsPage \.coach-v15-header-main/);
   assert.match(css,/#programsPage \.coach-v15-overview/);
   assert.match(css,/#programsPage #coachVisualWeekBoard \.coach-v6-title/);
@@ -877,4 +877,71 @@ test('table-only student changes retain factual upper numbers and render correct
   assert.equal(h.$('coachV15Overview').querySelector('[data-coach-summary="total"] strong').textContent,'5');
   assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v14-day').length,7);
   assert.equal(h.writes.length,0);
+});
+
+test('new coach composer generates editable TYT and AYT lesson tasks',t=>{
+ const h=harness(t);h.$('programAddTaskBtn').click();
+ const set=(id,value,event='input')=>{const n=h.$(id);n.value=value;n.dispatchEvent(new h.w.Event(event,{bubbles:true}))};
+ set('programBuilderSubject','Matematik','change');
+ set('programBuilderTopic','Problemler');
+ set('programBuilderCount','30');
+ assert.equal(h.$('programTaskText').value,'TYT Matematik · Problemler · Soru çözümü · 30 soru');
+ assert.equal(h.writes.length,0);
+ h.$('programBuilderLevel').querySelector('[data-plan-level="AYT"]').click();
+ assert.equal(h.$('programTaskText').value,'AYT Matematik · Problemler · Soru çözümü · 30 soru');
+ assert.ok([...h.$('programBuilderTopicSuggestions').querySelectorAll('option')].some(x=>x.value==='Türev'));
+ set('programBuilderActivity','Tekrar');
+ assert.equal(h.$('programTaskText').value,'AYT Matematik · Problemler · Tekrar');
+ assert.equal(h.$('programBuilderCount').closest('label').hidden,true);
+});
+test('manual instructions are preserved unless regenerate is explicitly selected',t=>{
+ const h=harness(t);h.$('programAddTaskBtn').click();
+ const subject=h.$('programBuilderSubject');subject.value='Fizik';subject.dispatchEvent(new h.w.Event('change',{bubbles:true}));
+ h.$('programTaskText').value='Kendi hazırladığım özel çalışma';h.$('programTaskText').dispatchEvent(new h.w.Event('input',{bubbles:true}));
+ h.$('programBuilderTopic').value='Hareket ve Kuvvet';h.$('programBuilderTopic').dispatchEvent(new h.w.Event('input',{bubbles:true}));
+ assert.equal(h.$('programTaskText').value,'Kendi hazırladığım özel çalışma');
+ assert.match(h.$('programBuilderHint').textContent,/korundu/);
+ h.$('programBuilderApply').click();
+ assert.equal(h.$('programTaskText').value,'TYT Fizik · Hareket ve Kuvvet · Soru çözümü');
+ h.$('programTaskCancel').click();h.$('programAddTaskBtn').click();
+ assert.equal(h.$('programBuilderSubject').value,'');
+ assert.equal(h.$('programTaskText').value,'');
+});
+test('multiple chosen weekdays send separate existing-format coachingActions',async t=>{
+ const h=harness(t);h.$('programAddTaskBtn').click();
+ h.$('programBuilderSubject').value='Kimya';h.$('programBuilderSubject').dispatchEvent(new h.w.Event('change',{bubbles:true}));
+ h.$('programBuilderTopic').value='Karışımlar';h.$('programBuilderTopic').dispatchEvent(new h.w.Event('input',{bubbles:true}));
+ h.$('programDaysWeekdays').click();h.$('programTaskSend').click();
+ for(let i=0;i<15;i++)await Promise.resolve();
+ assert.equal(h.writes.length,5);
+ assert.deepEqual(h.writes.map(x=>x.payload.date),['2026-10-05','2026-10-06','2026-10-07','2026-10-08','2026-10-09']);
+ for(const item of h.writes){
+   assert.equal(item.collection,'coachingActions');
+   assert.equal(item.type,'program_task');
+   assert.deepEqual(Object.keys(item.payload).sort(),['date','text']);
+   assert.equal(item.payload.text,'TYT Kimya · Karışımlar · Soru çözümü');
+ }
+});
+test('invalid quantity cannot send; existing editing and quick presets stay intact',async t=>{
+ const h=harness(t);h.$('programAddTaskBtn').click();
+ h.$('programBuilderSubject').value='Matematik';h.$('programBuilderSubject').dispatchEvent(new h.w.Event('change',{bubbles:true}));
+ h.$('programBuilderCount').value='1000';h.$('programBuilderCount').dispatchEvent(new h.w.Event('input',{bubbles:true}));
+ h.$('programTaskSend').click();await Promise.resolve();
+ assert.equal(h.writes.length,0);assert.match(h.$('programTaskStatus').textContent,/1 ile 999/);
+ h.$('programTaskClose').click();
+ h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-0-1"] [data-program-edit]').click();
+ assert.equal(h.$('programTaskText').value,'AYT Matematik · Fonksiyonlar');
+ assert.equal(h.$('programTaskBackdrop').hasAttribute('data-editing'),true);
+ h.$('programTaskCancel').click();h.$('programAddTaskBtn').click();
+ const picker=h.$('coachV8ModalPicker');
+ picker.querySelector('[data-v8-level="AYT"]').click();
+ picker.querySelector('[data-v8-preset="biology"]').click();
+ assert.equal(h.$('programTaskText').value,'AYT Biyoloji · Konu tekrarı · 20 soru');
+});
+test('composer stylesheet changes only the new modal, not the weekly board',()=>{
+ const html=read('index.html'),css=read('coach-lesson-composer-v18.css');
+ assert.match(html,/coach-lesson-composer-v18\.css\?v=1\.0\.0/);
+ assert.match(html,/app-reset\.js\?v=1\.0\.67/);
+ for(const id of ['programBuilderSubject','programBuilderTopic','programBuilderActivity','programBuilderCount','programTaskDayGrid'])assert.ok(html.includes('id="'+id+'"'));
+ assert.doesNotMatch(css,/#coachVisualWeekBoard|\.coach-v14-week|\.coach-v12-card-stack/);
 });

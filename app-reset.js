@@ -1984,6 +1984,7 @@ function coachV8BindPicker(root,mode,inputId){
     const text=coachV8PresetText(button.dataset.v8Preset,coachV8Levels[mode]);
     const input=$(inputId);if(!input||!text)return;
     input.value=text;input.dispatchEvent(new Event("input",{bubbles:true}));
+    if(mode==="modal")coachV18ReflectPreset(button.dataset.v8Preset,coachV8Levels[mode],text);
     input.focus({preventScroll:true});
     // Editing the suggestion directly is faster than returning to a second form.
     const topicStart=text.indexOf(" · ");
@@ -2491,6 +2492,105 @@ document.querySelector('[data-coach-page="programs"]')?.addEventListener("click"
 function todayIsoLocal(){
   const d=new Date(),off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10);
 }
+/* Structured coach lesson composer v18: UI-only metadata is flattened into the
+   existing plain-text task contract. Never write extra Firestore fields. */
+const COACH_V18_TOPICS={
+  "TYT|Matematik":["Temel Kavramlar","Sayı Basamakları","Bölme ve Bölünebilme","Rasyonel Sayılar","Üslü Sayılar","Köklü Sayılar","Denklemler","Problemler"],
+  "AYT|Matematik":["Fonksiyonlar","Polinomlar","Parabol","Trigonometri","Logaritma","Diziler","Limit","Türev","İntegral"],
+  "TYT|Türkçe":["Sözcükte Anlam","Cümlede Anlam","Paragraf","Yazım Kuralları","Noktalama İşaretleri","Dil Bilgisi"],
+  "AYT|Edebiyat":["Şiir Bilgisi","Edebî Akımlar","Tanzimat","Servetifünun","Millî Edebiyat","Cumhuriyet Dönemi"],
+  "TYT|Fizik":["Fizik Bilimine Giriş","Madde ve Özellikleri","Hareket ve Kuvvet","Isı ve Sıcaklık","Optik"],
+  "AYT|Fizik":["Vektörler","Kuvvet ve Hareket","Elektrik ve Manyetizma","Dalgalar","Modern Fizik"],
+  "TYT|Kimya":["Kimya Bilimi","Atom ve Periyodik Sistem","Kimyasal Türler","Maddenin Halleri","Karışımlar"],
+  "AYT|Kimya":["Modern Atom Teorisi","Gazlar","Çözeltiler","Kimyasal Tepkimelerde Enerji","Denge","Organik Kimya"],
+  "TYT|Biyoloji":["Canlıların Ortak Özellikleri","Hücre","Canlıların Sınıflandırılması","Ekosistem"],
+  "AYT|Biyoloji":["Sinir Sistemi","Endokrin Sistem","Fotosentez","Solunum","DNA ve Protein Sentezi","Kalıtım"],
+  "TYT|Geometri":["Doğruda Açılar","Üçgenler","Çokgenler","Dörtgenler","Çember ve Daire"],
+  "AYT|Geometri":["Analitik Geometri","Çemberin Analitiği","Katı Cisimler"],
+  "TYT|Paragraf":["Ana Düşünce","Yardımcı Düşünce","Paragrafın Yapısı"],
+  "TYT|Deneme":["Genel TYT Denemesi","Branş Denemesi"],
+  "AYT|Deneme":["Genel AYT Denemesi","Branş Denemesi"]
+};
+let coachV18LastAutoText="";
+function coachV18SetLevel(level){
+  const selected=level==="AYT"?"AYT":"TYT";
+  coachV8Levels.modal=selected;
+  $("programBuilderLevel")?.querySelectorAll("[data-plan-level]").forEach(button=>
+    button.setAttribute("aria-pressed",String(button.dataset.planLevel===selected)));
+  $("coachV8ModalPicker")?.querySelectorAll("[data-v8-level]").forEach(button=>
+    button.setAttribute("aria-pressed",String(button.dataset.v8Level===selected)));
+  coachV18Topics();
+}
+function coachV18Topics(){
+  const list=$("programBuilderTopicSuggestions");if(!list)return;
+  list.replaceChildren();
+  const subject=$("programBuilderSubject")?.value||"";
+  const level=coachV8Levels.modal;
+  for(const name of COACH_V18_TOPICS[level+"|"+subject]||[]){
+    const option=document.createElement("option");option.value=name;list.append(option);
+  }
+}
+function coachV18Compose(){
+  const subject=$("programBuilderSubject")?.value||"";
+  if(!subject)return "";
+  const topic=String($("programBuilderTopic")?.value||"").trim();
+  const activity=$("programBuilderActivity")?.value||"Soru çözümü";
+  const n=Number($("programBuilderCount")?.value||0);
+  const pieces=[coachV8Levels.modal+" "+subject];
+  if(topic)pieces.push(topic);
+  pieces.push(activity);
+  if(activity==="Soru çözümü"&&Number.isInteger(n)&&n>=1&&n<=999)pieces.push(n+" soru");
+  return pieces.join(" · ");
+}
+function coachV18Apply(force=false){
+  if(coachProgramEditContext)return;
+  const textarea=$("programTaskText"),hint=$("programBuilderHint"),generated=coachV18Compose();
+  const activity=$("programBuilderActivity")?.value;
+  const countLabel=$("programBuilderCount")?.closest("label");
+  if(countLabel)countLabel.hidden=activity!=="Soru çözümü";
+  if(!textarea)return;
+  if(!generated){
+    if(hint)hint.textContent="Bir ders seçerek başlayabilirsin.";
+    return;
+  }
+  if(force||!textarea.value.trim()||textarea.value===coachV18LastAutoText){
+    textarea.value=generated;coachV18LastAutoText=generated;
+    textarea.dispatchEvent(new Event("input",{bubbles:true}));
+    if(hint)hint.textContent="Görev metni hazır; göndermeden önce kontrol edebilirsin.";
+  }else if(hint)hint.textContent="Elle yazdığın metin korundu. Değiştirmek için ‘Görev metnini oluştur’a bas.";
+}
+function coachV18Reset(){
+  coachV18LastAutoText="";
+  if($("programBuilderSubject"))$("programBuilderSubject").value="";
+  if($("programBuilderTopic"))$("programBuilderTopic").value="";
+  if($("programBuilderCount"))$("programBuilderCount").value="";
+  if($("programBuilderActivity"))$("programBuilderActivity").value="Soru çözümü";
+  coachV18SetLevel("TYT");
+  if($("programBuilderHint"))$("programBuilderHint").textContent="Bir ders seçerek başlayabilirsin.";
+  const countLabel=$("programBuilderCount")?.closest("label");if(countLabel)countLabel.hidden=false;
+  const quick=$("coachV8ModalPicker")?.closest("details");if(quick)quick.open=false;
+}
+function coachV18ReflectPreset(id,level,text){
+  const item=COACH_V8_PRESETS.find(p=>p.id===id);
+  if(!item||!$("programBuilderSubject"))return;
+  coachV18SetLevel(level);
+  $("programBuilderSubject").value=item.subject==="Paragraf"?"Paragraf":item.subject==="Deneme"?"Deneme":item.subject;
+  $("programBuilderTopic").value="";
+  const type=/tekrar/i.test(item.detail)?"Tekrar":/yanlış analizi/i.test(item.detail)?"Deneme analizi":"Soru çözümü";
+  $("programBuilderActivity").value=type;
+  const count=item.detail.match(/(\d+) soru/);
+  $("programBuilderCount").value=count?count[1]:"";
+  coachV18Topics();coachV18LastAutoText=text;
+  const countLabel=$("programBuilderCount")?.closest("label");if(countLabel)countLabel.hidden=type!=="Soru çözümü";
+  if($("programBuilderHint"))$("programBuilderHint").textContent="Hazır örnek seçildi; metni düzenleyebilirsin.";
+}
+$("programBuilderLevel")?.querySelectorAll("[data-plan-level]").forEach(button=>
+  button.addEventListener("click",()=>{coachV18SetLevel(button.dataset.planLevel);coachV18Apply()}));
+$("programBuilderSubject")?.addEventListener("change",()=>{coachV18Topics();coachV18Apply()});
+["programBuilderTopic","programBuilderActivity","programBuilderCount"].forEach(id=>
+  $(id)?.addEventListener("input",()=>coachV18Apply()));
+$("programBuilderApply")?.addEventListener("click",()=>coachV18Apply(true));
+
 function coachProgramTaskText(){return String($("programTaskText")?.value||"").trim()}
 function coachProgramResource(){
   const raw=String($("programTaskVideo")?.value||"").trim();if(!raw)return "";
@@ -2581,6 +2681,8 @@ function openProgramTaskModal(prefill="",options={}){
   const parsed=edit?coachProgramSplitExisting(prefill):{text:prefill,resource:"",prefix:""};
   if(edit&&coachProgramEditContext)coachProgramEditContext.prefix=parsed.prefix;
   if($("programTaskText"))$("programTaskText").value=parsed.text;if($("programTaskVideo"))$("programTaskVideo").value=parsed.resource;
+  coachV18Reset();
+  if($("programTaskTitle"))$("programTaskTitle").textContent=edit?"Çalışmayı düzenle":"Çalışma ekle";
   if($("programTaskStatus")){$("programTaskStatus").className="program-task-status hidden";$("programTaskStatus").textContent=""}updateCoachProgramBuilder();
   const body=$("programTaskBackdrop")?.querySelector(".program-task-body");if(body)body.scrollTop=0;
   $("programTaskTitle")?.focus({preventScroll:true});
@@ -2639,11 +2741,18 @@ $("programTaskDelete")?.addEventListener("click",async()=>{
   }finally{if(button)button.disabled=false;if(send)send.disabled=false}
 });
 $("programTaskSend")?.addEventListener("click",async()=>{
+
   const row=coachReportRows.find(x=>x.studentUid===coachProgramModalStudentUid),user=auth.currentUser,button=$("programTaskSend"),base=coachProgramTaskText(),resource=coachProgramResource();
   if(!row||!user||selectedProgramStudentUid!==coachProgramModalStudentUid)return;
   const date=String($("programTaskDate")?.value||"");
   if(!coachWeekStartForDate(date)){setProgramTaskStatus("Geçerli bir tarih seç.","error");return}
   if(!base){setProgramTaskStatus("Görev boş olamaz.","error");return}
+  if(!coachProgramEditContext&&$("programBuilderSubject")?.value&&$("programBuilderActivity")?.value==="Soru çözümü"){
+    const raw=String($("programBuilderCount")?.value||"").trim();
+    if(raw&&(!/^\d+$/.test(raw)||Number(raw)<1||Number(raw)>999)){
+      setProgramTaskStatus("Soru sayısı 1 ile 999 arasında olmalı.","error");return;
+    }
+  }
   if(base.length>600){setProgramTaskStatus("Çalışma metni en fazla 600 karakter olabilir.","error");return}
   if(resource===null){setProgramTaskStatus("Video bağlantısı geçerli bir http/https adresi olmalı.","error");return}
   const task=base+(resource?" — "+resource:"");if(task.length>600){setProgramTaskStatus("Video bağlantısıyla birlikte çalışma en fazla 600 karakter olabilir.","error");return}
@@ -2681,7 +2790,7 @@ $("programTaskSend")?.addEventListener("click",async()=>{
       if(keepOpen){
         if($("programTaskText"))$("programTaskText").value="";
         if($("programTaskVideo"))$("programTaskVideo").value="";
-        updateCoachProgramBuilder();
+        coachV18LastAutoText="";updateCoachProgramBuilder();
         $("programTaskText")?.focus({preventScroll:true});
       }else setTimeout(closeProgramTaskModal,850);
     }
