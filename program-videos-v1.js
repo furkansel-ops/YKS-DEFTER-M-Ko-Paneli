@@ -420,10 +420,10 @@
     if(state.mode==="playlists"){
       const raw=Array.isArray(archive?.meta?.playlists)?archive.meta.playlists:(Array.isArray(media.playlists)?media.playlists:[]);
       const featured=FEATURED_PLAYLISTS[state.teacher]||[];
-      const all=dedupe([
+      const all=[
         ...featured.map(item=>normalizePlaylist({...item,url:"https://www.youtube.com/playlist?list="+item.id},archive?.meta||media)),
         ...raw.map(item=>normalizePlaylist(item,archive?.meta||media))
-      ]);
+      ];
       // YKS view: no 9th–11th grade-only or miscellaneous playlists.
       // Prefer the indexed copy when it holds real playlist videos.
       const byId=new Map();
@@ -435,7 +435,7 @@
       state.hasMore=false;
       return filtered([...byId.values()].filter(item=>
         /(?:tyt|ayt|yks|\bkamp\b|\bdeneme\b|konu|soru|dil bilgisi)/i.test(item.title)&&
-        !/(?:^|\\s)(?:9\\.?|10\\.?|11\\.?|12\\.?)\\s*s[ıi]n[ıi]f/i.test(item.title)
+        !/(?:^|\s)(?:9\.?|10\.?|11\.?|12\.?)\s*s[ıi]n[ıi]f/i.test(item.title)
       ));
     }
     if(archive&&archive.meta.pages.length){
