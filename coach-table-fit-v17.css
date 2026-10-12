@@ -1,0 +1,113 @@
+/* Koç Paneli · v17: viewport-friendly weekly program grid.
+   Only the displayed seven-day table is compacted. Do not clip task lists,
+   hide lessons, create nested vertical scroll areas or alter program data. */
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:clamp(3px,.42vw,7px);
+  align-items:stretch;
+  width:100%;max-width:100%;min-width:0;
+  padding:0;
+  overflow:visible;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week[data-density="wide"]:not([data-layout="list"]){
+  grid-template-columns:repeat(7,minmax(0,1fr));
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-day{
+  min-width:0;min-height:0;height:auto;align-self:stretch;
+  overflow:visible;
+  border-radius:9px!important;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head{
+  min-height:0;max-height:none;
+  padding:8px 5px 7px;gap:2px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head strong{
+  font-size:11px;line-height:1.2;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head span,
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head small{
+  font-size:9px;line-height:1.2;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-progress{
+  height:4px;margin-top:3px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v12-card-stack{
+  display:grid;grid-template-columns:minmax(0,1fr);grid-auto-rows:max-content;
+  gap:4px;align-content:start;
+  padding:5px 4px 6px;
+  min-height:0;max-height:none!important;
+  overflow:visible!important;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task{
+  grid-template-columns:18px minmax(0,1fr) 18px;
+  gap:2px 3px;
+  min-height:0;height:auto;max-height:none;
+  padding:6px 4px!important;border-radius:8px;
+  overflow:visible;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-symbol{
+  width:18px;height:20px;border-radius:5px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-symbol svg{
+  width:13px;height:13px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy{
+  gap:2px;min-width:0;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy strong{
+  font-size:10px;line-height:1.2;overflow-wrap:anywhere;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy span{
+  font-size:9px;line-height:1.25;overflow-wrap:anywhere;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy small{
+  font-size:9px;line-height:1.2;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task-menu summary{
+  width:18px;min-height:26px;height:26px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft{
+  min-height:0;padding:6px 4px;gap:3px;
+  grid-template-columns:18px minmax(0,1fr);
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft-icon{
+  width:18px;height:20px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft-main{
+  gap:2px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft-main strong{
+  font-size:10px;line-height:1.2;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft-main span{
+  font-size:9px;line-height:1.25;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-empty{
+  padding:8px 3px;font-size:9px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-day-footer{
+  padding:5px 4px;
+}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-add-day{
+  min-height:31px;height:31px;
+  padding:3px;font-size:10px;border-radius:7px;
+}
+/* More space comes from tighter, natural-flow cards rather than hidden text. */
+@media (min-width:1001px) and (max-height:790px){
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head{padding:5px 3px;gap:1px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v12-card-stack{padding:3px;gap:3px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task{padding:4px 3px!important}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-day-footer{padding:3px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-add-day{height:29px;min-height:29px}
+}
+/* Phones/tablets: readable cards take priority over crushing seven columns.
+   Swipe horizontally only; don't create a vertical scrollbar within days. */
+@media(max-width:1000px){
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]),
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week[data-density="wide"]:not([data-layout="list"]){
+    grid-template-columns:repeat(7,minmax(138px,1fr));
+    overflow-x:auto;overflow-y:visible;
+    scrollbar-width:thin;
+  }
+}
