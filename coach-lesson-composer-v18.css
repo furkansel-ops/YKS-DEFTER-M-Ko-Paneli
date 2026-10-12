@@ -1,0 +1,173 @@
+/* v18 | Koç Paneli Programlar > Çalışma Ekle. Scoped to the body-level
+   dialog: no changes to the weekly seven-column program display. */
+.program-task-backdrop .coach-v18-modal{
+  width:min(720px,100%);
+  border:1px solid #dbe3f1;
+  border-radius:17px;
+  box-shadow:0 24px 80px #14234038;
+}
+.coach-v18-modal>header{
+  align-items:center;
+  padding:16px 22px;
+  background:linear-gradient(100deg,#fcfdff,#f8f7ff);
+}
+.coach-v18-modal>header>div>span{
+  font-size:10px;letter-spacing:.09em;color:#6b5be6;
+}
+.coach-v18-modal>header h2{
+  margin:4px 0;font-size:21px;letter-spacing:-.03em;color:#1b2b47;
+}
+.coach-v18-modal>header p{font-size:11px;line-height:1.4}
+.coach-v18-modal>.program-task-body{
+  display:grid;gap:12px;
+  padding:17px 22px;
+  overscroll-behavior:contain;
+}
+.coach-v18-builder{
+  border:1px solid #e2e6f3;border-radius:13px;
+  padding:16px;background:#fbfcff;
+  display:grid;gap:14px;min-width:0;
+}
+.coach-v18-heading{
+  display:flex;gap:12px;align-items:flex-start;justify-content:space-between;
+}
+.coach-v18-heading>div{min-width:0}
+.coach-v18-eyebrow{
+  color:#6554e9;font-size:9px;font-weight:860;letter-spacing:.08em;
+}
+.coach-v18-heading h3{margin:4px 0 3px;font-size:16px;letter-spacing:-.025em;color:#253550}
+.coach-v18-heading p{margin:0;font-size:11px;line-height:1.5;color:#7383a1}
+.coach-v18-level{
+  display:flex;flex:none;gap:3px;
+  padding:4px;border:1px solid #e0e4f1;background:#f0f2f8;border-radius:10px;
+}
+.coach-v18-level button{
+  min-width:57px;height:32px;
+  border:0;border-radius:7px;background:transparent;color:#61728e;
+  font-size:11px;font-weight:820;cursor:pointer;
+}
+.coach-v18-level button[aria-pressed="true"]{
+  background:#6756ea;color:#fff;box-shadow:0 3px 8px #6654e627;
+}
+.coach-v18-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.coach-v18-fields label{
+  display:grid;align-content:start;gap:6px;min-width:0;
+}
+.coach-v18-fields label[hidden]{display:none!important}
+.coach-v18-modal .coach-v18-fields label>span,
+.coach-v18-modal .coach-v18-task-text>span,
+.coach-v18-modal .coach-v18-date>span{
+  color:#475979;font-size:11px;font-weight:780;
+}
+.coach-v18-fields em,
+.coach-v18-task-text em{
+  font-style:normal;font-size:9px;font-weight:590;color:#8d9ab0;
+  margin-left:4px;
+}
+.coach-v18-fields input,
+.coach-v18-fields select{
+  display:block;min-width:0;width:100%;height:39px;
+  border:1px solid #dce3ef;border-radius:9px;
+  padding:0 11px;background:#fff;color:#273955;
+  font:inherit;font-size:12px;
+}
+.coach-v18-fields input:focus-visible,
+.coach-v18-fields select:focus-visible,
+.coach-v18-level button:focus-visible,
+.coach-v18-builder-bottom button:focus-visible{
+  outline:2px solid #7262ed;outline-offset:2px;
+}
+.coach-v18-builder-bottom{
+  display:flex;gap:8px;align-items:center;justify-content:space-between;
+  border-top:1px solid #e9ecf4;padding-top:11px;
+}
+.coach-v18-builder-bottom>span{
+  flex:1;min-width:0;line-height:1.4;font-size:10px;color:#71829c;
+}
+.coach-v18-builder-bottom button{
+  flex:none;padding:7px 10px;min-height:33px;
+  border:1px solid #cfc8fb;border-radius:9px;
+  color:#5b49cb;background:#f3f0ff;font-size:10px;font-weight:800;
+  cursor:pointer;
+}
+.coach-v18-modal .coach-v18-date{
+  display:grid;grid-template-columns:minmax(0,1fr) 160px;
+  gap:12px;align-items:center;
+  padding:9px 12px;background:#fff;border:1px solid #e4e9f3;border-radius:10px;
+}
+.coach-v18-modal .coach-v18-date input{max-width:160px;font-size:12px;height:36px}
+.coach-v18-modal .coach-fast-days{
+  margin:0;padding:13px;background:#f8faff;border-radius:12px;
+}
+.coach-v18-modal .coach-fast-day-grid button{
+  min-height:56px;padding:5px 2px;gap:2px;
+}
+.coach-v18-modal .coach-fast-days-heading b{font-size:12px}
+.coach-v18-modal .coach-fast-days-heading small{font-size:10px}
+.coach-v18-modal .coach-fast-shortcuts button{font-size:10px;min-height:29px;padding:5px 10px}
+.coach-v18-modal .coach-fast-hint{font-size:10px}
+.coach-v18-modal .coach-v18-quick{
+  border:1px solid #e4e9f3;border-radius:10px;background:#fff;
+}
+.coach-v18-modal .coach-v18-quick summary{
+  display:flex;justify-content:space-between;gap:10px;
+  padding:11px 13px;color:#546785;
+  font-size:11px;font-weight:790;cursor:pointer;
+}
+.coach-v18-modal .coach-v18-quick summary span{
+  color:#96a3ba;font-weight:530;font-size:10px;
+}
+.coach-v18-modal .coach-v18-quick .coach-v8-modal-host{
+  margin:0;padding:0 10px 10px;
+}
+.coach-v18-modal .coach-v18-quick .coach-v8-picker{
+  gap:8px;padding:11px;
+}
+.coach-v18-modal .coach-v18-quick .coach-v8-picker-heading{display:none}
+.coach-v18-modal .coach-v18-task-text textarea{
+  display:block;width:100%;min-height:72px;
+  font:inherit;font-size:12px;line-height:1.5;color:#253a5c;
+}
+.coach-v18-modal .program-task-body>label>input[type=url]{font-size:11px}
+.coach-v18-modal .coach-fast-keep{margin:0;padding:9px 12px}
+.coach-v18-modal .coach-fast-keep span{font-size:11px}
+.coach-v18-modal .coach-fast-keep small{font-size:10px}
+.coach-v18-modal .program-task-info{
+  font-size:10px;line-height:1.5;padding:9px 11px;
+}
+.coach-v18-modal>footer{
+  display:flex;gap:8px;align-items:center;
+  padding:13px 22px;background:#fff;border-top:1px solid #e7ebf4;
+}
+.coach-v18-modal>footer button{font-size:11px;min-height:38px;padding:0 12px}
+.coach-v18-modal #programTaskSend{
+  background:#6553eb;color:#fff;
+  border-color:#6553eb;border-radius:9px;
+  font-weight:780;
+}
+.coach-v18-modal #programTaskDelete{margin-right:auto}
+.program-task-backdrop[data-editing] .coach-v18-builder,
+.program-task-backdrop[data-editing] .coach-v18-quick{display:none!important}
+@media(max-width:600px){
+  .program-task-backdrop .coach-v18-modal{border-radius:12px}
+  .coach-v18-modal>header{padding:13px 14px}
+  .coach-v18-modal>.program-task-body{padding:12px 13px;gap:11px}
+  .coach-v18-builder{padding:12px;gap:11px}
+  .coach-v18-heading{flex-wrap:wrap}
+  .coach-v18-fields{grid-template-columns:1fr;gap:9px}
+  .coach-v18-level{margin-left:0}
+  .coach-v18-builder-bottom{flex-wrap:wrap}
+  .coach-v18-builder-bottom button{width:100%}
+  .coach-v18-modal .coach-v18-date{grid-template-columns:1fr;gap:6px}
+  .coach-v18-modal .coach-v18-date input{max-width:none}
+  .coach-v18-modal .coach-fast-day-grid button{min-height:48px;padding:4px 1px}
+  .coach-v18-modal>footer{padding:10px 12px;gap:6px}
+  .coach-v18-modal>footer button{flex:1;min-width:0;font-size:10px;padding:0 6px}
+  .coach-v18-modal>footer #programTaskDelete{flex:1 1 100%}
+}
+@media(max-height:720px) and (min-width:601px){
+  .coach-v18-modal>header{padding:11px 18px}
+  .coach-v18-modal>.program-task-body{padding:11px 18px;gap:10px}
+  .coach-v18-builder{padding:11px;gap:9px}
+  .coach-v18-modal>footer{padding:9px 18px}
+}
