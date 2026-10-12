@@ -950,7 +950,7 @@ test('composer stylesheet changes only the new modal, not the weekly board',()=>
 
 test('hidden video library stays dormant but can be reactivated without losing the existing integration',async t=>{
   const h=harness(t),w=h.w;
-  const feed={teachers:{Eyüp B.:{
+  const feed={teachers:{'Eyüp B.':{
     channelName:'Eyüp B.',
     videos:[{id:'abc123XYZ99',title:'TYT Matematik Problemler 30 soru çözümü',url:'https://www.youtube.com/watch?v=abc123XYZ99'}],
     playlists:[{id:'PLabc123456789',title:'TYT Matematik video kampı',url:'https://www.youtube.com/playlist?list=PLabc123456789'}]
@@ -992,7 +992,7 @@ test('hidden video library stays dormant but can be reactivated without losing t
 });
 test('custom coach text survives video selection and compact tabs retain their own state',async t=>{
   const h=harness(t),w=h.w;
-  const feed={teachers:{Eyüp B.:{videos:[{id:'abc123XYZ99',title:'TYT Matematik tekrar',url:'https://www.youtube.com/watch?v=abc123XYZ99'}]}}};
+  const feed={teachers:{'Eyüp B.':{videos:[{id:'abc123XYZ99',title:'TYT Matematik tekrar',url:'https://www.youtube.com/watch?v=abc123XYZ99'}]}}};
   w.fetch=async()=>({ok:true,json:async()=>feed});
   w.eval(read('program-videos-v1.js'));h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
   h.$('coachV19VideoPane').hidden=false;
