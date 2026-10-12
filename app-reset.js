@@ -33,7 +33,7 @@ function setStatus(message,type=""){
 }
 function finishBoot(){$("bootView")?.classList.add("hidden")}
 function showAuth(message="Koç hesabınla giriş yap.",type=""){
-  closeProgramTaskModal();closeCoachMoveMenu();
+  closeProgramTaskModal();closeCoachVideoPicker();closeCoachMoveMenu();
   finishBoot();
   $("authView")?.classList.remove("hidden");
   $("appView")?.classList.add("hidden");
@@ -1584,6 +1584,150 @@ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!$("student
 let selectedProgramStudentUid="";
 let selectedProgramWeekStart="";
 
+/* Standalone Programlar → Video Ekle. A video pick is only a local selection.
+   The existing program_task protocol is used after explicit confirmation. */
+let coachVideoPickerStudentUid="",coachVideoPickerReturnFocus=null,coachVideoPickerSelection=null,coachVideoPickerBusy=false;
+function coachVideoPickerStatus(message,type=""){
+  const target=$("coachVideoPickerStatus");if(!target)return;
+  target.textContent=message;
+  target.dataset.status=type;
+}
+function renderCoachVideoPickerDays(){
+  const grid=$("coachVideoPickerDays"),input=$("coachVideoPickerDate");
+  if(!grid||!input)return;
+  const week=coachWeekStartForDate(input.value);
+  grid.replaceChildren();
+  if(!week)return;
+  for(let i=0;i<7;i++){
+    const date=programDayDate(week,i),button=document.createElement("button");
+    button.type="button";button.dataset.videoDate=date;
+    button.setAttribute("aria-pressed",String(date===input.value));
+    button.setAttribute("aria-label",programDayLabel(week,i)+(date===input.value?" seçili":""));
+    const day=document.createElement("strong"),number=document.createElement("small");
+    day.textContent=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"][i];
+    number.textContent=date.slice(-2);
+    button.append(day,number);
+    button.addEventListener("click",()=>{
+      input.value=date;
+      renderCoachVideoPickerDays();
+    });
+    grid.appendChild(button);
+  }
+}
+function closeCoachVideoPicker(){
+  const backdrop=$("coachVideoPickerBackdrop"),wasOpen=backdrop&&!backdrop.classList.contains("hidden");
+  backdrop?.classList.add("hidden");
+  backdrop?.setAttribute("aria-hidden","true");
+  coachVideoPickerStudentUid="";
+  coachVideoPickerSelection=null;
+  if($("coachVideoPickerSave"))$("coachVideoPickerSave").disabled=true;
+  window.dispatchEvent(new CustomEvent("yks:coach-video-picker-close"));
+  if(wasOpen){
+    document.documentElement.classList.remove("program-task-open");
+    document.documentElement.style.removeProperty("--program-scrollbar-width");
+    if($("appView"))$("appView").inert=false;
+    const trigger=coachVideoPickerReturnFocus?.isConnected?coachVideoPickerReturnFocus:$("programAddVideoBtn");
+    trigger?.focus({preventScroll:true});
+  }
+  coachVideoPickerReturnFocus=null;
+}
+function openCoachVideoPicker(){
+  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid);
+  if(!row){alert("Önce bir öğrenci seç.");return;}
+  if(!$("programTaskBackdrop")?.classList.contains("hidden"))return;
+  coachVideoPickerReturnFocus=document.activeElement;
+  coachVideoPickerStudentUid=row.studentUid;
+  coachVideoPickerSelection=null;
+  coachVideoPickerBusy=false;
+  const week=activeProgramWeek(row).week||programCurrentWeekStart();
+  const today=todayIsoLocal();
+  if($("coachVideoPickerDate"))$("coachVideoPickerDate").value=(today>=week&&today<=programDayDate(week,6))?today:week;
+  renderCoachVideoPickerDays();
+  if($("coachVideoPickerStudent"))$("coachVideoPickerStudent").textContent=studentName(row)+" · Video veya oynatma listesi seçip programa ekle";
+  if($("coachVideoPickerSelection"))$("coachVideoPickerSelection").textContent="Henüz video seçilmedi. Aşağıdaki hoca ve video listesinden bir kaynak seç.";
+  if($("coachVideoPickerSave"))$("coachVideoPickerSave").disabled=true;
+  coachVideoPickerStatus("Bir video seç; eklemek için alttaki Programa Ekle butonuna bas.","");
+  const gutter=Math.max(0,window.innerWidth-document.documentElement.clientWidth),padding=parseFloat(getComputedStyle(document.body).paddingRight)||0;
+  document.documentElement.style.setProperty("--program-scrollbar-width",(gutter+padding)+"px");
+  document.documentElement.classList.add("program-task-open");
+  if($("appView"))$("appView").inert=true;
+  $("coachVideoPickerBackdrop")?.classList.remove("hidden");
+  $("coachVideoPickerBackdrop")?.setAttribute("aria-hidden","false");
+  window.dispatchEvent(new CustomEvent("yks:coach-video-picker-open"));
+  $("coachVideoPickerTitle")?.focus({preventScroll:true});
+}
+$("programAddVideoBtn")?.addEventListener("click",openCoachVideoPicker);
+$("coachVideoPickerClose")?.addEventListener("click",closeCoachVideoPicker);
+$("coachVideoPickerCancel")?.addEventListener("click",closeCoachVideoPicker);
+$("coachVideoPickerBackdrop")?.addEventListener("click",event=>{
+  if(event.target===event.currentTarget&&!coachVideoPickerBusy)closeCoachVideoPicker();
+});
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape"&&!$("coachVideoPickerBackdrop")?.classList.contains("hidden")&&!coachVideoPickerBusy){
+    event.preventDefault();
+    closeCoachVideoPicker();
+  }
+});
+$("coachVideoPickerDate")?.addEventListener("change",()=>{
+  renderCoachVideoPickerDays();
+  coachVideoPickerStatus(coachVideoPickerSelection?"Gün seçildi. Programa Ekle diyerek gönderebilirsin.":"Önce hoca listesinden bir video seç.","");
+});
+window.addEventListener("yks:coach-video-picked",event=>{
+  if($("coachVideoPickerBackdrop")?.classList.contains("hidden")||!coachVideoPickerStudentUid
+     ||coachVideoPickerStudentUid!==selectedProgramStudentUid||coachVideoPickerBusy)return;
+  const d=event.detail||{},url=String(d.url||"").trim();
+  let parsed;
+  try{parsed=new URL(url)}catch{coachVideoPickerStatus("Geçerli bir video bağlantısı seç.","error");return}
+  if(!["http:","https:"].includes(parsed.protocol)||!parsed.hostname||url.length>500){
+    coachVideoPickerStatus("Bu video bağlantısı kullanılamıyor.","error");return;
+  }
+  const scope=d.scope==="AYT"?"AYT":"TYT";
+  const subject=String(d.subject||"").trim().slice(0,70);
+  const teacher=String(d.teacher||"").trim().slice(0,80);
+  const title=String(d.title||"Video").replace(/\s+/g," ").trim().slice(0,180);
+  const kind=d.kind==="playlist"?"playlist":"video";
+  const description=[scope+" "+subject,teacher,kind==="playlist"?"Oynatma listesi":"Video izle",title].filter(Boolean).join(" · ");
+  const maxText=600-url.length-3;
+  if(maxText<20){coachVideoPickerStatus("Bu bağlantı programa eklemek için fazla uzun.","error");return}
+  coachVideoPickerSelection={kind,url,title,teacher,subject,scope,text:description.slice(0,maxText).trim()+" — "+url};
+  const summary=$("coachVideoPickerSelection");
+  if(summary)summary.textContent=(kind==="playlist"?"Liste seçildi: ":"Video seçildi: ")+title+" · "+teacher;
+  if($("coachVideoPickerSave"))$("coachVideoPickerSave").disabled=false;
+  coachVideoPickerStatus("Kaynak seçildi. Gününü kontrol edip Programa Ekle butonuna bas.","success");
+});
+$("coachVideoPickerSave")?.addEventListener("click",async()=>{
+  if(coachVideoPickerBusy)return;
+  const row=coachReportRows.find(x=>x.studentUid===coachVideoPickerStudentUid),user=auth.currentUser,
+    selected=coachVideoPickerSelection,button=$("coachVideoPickerSave"),date=String($("coachVideoPickerDate")?.value||"");
+  if(!row||!user||row.studentUid!==selectedProgramStudentUid){
+    coachVideoPickerStatus("Öğrenci değişti. Videoyu tekrar seçmelisin.","error");return;
+  }
+  if(!selected){coachVideoPickerStatus("Önce bir video ya da liste seç.","error");return;}
+  if(!coachWeekStartForDate(date)){coachVideoPickerStatus("Geçerli bir gün seç.","error");return;}
+  const studentUid=row.studentUid,coachUid=user.uid;
+  coachVideoPickerBusy=true;
+  if(button)button.disabled=true;
+  coachVideoPickerStatus("Seçilen kaynak öğrenci programına gönderiliyor…","");
+  try{
+    await addDoc(collection(db,"coachingActions"),{
+      studentUid,coachUid,type:"program_task",payload:{text:selected.text,date},
+      status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+    });
+    if(coachVideoPickerStudentUid===studentUid&&selectedProgramStudentUid===studentUid){
+      coachVideoPickerStatus("Video görev olarak gönderildi. Öğrencinin uygulamasında işlenmesi bekleniyor ✓","success");
+      setTimeout(closeCoachVideoPicker,850);
+    }
+  }catch(error){
+    console.error("Koç video görevi",error);
+    if(coachVideoPickerStudentUid===studentUid)
+      coachVideoPickerStatus("Video eklenemedi: "+String(error?.message||"Bilinmeyen hata"),"error");
+  }finally{
+    coachVideoPickerBusy=false;
+    if(button&&coachVideoPickerStudentUid===studentUid)button.disabled=false;
+  }
+});
+
+
 window.addEventListener("yks:coach-resource-recommend",async event=>{
   const detail=event.detail||{},row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser;
   const reply=(ok,message)=>window.dispatchEvent(new CustomEvent("yks:coach-resource-recommend-result",{detail:{ok,message}}));
@@ -1766,7 +1910,7 @@ function hydrateProgramStudents(){
   const select=$("programStudentSelect");
   if(!select)return;
   if(!coachReportRows.length){
-    closeProgramTaskModal();closeCoachMoveMenu();
+    closeProgramTaskModal();closeCoachVideoPicker();closeCoachMoveMenu();
     select.innerHTML='<option value="">Bağlı öğrenci yok</option>';
     select.value="";select.disabled=true;
     selectedProgramStudentUid="";selectedProgramWeekStart="";return;
@@ -1775,6 +1919,7 @@ function hydrateProgramStudents(){
   if(!selectedProgramStudentUid||!coachReportRows.some(x=>x.studentUid===selectedProgramStudentUid))selectedProgramStudentUid=coachReportRows[0].studentUid;
   if(coachMoveMenu&&coachMoveMenu.dataset.studentUid!==selectedProgramStudentUid)closeCoachMoveMenu();
   if(coachProgramModalStudentUid&&coachProgramModalStudentUid!==selectedProgramStudentUid)closeProgramTaskModal();
+  if(coachVideoPickerStudentUid&&coachVideoPickerStudentUid!==selectedProgramStudentUid)closeCoachVideoPicker();
   select.innerHTML=coachReportRows.map(row=>{
     const name=studentName(row),stats=weekStats(row.share?.program);
     const suffix=stats.total?" · "+stats.ratio+"% uyum":"";
@@ -2465,7 +2610,7 @@ function renderProgramWorkspace(){
   bindCoachProgramCardActions(week.week);
 }
 $("programStudentSelect")?.addEventListener("change",event=>{
-  closeProgramTaskModal();closeCoachMoveMenu();
+  closeProgramTaskModal();closeCoachVideoPicker();closeCoachMoveMenu();
   selectedProgramStudentUid=event.target.value||"";
   selectedProgramWeekStart="";
   hydrateProgramStudents();
