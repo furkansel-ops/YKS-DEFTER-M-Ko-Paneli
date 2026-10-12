@@ -65,3 +65,6 @@
 .coach-playlist-video-search-row>span{flex:0 0 auto;color:#8491a4;font-size:8px;font-weight:800;white-space:nowrap}
 .coach-video-empty.compact{grid-column:1/-1;min-height:120px;padding:18px}
 @media(max-width:620px){.coach-playlist-video-search-row{align-items:stretch;flex-direction:column}.coach-playlist-video-search{width:100%}.coach-playlist-video-search-row>span{padding-left:2px}}
+
+/* Temporary feature visibility switch: keep the complete Hocalar ve Videolar runtime, styles, teachers, playlists and recommendations in the repository for reactivation. */
+#programsPage #programVideoLibrary.coach-video-library{display:none!important}
