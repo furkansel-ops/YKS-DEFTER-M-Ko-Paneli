@@ -203,12 +203,13 @@ test('video-to-program opens and fills the same composer without scrolling the p
   h.w.eval(videoRuntime.slice(0,bootStart)+`
     window.videoDialogTest={addToProgram,setContext(value){Object.assign(state,value)}};
   })();`);
+  h.click('programAddTaskBtn');
   h.w.videoDialogTest.setContext({teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf'});
   h.w.videoDialogTest.addToProgram({kind:'video',title:'Paragraf soru çözümü',url:'https://youtu.be/test'});
   h.runTimers(0);
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
   assert.equal(h.$('programTaskVideo').value,'https://youtu.be/test');
-  assert.match(h.$('programTaskText').value,/Video izle · Test Hoca · Türkçe · Paragraf · Paragraf soru çözümü/);
+  assert.match(h.$('programTaskText').value,/TYT Türkçe · Video izle · Paragraf soru çözümü/);
   assert.equal(h.w.dialogTest.context().studentUid,'student-b');
   assert.equal(h.w.dialogTest.context().week,week);
   assert.equal(h.scrollCalls.length,0);
@@ -227,7 +228,8 @@ test('video library mounts on the classic screen and recommendations preserve th
   h.w.videoLibraryTest.buildShell();
   h.w.videoLibraryTest.buildShell();
   assert.equal(h.document.querySelectorAll('#programVideoLibrary').length,1);
-  assert.equal(h.$('programVideoLibrary').closest('#programsPage'),h.$('programsPage'));
+  assert.equal(h.$('programVideoLibrary').closest('#coachV19VideoPane'),h.$('coachV19VideoPane'));
+  assert.equal(h.$('programVideoLibrary').closest('#programsPage'),null);
   h.w.videoLibraryTest.setContext({scope:'TYT',teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf'});
   h.w.videoLibraryTest.recommendResource({kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',thumb:'https://example.test/thumb.jpg'});
   await h.settle();
