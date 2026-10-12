@@ -1,0 +1,193 @@
+/* Koç Paneli — Önizleme entegrasyonu, AŞAMA 1: yalnızca hafta tablosu iskeleti.
+   Görev kartlarının tipografisi, renkleri ve etkileşimleri sonraki aşamaya bırakıldı.
+   Sadece #coachVisualWeekBoard içerisindeki v14 haftalık görünümü etkiler. */
+
+#programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+  display:grid;
+  grid-template-columns:repeat(7,minmax(170px,1fr));
+  align-items:stretch;
+  gap:8px;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  padding:3px;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  overflow-x:auto;
+  overflow-y:visible;
+  scrollbar-width:thin;
+  scrollbar-color:#c2cce0 transparent;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week[data-density="wide"]:not([data-layout="list"]){
+  grid-template-columns:repeat(7,minmax(210px,1fr));
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day{
+  display:flex;
+  flex-direction:column;
+  align-self:stretch;
+  height:auto;
+  min-height:190px;
+  min-width:0;
+  border:1px solid #e0e7f4!important;
+  border-radius:11px!important;
+  background:#fff;
+  overflow:visible;
+  box-shadow:0 2px 8px rgb(35 53 88 / 3%);
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day.is-today{
+  border-color:#aba1f2!important;
+  background:#fcfbff;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head{
+  display:flex;
+  flex-direction:column;
+  flex:none;
+  justify-content:flex-start;
+  align-items:flex-start;
+  text-align:left;
+  gap:3px;
+  min-height:104px;
+  max-height:none;
+  padding:13px 11px 10px;
+  border-bottom:1px solid #edf1f8;
+  border-radius:10px 10px 0 0;
+  background:#fbfcff;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day.is-today .coach-v6-day-head{
+  background:#f7f5ff;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head strong{
+  color:#22334f;
+  font-size:12px;
+  font-weight:810;
+  line-height:1.25;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head span{
+  color:#637596;
+  font-size:10px;
+  font-weight:560;
+  line-height:1.35;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head small{
+  color:#46708b;
+  font-size:10px;
+  font-weight:680;
+  line-height:1.35;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-progress{
+  width:100%;
+  height:6px;
+  flex:none;
+  overflow:hidden;
+  margin-top:6px;
+  border-radius:999px;
+  background:#e7edf5;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-progress span{
+  display:block;
+  height:100%;
+  max-width:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#15bd90,#24cf9e);
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v12-card-stack{
+  flex:1 1 auto;
+  min-width:0;
+  min-height:0;
+  max-height:none!important;
+  overflow:visible!important;
+  align-content:start;
+  padding:8px 7px 10px;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v11-day-footer{
+  flex:none;
+  min-width:0;
+  margin-top:auto;
+  padding:8px 7px;
+  border-top:1px solid #edf1f8;
+  background:#fff;
+  border-radius:0 0 10px 10px;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-add-day{
+  display:block;
+  width:100%;
+  min-height:39px;
+  border:1px dashed #c8d5ed;
+  border-radius:8px;
+  background:#fbfcff;
+  color:#53699a;
+  font-size:11px;
+  font-weight:760;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-add-day:hover{
+  border-color:#a59af3;
+  background:#f4f2ff;
+  color:#5f50d9;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-add-day:focus-visible{
+  outline:2px solid #6c5cf0;
+  outline-offset:2px;
+}
+
+/* Liste modunda aynı dersleri ve işlevleri koru; 7 sütun zorunlu değil. */
+#programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"]{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:9px;
+  padding:0;
+  border:0;
+  overflow:visible;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"] .coach-v14-day{
+  min-height:140px;
+  border:1px solid #e0e7f4!important;
+  border-radius:11px!important;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"] .coach-v14-day .coach-v6-day-head{
+  flex-direction:row;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  min-height:48px;
+  padding:9px 12px;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"] .coach-v14-progress{
+  width:min(150px,100%);
+  margin:0 0 0 auto;
+}
+#programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"] .coach-v12-card-stack{
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+}
+@media(max-width:780px){
+  #programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+    display:grid;
+    grid-template-columns:repeat(7,minmax(165px,1fr));
+    gap:7px;
+    overflow-x:auto;
+    border:0;
+  }
+  #programsPage #coachVisualWeekBoard .coach-v14-week[data-density="wide"]:not([data-layout="list"]){
+    grid-template-columns:repeat(7,minmax(202px,1fr));
+  }
+  #programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-day{
+    min-height:190px;
+    height:auto;
+    border:1px solid #e0e7f4!important;
+    border-radius:11px!important;
+    overflow:visible;
+  }
+  #programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-day:last-child{
+    border:1px solid #e0e7f4!important;
+  }
+}
+@media(max-width:490px){
+  #programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+    grid-template-columns:repeat(7,minmax(162px,1fr));
+  }
+  #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head{
+    display:flex;
+    align-items:flex-start;
+    gap:3px;
+  }
+}
