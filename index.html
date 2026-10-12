@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="./program-videos-v1.css?v=1.4.1">
   <link rel="stylesheet" href="./reports-v21.css?v=4.1.0">
   <link rel="stylesheet" href="./coach-reports-v29.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-evidence-v30.css?v=1.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v1.css?v=1.2.0">
   <link rel="stylesheet" href="./exams-v21.css?v=1.0.0">
   <link rel="stylesheet" href="./topics-v21.css?v=3.0.0">
@@ -408,6 +409,14 @@
             <article class="report-card report-insights-card">
               <div class="report-card-head compact"><div><span>KOÇ SİNYALLERİ</span><h2>Dikkat edilmesi gerekenler</h2><p>Verilerden çıkan hızlı takip notları.</p></div></div>
               <div class="report-signal-list" id="reportStudentSignals"></div>
+            </article>
+
+            <article class="report-card report-v30-evidence-card">
+              <div class="report-card-head compact">
+                <div><span>KANITA DAYALI ANALİZ</span><h2>Eksik Analizi</h2>
+                  <p>Hata Defteri yanlışları, konu takvimi ve karşılaştırılabilir deneme netleri. Otomatik görev önerilmez.</p></div>
+              </div>
+              <div id="reportEvidenceAnalysis" class="report-v30-evidence" aria-live="polite"></div>
             </article>
 
             <article class="report-card report-program-card">
@@ -1332,6 +1341,6 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.70-r29"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
+  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.70-r29-v30"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
 </html>
