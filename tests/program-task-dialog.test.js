@@ -257,7 +257,7 @@ test('missing student keeps the dialog closed and does not lock the page',t=>{
 
 test('Video Ekle opens its own teacher library and sends only after explicit confirmation',async t=>{
   const h=harness(t),w=h.w;
-  const feed={teachers:{Eyüp B.:{channelName:'Eyüp B.',videos:[{
+  const feed={teachers:{'Eyüp B.':{channelName:'Eyüp B.',videos:[{
     id:'abc123XYZ99',title:'TYT Matematik Problemler Konu anlatımı',
     url:'https://www.youtube.com/watch?v=abc123XYZ99'
   }]}}};
