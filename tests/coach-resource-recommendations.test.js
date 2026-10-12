@@ -13,7 +13,7 @@ test('koç video kütüphanesi seçili öğrenciye güvenli kaynak önerisi gön
   const css=read('program-videos-v1.css');
 
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.0/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.1/);
   assert.match(html,/app-reset\.js\?v=1\.0\.68/);
   assert.match(videos,/data-video-recommend/);
   assert.match(videos,/data-playlist-recommend/);
