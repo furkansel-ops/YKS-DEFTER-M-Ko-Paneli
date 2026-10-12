@@ -1,0 +1,72 @@
+/* Koç Paneli v22 · Çalışma Ekle: yalnızca çalışma programı.
+   Hocalar & Videolar kodunu, DOM yapısını ve medya kütüphanesini silmez.
+   Video arayüzü başka bir sayfada yeniden kullanılmak üzere gizli kalır. */
+
+.program-task-backdrop .coach-v19-modal{
+  width:min(790px,calc(100vw - 24px));
+  height:min(770px,calc(100dvh - 24px));
+  max-height:calc(100dvh - 16px);
+}
+
+/* Old two-pane workspace becomes a full-width single lesson editor. */
+.program-task-backdrop .coach-v19-workbench{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);
+  min-width:0;
+  min-height:0;
+}
+.program-task-backdrop .coach-v19-workbench[data-active-pane] > .coach-v19-left{
+  display:flex!important;
+  grid-column:1!important;
+  grid-row:1!important;
+  min-width:0;
+  min-height:0;
+}
+
+/* Use the hidden attribute as a feature switch; responsive legacy rules
+   must never re-open the hidden video panel or mobile video tabs. */
+.program-task-backdrop .coach-v19-video-pane[hidden],
+.program-task-backdrop .coach-v19-mobile-tabs[hidden]{
+  display:none!important;
+}
+.program-task-backdrop:not([data-editing]) .coach-v22-legacy-video-link{
+  display:none!important;
+}
+.program-task-backdrop[data-editing] .coach-v22-legacy-video-link{
+  display:grid;
+}
+
+/* Comfortable form density, with the existing fixed action bar intact. */
+.program-task-backdrop .coach-v19-left > .program-task-body{
+  padding:17px 20px;
+  gap:12px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+.program-task-backdrop .coach-v19-left > footer{
+  flex:0 0 auto;
+  padding:12px 20px;
+  gap:8px;
+}
+@media(max-width:910px){
+  .program-task-backdrop .coach-v19-modal{
+    width:calc(100vw - 16px);
+    height:calc(100dvh - 16px);
+    max-height:calc(100dvh - 16px);
+  }
+  .program-task-backdrop .coach-v19-workbench{
+    grid-template-rows:minmax(0,1fr);
+  }
+  .program-task-backdrop .coach-v19-left > .program-task-body{
+    padding:12px 14px;
+  }
+  .program-task-backdrop .coach-v19-left > footer{
+    padding:10px 13px;
+  }
+}
+@media(max-width:420px){
+  .program-task-backdrop .coach-v19-left > .program-task-body{
+    padding:10px 11px;
+  }
+}
