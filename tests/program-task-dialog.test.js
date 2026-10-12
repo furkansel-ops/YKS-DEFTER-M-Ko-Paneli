@@ -254,3 +254,77 @@ test('missing student keeps the dialog closed and does not lock the page',t=>{
   assert.equal(h.alerts.length,1);
   assert.equal(h.writes.length,0);
 });
+
+test('Video Ekle opens its own teacher library and sends only after explicit confirmation',async t=>{
+  const h=harness(t),w=h.w;
+  const feed={teachers:{MatMan:{channelName:'MatMan',videos:[{
+    id:'abc123XYZ99',title:'TYT Matematik Problemler Konu anlatımı',
+    url:'https://www.youtube.com/watch?v=abc123XYZ99'
+  }]}}};
+  let requests=0;
+  w.fetch=async()=>{requests++;return{ok:true,json:async()=>feed}};
+  w.eval(read('program-videos-v1.js'));
+  h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),true);
+  assert.equal(h.$('programVideoLibrary').closest('#coachV19VideoPane'),h.$('coachV19VideoPane'));
+  assert.equal(requests,0);
+  h.click('programAddVideoBtn');
+  for(let i=0;i<40;i++)await Promise.resolve();
+  assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),true,'Çalışma Ekle stays closed');
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),false);
+  assert.equal(h.$('coachVideoPickerBackdrop').getAttribute('aria-hidden'),'false');
+  assert.equal(h.$('coachVideoPickerTitle'),h.document.activeElement);
+  assert.equal(h.$('coachVideoPickerDate').value,'2026-10-05');
+  assert.equal(h.$('coachVideoPickerDays').querySelectorAll('button').length,7);
+  assert.equal(h.$('coachVideoLibraryHost').contains(h.$('programVideoLibrary')),true);
+  assert.ok(requests>0,'existing real teacher feed is loaded only on opening');
+  assert.ok(h.$('coachVideoResults').querySelector('[data-video-add="0"]'));
+  assert.equal(h.$('coachVideoPickerSave').disabled,true);
+  assert.equal(h.writes.length,0);
+  h.$('coachVideoResults').querySelector('[data-video-add="0"]').click();
+  assert.equal(h.$('coachVideoPickerSave').disabled,false);
+  assert.match(h.$('coachVideoPickerSelection').textContent,/Problemler/);
+  assert.equal(h.writes.length,0,'selecting never sends the video to a student');
+  h.$('coachVideoPickerDays').querySelector('[data-video-date="2026-10-07"]').click();
+  assert.equal(h.$('coachVideoPickerDate').value,'2026-10-07');
+  h.$('coachVideoPickerSave').click();
+  for(let i=0;i<20;i++)await Promise.resolve();
+  assert.equal(h.writes.length,1);
+  assert.equal(h.writes[0].studentUid,'student-b');
+  assert.equal(h.writes[0].type,'program_task');
+  assert.deepEqual(Object.keys(h.writes[0].payload).sort(),['date','text']);
+  assert.equal(h.writes[0].payload.date,'2026-10-07');
+  assert.match(h.writes[0].payload.text,/TYT Matematik.*MatMan.*Video izle/);
+  assert.match(h.writes[0].payload.text,/https:\/\/www\.youtube\.com\/watch\?v=abc123XYZ99/);
+  h.runTimers();
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),true);
+  assert.equal(h.$('programVideoLibrary').closest('#coachV19VideoPane'),h.$('coachV19VideoPane'));
+  assert.equal(h.document.documentElement.classList.contains('program-task-open'),false);
+});
+
+test('video picker cancel, student switch and invalid dates never create program tasks',async t=>{
+  const h=harness(t),w=h.w;
+  h.click('programAddVideoBtn');
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),false);
+  h.$('coachVideoPickerSave').click();
+  await h.settle();assert.equal(h.writes.length,0);
+  h.$('coachVideoPickerCancel').click();
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),true);
+  assert.equal(h.document.activeElement,h.$('programAddVideoBtn'));
+  h.click('programAddVideoBtn');
+  w.dispatchEvent(new w.CustomEvent('yks:coach-video-picked',{detail:{
+    scope:'AYT',subject:'Fizik',teacher:'Özcan Aykın',title:'Elektrik',
+    url:'https://youtu.be/abc123XYZ99',kind:'video'
+  }}));
+  h.change('coachVideoPickerDate','2026-13-39','change');
+  h.$('coachVideoPickerSave').click();
+  await h.settle();assert.equal(h.writes.length,0);
+  assert.match(h.$('coachVideoPickerStatus').textContent,/Geçerli bir gün/);
+  h.change('coachVideoPickerDate','2026-10-07','change');
+  h.change('programStudentSelect','student-a','change');
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),true);
+  assert.equal(h.writes.length,0);
+  h.click('programAddVideoBtn');
+  assert.equal(h.$('coachVideoPickerSave').disabled,true,'old student selection must not survive');
+  h.$('coachVideoPickerClose').click();
+});
