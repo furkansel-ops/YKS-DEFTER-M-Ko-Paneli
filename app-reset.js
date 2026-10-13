@@ -62,8 +62,23 @@ async function loadCoachProfile(user){
   const profile=snap.data();
   return profile?.role==="coach"?profile:null;
 }
-function openSidebar(){$("sidebar")?.classList.add("open");$("overlay")?.classList.add("show")}
-function closeSidebar(){$("sidebar")?.classList.remove("open");$("overlay")?.classList.remove("show")}
+function coachMobileNavActive(){return window.innerWidth<=1000}
+function openSidebar(){
+  if(!coachMobileNavActive())return;
+  $("sidebar")?.classList.add("open");
+  $("overlay")?.classList.add("show");
+  $("menuBtn")?.setAttribute("aria-expanded","true");
+  $("menuBtn")?.setAttribute("aria-label","Menüyü kapat");
+  ($("sidebar")?.querySelector(".coach-nav-item.on")||$("sidebar")?.querySelector(".coach-nav-item"))?.focus({preventScroll:true});
+}
+function closeSidebar(returnFocus=false){
+  const open=$("sidebar")?.classList.contains("open");
+  $("sidebar")?.classList.remove("open");
+  $("overlay")?.classList.remove("show");
+  $("menuBtn")?.setAttribute("aria-expanded","false");
+  $("menuBtn")?.setAttribute("aria-label","Menüyü aç");
+  if(open&&returnFocus&&coachMobileNavActive())$("menuBtn")?.focus({preventScroll:true});
+}
 
 $("signInBtn")?.addEventListener("click",async event=>{
   event.currentTarget.disabled=true;
@@ -78,7 +93,20 @@ $("signInBtn")?.addEventListener("click",async event=>{
 });
 $("signOutBtn")?.addEventListener("click",()=>signOut(auth));
 $("menuBtn")?.addEventListener("click",openSidebar);
-$("overlay")?.addEventListener("click",closeSidebar);
+$("overlay")?.addEventListener("click",()=>closeSidebar(true));
+// On narrow screens, keep keyboard navigation inside the open drawer.
+document.addEventListener("keydown",event=>{
+  const sidebar=$("sidebar");
+  if(!sidebar?.classList.contains("open")||!coachMobileNavActive())return;
+  if(event.key==="Escape"){event.preventDefault();closeSidebar(true);return}
+  if(event.key!=="Tab")return;
+  const links=[...sidebar.querySelectorAll(".coach-nav-item:not([disabled]),.coach-signout-v20:not([disabled])")];
+  if(!links.length)return;
+  const first=links[0],last=links.at(-1);
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus({preventScroll:true})}
+  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus({preventScroll:true})}
+});
+window.addEventListener("resize",()=>{if(!coachMobileNavActive())closeSidebar()});
 
 const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};
 function showCoachPage(page){
@@ -90,7 +118,7 @@ function showCoachPage(page){
   $(targetId)?.classList.remove("hidden");
   if(page==="home"){try{refreshDashboardGreeting();renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
   if(page==="settings"){try{openCoachSettingsOverview()}catch(error){console.error("Ayarlar görünümü",error)}}
-  closeSidebar();
+  closeSidebar(true);
 }
 document.querySelectorAll("[data-coach-page]").forEach(button=>{
   button.addEventListener("click",()=>showCoachPage(button.dataset.coachPage));
