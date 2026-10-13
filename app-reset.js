@@ -514,6 +514,107 @@ function renderReportProgramDetails(row,details){
     +'<div class="report-v29-columns"><section aria-label="Ders bazlı görev ilerlemesi"><h3>Ders bazında tamamlanma</h3><div class="report-v29-subjects">'+list+'</div></section>'
     +'<section aria-label="Tamamlanmayan program görevleri"><h3>Tamamlanmayan görevler</h3><div class="report-v29-tasks">'+open+'</div></section></div>';
 }
+/* v30 · Read-only evidence, not a study recommender or a diagnosis.
+   Coaching shares expose exam SUBJECT net scores, never topic-level exam errors. */
+function reportEvidenceAnalysis(row){
+  const share=row?.share||{},norm=value=>String(value||"").replace(/\s+/g," ").trim().toLocaleLowerCase("tr-TR");
+  const items=Array.isArray(share.topics?.items)?share.topics.items:[];
+  const topics=new Map(),today=reportDateOffset(0);
+  for(const item of items){
+    const subject=norm(item?.subject),topic=norm(item?.topic);
+    if(!subject||!topic)continue;
+    const key=subject+"|"+topic,entries=topics.get(key)||[];
+    entries.push(item);topics.set(key,entries);
+  }
+  const grouped=new Map();
+  for(const item of (Array.isArray(share.errorJournal)?share.errorJournal:[])){
+    const subject=String(item?.subject||"").trim(),topic=String(item?.topic||"").trim();
+    const count=Number(item?.n);
+    // A missing topic is not evidence for any particular topic.
+    if(!subject||!topic||!Number.isFinite(count)||count<=0)continue;
+    const key=norm(subject)+"|"+norm(topic),entry=grouped.get(key)||{subject,topic,wrong:0,lastDate:""};
+    entry.wrong+=Math.max(1,Math.floor(count));
+    if(/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||""))&&item.date>entry.lastDate)entry.lastDate=item.date;
+    grouped.set(key,entry);
+  }
+  const stageLabel=st=>st>=3?"Pekiştirildi":st===2?"Soru çözüldü":st===1?"İşlendi":"Başlanmadı";
+  const mistakes=[...grouped.entries()].map(([key,entry])=>{
+    const matches=topics.get(key)||[],match=matches.length===1?matches[0]:null;
+    return{...entry,stage:match?stageLabel(reportNum(match.st)):"",stageLinked:Boolean(match)};
+  }).sort((a,b)=>b.wrong-a.wrong||b.lastDate.localeCompare(a.lastDate)||a.subject.localeCompare(b.subject,"tr")||a.topic.localeCompare(b.topic,"tr"));
+  const delayed=items.filter(item=>{
+    const deadline=String(item?.deadline||"");
+    return/^\d{4}-\d{2}-\d{2}$/.test(deadline)&&deadline<today&&reportNum(item?.st)<3;
+  }).map(item=>({subject:String(item.subject||"Ders"),topic:String(item.topic||"Konu"),deadline:item.deadline,
+    stage:stageLabel(reportNum(item?.st))}))
+    .sort((a,b)=>a.deadline.localeCompare(b.deadline)||a.subject.localeCompare(b.subject,"tr"));
+
+  // Only compare net scores in two distinct, like-for-like exam types.
+  // Neither exam score nor a pending program checkbox proves a topic deficit.
+  const byType=new Map();
+  for(const exam of reportExamRows(row)){
+    const type=String(exam?.type||"").trim().toUpperCase();
+    if(!type||!Array.isArray(exam?.subjectResults))continue;
+    if(!byType.has(type))byType.set(type,[]);
+    byType.get(type).push(exam);
+  }
+  const changes=[];
+  for(const [type,exams] of byType){
+    if(exams.length<2)continue;
+    const latest=exams[0],previous=exams[1];
+    const previousBySubject=new Map();
+    for(const subject of previous.subjectResults||[]){
+      if(!norm(subject?.name)||typeof subject?.net!=="number"||!Number.isFinite(subject.net))continue;
+      previousBySubject.set(norm(subject.name),subject.net);
+    }
+    for(const subject of latest.subjectResults){
+      const key=norm(subject?.name),net=subject?.net;
+      if(!key||typeof net!=="number"||!Number.isFinite(net)||!previousBySubject.has(key))continue;
+      const delta=net-previousBySubject.get(key);
+      if(delta<-.005)changes.push({type,subject:String(subject.name),delta,from:previousBySubject.get(key),to:net,
+        latest:String(latest.date||""),previous:String(previous.date||"")});
+    }
+  }
+  changes.sort((a,b)=>a.delta-b.delta||a.subject.localeCompare(b.subject,"tr"));
+  return{mistakes,delayed,changes,hasExams:Array.isArray(share.exams)&&share.exams.length>0,
+    hasTopics:items.length>0,hasErrors:Array.isArray(share.errorJournal)&&share.errorJournal.length>0,
+    updatedAt:share.updatedAt};
+}
+function renderReportEvidence(row){
+  const host=$("reportEvidenceAnalysis");if(!host)return;
+  const data=reportEvidenceAnalysis(row),shown=6;
+  const counters='<div class="report-v30-counters"><span><b>'+data.mistakes.length+'</b> yanlış kaydı olan konu</span>'
+    +'<span><b>'+data.delayed.length+'</b> hedef tarihi geçen konu</span>'
+    +'<span><b>'+data.changes.length+'</b> net düşüşü görülen ders</span></div>';
+  const mistakes=data.mistakes.length?data.mistakes.slice(0,shown).map(item=>
+    '<div class="report-v30-line"><div><b>'+escHtml(item.subject)+' · '+escHtml(item.topic)+'</b>'
+    +'<small>Hata Defteri: '+item.wrong+' yanlış kaydı'+(item.lastDate?' · Son kayıt '+escHtml(item.lastDate):'')+'</small>'
+    +(item.stageLinked?'<small>Konu durumu: '+escHtml(item.stage)+'</small>':'')+'</div>'
+    +'<strong>'+item.wrong+' yanlış</strong></div>').join("")
+    :'<p class="report-v30-empty">Konu adıyla eşleşen yanlış kaydı bulunmuyor.</p>';
+  const delayed=data.delayed.length?data.delayed.slice(0,shown).map(item=>
+    '<div class="report-v30-line"><div><b>'+escHtml(item.subject)+' · '+escHtml(item.topic)+'</b>'
+    +'<small>Hedef: '+escHtml(item.deadline)+' · Durum: '+escHtml(item.stage)+'</small></div>'
+    +'<strong class="is-time">Tarih geçti</strong></div>').join("")
+    :'<p class="report-v30-empty">Hedef tarihi geçmiş açık konu görünmüyor.</p>';
+  const changes=data.changes.length?data.changes.slice(0,shown).map(item=>{
+    const abs=Math.abs(item.delta),display=(Math.round(abs*100)/100).toLocaleString("tr-TR",{maximumFractionDigits:2});
+    return '<div class="report-v30-line"><div><b>'+escHtml(item.type)+' · '+escHtml(item.subject)+'</b>'
+      +'<small>Önceki '+escHtml(item.from.toLocaleString("tr-TR"))+' → Son '+escHtml(item.to.toLocaleString("tr-TR"))+' net'
+      +(item.latest?' · '+escHtml(item.latest):'')+'</small></div><strong class="is-drop">−'+display+' net</strong></div>';
+  }).join(""):'<p class="report-v30-empty">Aynı türden son iki denemede karşılaştırılabilir ders net düşüşü görünmüyor veya veri yetersiz.</p>';
+  const section=(title,detail,body,count)=>
+    '<section class="report-v30-group"><div class="report-v30-group-head"><h3>'+title+'</h3><small>'+detail+'</small></div>'
+      +'<div class="report-v30-list">'+body+'</div>'+(count>shown?'<p class="report-v30-more">Diğer '+(count-shown)+' kayıt ayrıntılı bölümlerde görülebilir.</p>':'')+'</section>';
+  const stale=reportUpdatedMs(data.updatedAt),freshness=!stale?"Son paylaşım zamanı bilinmiyor."
+    :reportFreshnessHours(row)>48?"Paylaşılan kayıtlar 48 saatten eski olabilir.":"Son paylaşım: "+reportTimestamp(data.updatedAt);
+  host.innerHTML=counters+'<div class="report-v30-grid">'
+    +section("Yanlış yoğunlaşan konular","Hata Defteri kayıtları",mistakes,data.mistakes.length)
+    +section("Konu takvimi","Öğrenme eksiği değil, hedef durumu",delayed,data.delayed.length)
+    +section("Deneme net değişimleri","Yalnızca aynı deneme türünde ders bazlı",changes,data.changes.length)
+    +'</div><p class="report-v30-disclaimer">'+escHtml(freshness)
+    +' Denemelerde konu bazlı yanlış sayısı şu anda koçla paylaşılmıyor. Tamamlanmayan program görevleri bilgi eksiği sayılmaz; bu tespitler tanı değil, kayıtların özetidir.</p>';
+}
 function renderReport(scope){
   if(!coachReportRows.length){setReportState("reportEmpty");return}
   if(scope==="all"){renderReportOverview();return}
@@ -593,6 +694,7 @@ function renderStudentReport(row){
   }else $("reportActivityChart").innerHTML='<div class="report-data-wait"><b>Günlük dağılım yeni senkronla açılacak.</b><span>Toplam çalışma: '+escHtml(reportMinutes(progress.minutes7))+' · '+Math.round(reportNum(progress.questions7))+' soru</span></div>';
 
   $("reportStudentSignals").innerHTML=reportStudentSignals(row).map(item=>'<div class="report-signal '+item.tone+'"><i></i><span><b>'+escHtml(item.title)+'</b><small>'+escHtml(item.text)+'</small></span></div>').join("");
+  renderReportEvidence(row);
 
   $("reportProgramTitle").textContent=w.week?"Hafta · "+w.week:"Haftalık program";
   $("reportProgramScore").textContent=w.total?w.ratio+"%":"—";

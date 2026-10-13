@@ -1131,7 +1131,7 @@ test('live completion redraw keeps wide table position and open card action menu
 test('coach progress pulse keeps existing weekly table dimensions and cache-busted assets',()=>{
   const css=read('coach-live-progress-v28.css'),html=read('index.html');
   assert.match(html,/coach-live-progress-v28\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-r28-r29/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-r28-r29-v30/);
   assert.match(css,/\.coach-v28-pulse/);
   assert.match(css,/\.coach-v28-pill\.complete/);
   assert.match(css,/@media\(max-width:780px\)/);
