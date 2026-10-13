@@ -142,7 +142,7 @@ test("stylesheet and report container do not alter weekly program controls",()=>
   const html=read("index.html"),css=read("coach-evidence-v30.css"),js=read("app-reset.js");
   assert.match(html,/id="reportEvidenceAnalysis"/);
   assert.match(html,/coach-evidence-v30\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-r29-v30/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-r28-r29-v30/);
   assert.match(js,/function reportEvidenceAnalysis/);
   assert.doesNotMatch(css,/#programsPage|#coachVisualWeekBoard|#programWeekBoard/);
 });

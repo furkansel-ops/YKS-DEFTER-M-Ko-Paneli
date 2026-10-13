@@ -111,7 +111,7 @@ test("compact report CSS is isolated from the weekly program and assets are cach
   const html=read("index.html"),css=read("coach-reports-v29.css");
   assert.match(html,/id="reportProgramDetails"/);
   assert.match(html,/coach-reports-v29\.css\?v=1\.0\.0/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-r29/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-r28-r29-v30/);
   assert.match(css,/#reportsPage \.report-v29-program-card/);
   assert.doesNotMatch(css,/#programsPage|#coachVisualWeekBoard|#programWeekBoard/);
 });
