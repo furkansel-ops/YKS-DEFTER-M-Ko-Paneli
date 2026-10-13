@@ -1,0 +1,71 @@
+/* Koç Paneli v33 · iPadOS / Android browser compatibility.
+   Only affects narrow or touch-first environments; desktop planner unchanged. */
+@media(max-width:1024px),(hover:none) and (pointer:coarse){
+  .coach-reset-canvas,.coach-shell-reset{max-width:100%;min-width:0}
+  .student-connect-backdrop,.program-task-backdrop,.coach-video-picker-backdrop{
+    padding: max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right))
+      max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+    overscroll-behavior:contain;
+  }
+  .student-connect-modal{
+    display:flex;flex-direction:column;min-height:0;
+    max-height:calc(var(--coach-visible-height,100dvh) - 20px);
+    max-width:100%;overflow:hidden;
+  }
+  .student-connect-modal .student-connect-head,
+  .student-connect-modal .student-connect-foot{flex:0 0 auto}
+  .student-connect-modal .student-connect-body{
+    min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  }
+  .program-task-backdrop .coach-v19-modal{
+    min-width:0;min-height:0;
+    height:min(700px,calc(var(--coach-visible-height,100dvh) - 20px));
+    max-height:calc(var(--coach-visible-height,100dvh) - 16px);
+    overflow:hidden;
+  }
+  .program-task-backdrop .coach-v19-left>.program-task-body,
+  .coach-v19-modal .coach-v19-video-pane,
+  .coach-video-picker-dialog .coach-video-picker-host{
+    min-height:0;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .coach-video-picker-dialog{
+    min-width:0;min-height:0;max-width:100%;
+    height:min(880px,calc(var(--coach-visible-height,100dvh) - 20px));
+    max-height:calc(var(--coach-visible-height,100dvh) - 16px);
+    overflow:hidden;
+  }
+  /* Prevent iOS Safari auto-zoom on small input text; do not affect desktops. */
+  .student-connect-modal input,
+  .program-task-backdrop .coach-v19-modal input,
+  .program-task-backdrop .coach-v19-modal select,
+  .program-task-backdrop .coach-v19-modal textarea,
+  .coach-video-picker-dialog input,
+  .coach-video-picker-dialog select,
+  .coach-video-picker-dialog textarea{font-size:16px}
+  .student-connect-modal button,.coach-video-picker-dialog button,
+  .program-task-backdrop .coach-v19-modal button{
+    touch-action:manipulation;
+  }
+  #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-inline:contain;
+  }
+}
+@media(max-width:730px){
+  .program-task-backdrop .coach-v19-modal{
+    width:100%;max-height:calc(var(--coach-visible-height,100dvh) - 12px);
+    height:calc(var(--coach-visible-height,100dvh) - 12px);
+  }
+  .coach-video-picker-dialog{
+    width:100%;height:calc(var(--coach-visible-height,100dvh) - 12px);
+  }
+  .student-connect-backdrop .student-connect-modal{width:100%}
+  .coach-video-picker-header,.student-connect-head{gap:8px}
+}
+@media(max-height:520px) and (hover:none){
+  .student-connect-backdrop,.program-task-backdrop,.coach-video-picker-backdrop{
+    align-items:start;
+  }
+}
