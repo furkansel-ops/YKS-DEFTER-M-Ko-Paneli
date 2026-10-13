@@ -1077,3 +1077,63 @@ test('completion styles use a clear green done state without enlarging or clippi
   assert.match(css,/\.classic-task-status\[data-completion-status="done"\]/);
   assert.doesNotMatch(css,/\.coach-v7-draft|\.program-task-modal|#coachVideoPickerBackdrop/);
 });
+
+test('coach weekly pulse shows saved completion and remaining tasks without inferring missing sync times',t=>{
+  const h=harness(t),visual=h.$('coachVisualWeekBoard');
+  const pulse=visual.querySelector('.coach-v28-pulse');
+  assert.ok(pulse,'compact progress strip is attached to the actual weekly table');
+  assert.match(pulse.querySelector('.coach-v28-pill.complete').textContent,/2 tamamlandı/);
+  assert.match(pulse.querySelector('.coach-v28-pill.pending').textContent,/3 bekliyor/);
+  assert.match(pulse.querySelector('.coach-v28-sync').textContent,/zaman bilgisi yok/);
+  assert.equal(pulse.querySelector('.coach-v28-pill.today'),null,'another week must not be described as today');
+  assert.equal(h.writes.length,0);
+  const program=h.rows[1].share.program;
+  program.syncedAt=Date.parse('2026-10-06T12:00:00.000Z');
+  program.weeks[0].data.dn['s-1-0']=1;
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const fresh=h.$('coachVisualWeekBoard').querySelector('.coach-v28-pulse');
+  assert.match(fresh.querySelector('.coach-v28-pill.complete').textContent,/3 tamamlandı/);
+  assert.match(fresh.querySelector('.coach-v28-pill.pending').textContent,/2 bekliyor/);
+  assert.doesNotMatch(fresh.querySelector('.coach-v28-sync').textContent,/zaman bilgisi yok/);
+  assert.equal(h.writes.length,0,'sync and completion indicators never queue a coach action');
+});
+
+test('current day progress is scoped to the real selected week',t=>{
+  const h=harness(t),current=h.w.eval('programCurrentWeekStart()');
+  h.rows[1].share.program.weeks[0].week=current;
+  h.w.coachV6Test.seed(h.rows,'student-b',current);
+  const pulse=h.$('coachVisualWeekBoard').querySelector('.coach-v28-pulse');
+  assert.match(pulse.querySelector('.coach-v28-pill.today').textContent,/Bugün [0-9]+\/[0-9]+/);
+  assert.equal(h.writes.length,0);
+});
+
+test('live completion redraw keeps wide table position and open card action menu for the same student and week',t=>{
+  const h=harness(t),visual=h.$('coachVisualWeekBoard');
+  const before=visual.querySelector('.coach-v6-days');
+  before.scrollLeft=287;before.scrollTop=21;
+  const task=visual.querySelector('[data-program-task-id="s-1-0"]');
+  const menu=task.querySelector('.coach-v11-task-menu');
+  menu.open=true;menu.querySelector('summary').focus();
+  h.rows[1].share.program.weeks[0].data.dn['s-1-0']=1;
+  h.w.coachV6Test.seed(h.rows,'student-b',week);
+  const after=h.$('coachVisualWeekBoard').querySelector('.coach-v6-days');
+  assert.equal(after.scrollLeft,287);
+  assert.equal(after.scrollTop,21);
+  const reopened=h.$('coachVisualWeekBoard').querySelector('[data-program-task-id="s-1-0"] .coach-v11-task-menu');
+  assert.equal(reopened.open,true);
+  assert.equal(h.document.activeElement,reopened.querySelector('summary'));
+  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v27-task-status.is-complete').length,3);
+  assert.equal(h.writes.length,0);
+  h.w.coachV6Test.seed(h.rows,'student-a',week);
+  assert.equal(h.$('coachVisualWeekBoard').querySelector('.coach-v6-days').scrollLeft,0,'another student starts at the table beginning');
+});
+
+test('coach progress pulse keeps existing weekly table dimensions and cache-busted assets',()=>{
+  const css=read('coach-live-progress-v28.css'),html=read('index.html');
+  assert.match(html,/coach-live-progress-v28\.css\?v=1\.0\.0/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-r28-r29/);
+  assert.match(css,/\.coach-v28-pulse/);
+  assert.match(css,/\.coach-v28-pill\.complete/);
+  assert.match(css,/@media\(max-width:780px\)/);
+  assert.doesNotMatch(css,/\.coach-v12-week-table\s*\{|\.coach-v11-task\s*\{|grid-template-columns:repeat\(7/);
+});
