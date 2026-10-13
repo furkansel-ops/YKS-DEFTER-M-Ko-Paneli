@@ -40,9 +40,8 @@ function showAuth(message="Koç hesabınla giriş yap.",type=""){
   setStatus(message,type);
 }
 function showApp(profile,user){
-  finishBoot();
+  // Resolve saved route before making any old/default page visible.
   $("authView")?.classList.add("hidden");
-  $("appView")?.classList.remove("hidden");
   const name=text(profile?.displayName||user?.displayName||"Koç",80)||"Koç";
   const nameNode=$("coachSidebarName"),avatar=$("coachSidebarAvatar");
   if(nameNode)nameNode.textContent=name;
@@ -51,8 +50,10 @@ function showApp(profile,user){
   refreshDashboardGreeting();
   const dashDate=$("dashboardDate");if(dashDate)dashDate.textContent=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
   hydrateCoachSettings(profile,user);
-  const startPage=readCoachUiPrefs().defaultPage||"home";
-  if(startPage!=="home")setTimeout(()=>showCoachPage(startPage),0);
+  const pref=readCoachUiPrefs().defaultPage||"home";
+  showCoachPage(coachPages[pref]?pref:"home");
+  $("appView")?.classList.remove("hidden");
+  finishBoot();
   void loadCoachReports(user.uid);
   void loadCoachMessages(user.uid);
 }
@@ -107,6 +108,27 @@ document.addEventListener("keydown",event=>{
   else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus({preventScroll:true})}
 });
 window.addEventListener("resize",()=>{if(!coachMobileNavActive())closeSidebar()});
+
+// iPadOS Safari and Android Chrome may resize the visual viewport while
+// the virtual keyboard is open, even though the layout viewport stays fixed.
+function syncCoachVisualViewport(){
+  const h=Math.round(Number(window.visualViewport?.height)||Number(window.innerHeight)||0);
+  if(h>0)document.documentElement.style.setProperty("--coach-visible-height",h+"px");
+}
+syncCoachVisualViewport();
+window.visualViewport?.addEventListener("resize",syncCoachVisualViewport);
+window.addEventListener("orientationchange",syncCoachVisualViewport);
+window.addEventListener("resize",syncCoachVisualViewport);
+window.addEventListener("pageshow",event=>{
+  if(!event.persisted)return;
+  closeSidebar();
+  if(!auth.currentUser){showAuth();return}
+  if($("appView")?.classList.contains("hidden"))return;
+  const active=document.querySelector(".coach-nav-item.on")?.dataset.coachPage||"home";
+  showCoachPage(coachPages[active]?active:"home");
+  scheduleCoachRealtimeRender();
+  syncCoachVisualViewport();
+});
 
 const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};
 function showCoachPage(page){
