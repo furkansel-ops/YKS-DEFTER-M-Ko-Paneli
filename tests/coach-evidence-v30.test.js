@@ -144,5 +144,9 @@ test("stylesheet and report container do not alter weekly program controls",()=>
   assert.match(html,/coach-evidence-v30\.css\?v=1\.0\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70-r28-r29-v30/);
   assert.match(js,/function reportEvidenceAnalysis/);
+  assert.match(js,/function coachV28ProgressPulse/);
+  assert.match(js,/function reportProgramDetails/);
+  assert.match(html,/coach-live-progress-v28\.css/);
+  assert.match(html,/coach-reports-v29\.css/);
   assert.doesNotMatch(css,/#programsPage|#coachVisualWeekBoard|#programWeekBoard/);
 });
