@@ -1,0 +1,166 @@
+/* Koç Paneli · v32 mobile/tablet polish
+   Layout-only overrides. Desktop weekly timetable, state and Firestore remain untouched. */
+@media(max-width:1000px){
+  .coach-shell-reset{display:block;min-width:0;max-width:100%}
+  .coach-reset-canvas{width:100%;max-width:100%;min-width:0;min-height:100dvh}
+  .coach-sidebar-v20{
+    height:100vh;height:100dvh;
+    padding-top:max(18px,env(safe-area-inset-top));
+    padding-bottom:max(14px,env(safe-area-inset-bottom));
+    overscroll-behavior:contain;
+  }
+  .coach-sidebar-v20 .coach-nav-v20{min-height:0;overscroll-behavior:contain}
+  .coach-mobile-menu-reset{
+    left:max(12px,env(safe-area-inset-left));
+    top:max(12px,env(safe-area-inset-top));
+    width:44px;height:44px;
+    display:inline-flex;align-items:center;justify-content:center;
+    border-radius:12px;
+    font-size:20px;
+  }
+  .coach-mobile-menu-reset:focus-visible,
+  .coach-sidebar-v20 .coach-nav-item:focus-visible,
+  .coach-sidebar-v20 .coach-signout-v20:focus-visible{
+    outline:2px solid #54aafc;outline-offset:3px;
+  }
+  .dashboard-page,.students-page,.programs-page,.reports-page,
+  .pp-coach-page,.exams-page,.topics-page,.errors-page,
+  .messages-page,.settings-page{
+    box-sizing:border-box;
+    max-width:100%;min-width:0;
+    padding:72px clamp(13px,2.4vw,24px) max(26px,env(safe-area-inset-bottom));
+  }
+  :where(.dashboard-grid,.report-overview-grid,.report-detail-grid,
+    .exam-overview-grid,.exam-detail-grid,.topic-overview-grid,.topic-detail-grid,
+    .error-overview-grid,.error-detail-grid,.settings-shell,.program-layout,
+    .messages-shell,.pp-coach-analysis-grid)>*{min-width:0}
+  :where(.stat-card,.dash-panel,.report-card,.exam-card,.topic-card,
+    .error-card,.program-workspace,.pp-coach-card,.students-card,
+    .settings-section,.settings-sidebar){min-width:0}
+  /* Keep the timetable as the sole horizontal scroller, not the entire page. */
+  #programsPage #coachFutureProgramTable,
+  #programsPage #coachFutureProgramTable .program-workspace,
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard,
+  #programsPage #coachFutureProgramTable .coach-v6-sheet{min-width:0;max-width:100%}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+    display:grid;
+    grid-template-columns:repeat(7,minmax(154px,1fr));
+    width:100%;max-width:100%;min-width:0;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    scrollbar-width:thin;
+  }
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"])>.coach-v14-day{
+    min-width:0;scroll-snap-align:start;
+  }
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week[data-layout="list"]{
+    display:grid;grid-template-columns:minmax(0,1fr);min-width:0;width:100%;
+  }
+  #programsPage .coach-v15-header-main,
+  #programsPage .coach-v15-header-tools,
+  #programsPage .coach-v15-actions{min-width:0;max-width:100%}
+  #programsPage .coach-v15-action-buttons{min-width:0}
+  #programsPage .coach-v15-week-nav strong{min-width:0}
+}
+@media(max-width:720px){
+  .dashboard-page,.students-page,.programs-page,.reports-page,
+  .pp-coach-page,.exams-page,.topics-page,.errors-page,
+  .messages-page,.settings-page{
+    padding:70px 12px max(26px,env(safe-area-inset-bottom));
+  }
+  .dashboard-head h1,.students-head h1,.programs-head h1,.reports-head h1,
+  .pp-coach-head h1,.exams-head h1,.topics-head h1,.errors-head h1,
+  .messages-head h1,.settings-head h1{font-size:clamp(22px,5.8vw,28px);line-height:1.2;overflow-wrap:anywhere}
+  .dashboard-head,.students-head,.reports-head,.exams-head,.topics-head,.errors-head,
+  .messages-head,.settings-head{min-width:0;gap:10px}
+  .dashboard-head p,.students-head p,.reports-head p,.exams-head p,
+  .topics-head p,.errors-head p,.messages-head p{line-height:1.45}
+  .dashboard-stats,.students-summary,.report-kpis,.exam-kpis,.topic-kpis,.error-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+  }
+  .stat-card,.report-kpi,.exam-kpi,.topic-kpi,.error-kpi{
+    box-sizing:border-box;min-width:0;min-height:0;padding:12px;
+  }
+  .stat-card{gap:9px}
+  .stat-card strong{font-size:23px}
+  .report-kpi>span,.exam-kpi>span,.topic-kpi>span,.error-kpi>span{font-size:9px;line-height:1.35}
+  .report-kpi>strong,.exam-kpi>strong,.topic-kpi>strong,.error-kpi>strong{font-size:22px}
+  .report-kpi>small,.exam-kpi>small,.topic-kpi>small,.error-kpi>small{font-size:9px;line-height:1.35}
+  .dash-panel{padding:14px;min-height:0}
+  .report-card-head{min-height:0;padding:12px 13px;gap:8px}
+  .report-card-head h2{font-size:14px;line-height:1.35}
+  .report-card-head p{font-size:10px;line-height:1.45}
+  .report-overview-grid,.report-detail-grid,.report-side-stack{grid-template-columns:minmax(0,1fr)}
+  .report-kpis,.report-student-hero{min-width:0}
+  .report-day{min-width:93px}
+  #reportsPage .report-v29-detail,#reportsPage .report-v30-evidence{padding:12px}
+  #reportsPage .report-v29-overview{gap:7px;padding:10px}
+  #reportsPage .report-v29-overview>b{overflow-wrap:anywhere}
+  #reportsPage .report-v29-task>div{min-width:0}
+  #reportsPage .report-v29-task small{white-space:normal;overflow-wrap:anywhere}
+  #reportsPage .report-v30-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+  #reportsPage .report-v30-line{align-items:flex-start}
+  #reportsPage .report-v30-line>strong{margin-top:2px}
+  /* Actions remain available: a 2x2 button grid is smaller than four long rows. */
+  #programsPage .coach-v15-header{margin-bottom:10px}
+  #programsPage .coach-v15-header-main{gap:11px}
+  #programsPage .coach-v15-title-group{gap:10px}
+  #programsPage .coach-v15-title-icon{width:42px;height:42px;border-radius:11px}
+  #programsPage .coach-v15-title-group h1{font-size:24px}
+  #programsPage .coach-v15-title-group p{font-size:11px}
+  #programsPage .coach-v15-header-tools{width:100%;gap:9px}
+  #programsPage .coach-v15-header .program-student-picker{min-width:0;max-width:100%}
+  #programsPage .coach-v15-actions{display:grid;gap:9px;padding:11px;margin-bottom:10px}
+  #programsPage .coach-v15-action-heading{gap:2px}
+  #programsPage .coach-v15-action-heading span{font-size:10px}
+  #programsPage .coach-v15-action-buttons{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    justify-content:stretch;align-items:stretch;gap:7px;width:100%;
+  }
+  #programsPage .coach-v15-action-buttons button{
+    box-sizing:border-box;flex:none;width:100%;min-width:0;
+    min-height:44px;height:auto;
+    padding:8px 7px;font-size:11px;line-height:1.35;white-space:normal;
+  }
+  #programsPage .coach-v15-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #programsPage .coach-v15-stat{min-width:0;min-height:0;padding:11px}
+  #programsPage .coach-v15-week-nav{min-width:0}
+  #programsPage .coach-v15-week-nav button{min-width:40px;min-height:40px}
+  #programsPage .coach-v15-week-nav .week-nav-today{min-width:75px;padding-inline:8px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]){
+    grid-template-columns:repeat(7,minmax(158px,1fr));gap:6px;
+  }
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week .coach-v14-day{
+    min-height:0;height:auto;
+  }
+  .students-toolbar{padding:12px;gap:10px}
+  .student-search{min-width:0;width:100%}
+  .student-filters{max-width:100%;overscroll-behavior-inline:contain}
+  .settings-nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:7px}
+  .settings-nav button{
+    box-sizing:border-box;min-width:0;min-height:44px;
+    grid-template-columns:25px minmax(0,1fr);gap:7px;
+    align-items:center;text-align:left;justify-items:stretch;padding:8px;
+  }
+  .settings-nav button small{display:none}
+  .settings-nav button b{font-size:11px;overflow-wrap:anywhere}
+  .message-students{max-height:220px}
+  .message-chat{min-height:360px}
+  :where(.report-refresh,.exam-refresh,.topic-refresh,.error-refresh,
+    .students-add,.student-filters button){min-height:44px}
+}
+@media(max-width:400px){
+  .dashboard-stats,.students-summary,.report-kpis,.exam-kpis,.topic-kpis,.error-kpis{gap:7px}
+  .stat-card,.report-kpi,.exam-kpi,.topic-kpi,.error-kpi{padding:10px}
+  #programsPage .coach-v15-week-nav strong{font-size:10px;min-width:0}
+  #programsPage .coach-v15-action-buttons button{font-size:10.5px}
+  #programsPage .coach-v15-title-group h1{font-size:22px}
+  #reportsPage .report-v29-task{grid-template-columns:31px minmax(0,1fr);row-gap:5px}
+  #reportsPage .report-v29-task>em{grid-column:2;justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){
+  .coach-sidebar-v20{transition:none}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week{scroll-snap-type:none}
+}
