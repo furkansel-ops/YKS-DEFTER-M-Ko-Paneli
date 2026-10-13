@@ -139,6 +139,11 @@ function renderCoachRealtimeViews(){
   try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Canlı program görünümü",error)}
   try{renderReport($("reportStudentSelect")?.value||"all")}catch(error){console.error("Canlı rapor görünümü",error)}
   try{hydrateParagraphProblemControls();renderParagraphProblem($("ppCoachStudentSelect")?.value||"")}catch(error){console.error("Canlı paragraf/problem görünümü",error)}
+  // A share update can include new exam, topic and wrong-log records, not only progress.
+  // Keep the selected student, exam type and subject filters while refreshing the UI.
+  try{hydrateExamStudentSelect();renderExamAnalysis($("examStudentSelect")?.value||"all")}catch(error){console.error("Canlı deneme analizi görünümü",error)}
+  try{hydrateTopicControls();renderTopicAnalysis($("topicStudentSelect")?.value||"all")}catch(error){console.error("Canlı konu takibi görünümü",error)}
+  try{hydrateErrorControls();renderErrorAnalysis($("errorStudentSelect")?.value||"all")}catch(error){console.error("Canlı hata defteri görünümü",error)}
 }
 function scheduleCoachRealtimeRender(){clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=setTimeout(()=>{coachRealtimeRenderTimer=null;renderCoachRealtimeViews()},60)}
 function startCoachShareRealtime(){
