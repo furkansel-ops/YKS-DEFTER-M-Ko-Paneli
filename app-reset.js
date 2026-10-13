@@ -374,6 +374,14 @@ function reportDailyRows(row){
     date:String(item.date),minutes:Math.max(0,reportNum(item.minutes)),questions:Math.max(0,reportNum(item.questions))
   })).sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
 }
+/** Date-bound windows: missing log days count as 0, not as previous-week activity. */
+function reportCalendarWeek(rows,endOffset=0){
+  const byDate=new Map(rows.map(item=>[item.date,item]));
+  return Array.from({length:7},(_,index)=>{
+    const date=reportDateOffset(endOffset-6+index);
+    return byDate.get(date)||{date,minutes:0,questions:0};
+  });
+}
 function reportPeriod(rows){
   const minutes=rows.reduce((sum,item)=>sum+item.minutes,0),questions=rows.reduce((sum,item)=>sum+item.questions,0);
   return{minutes,questions,activeDays:rows.filter(item=>item.minutes>0||item.questions>0).length};
@@ -408,8 +416,8 @@ function reportSubjectRows(row){
   return[...map.values()].filter(item=>item.minutes||item.questions||item.wrongs||item.examNet!==null).sort((a,b)=>(b.minutes+b.questions+b.wrongs*20)-(a.minutes+a.questions+a.wrongs*20)).slice(0,10);
 }
 function reportStudyPulse(row){
-  const daily=reportDailyRows(row),last7=daily.slice(-7),period=reportPeriod(last7),today=reportDateOffset(0),todayRow=last7.find(item=>item.date===today)||{minutes:0,questions:0};
-  const best=[...last7].sort((a,b)=>b.minutes-a.minutes||b.questions-a.questions)[0]||null;
+  const daily=reportDailyRows(row),last7=reportCalendarWeek(daily),period=reportPeriod(last7),today=reportDateOffset(0),todayRow=last7.find(item=>item.date===today)||{minutes:0,questions:0};
+  const best=[...last7].filter(item=>item.minutes||item.questions).sort((a,b)=>b.minutes-a.minutes||b.questions-a.questions)[0]||null;
   let streak=0;
   for(let offset=0;offset<14;offset++){
     const date=reportDateOffset(-offset),item=daily.find(entry=>entry.date===date);
@@ -446,8 +454,8 @@ function reportRiskMeta(score){
   return{label:"İyi gidiyor",tone:"good"};
 }
 function reportStudentSignals(row){
-  const progress=row?.share?.progress||{},w=weekStats(row?.share?.program),daily=reportDailyRows(row),current=reportPeriod(daily.slice(-7)),previous=reportPeriod(daily.slice(-14,-7)),pp=reportPpSummaryMetrics(row),exams=reportExamRows(row),signals=[];
-  if(daily.length>=14&&previous.minutes>0){const pct=Math.round((current.minutes-previous.minutes)/previous.minutes*100);signals.push({tone:pct>=0?"good":"warn",title:"Çalışma süresi",text:"Önceki 7 güne göre "+(pct>=0?"+":"")+pct+"% değişti."});}
+  const progress=row?.share?.progress||{},w=reportProgramDetails(row).stats,daily=reportDailyRows(row),current=reportPeriod(reportCalendarWeek(daily)),previous=reportPeriod(reportCalendarWeek(daily,-7)),pp=reportPpSummaryMetrics(row),exams=reportExamRows(row),signals=[];
+  if(previous.minutes>0){const pct=Math.round((current.minutes-previous.minutes)/previous.minutes*100);signals.push({tone:pct>=0?"good":"warn",title:"Çalışma süresi",text:"Önceki 7 güne göre "+(pct>=0?"+":"")+pct+"% değişti."});}
   else signals.push({tone:current.minutes?"good":"warn",title:"Çalışma kaydı",text:current.minutes?reportMinutes(current.minutes)+" çalışma · "+current.activeDays+"/7 aktif gün.":"Son 7 günde odak süresi görünmüyor."});
   if(w.total)signals.push({tone:w.ratio>=75?"good":w.ratio>=50?"warn":"danger",title:"Program uyumu",text:w.completed+" / "+w.total+" görev tamamlandı · %"+w.ratio+" uyum."});
   if(reportNum(progress.overdueTopics)>0)signals.push({tone:"danger",title:"Geciken konular",text:Math.round(reportNum(progress.overdueTopics))+" konu hedef tarihini geçmiş."});
@@ -456,6 +464,55 @@ function reportStudentSignals(row){
   else if(pp.total)signals.push({tone:pp.accuracy>=70?"good":"warn",title:"P&P düzeni",text:pp.total+" soru · "+pp.activeDays+"/7 aktif gün · %"+Math.round(pp.accuracy)+" doğruluk."});
   const review=studentDayReviews(row)[0];if(review?.mood==="hard")signals.unshift({tone:"danger",title:"Gün sonu notu",text:"Öğrenci son gününü zor olarak işaretledi; notunu kontrol et."});
   return signals.slice(0,4);
+}
+/** Student-owned program projection; teacher side never writes to program or done flags. */
+function reportProgramDetails(row){
+  const program=row?.share?.program||{},weeks=programWeeks(row),current=programCurrentWeekStart();
+  const week=weeks.find(item=>item.week===current)
+    ||[...weeks].filter(item=>item.week<current).at(-1)
+    ||weeks[0]||null;
+  const stats=weekStats({weeks:week?[week]:[],rowLabels:program.rowLabels});
+  const subjects=new Map(),pending=[];
+  if(week){
+    for(let day=0;day<7;day++){
+      for(const task of collectProgramDayTasks(program,week,day)){
+        const lesson=coachV6Subject(task),name=lesson.title,done=programTaskDone(week.data||{},task,day);
+        if(!subjects.has(name))subjects.set(name,{name,total:0,done:0});
+        const entry=subjects.get(name);entry.total++;if(done)entry.done++;
+        else pending.push({
+          id:task.id,date:programDayDate(week.week,day),day,
+          title:coachV6TaskLabel(task.text)||task.label||"Çalışma",
+          subject:name
+        });
+      }
+    }
+  }
+  pending.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
+  const subjectRows=[...subjects.values()].sort((a,b)=>(b.total-b.done)-(a.total-a.done)||b.total-a.total||a.name.localeCompare(b.name,"tr"));
+  return{week,stats,subjects:subjectRows,pending,period:!week?"":week.week===current?"Bu hafta":week.week<current?"Önceki kayıtlı hafta":"Gelecek kayıtlı hafta"};
+}
+function renderReportProgramDetails(row,details){
+  const host=$("reportProgramDetails");
+  if(!host)return;
+  if(!details.week){
+    host.innerHTML='<div class="report-v29-empty">Öğrencinin paylaşılmış bir haftalık programı henüz yok.</div>';return;
+  }
+  const today=reportDateOffset(0),pending=details.pending;
+  const list=details.subjects.length?details.subjects.map(item=>{
+    const pct=item.total?Math.round(item.done/item.total*100):0;
+    return '<div class="report-v29-subject"><div><b>'+escHtml(item.name)+'</b><small>'+item.done+' / '+item.total+' tamamlandı</small></div>'
+      +'<span class="report-v29-bar" role="progressbar" aria-label="'+escHtml(item.name+' tamamlanma')+'" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></span>'
+      +'<strong>'+pct+'%</strong></div>';
+  }).join(""):'<div class="report-v29-empty">Ders görevi bulunmuyor.</div>';
+  const open=pending.length?pending.slice(0,8).map(task=>{
+    const position=task.date<today?"Geçmiş gün":task.date===today?"Bugün":"Planlı";
+    return '<div class="report-v29-task" data-report-task="'+escHtml(task.id)+'"><span class="report-v29-task-date">'+escHtml(["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"][task.day])+'</span><div><b>'+escHtml(task.subject)+'</b><small title="'+escHtml(task.title)+'">'+escHtml(task.title)+'</small></div><em data-period="'+(task.date<today?"past":task.date===today?"today":"future")+'">'+position+'</em></div>';
+  }).join("")+'<small class="report-v29-rest">'+(pending.length>8?'Diğer '+(pending.length-8)+' görev için Programlar bölümüne bak.':'Durum öğrencinin son paylaştığı programdan alınır.')+'</small>'
+    :'<div class="report-v29-empty">Bu haftada bekleyen görev görünmüyor.</div>';
+  host.innerHTML='<div class="report-v29-overview"><b>'+escHtml(details.period)+' · '+escHtml(formatProgramWeek(details.week.week))+'</b>'
+    +'<span>'+details.stats.completed+' tamamlanan <i aria-hidden="true">·</i> '+pending.length+' bekleyen</span></div>'
+    +'<div class="report-v29-columns"><section aria-label="Ders bazlı görev ilerlemesi"><h3>Ders bazında tamamlanma</h3><div class="report-v29-subjects">'+list+'</div></section>'
+    +'<section aria-label="Tamamlanmayan program görevleri"><h3>Tamamlanmayan görevler</h3><div class="report-v29-tasks">'+open+'</div></section></div>';
 }
 function renderReport(scope){
   if(!coachReportRows.length){setReportState("reportEmpty");return}
@@ -502,7 +559,7 @@ function renderReportOverview(){
   setReportState("reportOverview");
 }
 function renderStudentReport(row){
-  const share=row.share||{},profile=share.profile||{},progress=share.progress||{},w=weekStats(share.program),name=studentName(row),daily=reportDailyRows(row),current7=reportPeriod(daily.slice(-7)),previous7=reportPeriod(daily.slice(-14,-7)),riskScore=reportRiskScore(row),risk=reportRiskMeta(riskScore);
+  const share=row.share||{},profile=share.profile||{},progress=share.progress||{},programDetails=reportProgramDetails(row),w=programDetails.stats,name=studentName(row),daily=reportDailyRows(row),currentWeek=reportCalendarWeek(daily),priorWeek=reportCalendarWeek(daily,-7),current7=reportPeriod(currentWeek),previous7=reportPeriod(priorWeek),riskScore=reportRiskScore(row),risk=reportRiskMeta(riskScore);
   $("reportScopeTitle").textContent=name;
   $("reportScopeMeta").textContent="Detaylı takip · son 7 gün";
   $("reportStudentAvatar").textContent=reportInitial(name);
@@ -528,10 +585,10 @@ function renderStudentReport(row){
   $("reportSubjectFocusBars").innerHTML=focusSubjects.length?focusSubjects.map((item,index)=>'<div class="report-subject-focus-row"><span><b>'+escHtml(item.name)+'</b><small>'+(index===0?"En çok çalışılan · ":"")+Math.round(item.questions)+' soru</small></span><i><em style="width:'+Math.round(item.minutes/focusMax*100)+'%"></em></i><strong>'+escHtml(reportMinutes(item.minutes))+'</strong></div>').join(""):'<div class="report-mini-empty">Ders bazlı odak süresi yeni senkronla burada görünecek.</div>';
 
   const trend=$("reportActivityTrend");
-  if(daily.length>=14&&previous7.minutes>0){const pct=Math.round((current7.minutes-previous7.minutes)/previous7.minutes*100);trend.textContent=(pct>=0?"+":"")+pct+"% süre";trend.className="report-trend-pill "+(pct>=0?"good":"warn");}
+  if(previous7.minutes>0){const pct=Math.round((current7.minutes-previous7.minutes)/previous7.minutes*100);trend.textContent=(pct>=0?"+":"")+pct+"% süre";trend.className="report-trend-pill "+(pct>=0?"good":"warn");}
   else{trend.textContent=daily.length?"7 günlük görünüm":"Günlük veri bekleniyor";trend.className="report-trend-pill";}
   if(daily.length){
-    const rows=daily.slice(-7),maxMinutes=Math.max(1,...rows.map(item=>item.minutes)),maxQuestions=Math.max(1,...rows.map(item=>item.questions));
+    const rows=currentWeek,maxMinutes=Math.max(1,...rows.map(item=>item.minutes)),maxQuestions=Math.max(1,...rows.map(item=>item.questions));
     $("reportActivityChart").innerHTML='<div class="report-activity-bars">'+rows.map(item=>{const d=new Date(item.date+"T12:00:00"),label=new Intl.DateTimeFormat("tr-TR",{weekday:"short"}).format(d);return '<div class="report-activity-day" title="'+escHtml(item.date+" · "+Math.round(item.minutes)+" dk · "+Math.round(item.questions)+" soru")+'"><div class="report-activity-columns"><i style="height:'+Math.max(item.minutes?8:2,item.minutes/maxMinutes*100)+'%"></i><b style="height:'+Math.max(item.questions?8:2,item.questions/maxQuestions*100)+'%"></b></div><span>'+escHtml(label)+'</span><small>'+Math.round(item.minutes)+'dk · '+Math.round(item.questions)+'s</small></div>';}).join("")+'</div><div class="report-activity-legend"><span><i></i>Odak süresi</span><span><b></b>Soru</span><em>'+reportMinutes(current7.minutes)+' · '+Math.round(current7.questions)+' soru</em></div>';
   }else $("reportActivityChart").innerHTML='<div class="report-data-wait"><b>Günlük dağılım yeni senkronla açılacak.</b><span>Toplam çalışma: '+escHtml(reportMinutes(progress.minutes7))+' · '+Math.round(reportNum(progress.questions7))+' soru</span></div>';
 
@@ -545,6 +602,7 @@ function renderStudentReport(row){
     const meta=!tasks?"Plan yok":completed>=tasks?"Tümü tamam":completed+" / "+tasks+" tamamlandı";
     return '<div class="report-day '+cls+'"><span>'+day+'</span><b>'+completed+'<small>/'+tasks+'</small></b><em class="report-day-progress"><i style="width:'+(tasks?Math.round(completed/tasks*100):0)+'%"></i></em><small>'+meta+'</small></div>';
   }).join("");
+  renderReportProgramDetails(row,programDetails);
 
   const pp=reportPpSummaryMetrics(row);
   $("reportPpSummary").innerHTML=
