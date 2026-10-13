@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-12T17:57:10.330Z",
+  "generatedAt": "2026-10-13T09:49:38.998Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-12T17:51:38.821Z"
+      "refreshedAt": "2026-10-13T09:44:10.967Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-12T17:55:42.697Z"
+      "refreshedAt": "2026-10-13T09:48:15.290Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-12T17:56:06.980Z"
+      "refreshedAt": "2026-10-13T09:48:38.341Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5508,7 +5508,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-12T17:56:15.485Z"
+      "refreshedAt": "2026-10-13T09:48:46.143Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8027,7 +8027,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-12T17:56:25.858Z"
+      "refreshedAt": "2026-10-13T09:48:56.157Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8771,7 +8771,7 @@
         },
         {
           "id": "jD6oeZ9MusM",
-          "title": "8) 2024 KPSS ASSOCIATE DEGREE QUESTION TWIN (KADİR GÜMÜŞ)",
+          "title": "8 ) 2024 KPSS ÖN LİSANS SORU İKİZİ (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=jD6oeZ9MusM",
           "thumbnail": "https://i.ytimg.com/vi/jD6oeZ9MusM/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -8833,7 +8833,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-12T17:56:33.416Z"
+      "refreshedAt": "2026-10-13T09:49:02.900Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9662,7 +9662,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-12T17:56:35.992Z"
+      "refreshedAt": "2026-10-13T09:49:05.222Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10664,7 +10664,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-12T17:57:10.326Z"
+      "refreshedAt": "2026-10-13T09:49:38.994Z"
     }
   }
 }
