@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0d1728">
   <meta name="description" content="YKS Defterim bağımsız koç paneli">
   <title>YKS Defterim · Koç Paneli</title>
-  <link rel="stylesheet" href="./base-reset.css?v=1.0.1">
+  <link rel="stylesheet" href="./base-reset.css?v=1.0.1-boot33">
   <link rel="stylesheet" href="./sidebar-v20.css?v=1.0.1">
   <link rel="stylesheet" href="./dashboard-v21.css?v=1.3.0">
   <link rel="stylesheet" href="./students-v21.css?v=2.3.0">
@@ -44,6 +44,7 @@
   <link rel="stylesheet" href="./coach-task-completion-v27.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-live-progress-v28.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-responsive-v32.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-mobile-compat-v33.css?v=1.0.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -1343,6 +1344,7 @@
     </section>
   </div>
 
-  <script>document.addEventListener("click",function(e){var b=e.target.closest("[data-coach-page]");if(!b)return;var p=b.getAttribute("data-coach-page"),m={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};if(!m[p])return;document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(function(x){x.classList.add("hidden")});var t=document.getElementById(m[p]);if(t)t.classList.remove("hidden");document.querySelectorAll("[data-coach-page]").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-coach-page")===p)})},true);</script><script type="module" src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33"></script>
+  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
 </html>
