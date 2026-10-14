@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-13T09:49:38.998Z",
+  "generatedAt": "2026-10-14T08:06:19.852Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-13T09:44:10.967Z"
+      "refreshedAt": "2026-10-14T08:00:34.626Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-13T09:48:15.290Z"
+      "refreshedAt": "2026-10-14T08:04:42.448Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-13T09:48:38.341Z"
+      "refreshedAt": "2026-10-14T08:05:09.593Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 461,
+      "videoCount": 462,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5323,8 +5323,15 @@
           "id": "PLQUvAy0iZ3Fc",
           "title": "11. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLQUvAy0iZ3Fc",
-          "videoCount": 1,
+          "videoCount": 2,
           "videos": [
+            {
+              "id": "SsuS5rgf5V0",
+              "title": "Plant Hormones | 11th Grade Biology Lecture | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=SsuS5rgf5V0",
+              "thumbnail": "https://i.ytimg.com/vi/SsuS5rgf5V0/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "Z5fVahdYsx8",
               "title": "Living Things and Response 11th Grade Maarif Model",
@@ -5424,6 +5431,13 @@
       ],
       "videos": [
         {
+          "id": "SsuS5rgf5V0",
+          "title": "Plant Hormones | 11th Grade Biology Lecture | Course Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=SsuS5rgf5V0",
+          "thumbnail": "https://i.ytimg.com/vi/SsuS5rgf5V0/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
           "id": "1yQc35hxhlE",
           "title": "Energy and ATP Structure | 10th Grade Biology Lecture | Study Materials | Biosem",
           "url": "https://www.youtube.com/watch?v=1yQc35hxhlE",
@@ -5499,16 +5513,9 @@
           "url": "https://www.youtube.com/watch?v=CZkEvLI5mq4",
           "thumbnail": "https://i.ytimg.com/vi/CZkEvLI5mq4/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "oJ1z7spDyDs",
-          "title": "AYT Biyoloji Full Tekrar - Biosem Cep Kitabı | Zeduva",
-          "url": "https://www.youtube.com/watch?v=oJ1z7spDyDs",
-          "thumbnail": "https://i.ytimg.com/vi/oJ1z7spDyDs/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-13T09:48:46.143Z"
+      "refreshedAt": "2026-10-14T08:05:18.656Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8027,7 +8034,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-13T09:48:56.157Z"
+      "refreshedAt": "2026-10-14T08:05:30.473Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8771,7 +8778,7 @@
         },
         {
           "id": "jD6oeZ9MusM",
-          "title": "8 ) 2024 KPSS ÖN LİSANS SORU İKİZİ (KADİR GÜMÜŞ)",
+          "title": "8) 2024 KPSS ASSOCIATE DEGREE QUESTION TWIN (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=jD6oeZ9MusM",
           "thumbnail": "https://i.ytimg.com/vi/jD6oeZ9MusM/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -8833,7 +8840,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-13T09:49:02.900Z"
+      "refreshedAt": "2026-10-14T08:05:38.122Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9662,7 +9669,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-13T09:49:05.222Z"
+      "refreshedAt": "2026-10-14T08:05:40.728Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10664,7 +10671,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-13T09:49:38.994Z"
+      "refreshedAt": "2026-10-14T08:06:19.843Z"
     }
   }
 }
