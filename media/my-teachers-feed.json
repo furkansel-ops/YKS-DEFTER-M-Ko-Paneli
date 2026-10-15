@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-14T08:06:19.852Z",
+  "generatedAt": "2026-10-15T07:49:15.905Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-14T08:00:34.626Z"
+      "refreshedAt": "2026-10-15T07:43:45.411Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-14T08:04:42.448Z"
+      "refreshedAt": "2026-10-15T07:47:49.645Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1172,
+      "videoCount": 1173,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,6 +4611,13 @@
       ],
       "videos": [
         {
+          "id": "yBx727j2RDk",
+          "title": "9. Sınıf Kimya 9. Ders | Atom Orbitalleri: s, p, d, f | Atomdan Periyodik Tabloya | MAARİF",
+          "url": "https://www.youtube.com/watch?v=yBx727j2RDk",
+          "thumbnail": "https://i.ytimg.com/vi/yBx727j2RDk/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "XbACJ9I4SjA",
           "title": "11. Sınıf Kimya 10. Ders | Ortalama Tepkime Hızı Hesaplama | Tepkimelerde Hız | MAARİF",
           "url": "https://www.youtube.com/watch?v=XbACJ9I4SjA",
@@ -4686,16 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=l26bHN2DAiU",
           "thumbnail": "https://i.ytimg.com/vi/l26bHN2DAiU/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "tRkEgQr7q_w",
-          "title": "11. Sınıf Kimya 4. Ders | Bağ Enerjisi, Bağ Uzunluğu ve Bağ Sağlamlığı | Enerji | MAARİF",
-          "url": "https://www.youtube.com/watch?v=tRkEgQr7q_w",
-          "thumbnail": "https://i.ytimg.com/vi/tRkEgQr7q_w/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-14T08:05:09.593Z"
+      "refreshedAt": "2026-10-15T07:48:13.417Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5515,7 +5515,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-14T08:05:18.656Z"
+      "refreshedAt": "2026-10-15T07:48:21.403Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8034,7 +8034,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-14T08:05:30.473Z"
+      "refreshedAt": "2026-10-15T07:48:31.638Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8840,7 +8840,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-14T08:05:38.122Z"
+      "refreshedAt": "2026-10-15T07:48:38.324Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9669,7 +9669,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-14T08:05:40.728Z"
+      "refreshedAt": "2026-10-15T07:48:40.855Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9682,7 +9682,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2293,
+      "videoCount": 2294,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10671,7 +10671,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-14T08:06:19.843Z"
+      "refreshedAt": "2026-10-15T07:49:15.901Z"
     }
   }
 }
