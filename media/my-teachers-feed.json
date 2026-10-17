@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-16T07:36:20.875Z",
+  "generatedAt": "2026-10-17T07:17:11.107Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-16T07:30:34.291Z"
+      "refreshedAt": "2026-10-17T07:11:26.934Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-16T07:34:42.219Z"
+      "refreshedAt": "2026-10-17T07:15:33.086Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-16T07:35:09.721Z"
+      "refreshedAt": "2026-10-17T07:16:00.457Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 462,
+      "videoCount": 463,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5323,8 +5323,15 @@
           "id": "PLQUvAy0iZ3Fc",
           "title": "11. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLQUvAy0iZ3Fc",
-          "videoCount": 2,
+          "videoCount": 3,
           "videos": [
+            {
+              "id": "7Gdao-DhH6c",
+              "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=7Gdao-DhH6c",
+              "thumbnail": "https://i.ytimg.com/vi/7Gdao-DhH6c/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "SsuS5rgf5V0",
               "title": "Plant Hormones | 11th Grade Biology Lecture | Course Materials | Biosem",
@@ -5346,7 +5353,7 @@
           "id": "PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
           "title": "BİOSEM GÜNDEM",
           "url": "https://www.youtube.com/playlist?list=PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
-          "videoCount": 11,
+          "videoCount": 12,
           "videos": [
             {
               "id": "67pqs5VIL4w",
@@ -5424,12 +5431,26 @@
               "url": "https://www.youtube.com/watch?v=1yQc35hxhlE",
               "thumbnail": "https://i.ytimg.com/vi/1yQc35hxhlE/hqdefault.jpg",
               "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "7Gdao-DhH6c",
+              "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=7Gdao-DhH6c",
+              "thumbnail": "https://i.ytimg.com/vi/7Gdao-DhH6c/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
             }
           ],
           "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "7Gdao-DhH6c",
+          "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=7Gdao-DhH6c",
+          "thumbnail": "https://i.ytimg.com/vi/7Gdao-DhH6c/hqdefault.jpg",
+          "channel": "Biosem"
+        },
         {
           "id": "SsuS5rgf5V0",
           "title": "Plant Hormones | 11th Grade Biology Lecture | Course Materials | Biosem",
@@ -5506,16 +5527,9 @@
           "url": "https://www.youtube.com/watch?v=8_dVQn1bptc",
           "thumbnail": "https://i.ytimg.com/vi/8_dVQn1bptc/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "CZkEvLI5mq4",
-          "title": "9th Grade Biology 2nd Term 2nd Written Exam | General Review | Full Review",
-          "url": "https://www.youtube.com/watch?v=CZkEvLI5mq4",
-          "thumbnail": "https://i.ytimg.com/vi/CZkEvLI5mq4/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-16T07:35:18.982Z"
+      "refreshedAt": "2026-10-17T07:16:09.372Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8034,7 +8048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-16T07:35:30.815Z"
+      "refreshedAt": "2026-10-17T07:16:20.898Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8785,7 +8799,7 @@
         },
         {
           "id": "4sl3L8b6yIc",
-          "title": "7 ) 2023 KPSS LİSANS SORU İKİZİ (KADİR GÜMÜŞ)",
+          "title": "7) 2023 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=4sl3L8b6yIc",
           "thumbnail": "https://i.ytimg.com/vi/4sl3L8b6yIc/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -8840,7 +8854,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-16T07:35:38.490Z"
+      "refreshedAt": "2026-10-17T07:16:28.488Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9669,7 +9683,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-16T07:35:41.175Z"
+      "refreshedAt": "2026-10-17T07:16:31.499Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10671,7 +10685,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-16T07:36:20.871Z"
+      "refreshedAt": "2026-10-17T07:17:11.104Z"
     }
   }
 }
