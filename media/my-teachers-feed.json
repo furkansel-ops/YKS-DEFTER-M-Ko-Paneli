@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-17T07:17:11.107Z",
+  "generatedAt": "2026-10-18T07:30:32.951Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-17T07:11:26.934Z"
+      "refreshedAt": "2026-10-18T07:25:10.220Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-17T07:15:33.086Z"
+      "refreshedAt": "2026-10-18T07:29:11.141Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-17T07:16:00.457Z"
+      "refreshedAt": "2026-10-18T07:29:33.496Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5529,7 +5529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-17T07:16:09.372Z"
+      "refreshedAt": "2026-10-18T07:29:41.702Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8048,7 +8048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-17T07:16:20.898Z"
+      "refreshedAt": "2026-10-18T07:29:51.414Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8854,7 +8854,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-17T07:16:28.488Z"
+      "refreshedAt": "2026-10-18T07:29:58.092Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9683,7 +9683,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-17T07:16:31.499Z"
+      "refreshedAt": "2026-10-18T07:30:00.635Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10685,7 +10685,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-17T07:17:11.104Z"
+      "refreshedAt": "2026-10-18T07:30:32.947Z"
     }
   }
 }
