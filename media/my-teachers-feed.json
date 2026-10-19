@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-18T07:30:32.951Z",
+  "generatedAt": "2026-10-19T08:10:34.404Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-18T07:25:10.220Z"
+      "refreshedAt": "2026-10-19T08:05:05.658Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-18T07:29:11.141Z"
+      "refreshedAt": "2026-10-19T08:09:08.743Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1173,
+      "videoCount": 1175,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,6 +4611,20 @@
       ],
       "videos": [
         {
+          "id": "YE5z728gskk",
+          "title": "9. Sınıf Kimya 11. Ders | Değerlik Elektronu ve Küresel Simetri | Atomdan Periyodik Tabloya | MAARİF",
+          "url": "https://www.youtube.com/watch?v=YE5z728gskk",
+          "thumbnail": "https://i.ytimg.com/vi/YE5z728gskk/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "cYHLkP3Egys",
+          "title": "9. Sınıf Kimya 10. Ders | Elektron Dizilimi - 1 | Atomdan Periyodik Tabloya | MAARİF",
+          "url": "https://www.youtube.com/watch?v=cYHLkP3Egys",
+          "thumbnail": "https://i.ytimg.com/vi/cYHLkP3Egys/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "yBx727j2RDk",
           "title": "9. Sınıf Kimya 9. Ders | Atom Orbitalleri: s, p, d, f | Atomdan Periyodik Tabloya | MAARİF",
           "url": "https://www.youtube.com/watch?v=yBx727j2RDk",
@@ -4679,23 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=ffaA-LYy4e8",
           "thumbnail": "https://i.ytimg.com/vi/ffaA-LYy4e8/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "z3673UacaYU",
-          "title": "11. Sınıf Kimya 6. Ders | Bağ Enerjisi ve Potansiyel Enerji Grafikleri | Enerji | MAARİF",
-          "url": "https://www.youtube.com/watch?v=z3673UacaYU",
-          "thumbnail": "https://i.ytimg.com/vi/z3673UacaYU/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "l26bHN2DAiU",
-          "title": "11. Sınıf Kimya 5. Ders | Bağ Enerjileri ile Tepkime Entalpisi Hesaplama | Enerji | MAARİF",
-          "url": "https://www.youtube.com/watch?v=l26bHN2DAiU",
-          "thumbnail": "https://i.ytimg.com/vi/l26bHN2DAiU/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-18T07:29:33.496Z"
+      "refreshedAt": "2026-10-19T08:09:32.591Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5529,7 +5529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-18T07:29:41.702Z"
+      "refreshedAt": "2026-10-19T08:09:40.519Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8048,7 +8048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-18T07:29:51.414Z"
+      "refreshedAt": "2026-10-19T08:09:50.779Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8854,7 +8854,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-18T07:29:58.092Z"
+      "refreshedAt": "2026-10-19T08:09:57.205Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9683,7 +9683,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-18T07:30:00.635Z"
+      "refreshedAt": "2026-10-19T08:09:59.667Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10685,7 +10685,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-18T07:30:32.947Z"
+      "refreshedAt": "2026-10-19T08:10:34.400Z"
     }
   }
 }
