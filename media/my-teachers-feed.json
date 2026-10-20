@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-19T08:10:34.404Z",
+  "generatedAt": "2026-10-20T08:01:04.156Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-19T08:05:05.658Z"
+      "refreshedAt": "2026-10-20T07:55:34.124Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-19T08:09:08.743Z"
+      "refreshedAt": "2026-10-20T07:59:37.542Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-19T08:09:32.591Z"
+      "refreshedAt": "2026-10-20T08:00:01.264Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5529,7 +5529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-19T08:09:40.519Z"
+      "refreshedAt": "2026-10-20T08:00:09.256Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8048,7 +8048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-19T08:09:50.779Z"
+      "refreshedAt": "2026-10-20T08:00:19.586Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8799,7 +8799,7 @@
         },
         {
           "id": "4sl3L8b6yIc",
-          "title": "7) 2023 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
+          "title": "7 ) 2023 KPSS LİSANS SORU İKİZİ (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=4sl3L8b6yIc",
           "thumbnail": "https://i.ytimg.com/vi/4sl3L8b6yIc/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -8854,7 +8854,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-19T08:09:57.205Z"
+      "refreshedAt": "2026-10-20T08:00:26.785Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9683,7 +9683,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-19T08:09:59.667Z"
+      "refreshedAt": "2026-10-20T08:00:29.255Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10685,7 +10685,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-19T08:10:34.400Z"
+      "refreshedAt": "2026-10-20T08:01:04.153Z"
     }
   }
 }
