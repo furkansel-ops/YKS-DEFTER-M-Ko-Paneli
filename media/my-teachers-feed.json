@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-20T08:01:04.156Z",
+  "generatedAt": "2026-10-21T08:04:43.989Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-20T07:55:34.124Z"
+      "refreshedAt": "2026-10-21T07:59:12.963Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-20T07:59:37.542Z"
+      "refreshedAt": "2026-10-21T08:03:18.144Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-20T08:00:01.264Z"
+      "refreshedAt": "2026-10-21T08:03:41.683Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 463,
+      "videoCount": 464,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5323,8 +5323,15 @@
           "id": "PLQUvAy0iZ3Fc",
           "title": "11. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLQUvAy0iZ3Fc",
-          "videoCount": 3,
+          "videoCount": 4,
           "videos": [
+            {
+              "id": "0IieRml2qTg",
+              "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
+              "thumbnail": "https://i.ytimg.com/vi/0IieRml2qTg/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "7Gdao-DhH6c",
               "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
@@ -5353,7 +5360,7 @@
           "id": "PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
           "title": "BİOSEM GÜNDEM",
           "url": "https://www.youtube.com/playlist?list=PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
-          "videoCount": 12,
+          "videoCount": 13,
           "videos": [
             {
               "id": "67pqs5VIL4w",
@@ -5438,12 +5445,26 @@
               "url": "https://www.youtube.com/watch?v=7Gdao-DhH6c",
               "thumbnail": "https://i.ytimg.com/vi/7Gdao-DhH6c/hqdefault.jpg",
               "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "0IieRml2qTg",
+              "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
+              "thumbnail": "https://i.ytimg.com/vi/0IieRml2qTg/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
             }
           ],
           "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "0IieRml2qTg",
+          "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
+          "thumbnail": "https://i.ytimg.com/vi/0IieRml2qTg/hqdefault.jpg",
+          "channel": "Biosem"
+        },
         {
           "id": "7Gdao-DhH6c",
           "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
@@ -5520,16 +5541,9 @@
           "url": "https://www.youtube.com/watch?v=nQqbVfL2C0U",
           "thumbnail": "https://i.ytimg.com/vi/nQqbVfL2C0U/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "8_dVQn1bptc",
-          "title": "9.sınıf biyoloji 2.dönem 2.yazılı provası",
-          "url": "https://www.youtube.com/watch?v=8_dVQn1bptc",
-          "thumbnail": "https://i.ytimg.com/vi/8_dVQn1bptc/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-20T08:00:09.256Z"
+      "refreshedAt": "2026-10-21T08:03:49.618Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8048,7 +8062,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-20T08:00:19.586Z"
+      "refreshedAt": "2026-10-21T08:03:59.917Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8799,7 +8813,7 @@
         },
         {
           "id": "4sl3L8b6yIc",
-          "title": "7 ) 2023 KPSS LİSANS SORU İKİZİ (KADİR GÜMÜŞ)",
+          "title": "7) 2023 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=4sl3L8b6yIc",
           "thumbnail": "https://i.ytimg.com/vi/4sl3L8b6yIc/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -8854,7 +8868,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-20T08:00:26.785Z"
+      "refreshedAt": "2026-10-21T08:04:06.786Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9683,7 +9697,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-20T08:00:29.255Z"
+      "refreshedAt": "2026-10-21T08:04:09.044Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10685,7 +10699,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-20T08:01:04.153Z"
+      "refreshedAt": "2026-10-21T08:04:43.984Z"
     }
   }
 }
