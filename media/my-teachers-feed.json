@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-21T08:04:43.989Z",
+  "generatedAt": "2026-10-22T08:01:21.185Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-21T07:59:12.963Z"
+      "refreshedAt": "2026-10-22T07:56:16.149Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-21T08:03:18.144Z"
+      "refreshedAt": "2026-10-22T08:00:13.323Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-21T08:03:41.683Z"
+      "refreshedAt": "2026-10-22T08:00:32.201Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5543,7 +5543,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-21T08:03:49.618Z"
+      "refreshedAt": "2026-10-22T08:00:38.861Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8062,7 +8062,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-21T08:03:59.917Z"
+      "refreshedAt": "2026-10-22T08:00:47.238Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8868,7 +8868,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-21T08:04:06.786Z"
+      "refreshedAt": "2026-10-22T08:00:52.677Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9697,7 +9697,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-21T08:04:09.044Z"
+      "refreshedAt": "2026-10-22T08:00:54.590Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9710,7 +9710,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2295,
+      "videoCount": 2296,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10615,6 +10615,13 @@
       ],
       "videos": [
         {
+          "id": "Ceokr-lOkck",
+          "title": "10th Grade Literature Textbook 2027 / Aligned with the Maarif Model",
+          "url": "https://www.youtube.com/watch?v=Ceokr-lOkck",
+          "thumbnail": "https://i.ytimg.com/vi/Ceokr-lOkck/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "b6gEud6hg7M",
           "title": "YAZIM KURALLARI SORU ÇÖZÜMÜ / 2027 TYT TÜRKÇE",
           "url": "https://www.youtube.com/watch?v=b6gEud6hg7M",
@@ -10690,16 +10697,9 @@
           "url": "https://www.youtube.com/watch?v=_vc8qMp5It4",
           "thumbnail": "https://i.ytimg.com/vi/_vc8qMp5It4/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "miIWzFBburw",
-          "title": "What Awaits Us in 10th Grade Literature? 📚 (All Details) 2027",
-          "url": "https://www.youtube.com/watch?v=miIWzFBburw",
-          "thumbnail": "https://i.ytimg.com/vi/miIWzFBburw/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-21T08:04:43.984Z"
+      "refreshedAt": "2026-10-22T08:01:21.182Z"
     }
   }
 }
