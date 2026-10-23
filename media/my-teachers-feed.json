@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-22T08:01:21.185Z",
+  "generatedAt": "2026-10-23T08:01:16.870Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-22T07:56:16.149Z"
+      "refreshedAt": "2026-10-23T07:55:36.303Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-22T08:00:13.323Z"
+      "refreshedAt": "2026-10-23T07:59:42.956Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1175,
+      "videoCount": 1178,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,6 +4611,27 @@
       ],
       "videos": [
         {
+          "id": "xYAmgjRiZx0",
+          "title": "10. Sınıf Kimya 8. Ders | Mol–Kütle İlişkisi ve Mol Kütlesi Hesaplama | Mol Kavramı | MAARİF",
+          "url": "https://www.youtube.com/watch?v=xYAmgjRiZx0",
+          "thumbnail": "https://i.ytimg.com/vi/xYAmgjRiZx0/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "YsaW6ie6NgI",
+          "title": "10. Sınıf Kimya 7. Ders | Mol–Atom ve Mol–Tanecik İlişkisi | Mol Kavramı | MAARİF",
+          "url": "https://www.youtube.com/watch?v=YsaW6ie6NgI",
+          "thumbnail": "https://i.ytimg.com/vi/YsaW6ie6NgI/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "cdDIGFZmZvM",
+          "title": "10. Sınıf Kimya 6. Ders | Mol Nedir? Avogadro Sayısı ve AKB | Mol Kavramı | MAARİF",
+          "url": "https://www.youtube.com/watch?v=cdDIGFZmZvM",
+          "thumbnail": "https://i.ytimg.com/vi/cdDIGFZmZvM/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "YE5z728gskk",
           "title": "9. Sınıf Kimya 11. Ders | Değerlik Elektronu ve Küresel Simetri | Atomdan Periyodik Tabloya | MAARİF",
           "url": "https://www.youtube.com/watch?v=YE5z728gskk",
@@ -4672,30 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=EkimXlihm2Y",
           "thumbnail": "https://i.ytimg.com/vi/EkimXlihm2Y/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "vldW2j_fLFk",
-          "title": "10. Sınıf Kimya 3. Ders | Çökelme Tepkimeleri | Kimyasal Tepkimeler | MAARİF",
-          "url": "https://www.youtube.com/watch?v=vldW2j_fLFk",
-          "thumbnail": "https://i.ytimg.com/vi/vldW2j_fLFk/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "lU63lkYDNlM",
-          "title": "11. Sınıf Kimya 8. Ders | Oluşum Entalpilerinden Tepkime Entalpisi Hesaplama | Enerji | MAARİF",
-          "url": "https://www.youtube.com/watch?v=lU63lkYDNlM",
-          "thumbnail": "https://i.ytimg.com/vi/lU63lkYDNlM/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "ffaA-LYy4e8",
-          "title": "11. Sınıf Kimya 7. Ders | Standart Oluşum Entalpisi | Enerji | MAARİF",
-          "url": "https://www.youtube.com/watch?v=ffaA-LYy4e8",
-          "thumbnail": "https://i.ytimg.com/vi/ffaA-LYy4e8/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-22T08:00:32.201Z"
+      "refreshedAt": "2026-10-23T08:00:09.192Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 464,
+      "videoCount": 465,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5291,8 +5291,15 @@
           "id": "PLMkKvY88diDE",
           "title": "10. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLMkKvY88diDE",
-          "videoCount": 1,
+          "videoCount": 2,
           "videos": [
+            {
+              "id": "a-YofK21jZw",
+              "title": "Introduction to Photosynthesis | 10th Grade Biology Lesson | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=a-YofK21jZw",
+              "thumbnail": "https://i.ytimg.com/vi/a-YofK21jZw/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "1yQc35hxhlE",
               "title": "Energy and ATP Structure | 10th Grade Biology Lecture | Study Materials | Biosem",
@@ -5459,6 +5466,13 @@
       ],
       "videos": [
         {
+          "id": "a-YofK21jZw",
+          "title": "Introduction to Photosynthesis | 10th Grade Biology Lesson | Course Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=a-YofK21jZw",
+          "thumbnail": "https://i.ytimg.com/vi/a-YofK21jZw/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
           "id": "0IieRml2qTg",
           "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
           "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
@@ -5534,16 +5548,9 @@
           "url": "https://www.youtube.com/watch?v=rcTtZH5NBTM",
           "thumbnail": "https://i.ytimg.com/vi/rcTtZH5NBTM/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "nQqbVfL2C0U",
-          "title": "10th Grade Biology 2nd Term 2nd Exam | General Review | Full Review",
-          "url": "https://www.youtube.com/watch?v=nQqbVfL2C0U",
-          "thumbnail": "https://i.ytimg.com/vi/nQqbVfL2C0U/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-22T08:00:38.861Z"
+      "refreshedAt": "2026-10-23T08:00:17.963Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8062,7 +8069,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-22T08:00:47.238Z"
+      "refreshedAt": "2026-10-23T08:00:29.027Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8868,7 +8875,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-22T08:00:52.677Z"
+      "refreshedAt": "2026-10-23T08:00:36.260Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9697,7 +9704,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-22T08:00:54.590Z"
+      "refreshedAt": "2026-10-23T08:00:38.972Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10699,7 +10706,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-22T08:01:21.182Z"
+      "refreshedAt": "2026-10-23T08:01:16.866Z"
     }
   }
 }
