@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-23T08:01:16.870Z",
+  "generatedAt": "2026-10-24T07:41:00.010Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -16,7 +16,7 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/eyup-b/index.json",
-      "videoCount": 4165,
+      "videoCount": 4166,
       "playlistCount": 35,
       "archiveComplete": true,
       "playlists": [
@@ -2727,6 +2727,13 @@
       ],
       "videos": [
         {
+          "id": "oJvi9H1DYHw",
+          "title": "A Polynomial Question (From a Future AYT Mini Practice Test)",
+          "url": "https://www.youtube.com/watch?v=oJvi9H1DYHw",
+          "thumbnail": "https://i.ytimg.com/vi/oJvi9H1DYHw/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
           "id": "x0tY38buhRg",
           "title": "How to Study for 2027 AYT Mathematics?",
           "url": "https://www.youtube.com/watch?v=x0tY38buhRg",
@@ -2802,16 +2809,9 @@
           "url": "https://www.youtube.com/watch?v=kClThdJ5vnY",
           "thumbnail": "https://i.ytimg.com/vi/kClThdJ5vnY/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "P0NNgnEuCDc",
-          "title": "How to Study Mathematics (Without Geometry): 0-10 Net Score Range",
-          "url": "https://www.youtube.com/watch?v=P0NNgnEuCDc",
-          "thumbnail": "https://i.ytimg.com/vi/P0NNgnEuCDc/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-23T07:55:36.303Z"
+      "refreshedAt": "2026-10-24T07:35:39.973Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-23T07:59:42.956Z"
+      "refreshedAt": "2026-10-24T07:39:40.826Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-23T08:00:09.192Z"
+      "refreshedAt": "2026-10-24T07:40:03.002Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 465,
+      "videoCount": 469,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5291,8 +5291,22 @@
           "id": "PLMkKvY88diDE",
           "title": "10. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLMkKvY88diDE",
-          "videoCount": 2,
+          "videoCount": 6,
           "videos": [
+            {
+              "id": "A1C0OD4u9SY",
+              "title": "Fotosentez Çalışmaları | 10. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
+              "url": "https://www.youtube.com/watch?v=A1C0OD4u9SY",
+              "thumbnail": "https://i.ytimg.com/vi/A1C0OD4u9SY/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "bT9Vt0qHqbw",
+              "title": "Photosynthesis Stages | 10th Grade Biology Lecture | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=bT9Vt0qHqbw",
+              "thumbnail": "https://i.ytimg.com/vi/bT9Vt0qHqbw/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "a-YofK21jZw",
               "title": "Introduction to Photosynthesis | 10th Grade Biology Lesson | Course Materials | Biosem",
@@ -5306,6 +5320,20 @@
               "url": "https://www.youtube.com/watch?v=1yQc35hxhlE",
               "thumbnail": "https://i.ytimg.com/vi/1yQc35hxhlE/hqdefault.jpg",
               "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "YVRxCVqiR3w",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=YVRxCVqiR3w",
+              "thumbnail": "https://i.ytimg.com/vi/YVRxCVqiR3w/hqdefault.jpg",
+              "channel": "Biosem"
+            },
+            {
+              "id": "eU6MSTt1No4",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=eU6MSTt1No4",
+              "thumbnail": "https://i.ytimg.com/vi/eU6MSTt1No4/hqdefault.jpg",
+              "channel": "Biosem"
             }
           ],
           "contentComplete": true
@@ -5466,6 +5494,20 @@
       ],
       "videos": [
         {
+          "id": "A1C0OD4u9SY",
+          "title": "Fotosentez Çalışmaları | 10. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
+          "url": "https://www.youtube.com/watch?v=A1C0OD4u9SY",
+          "thumbnail": "https://i.ytimg.com/vi/A1C0OD4u9SY/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "bT9Vt0qHqbw",
+          "title": "Photosynthesis Stages | 10th Grade Biology Lecture | Course Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=bT9Vt0qHqbw",
+          "thumbnail": "https://i.ytimg.com/vi/bT9Vt0qHqbw/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
           "id": "a-YofK21jZw",
           "title": "Introduction to Photosynthesis | 10th Grade Biology Lesson | Course Materials | Biosem",
           "url": "https://www.youtube.com/watch?v=a-YofK21jZw",
@@ -5534,23 +5576,9 @@
           "url": "https://www.youtube.com/watch?v=jqNiNS5sCa4",
           "thumbnail": "https://i.ytimg.com/vi/jqNiNS5sCa4/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "VX2aSVwtkkk",
-          "title": "11th Grade Biology 2nd Term 2nd Exam | General Review | Full Review",
-          "url": "https://www.youtube.com/watch?v=VX2aSVwtkkk",
-          "thumbnail": "https://i.ytimg.com/vi/VX2aSVwtkkk/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "rcTtZH5NBTM",
-          "title": "10th Grade Biology 2nd Semester 2nd Exam Practice",
-          "url": "https://www.youtube.com/watch?v=rcTtZH5NBTM",
-          "thumbnail": "https://i.ytimg.com/vi/rcTtZH5NBTM/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-23T08:00:17.963Z"
+      "refreshedAt": "2026-10-24T07:40:10.431Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8069,7 +8097,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-23T08:00:29.027Z"
+      "refreshedAt": "2026-10-24T07:40:19.556Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8082,8 +8110,8 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/kadir-gumus/index.json",
-      "videoCount": 224,
-      "playlistCount": 17,
+      "videoCount": 230,
+      "playlistCount": 18,
       "archiveComplete": true,
       "playlists": [
         {
@@ -8539,6 +8567,57 @@
           "contentComplete": true
         },
         {
+          "id": "PLFZHFK4ME0HY",
+          "title": "1. DÖNEM 1. YAZILILAR",
+          "url": "https://www.youtube.com/playlist?list=PLFZHFK4ME0HY",
+          "videoCount": 6,
+          "videos": [
+            {
+              "id": "hkoxYBf7oyc",
+              "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
+              "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "ZSsorj9Rw9Y",
+              "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
+              "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "_ZzpAtuH6nk",
+              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
+              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "nKzxHl_wUAk",
+              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "lYBH78z-Fi8",
+              "title": "7TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST WRITTEN EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=lYBH78z-Fi8",
+              "thumbnail": "https://i.ytimg.com/vi/lYBH78z-Fi8/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "kUiynIoV5Ow",
+              "title": "8TH GRADE - TURKISH - 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=kUiynIoV5Ow",
+              "thumbnail": "https://i.ytimg.com/vi/kUiynIoV5Ow/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLwy7o4Q68j6SngIBRaSgLq3aHJUFXraRv",
           "title": "2026 TAHMİN-GENEL TEKRAR",
           "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6SngIBRaSgLq3aHJUFXraRv",
@@ -8764,32 +8843,51 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLwy7o4Q68j6SuU3nx93a42UNqflIZKdkX",
-          "title": "MSÜ - TÜRKÇE KAMP (1.5 SAATTE)",
-          "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6SuU3nx93a42UNqflIZKdkX",
-          "videoCount": 2,
-          "videos": [
-            {
-              "id": "e7v6-eZMC4I",
-              "title": "1 . SES BİLGİSİ - PARLA DİL BİLGİSİ - (KADİR GÜMÜŞ) (2026)",
-              "url": "https://www.youtube.com/watch?v=e7v6-eZMC4I",
-              "thumbnail": "https://i.ytimg.com/vi/e7v6-eZMC4I/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "231zpOrxPhM",
-              "title": "2026-MSÜ TÜRKÇE GENEL TEKRAR-1.5 saatte -38 soruyla PDF ÜCRETSİZ KAMP (KADİR GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=231zpOrxPhM",
-              "thumbnail": "https://i.ytimg.com/vi/231zpOrxPhM/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "hkoxYBf7oyc",
+          "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
+          "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "_ZzpAtuH6nk",
+          "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
+          "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "kUiynIoV5Ow",
+          "title": "8TH GRADE - TURKISH - 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=kUiynIoV5Ow",
+          "thumbnail": "https://i.ytimg.com/vi/kUiynIoV5Ow/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "lYBH78z-Fi8",
+          "title": "7TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST WRITTEN EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=lYBH78z-Fi8",
+          "thumbnail": "https://i.ytimg.com/vi/lYBH78z-Fi8/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "nKzxHl_wUAk",
+          "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+          "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "ZSsorj9Rw9Y",
+          "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
+          "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
         {
           "id": "N6THHBvda6A",
           "title": "10) 2024 KPSS SECONDARY EDUCATION QUESTION TWIN (KADİR GÜMÜŞ)",
@@ -8831,51 +8929,9 @@
           "url": "https://www.youtube.com/watch?v=I0DQdLkqriI",
           "thumbnail": "https://i.ytimg.com/vi/I0DQdLkqriI/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "9vX032qlyGA",
-          "title": "5 ) 2022 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=9vX032qlyGA",
-          "thumbnail": "https://i.ytimg.com/vi/9vX032qlyGA/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "t1nqJwCsLww",
-          "title": "4) 2022 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=t1nqJwCsLww",
-          "thumbnail": "https://i.ytimg.com/vi/t1nqJwCsLww/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "0pk0wSpQ_X0",
-          "title": "3) 2021 KPSS UNDERGRADUATE EXAM QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=0pk0wSpQ_X0",
-          "thumbnail": "https://i.ytimg.com/vi/0pk0wSpQ_X0/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "p8L9bcd17Hg",
-          "title": "2) 2020 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=p8L9bcd17Hg",
-          "thumbnail": "https://i.ytimg.com/vi/p8L9bcd17Hg/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "zO0XN4BMOVU",
-          "title": "1) 2020 KPSS SECONDARY EDUCATION QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=zO0XN4BMOVU",
-          "thumbnail": "https://i.ytimg.com/vi/zO0XN4BMOVU/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "IWQ7jUvmYzA",
-          "title": "2026 AYT TURKISH LANGUAGE AND LITERATURE QUESTIONS AND SOLUTIONS - EVALUATION (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=IWQ7jUvmYzA",
-          "thumbnail": "https://i.ytimg.com/vi/IWQ7jUvmYzA/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-23T08:00:36.260Z"
+      "refreshedAt": "2026-10-24T07:40:25.559Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9704,7 +9760,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-23T08:00:38.972Z"
+      "refreshedAt": "2026-10-24T07:40:27.971Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10706,7 +10762,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-23T08:01:16.866Z"
+      "refreshedAt": "2026-10-24T07:41:00.007Z"
     }
   }
 }
