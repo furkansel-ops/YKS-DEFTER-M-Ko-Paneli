@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-24T07:41:00.010Z",
+  "generatedAt": "2026-10-25T07:53:33.783Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-24T07:35:39.973Z"
+      "refreshedAt": "2026-10-25T07:48:24.770Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-24T07:39:40.826Z"
+      "refreshedAt": "2026-10-25T07:52:23.449Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-24T07:40:03.002Z"
+      "refreshedAt": "2026-10-25T07:52:43.123Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5294,6 +5294,20 @@
           "videoCount": 6,
           "videos": [
             {
+              "id": "eU6MSTt1No4",
+              "title": "Chemosynthesis | 10th Grade Biology Lecture | Dossier Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=eU6MSTt1No4",
+              "thumbnail": "https://i.ytimg.com/vi/eU6MSTt1No4/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "YVRxCVqiR3w",
+              "title": "Factors Affecting Photosynthesis Rate | 10th Grade Biology Lecture | Dosia Materials",
+              "url": "https://www.youtube.com/watch?v=YVRxCVqiR3w",
+              "thumbnail": "https://i.ytimg.com/vi/YVRxCVqiR3w/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
               "id": "A1C0OD4u9SY",
               "title": "Fotosentez Çalışmaları | 10. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
               "url": "https://www.youtube.com/watch?v=A1C0OD4u9SY",
@@ -5320,20 +5334,6 @@
               "url": "https://www.youtube.com/watch?v=1yQc35hxhlE",
               "thumbnail": "https://i.ytimg.com/vi/1yQc35hxhlE/hqdefault.jpg",
               "channel": "Biosem Biyoloji"
-            },
-            {
-              "id": "YVRxCVqiR3w",
-              "title": "YouTube videosu",
-              "url": "https://www.youtube.com/watch?v=YVRxCVqiR3w",
-              "thumbnail": "https://i.ytimg.com/vi/YVRxCVqiR3w/hqdefault.jpg",
-              "channel": "Biosem"
-            },
-            {
-              "id": "eU6MSTt1No4",
-              "title": "YouTube videosu",
-              "url": "https://www.youtube.com/watch?v=eU6MSTt1No4",
-              "thumbnail": "https://i.ytimg.com/vi/eU6MSTt1No4/hqdefault.jpg",
-              "channel": "Biosem"
             }
           ],
           "contentComplete": true
@@ -5494,6 +5494,20 @@
       ],
       "videos": [
         {
+          "id": "eU6MSTt1No4",
+          "title": "Chemosynthesis | 10th Grade Biology Lecture | Dossier Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=eU6MSTt1No4",
+          "thumbnail": "https://i.ytimg.com/vi/eU6MSTt1No4/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "YVRxCVqiR3w",
+          "title": "Factors Affecting Photosynthesis Rate | 10th Grade Biology Lecture | Dosia Materials",
+          "url": "https://www.youtube.com/watch?v=YVRxCVqiR3w",
+          "thumbnail": "https://i.ytimg.com/vi/YVRxCVqiR3w/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
           "id": "A1C0OD4u9SY",
           "title": "Fotosentez Çalışmaları | 10. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
           "url": "https://www.youtube.com/watch?v=A1C0OD4u9SY",
@@ -5562,23 +5576,9 @@
           "url": "https://www.youtube.com/watch?v=67pqs5VIL4w",
           "thumbnail": "https://i.ytimg.com/vi/67pqs5VIL4w/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "kP_Iw5sDn6o",
-          "title": "TYT Biology - Ace Biology in 39 Days - 2027 Roadmap",
-          "url": "https://www.youtube.com/watch?v=kP_Iw5sDn6o",
-          "thumbnail": "https://i.ytimg.com/vi/kP_Iw5sDn6o/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "jqNiNS5sCa4",
-          "title": "11th Grade Biology 2nd Term 2nd Exam Practice",
-          "url": "https://www.youtube.com/watch?v=jqNiNS5sCa4",
-          "thumbnail": "https://i.ytimg.com/vi/jqNiNS5sCa4/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-24T07:40:10.431Z"
+      "refreshedAt": "2026-10-25T07:52:49.614Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8097,7 +8097,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-24T07:40:19.556Z"
+      "refreshedAt": "2026-10-25T07:52:57.973Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8110,7 +8110,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/kadir-gumus/index.json",
-      "videoCount": 230,
+      "videoCount": 232,
       "playlistCount": 18,
       "archiveComplete": true,
       "playlists": [
@@ -8568,15 +8568,22 @@
         },
         {
           "id": "PLFZHFK4ME0HY",
-          "title": "1. DÖNEM 1. YAZILILAR",
+          "title": "1. DÖNEM 1. YAZILILAR (2027)",
           "url": "https://www.youtube.com/playlist?list=PLFZHFK4ME0HY",
-          "videoCount": 6,
+          "videoCount": 8,
           "videos": [
             {
-              "id": "hkoxYBf7oyc",
-              "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
-              "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
+              "id": "_ZzpAtuH6nk",
+              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
+              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "Zc65IjkVCxg",
+              "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
+              "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
+              "thumbnail": "https://i.ytimg.com/vi/Zc65IjkVCxg/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -8587,17 +8594,17 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "_ZzpAtuH6nk",
-              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
-              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+              "id": "hkoxYBf7oyc",
+              "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
+              "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "nKzxHl_wUAk",
-              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
-              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+              "id": "kUiynIoV5Ow",
+              "title": "8TH GRADE - TURKISH - 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=kUiynIoV5Ow",
+              "thumbnail": "https://i.ytimg.com/vi/kUiynIoV5Ow/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -8608,10 +8615,17 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "kUiynIoV5Ow",
-              "title": "8TH GRADE - TURKISH - 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=kUiynIoV5Ow",
-              "thumbnail": "https://i.ytimg.com/vi/kUiynIoV5Ow/hqdefault.jpg",
+              "id": "nKzxHl_wUAk",
+              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "1ZOln3nhcuU",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
+              "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             }
           ],
@@ -8847,17 +8861,31 @@
       ],
       "videos": [
         {
-          "id": "hkoxYBf7oyc",
-          "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
-          "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
           "id": "_ZzpAtuH6nk",
           "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
           "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "Zc65IjkVCxg",
+          "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
+          "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
+          "thumbnail": "https://i.ytimg.com/vi/Zc65IjkVCxg/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "ZSsorj9Rw9Y",
+          "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
+          "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "hkoxYBf7oyc",
+          "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
+          "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
@@ -8879,13 +8907,6 @@
           "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
           "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "ZSsorj9Rw9Y",
-          "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
-          "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
@@ -8922,16 +8943,9 @@
           "url": "https://www.youtube.com/watch?v=4sl3L8b6yIc",
           "thumbnail": "https://i.ytimg.com/vi/4sl3L8b6yIc/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "I0DQdLkqriI",
-          "title": "6) 2022 KPSS ASSOCIATE DEGREE QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=I0DQdLkqriI",
-          "thumbnail": "https://i.ytimg.com/vi/I0DQdLkqriI/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-24T07:40:25.559Z"
+      "refreshedAt": "2026-10-25T07:53:03.516Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9760,7 +9774,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-24T07:40:27.971Z"
+      "refreshedAt": "2026-10-25T07:53:05.544Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9773,7 +9787,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2296,
+      "videoCount": 2297,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10678,6 +10692,13 @@
       ],
       "videos": [
         {
+          "id": "llnMSppeWkM",
+          "title": "10.Sınıf Edebiyat 1. Tema Full Tekrar / Sözün Ezgisi",
+          "url": "https://www.youtube.com/watch?v=llnMSppeWkM",
+          "thumbnail": "https://i.ytimg.com/vi/llnMSppeWkM/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "Ceokr-lOkck",
           "title": "10th Grade Literature Textbook 2027 / Aligned with the Maarif Model",
           "url": "https://www.youtube.com/watch?v=Ceokr-lOkck",
@@ -10753,16 +10774,9 @@
           "url": "https://www.youtube.com/watch?v=-yOzGm6OC2I",
           "thumbnail": "https://i.ytimg.com/vi/-yOzGm6OC2I/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "_vc8qMp5It4",
-          "title": "FİİLİMSİ KONU ANLATIMI / 11.Sınıf Edebiyat 1.TEMA: Bir Diyeceğim Var! / 2027",
-          "url": "https://www.youtube.com/watch?v=_vc8qMp5It4",
-          "thumbnail": "https://i.ytimg.com/vi/_vc8qMp5It4/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-24T07:41:00.007Z"
+      "refreshedAt": "2026-10-25T07:53:33.780Z"
     }
   }
 }
