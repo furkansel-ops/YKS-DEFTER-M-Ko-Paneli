@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-25T07:53:33.783Z",
+  "generatedAt": "2026-10-26T08:11:59.485Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-25T07:48:24.770Z"
+      "refreshedAt": "2026-10-26T08:06:20.904Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-25T07:52:23.449Z"
+      "refreshedAt": "2026-10-26T08:10:26.938Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1178,
+      "videoCount": 1180,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,6 +4611,20 @@
       ],
       "videos": [
         {
+          "id": "wpxB6jBwSQg",
+          "title": "11. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | Konu Tekrarı ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=wpxB6jBwSQg",
+          "thumbnail": "https://i.ytimg.com/vi/wpxB6jBwSQg/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "w2qop_4VEjQ",
+          "title": "10. Sınıf Kimya 9. Ders | Mol Soru Çözümü: Rutin Olmayan Sorular | Mol Kavramı | MAARİF",
+          "url": "https://www.youtube.com/watch?v=w2qop_4VEjQ",
+          "thumbnail": "https://i.ytimg.com/vi/w2qop_4VEjQ/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "xYAmgjRiZx0",
           "title": "10. Sınıf Kimya 8. Ders | Mol–Kütle İlişkisi ve Mol Kütlesi Hesaplama | Mol Kavramı | MAARİF",
           "url": "https://www.youtube.com/watch?v=xYAmgjRiZx0",
@@ -4679,23 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=TBfaF7AI7sY",
           "thumbnail": "https://i.ytimg.com/vi/TBfaF7AI7sY/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "2Z6RhrDb-pU",
-          "title": "10. Sınıf Kimya 5. Ders | Asit–Baz ve Nötralleşme Tepkimeleri | Tepkime Türleri | MAARİF",
-          "url": "https://www.youtube.com/watch?v=2Z6RhrDb-pU",
-          "thumbnail": "https://i.ytimg.com/vi/2Z6RhrDb-pU/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "EkimXlihm2Y",
-          "title": "10. Sınıf Kimya 4. Ders | İndirgenme Yükseltgenme (Redoks) Tepkimeleri | Tepkime Türleri | MAARİF",
-          "url": "https://www.youtube.com/watch?v=EkimXlihm2Y",
-          "thumbnail": "https://i.ytimg.com/vi/EkimXlihm2Y/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-25T07:52:43.123Z"
+      "refreshedAt": "2026-10-26T08:10:52.781Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5578,7 +5578,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-25T07:52:49.614Z"
+      "refreshedAt": "2026-10-26T08:11:01.362Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8097,7 +8097,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-25T07:52:57.973Z"
+      "refreshedAt": "2026-10-26T08:11:12.365Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8573,6 +8573,13 @@
           "videoCount": 8,
           "videos": [
             {
+              "id": "nKzxHl_wUAk",
+              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
               "id": "_ZzpAtuH6nk",
               "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
@@ -8615,15 +8622,8 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "nKzxHl_wUAk",
-              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
-              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "1ZOln3nhcuU",
-              "title": "YouTube videosu",
+              "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
               "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
               "channel": "Kadir Gümüş"
@@ -8861,10 +8861,24 @@
       ],
       "videos": [
         {
+          "id": "nKzxHl_wUAk",
+          "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+          "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
           "id": "_ZzpAtuH6nk",
           "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
           "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "1ZOln3nhcuU",
+          "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
+          "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
@@ -8903,13 +8917,6 @@
           "channel": "Kadir Gümüş"
         },
         {
-          "id": "nKzxHl_wUAk",
-          "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
-          "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
           "id": "N6THHBvda6A",
           "title": "10) 2024 KPSS SECONDARY EDUCATION QUESTION TWIN (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=N6THHBvda6A",
@@ -8936,16 +8943,9 @@
           "url": "https://www.youtube.com/watch?v=jD6oeZ9MusM",
           "thumbnail": "https://i.ytimg.com/vi/jD6oeZ9MusM/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "4sl3L8b6yIc",
-          "title": "7) 2023 KPSS UNDERGRADUATE QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=4sl3L8b6yIc",
-          "thumbnail": "https://i.ytimg.com/vi/4sl3L8b6yIc/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-25T07:53:03.516Z"
+      "refreshedAt": "2026-10-26T08:11:19.726Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9774,7 +9774,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-25T07:53:05.544Z"
+      "refreshedAt": "2026-10-26T08:11:22.432Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9787,7 +9787,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2297,
+      "videoCount": 2300,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10692,6 +10692,20 @@
       ],
       "videos": [
         {
+          "id": "VmmLkBbFX-M",
+          "title": "11th Grade Literature 1st Term 1st Exam FULL REVIEW / Maarif Model",
+          "url": "https://www.youtube.com/watch?v=VmmLkBbFX-M",
+          "thumbnail": "https://i.ytimg.com/vi/VmmLkBbFX-M/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "5Ks0teH_rDo",
+          "title": "9.SINIF EDEBİYAT 1.TEMA FULL TEKRAR / Sözün İnceliği Teması",
+          "url": "https://www.youtube.com/watch?v=5Ks0teH_rDo",
+          "thumbnail": "https://i.ytimg.com/vi/5Ks0teH_rDo/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "llnMSppeWkM",
           "title": "10.Sınıf Edebiyat 1. Tema Full Tekrar / Sözün Ezgisi",
           "url": "https://www.youtube.com/watch?v=llnMSppeWkM",
@@ -10760,23 +10774,9 @@
           "url": "https://www.youtube.com/watch?v=5AjI4ELSeKk",
           "thumbnail": "https://i.ytimg.com/vi/5AjI4ELSeKk/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "49qeUWYp_yk",
-          "title": "PARAGRAPH SENTENCE INSERTION Question Solving / MEŞAKKAT PARAGRAPH CAMP",
-          "url": "https://www.youtube.com/watch?v=49qeUWYp_yk",
-          "thumbnail": "https://i.ytimg.com/vi/49qeUWYp_yk/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "-yOzGm6OC2I",
-          "title": "What Awaits Us in 9th Grade Literature? 📚 (All Details) 2027",
-          "url": "https://www.youtube.com/watch?v=-yOzGm6OC2I",
-          "thumbnail": "https://i.ytimg.com/vi/-yOzGm6OC2I/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-25T07:53:33.780Z"
+      "refreshedAt": "2026-10-26T08:11:59.480Z"
     }
   }
 }
