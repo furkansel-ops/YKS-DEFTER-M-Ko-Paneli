@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-26T08:11:59.485Z",
+  "generatedAt": "2026-10-27T08:27:32.642Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-26T08:06:20.904Z"
+      "refreshedAt": "2026-10-27T08:22:07.047Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -2824,10 +2824,75 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/3d-yayinlari/index.json",
-      "videoCount": 6021,
-      "playlistCount": 122,
+      "videoCount": 6029,
+      "playlistCount": 123,
       "archiveComplete": false,
       "playlists": [
+        {
+          "id": "PLfK1XnUk_Upc",
+          "title": "2027 3D Türkiye Geneli Deneme Sınavı 1 - TYT",
+          "url": "https://www.youtube.com/playlist?list=PLfK1XnUk_Upc",
+          "videoCount": 8,
+          "videos": [
+            {
+              "id": "er_jQe6HmoM",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT A Kitapçığı Türkçe Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=er_jQe6HmoM",
+              "thumbnail": "https://i.ytimg.com/vi/er_jQe6HmoM/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ymCD2C1KDg4",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT A Kitapçığı Matematik Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=ymCD2C1KDg4",
+              "thumbnail": "https://i.ytimg.com/vi/ymCD2C1KDg4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ImcLVrpKrv8",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT B Kitapçığı Fen Bilimleri Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=ImcLVrpKrv8",
+              "thumbnail": "https://i.ytimg.com/vi/ImcLVrpKrv8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ZX-v5Dbvs9Q",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT A Kitapçığı Fen Bilimleri Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=ZX-v5Dbvs9Q",
+              "thumbnail": "https://i.ytimg.com/vi/ZX-v5Dbvs9Q/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "h4f3zX_xzYU",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT B Kitapçığı Matematik Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=h4f3zX_xzYU",
+              "thumbnail": "https://i.ytimg.com/vi/h4f3zX_xzYU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "2ThGyac5uCE",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT B Kitapçığı Türkçe Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=2ThGyac5uCE",
+              "thumbnail": "https://i.ytimg.com/vi/2ThGyac5uCE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "By3K4L60dTc",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT A Kitapçığı Sosyal Bilimler Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=By3K4L60dTc",
+              "thumbnail": "https://i.ytimg.com/vi/By3K4L60dTc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "lXoJY1-9-Z0",
+              "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT B Kitapçığı Sosyal Bilimler Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=lXoJY1-9-Z0",
+              "thumbnail": "https://i.ytimg.com/vi/lXoJY1-9-Z0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
         {
           "id": "PLUO8fjfFTSLY",
           "title": "TYT TÜRKÇE SİMÜLASYON DENEMELERİ 2027 | ÖZNUR SAAT YILDIRIM",
@@ -3394,71 +3459,6 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLyiXTl2rW_wq0vZ9aRsoHQad5aAns-Bv_",
-          "title": "2026 3D Türkiye Geneli Deneme Sınavı 3 - AYT",
-          "url": "https://www.youtube.com/playlist?list=PLyiXTl2rW_wq0vZ9aRsoHQad5aAns-Bv_",
-          "videoCount": 8,
-          "videos": [
-            {
-              "id": "3HTmtEuHS7w",
-              "title": "3D Turkey-Wide Practice Exam 3 - AYT - Booklet A Social Sciences 2 Question Solutions",
-              "url": "https://www.youtube.com/watch?v=3HTmtEuHS7w",
-              "thumbnail": "https://i.ytimg.com/vi/3HTmtEuHS7w/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "mJgiBj_-_Xk",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT - A Kitapçığı Fen Bilimleri Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=mJgiBj_-_Xk",
-              "thumbnail": "https://i.ytimg.com/vi/mJgiBj_-_Xk/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "H8jlQ--fILQ",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT - B Kitapçığı Sosyal Bilimler 2 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=H8jlQ--fILQ",
-              "thumbnail": "https://i.ytimg.com/vi/H8jlQ--fILQ/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "5qsXoTGKOvo",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT - B Kitapçığı Fen Bilimleri Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=5qsXoTGKOvo",
-              "thumbnail": "https://i.ytimg.com/vi/5qsXoTGKOvo/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "1Dii_k2tej0",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT - A Kitapçığı Matematik Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=1Dii_k2tej0",
-              "thumbnail": "https://i.ytimg.com/vi/1Dii_k2tej0/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "DuuKcsIrFHg",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT - B Kitapçığı Matematik Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=DuuKcsIrFHg",
-              "thumbnail": "https://i.ytimg.com/vi/DuuKcsIrFHg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "za_v6x0Su1M",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT A Kitapçığı Edebiyat - Sosyal Bilimler 1 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=za_v6x0Su1M",
-              "thumbnail": "https://i.ytimg.com/vi/za_v6x0Su1M/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "vvYpX6Bl9zA",
-              "title": "3D Türkiye Geneli Deneme Sınavı 3 - AYT B Kitapçığı Edebiyat - Sosyal Bilimler 1 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=vvYpX6Bl9zA",
-              "thumbnail": "https://i.ytimg.com/vi/vvYpX6Bl9zA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-26T08:10:26.938Z"
+      "refreshedAt": "2026-10-27T08:26:09.824Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1180,
+      "videoCount": 1181,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,10 +4611,10 @@
       ],
       "videos": [
         {
-          "id": "wpxB6jBwSQg",
-          "title": "11. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | Konu Tekrarı ve Soru Çözümü | MAARİF",
-          "url": "https://www.youtube.com/watch?v=wpxB6jBwSQg",
-          "thumbnail": "https://i.ytimg.com/vi/wpxB6jBwSQg/hqdefault.jpg",
+          "id": "aGO23EnWfb8",
+          "title": "11. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=aGO23EnWfb8",
+          "thumbnail": "https://i.ytimg.com/vi/aGO23EnWfb8/hqdefault.jpg",
           "channel": "Ferrum"
         },
         {
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-26T08:10:52.781Z"
+      "refreshedAt": "2026-10-27T08:26:33.011Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 469,
+      "videoCount": 473,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5342,8 +5342,36 @@
           "id": "PLNgjhYy7HAMY",
           "title": "9. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLNgjhYy7HAMY",
-          "videoCount": 1,
+          "videoCount": 5,
           "videos": [
+            {
+              "id": "gqNp3JRVRCE",
+              "title": "Viruses: Living or Non-Living? Structure and Reproduction | 9th Grade Biology Lesson | Dosia Mate...",
+              "url": "https://www.youtube.com/watch?v=gqNp3JRVRCE",
+              "thumbnail": "https://i.ytimg.com/vi/gqNp3JRVRCE/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "Ny4f5dIDat8",
+              "title": "Common Characteristics of Living Things | 9th Grade Biology Lesson | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=Ny4f5dIDat8",
+              "thumbnail": "https://i.ytimg.com/vi/Ny4f5dIDat8/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "RTWKJqqqhMk",
+              "title": "Bilim Etiği | 9. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
+              "url": "https://www.youtube.com/watch?v=RTWKJqqqhMk",
+              "thumbnail": "https://i.ytimg.com/vi/RTWKJqqqhMk/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "CR1JbFtBffw",
+              "title": "Scientific Method and Variables | 9th Grade Biology Lecture | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=CR1JbFtBffw",
+              "thumbnail": "https://i.ytimg.com/vi/CR1JbFtBffw/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "WDWC3qzN_hI",
               "title": "The Importance of Biology | 9th Grade Biology Lecture | File Materials | Biosem",
@@ -5494,6 +5522,34 @@
       ],
       "videos": [
         {
+          "id": "gqNp3JRVRCE",
+          "title": "Viruses: Living or Non-Living? Structure and Reproduction | 9th Grade Biology Lesson | Dosia Mate...",
+          "url": "https://www.youtube.com/watch?v=gqNp3JRVRCE",
+          "thumbnail": "https://i.ytimg.com/vi/gqNp3JRVRCE/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "Ny4f5dIDat8",
+          "title": "Common Characteristics of Living Things | 9th Grade Biology Lesson | Dosia Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=Ny4f5dIDat8",
+          "thumbnail": "https://i.ytimg.com/vi/Ny4f5dIDat8/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "RTWKJqqqhMk",
+          "title": "Bilim Etiği | 9. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
+          "url": "https://www.youtube.com/watch?v=RTWKJqqqhMk",
+          "thumbnail": "https://i.ytimg.com/vi/RTWKJqqqhMk/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "CR1JbFtBffw",
+          "title": "Scientific Method and Variables | 9th Grade Biology Lecture | Dosia Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=CR1JbFtBffw",
+          "thumbnail": "https://i.ytimg.com/vi/CR1JbFtBffw/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
           "id": "eU6MSTt1No4",
           "title": "Chemosynthesis | 10th Grade Biology Lecture | Dossier Materials | Biosem",
           "url": "https://www.youtube.com/watch?v=eU6MSTt1No4",
@@ -5548,37 +5604,9 @@
           "url": "https://www.youtube.com/watch?v=SsuS5rgf5V0",
           "thumbnail": "https://i.ytimg.com/vi/SsuS5rgf5V0/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "1yQc35hxhlE",
-          "title": "Energy and ATP Structure | 10th Grade Biology Lecture | Study Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=1yQc35hxhlE",
-          "thumbnail": "https://i.ytimg.com/vi/1yQc35hxhlE/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "WDWC3qzN_hI",
-          "title": "The Importance of Biology | 9th Grade Biology Lecture | File Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=WDWC3qzN_hI",
-          "thumbnail": "https://i.ytimg.com/vi/WDWC3qzN_hI/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "Z5fVahdYsx8",
-          "title": "Living Things and Response 11th Grade Maarif Model",
-          "url": "https://www.youtube.com/watch?v=Z5fVahdYsx8",
-          "thumbnail": "https://i.ytimg.com/vi/Z5fVahdYsx8/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "67pqs5VIL4w",
-          "title": "MAARIF MODEL LECTURES 2026 - 2027 I 9TH-10TH-11TH GRADE BIOLOGY I File Materials",
-          "url": "https://www.youtube.com/watch?v=67pqs5VIL4w",
-          "thumbnail": "https://i.ytimg.com/vi/67pqs5VIL4w/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-26T08:11:01.362Z"
+      "refreshedAt": "2026-10-27T08:26:40.755Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8097,7 +8125,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-26T08:11:12.365Z"
+      "refreshedAt": "2026-10-27T08:26:50.794Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8573,20 +8601,6 @@
           "videoCount": 8,
           "videos": [
             {
-              "id": "nKzxHl_wUAk",
-              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
-              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "_ZzpAtuH6nk",
-              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
-              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "Zc65IjkVCxg",
               "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
               "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
@@ -8594,17 +8608,10 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "ZSsorj9Rw9Y",
-              "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
-              "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "hkoxYBf7oyc",
-              "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
-              "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
+              "id": "1ZOln3nhcuU",
+              "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
+              "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -8622,10 +8629,31 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "1ZOln3nhcuU",
-              "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
-              "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
+              "id": "nKzxHl_wUAk",
+              "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+              "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "_ZzpAtuH6nk",
+              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
+              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "ZSsorj9Rw9Y",
+              "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
+              "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "hkoxYBf7oyc",
+              "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
+              "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             }
           ],
@@ -8861,27 +8889,6 @@
       ],
       "videos": [
         {
-          "id": "nKzxHl_wUAk",
-          "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
-          "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "_ZzpAtuH6nk",
-          "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
-          "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "1ZOln3nhcuU",
-          "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
-          "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
           "id": "Zc65IjkVCxg",
           "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
           "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
@@ -8889,17 +8896,10 @@
           "channel": "Kadir Gümüş"
         },
         {
-          "id": "ZSsorj9Rw9Y",
-          "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
-          "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "hkoxYBf7oyc",
-          "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
-          "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
+          "id": "1ZOln3nhcuU",
+          "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
+          "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
@@ -8914,6 +8914,34 @@
           "title": "7TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST WRITTEN EXAM - OYSS (Kadir GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=lYBH78z-Fi8",
           "thumbnail": "https://i.ytimg.com/vi/lYBH78z-Fi8/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "nKzxHl_wUAk",
+          "title": "6th GRADE - TURKISH - MAARIF 1st SEMESTER 1st EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
+          "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "_ZzpAtuH6nk",
+          "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
+          "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "ZSsorj9Rw9Y",
+          "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
+          "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "hkoxYBf7oyc",
+          "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
+          "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
@@ -8945,7 +8973,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-26T08:11:19.726Z"
+      "refreshedAt": "2026-10-27T08:26:57.479Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9774,7 +9802,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-26T08:11:22.432Z"
+      "refreshedAt": "2026-10-27T08:26:59.893Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9787,7 +9815,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2300,
+      "videoCount": 2301,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10692,6 +10720,13 @@
       ],
       "videos": [
         {
+          "id": "DNYX3GbpnXk",
+          "title": "10TH GRADE 1ST SEMESTER 1ST WRITTEN EXAM QUESTIONS / COMMON EXAM",
+          "url": "https://www.youtube.com/watch?v=DNYX3GbpnXk",
+          "thumbnail": "https://i.ytimg.com/vi/DNYX3GbpnXk/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "VmmLkBbFX-M",
           "title": "11th Grade Literature 1st Term 1st Exam FULL REVIEW / Maarif Model",
           "url": "https://www.youtube.com/watch?v=VmmLkBbFX-M",
@@ -10767,16 +10802,9 @@
           "url": "https://www.youtube.com/watch?v=BHyXwvUOmnk",
           "thumbnail": "https://i.ytimg.com/vi/BHyXwvUOmnk/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "5AjI4ELSeKk",
-          "title": "YOU WIN THE EXAM IN 11TH GRADE!!!",
-          "url": "https://www.youtube.com/watch?v=5AjI4ELSeKk",
-          "thumbnail": "https://i.ytimg.com/vi/5AjI4ELSeKk/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-26T08:11:59.480Z"
+      "refreshedAt": "2026-10-27T08:27:32.638Z"
     }
   }
 }
