@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-27T08:27:32.642Z",
+  "generatedAt": "2026-10-28T09:03:18.374Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-27T08:22:07.047Z"
+      "refreshedAt": "2026-10-28T08:57:55.750Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-27T08:26:09.824Z"
+      "refreshedAt": "2026-10-28T09:01:57.218Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-27T08:26:33.011Z"
+      "refreshedAt": "2026-10-28T09:02:19.994Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5606,7 +5606,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-27T08:26:40.755Z"
+      "refreshedAt": "2026-10-28T09:02:27.462Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8125,7 +8125,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-27T08:26:50.794Z"
+      "refreshedAt": "2026-10-28T09:02:36.973Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8139,7 +8139,7 @@
       ],
       "archiveIndex": "media/my-teachers/kadir-gumus/index.json",
       "videoCount": 232,
-      "playlistCount": 18,
+      "playlistCount": 19,
       "archiveComplete": true,
       "playlists": [
         {
@@ -8595,25 +8595,11 @@
           "contentComplete": true
         },
         {
-          "id": "PLFZHFK4ME0HY",
-          "title": "1. DÖNEM 1. YAZILILAR (2027)",
-          "url": "https://www.youtube.com/playlist?list=PLFZHFK4ME0HY",
-          "videoCount": 8,
+          "id": "PLYdcKFkWayl8",
+          "title": "1. DÖNEM 1. YAZILILAR (2027) (5-6-7-8. SINIFLAR)",
+          "url": "https://www.youtube.com/playlist?list=PLYdcKFkWayl8",
+          "videoCount": 5,
           "videos": [
-            {
-              "id": "Zc65IjkVCxg",
-              "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
-              "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
-              "thumbnail": "https://i.ytimg.com/vi/Zc65IjkVCxg/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "1ZOln3nhcuU",
-              "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
-              "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
             {
               "id": "kUiynIoV5Ow",
               "title": "8TH GRADE - TURKISH - 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
@@ -8636,13 +8622,6 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "_ZzpAtuH6nk",
-              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
-              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "ZSsorj9Rw9Y",
               "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
@@ -8654,6 +8633,36 @@
               "title": "5th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
               "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLFZHFK4ME0HY",
+          "title": "1. DÖNEM 1. YAZILILAR (2027) (9-10-11. SINIFLAR)",
+          "url": "https://www.youtube.com/playlist?list=PLFZHFK4ME0HY",
+          "videoCount": 3,
+          "videos": [
+            {
+              "id": "Zc65IjkVCxg",
+              "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
+              "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
+              "thumbnail": "https://i.ytimg.com/vi/Zc65IjkVCxg/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "1ZOln3nhcuU",
+              "title": "11TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
+              "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "_ZzpAtuH6nk",
+              "title": "9TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
+              "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             }
           ],
@@ -8848,43 +8857,6 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLwy7o4Q68j6RxWBhUe7Ed_Oos3E7KMkeV",
-          "title": "TYT TÜRKÇE DENEME",
-          "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6RxWBhUe7Ed_Oos3E7KMkeV",
-          "videoCount": 4,
-          "videos": [
-            {
-              "id": "lWLuoqbSmRE",
-              "title": "TYT TÜRKÇE DENEME (2026 TYT TÜRKÇE SON PROVA) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=lWLuoqbSmRE",
-              "thumbnail": "https://i.ytimg.com/vi/lWLuoqbSmRE/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "0RMU_otOsJE",
-              "title": "TYT TÜRKÇE DENEME (2024 TYT TÜRKÇE İKİZİ) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=0RMU_otOsJE",
-              "thumbnail": "https://i.ytimg.com/vi/0RMU_otOsJE/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "KjO95LAO0-s",
-              "title": "TYT Turkish Practice Test (2025 TYT Turkish Twin) by Kadir Gümüş",
-              "url": "https://www.youtube.com/watch?v=KjO95LAO0-s",
-              "thumbnail": "https://i.ytimg.com/vi/KjO95LAO0-s/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "7fSjK6Q_znw",
-              "title": "TYT TÜRKÇE DENEME 1 - KADİR GÜMÜŞ (2026) (Kolaydan Zora)",
-              "url": "https://www.youtube.com/watch?v=7fSjK6Q_znw",
-              "thumbnail": "https://i.ytimg.com/vi/7fSjK6Q_znw/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
@@ -8973,7 +8945,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-27T08:26:57.479Z"
+      "refreshedAt": "2026-10-28T09:02:43.682Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9802,7 +9774,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-27T08:26:59.893Z"
+      "refreshedAt": "2026-10-28T09:02:45.947Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10804,7 +10776,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-27T08:27:32.638Z"
+      "refreshedAt": "2026-10-28T09:03:18.370Z"
     }
   }
 }
