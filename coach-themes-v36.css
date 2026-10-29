@@ -1,0 +1,114 @@
+/* Koç Paneli · v36 — öğrencideki üç tema (Sade Mavi, Gece, Canlı),
+   gruplu yan menü, tablette ikon şeridi ve ana sayfa özet kartı.
+   Panel renkleri coach-theme-tokens-v36.css'teki --kc-* değerlerinden gelir. */
+:root{
+  --k-bg:#f4f7fb;--k-surface:#fff;--k-soft:#f1f5fa;--k-ink:#14243a;--k-muted:#6b7a92;--k-line:#e0e7f0;
+  --k-accent:#2873f0;--k-on-accent:#fff;--k-ok:#13906b;--k-warn:#c9740c;--k-bad:#c4323b;
+  --k-hero:linear-gradient(140deg,#2f6bea,#1d4cc4);--k-hero-ink:#fff;--k-hero-btn:#fff;--k-hero-btn-ink:#1d4cc4;
+  --k-side:#fff;--k-side-ink:#5f6b80;--k-side-on:#e9f0fe;--k-side-on-ink:#2453b8;
+}
+:root[data-theme="night"]{
+  --k-bg:#0a0f1c;--k-surface:#121a2c;--k-soft:#1a2440;--k-ink:#eef2fb;--k-muted:#a9b5ca;--k-line:#26314d;
+  --k-accent:#7aa2ff;--k-on-accent:#0a0f1c;--k-ok:#3ccf97;--k-warn:#f3b860;--k-bad:#ff8f8f;
+  --k-hero:radial-gradient(circle at 85% 0%,rgba(122,162,255,.42),transparent 55%),linear-gradient(160deg,#1a2650,#111a33);
+  --k-hero-ink:#eef2fb;--k-hero-btn:#7aa2ff;--k-hero-btn-ink:#0a0f1c;
+  --k-side:#0d1426;--k-side-ink:#a9b5ca;--k-side-on:#1a2440;--k-side-on-ink:#b5c8ff;
+}
+:root[data-theme="vivid"]{
+  --k-bg:#fbf8f4;--k-surface:#fff;--k-soft:#f4efe8;--k-ink:#1b1830;--k-muted:#615c76;--k-line:#ece5dc;
+  --k-accent:#5a3ee0;--k-on-accent:#fff;--k-ok:#128a5c;--k-warn:#e0750f;--k-bad:#d13b52;
+  --k-hero:linear-gradient(135deg,#6a4cf5 0%,#a845e8 55%,#f0705a 100%);--k-hero-ink:#fff;--k-hero-btn:#fff;--k-hero-btn-ink:#4a2fc4;
+  --k-side:#fff;--k-side-ink:#615c76;--k-side-on:#f0ebff;--k-side-on-ink:#4a2fc4;
+}
+body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--k-bg)}
+:root[data-theme] body{color:var(--k-ink)}
+
+/* Giriş ekranının kapak yarısı Gece ve Canlı'da temanın kahraman rengini alır */
+:root[data-theme] .auth-page .nb-auth-cover{background:var(--k-hero);color:var(--k-hero-ink)}
+:root[data-theme] .nb-auth-cover :is(h2,small a,.brand-mark){color:inherit}
+
+/* Yan menü: öğrenci uygulamasıyla aynı dil */
+.coach-shell-reset .coach-sidebar-v20{background:var(--k-side);border-right:1px solid var(--k-line);color:var(--k-ink);box-shadow:none;gap:10px}
+.coach-shell-reset .coach-brand-v20 .brand-mark{background:var(--k-hero);color:var(--k-hero-ink);box-shadow:none}
+.coach-shell-reset .coach-brand-v20 .brand-copy b{color:var(--k-accent)}
+.coach-shell-reset .coach-brand-v20 .brand-copy span{color:var(--k-muted)}
+.coach-shell-reset .coach-nav-v20{gap:2px;scrollbar-color:var(--k-line) transparent}
+.coach-shell-reset .coach-nav-v20::-webkit-scrollbar-thumb{background:var(--k-line)}
+.coach-nav-group{display:block;padding:12px 12px 4px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--k-muted)}
+.coach-nav-group:first-child{padding-top:2px}
+.coach-shell-reset .coach-nav-item,.coach-shell-reset .coach-nav-item:hover,.coach-shell-reset .coach-nav-item.on{border-color:transparent}
+.coach-shell-reset .coach-nav-item{min-height:38px;border-radius:11px;color:var(--k-side-ink);box-shadow:none}
+.coach-shell-reset .coach-nav-item>span{color:inherit}
+.coach-shell-reset .coach-nav-item>b{font-size:13px}
+.coach-shell-reset .coach-nav-item:hover{background:var(--k-soft);color:var(--k-ink)}
+.coach-shell-reset .coach-nav-item.on{background:var(--k-side-on);color:var(--k-side-on-ink);box-shadow:none}
+.coach-shell-reset .coach-nav-item.on>span{color:inherit}
+.coach-shell-reset .coach-profile-v20{border:1px solid var(--k-line);background:var(--k-soft)}
+.coach-shell-reset .coach-profile-avatar{background:var(--k-hero);color:var(--k-hero-ink)}
+.coach-shell-reset .coach-profile-v20 span{color:var(--k-muted)}
+.coach-shell-reset .coach-profile-v20 b{color:var(--k-ink)}
+.coach-shell-reset .coach-signout-v20{color:var(--k-side-ink)}
+.coach-shell-reset .coach-signout-v20:hover{background:var(--k-soft);color:var(--k-ink)}
+.coach-shell-reset .coach-mobile-menu-reset{background:var(--k-surface);border-color:var(--k-line);color:var(--k-ink)}
+
+@media(min-width:1180px){
+  .coach-shell-reset{grid-template-columns:232px minmax(0,1fr)}
+}
+/* Tablet: ikon şeridi, menü düğmesi yok */
+@media(min-width:760px) and (max-width:1179px){
+  .coach-shell-reset{display:grid;grid-template-columns:84px minmax(0,1fr)}
+  .coach-shell-reset .coach-sidebar-v20{position:sticky;top:0;left:auto;width:auto;transform:none;transition:none;padding:16px 7px;align-items:center}
+  .coach-shell-reset .coach-brand-v20{padding:0 0 6px}
+  .coach-shell-reset .coach-brand-v20 .brand-copy,.coach-nav-group,.coach-shell-reset .coach-profile-v20>div:last-child,.coach-shell-reset .coach-signout-v20 span{display:none}
+  .coach-shell-reset .coach-sidebar-v20,.coach-shell-reset .coach-nav-v20{overflow-x:hidden}
+  .coach-shell-reset .coach-nav-v20{width:100%;padding-right:0;justify-items:center}
+  .coach-shell-reset .coach-nav-item{width:70px;min-height:0;padding:8px 2px;grid-template-columns:1fr;justify-items:center;gap:3px;text-align:center}
+  .coach-shell-reset .coach-nav-item>b{font-size:10px;line-height:1.2;font-weight:750}
+  .coach-shell-reset .coach-profile-v20{grid-template-columns:1fr;padding:4px;border:0;background:none}
+  .coach-shell-reset .coach-signout-v20{width:70px;text-align:center;padding:0}
+  .coach-shell-reset .coach-mobile-menu-reset.mobile-only,.coach-shell-reset .overlay{display:none!important}
+  .coach-shell-reset :is(.dashboard-page,.students-page,.programs-page,.reports-page,.pp-coach-page,.exams-page,.topics-page,.errors-page,.messages-page,.settings-page){padding-top:26px}
+}
+
+/* Ana sayfa: özet kart + 4 sayı */
+.coach-v36-top{display:grid;gap:12px;margin-bottom:16px}
+.dashboard-head.coach-v36-hero{display:block;margin:0;padding:22px 24px;border:0;border-radius:18px;background:var(--k-hero);color:var(--k-hero-ink)}
+.coach-v36-hero .dashboard-eyebrow{color:inherit;opacity:.85;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.coach-v36-hero h1{margin:6px 0 4px;color:inherit}
+.coach-v36-hero p{margin:0;color:inherit;opacity:.9;font-size:13px}
+.coach-v36-hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.coach-v36-hero-actions button{min-height:40px;padding:0 15px;border:0;border-radius:12px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.18);color:inherit}
+.coach-v36-hero-actions button:first-child{background:var(--k-hero-btn);color:var(--k-hero-btn-ink)}
+.coach-v36-hero-actions button:focus-visible{outline:2px solid var(--k-hero-ink);outline-offset:2px}
+.coach-v36-top .dashboard-stats{margin:0;gap:10px}
+.coach-v36-top .stat-card{min-height:0;padding:14px 16px}
+@media(min-width:760px) and (max-width:1179px){.coach-v36-top .dashboard-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1180px){
+  .coach-v36-top{grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:stretch}
+  .coach-v36-top .dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .coach-v36-top .stat-card{padding:12px 14px}
+}
+@media(max-width:600px){.dashboard-head.coach-v36-hero{padding:18px}.coach-v36-hero-actions button{flex:1 1 auto}}
+
+/* Öğrenci durumu solda, bugünün akışı sağda */
+@media(min-width:1201px){
+  .dashboard-grid{grid-template-columns:minmax(0,2fr) minmax(300px,1fr);grid-auto-flow:row dense}
+  .dashboard-grid>.coach-v36-status,.dashboard-grid>.day-review-panel{grid-column:1}
+  .dashboard-grid>.coach-v36-flow,.dashboard-grid>.coach-v36-quick,.dashboard-grid>.coach-v36-note{grid-column:2}
+}
+.dashboard-student-pill.active{background:color-mix(in srgb,var(--k-ok) 15%,var(--k-surface));color:var(--k-ok)}
+.dashboard-student-pill.behind{background:color-mix(in srgb,var(--k-warn) 16%,var(--k-surface));color:var(--k-warn)}
+.dashboard-student-pill.attention{background:color-mix(in srgb,var(--k-bad) 14%,var(--k-surface));color:var(--k-bad)}
+
+/* Ayarlar › Görünüm › Tema */
+.coach-v36-themes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.coach-v36-themes button{display:grid;gap:4px;padding:10px 10px 12px;border:1px solid var(--k-line);border-radius:14px;background:var(--k-surface);color:var(--k-ink);font:inherit;text-align:left;cursor:pointer}
+.coach-v36-themes button[aria-pressed="true"]{border-color:var(--k-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--k-accent) 28%,transparent)}
+.coach-v36-themes button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+.coach-v36-themes b{font-size:13px}
+.coach-v36-themes small{font-size:11px;color:var(--k-muted)}
+.coach-v36-swatch{display:block;height:46px;margin-bottom:4px;border-radius:10px;border:1px solid var(--k-line)}
+.coach-v36-swatch[data-swatch="refined-blue"]{background:linear-gradient(90deg,#f5f7fb 0 55%,#2f6bea 55% 78%,#e9f0fe 78%)}
+.coach-v36-swatch[data-swatch="night"]{background:linear-gradient(90deg,#0a0f1c 0 55%,#7aa2ff 55% 78%,#1a2440 78%)}
+.coach-v36-swatch[data-swatch="vivid"]{background:linear-gradient(90deg,#fbf8f4 0 50%,#6a4cf5 50% 70%,#a845e8 70% 85%,#f0705a 85%)}
+@media(max-width:520px){.coach-v36-themes{grid-template-columns:1fr}.coach-v36-themes button{grid-template-columns:64px 1fr;align-items:center;column-gap:10px}.coach-v36-swatch{grid-row:1/3;height:40px;margin:0}}

@@ -1,36 +1,36 @@
 /* YKS Defterim Koç Paneli · Global polish v1.0
    Görsel katman: veri akışı ve sayfa mantığına dokunmaz. */
 :root{
-  --coach-surface:#ffffff;
-  --coach-surface-soft:#f8fafc;
-  --coach-canvas:#f3f6fa;
-  --coach-border:#e1e8f0;
-  --coach-border-strong:#d6e0eb;
-  --coach-text:#14243a;
-  --coach-muted:#738198;
-  --coach-blue:#2873f0;
-  --coach-blue-soft:#edf5ff;
-  --coach-success:#2d8a69;
-  --coach-warning:#b9782b;
-  --coach-danger:#bd5960;
+  --coach-surface:var(--kc-ffffff,#ffffff);
+  --coach-surface-soft:var(--kc-f8fafc,#f8fafc);
+  --coach-canvas:var(--kc-f3f6fa,#f3f6fa);
+  --coach-border:var(--kc-e1e8f0,#e1e8f0);
+  --coach-border-strong:var(--kc-d6e0eb,#d6e0eb);
+  --coach-text:var(--kc-14243a,#14243a);
+  --coach-muted:var(--kc-738198,#738198);
+  --coach-blue:var(--kc-2873f0,#2873f0);
+  --coach-blue-soft:var(--kc-edf5ff,#edf5ff);
+  --coach-success:var(--kc-2d8a69,#2d8a69);
+  --coach-warning:var(--kc-b9782b,#b9782b);
+  --coach-danger:var(--kc-bd5960,#bd5960);
   --coach-radius:18px;
-  --coach-shadow:0 12px 34px rgba(26,45,72,.055);
-  --coach-shadow-hover:0 18px 42px rgba(26,45,72,.085);
+  --coach-shadow:0 12px 34px var(--kc-1a2d48-a055,rgba(26,45,72,.055));
+  --coach-shadow-hover:0 18px 42px var(--kc-1a2d48-a085,rgba(26,45,72,.085));
 }
 
 html{scroll-behavior:smooth}
 body{
   background:
-    radial-gradient(circle at 82% -10%,rgba(40,115,240,.055),transparent 28rem),
+    radial-gradient(circle at 82% -10%,var(--kc-2873f0-a055,rgba(40,115,240,.055)),transparent 28rem),
     var(--coach-canvas);
   color:var(--coach-text);
 }
-::selection{background:#dceaff;color:#17345f}
+::selection{background:var(--kc-dceaff,#dceaff);color:var(--kc-17345f,#17345f)}
 
 .coach-reset-canvas{
   background:
-    radial-gradient(circle at 85% 0,rgba(40,115,240,.04),transparent 32rem),
-    linear-gradient(180deg,#f7f9fc 0,#f3f6fa 260px,#f3f6fa 100%);
+    radial-gradient(circle at 85% 0,var(--kc-2873f0-a040,rgba(40,115,240,.04)),transparent 32rem),
+    linear-gradient(180deg,var(--kc-f7f9fc,#f7f9fc) 0,var(--kc-f3f6fa,#f3f6fa) 260px,var(--kc-f3f6fa,#f3f6fa) 100%);
 }
 
 .dashboard-page,
@@ -70,7 +70,7 @@ body{
 .errors-head h1,
 .messages-head h1,
 .settings-head h1{
-  color:#142238;
+  color:var(--kc-142238,#142238);
   font-weight:800;
   letter-spacing:-.045em;
   text-wrap:balance;
@@ -86,7 +86,7 @@ body{
 .errors-head p,
 .messages-head p,
 .settings-head p{
-  color:#738198;
+  color:var(--kc-738198,#738198);
   line-height:1.55;
 }
 
@@ -97,14 +97,14 @@ body{
   font-size:9px;
   font-weight:900;
   letter-spacing:.15em;
-  color:#2873f0;
+  color:var(--kc-2873f0,#2873f0);
 }
 .dashboard-eyebrow:before{
   content:"";
   width:18px;
   height:2px;
   border-radius:99px;
-  background:linear-gradient(90deg,#2873f0,#79b4ff);
+  background:linear-gradient(90deg,var(--kc-2873f0,#2873f0),var(--kc-79b4ff,#79b4ff));
 }
 
 /* Ortak yüzey dili */
@@ -131,7 +131,7 @@ body{
     .topic-card,.error-card
   ):hover{
     transform:translateY(-1px);
-    border-color:#d8e2ee;
+    border-color:var(--kc-d8e2ee,#d8e2ee);
     box-shadow:var(--coach-shadow-hover);
   }
 }
@@ -141,13 +141,13 @@ body{
   .panel-title,.report-card-head,.pp-coach-card-head,.exam-card-head,
   .topic-card-head,.error-card-head,.settings-section-head
 ){
-  border-bottom-color:#edf1f6;
+  border-bottom-color:var(--kc-edf1f6,#edf1f6);
 }
 :where(
   .panel-title,.report-card-head,.pp-coach-card-head,.exam-card-head,
   .topic-card-head,.error-card-head
 ) h2{
-  color:#21344c;
+  color:var(--kc-21344c,#21344c);
   font-weight:800;
   letter-spacing:-.015em;
 }
@@ -155,20 +155,20 @@ body{
   .report-card-head,.pp-coach-card-head,.exam-card-head,
   .topic-card-head,.error-card-head
 )>div>span{
-  color:#2873f0;
+  color:var(--kc-2873f0,#2873f0);
   letter-spacing:.11em;
 }
 
 /* KPI kartları daha okunur */
 :where(.stat-card,.report-kpi,.pp-coach-kpi,.exam-kpi,.topic-kpi,.error-kpi){
-  background:linear-gradient(180deg,#fff 0%,#fcfdff 100%);
+  background:linear-gradient(180deg,var(--kc-ffffff,#fff) 0%,var(--kc-fcfdff,#fcfdff) 100%);
 }
 :where(.stat-card,.report-kpi,.pp-coach-kpi,.exam-kpi,.topic-kpi,.error-kpi) strong{
-  color:#172940;
+  color:var(--kc-172940,#172940);
 }
 .stat-icon{
-  background:linear-gradient(145deg,#edf5ff,#e5f0ff);
-  box-shadow:inset 0 0 0 1px rgba(40,115,240,.05);
+  background:linear-gradient(145deg,var(--kc-edf5ff,#edf5ff),var(--kc-e5f0ff,#e5f0ff));
+  box-shadow:inset 0 0 0 1px var(--kc-2873f0-a050,rgba(40,115,240,.05));
 }
 
 /* Butonlar */
@@ -186,7 +186,7 @@ body{
     .report-link-button
   ):hover{
     transform:translateY(-1px);
-    box-shadow:0 8px 18px rgba(36,77,132,.10);
+    box-shadow:0 8px 18px var(--kc-244d84-a100,rgba(36,77,132,.10));
   }
 }
 :where(button,[role="button"]):active{transform:translateY(0) scale(.985)}
@@ -198,14 +198,14 @@ body{
   .pp-coach-control-fields label,.error-control-fields label,
   .message-search
 ){
-  border-color:#dfe6ef;
-  background:#fafcff;
+  border-color:var(--kc-dfe6ef,#dfe6ef);
+  background:var(--kc-fafcff,#fafcff);
 }
-:where(input,select,textarea)::placeholder{color:#9aa7b7}
+:where(input,select,textarea)::placeholder{color:var(--kc-9aa7b7,#9aa7b7)}
 :where(input,select,textarea):focus{
   outline:none;
-  border-color:#8bb8f6;
-  box-shadow:0 0 0 3px rgba(40,115,240,.08);
+  border-color:var(--kc-8bb8f6,#8bb8f6);
+  box-shadow:0 0 0 3px var(--kc-2873f0-a080,rgba(40,115,240,.08));
 }
 
 /* Satır / tablo hareketleri */
@@ -222,45 +222,45 @@ body{
     .error-student-row,.message-student-item,.dashboard-flow-row,
     .dashboard-student-row,.dashboard-day-review-row
   ):hover{
-    background:#f7faff;
+    background:var(--kc-f7faff,#f7faff);
   }
 }
 
 /* Sidebar */
 .coach-sidebar-v20{
   background:
-    radial-gradient(circle at 15% 0,rgba(61,139,255,.14),transparent 18rem),
-    linear-gradient(180deg,#0d192b 0%,#0a1423 100%);
-  border-right-color:#17263a;
-  box-shadow:10px 0 34px rgba(9,20,35,.05);
+    radial-gradient(circle at 15% 0,var(--kc-3d8bff-a140,rgba(61,139,255,.14)),transparent 18rem),
+    linear-gradient(180deg,var(--kc-0d192b,#0d192b) 0%,var(--kc-0a1423,#0a1423) 100%);
+  border-right-color:var(--kc-17263a,#17263a);
+  box-shadow:10px 0 34px var(--kc-091423-a050,rgba(9,20,35,.05));
 }
 .coach-brand-v20{padding-top:3px}
 .coach-brand-v20 .brand-mark{
-  box-shadow:0 10px 24px rgba(47,121,235,.26),inset 0 0 0 1px rgba(255,255,255,.16);
+  box-shadow:0 10px 24px var(--kc-2f79eb-a260,rgba(47,121,235,.26)),inset 0 0 0 1px var(--kc-ffffff-a160,rgba(255,255,255,.16));
 }
 .coach-nav-item{
   min-height:42px;
   border:1px solid transparent;
 }
 .coach-nav-item:hover{
-  background:#14243a;
-  border-color:#1b304c;
+  background:var(--kc-14243a,#14243a);
+  border-color:var(--kc-1b304c,#1b304c);
 }
 .coach-nav-item.on{
-  background:linear-gradient(90deg,#17385f,#142d4c);
-  border-color:#1c426f;
-  box-shadow:0 8px 20px rgba(0,0,0,.08),inset 3px 0 #4ab8ff;
+  background:linear-gradient(90deg,var(--kc-17385f,#17385f),var(--kc-142d4c,#142d4c));
+  border-color:var(--kc-1c426f,#1c426f);
+  box-shadow:0 8px 20px var(--kc-000000-a080,rgba(0,0,0,.08)),inset 3px 0 var(--kc-4ab8ff,#4ab8ff);
 }
 .coach-profile-v20{
-  border-color:#1d3049;
-  background:linear-gradient(145deg,#111f33,#0f1b2d);
+  border-color:var(--kc-1d3049,#1d3049);
+  background:linear-gradient(145deg,var(--kc-111f33,#111f33),var(--kc-0f1b2d,#0f1b2d));
 }
 
 /* Dashboard */
 .dashboard-date{
   border-color:var(--coach-border);
   border-radius:12px;
-  box-shadow:0 7px 18px rgba(27,46,73,.035);
+  box-shadow:0 7px 18px var(--kc-1b2e49-a035,rgba(27,46,73,.035));
 }
 .quick-actions button{
   min-height:66px;
@@ -269,33 +269,33 @@ body{
 @media(hover:hover){
   .quick-actions button:hover{
     transform:translateY(-2px);
-    box-shadow:0 10px 22px rgba(38,80,137,.07);
+    box-shadow:0 10px 22px var(--kc-265089-a070,rgba(38,80,137,.07));
   }
 }
 
 /* Öğrenciler */
 .students-summary div{
   border-color:var(--coach-border);
-  box-shadow:0 8px 22px rgba(28,48,78,.035);
+  box-shadow:0 8px 22px var(--kc-1c304e-a035,rgba(28,48,78,.035));
 }
 .student-filters{
-  border:1px solid #e8edf4;
-  background:#f5f7fa;
+  border:1px solid var(--kc-e8edf4,#e8edf4);
+  background:var(--kc-f5f7fa,#f5f7fa);
 }
 .student-filters button.active{
-  box-shadow:0 3px 9px rgba(26,43,69,.07);
+  box-shadow:0 3px 9px var(--kc-1a2b45-a070,rgba(26,43,69,.07));
 }
 
 /* Program */
 .program-workspace{
   border-radius:19px;
-  box-shadow:0 12px 34px rgba(28,48,78,.05);
+  box-shadow:0 12px 34px var(--kc-1c304e-a050,rgba(28,48,78,.05));
 }
 .program-toolbar{
-  background:linear-gradient(180deg,#fff,#fcfdff);
+  background:linear-gradient(180deg,var(--kc-ffffff,#fff),var(--kc-fcfdff,#fcfdff));
 }
-.program-secondary:hover{border-color:#bfd3eb;background:#f7faff}
-.program-primary:hover{background:#1e67df}
+.program-secondary:hover{border-color:var(--kc-bfd3eb,#bfd3eb);background:var(--kc-f7faff,#f7faff)}
+.program-primary:hover{background:var(--kc-1e67df,#1e67df)}
 
 /* Rapor / konu / deneme seçicileri */
 .report-selector-card,
@@ -304,34 +304,34 @@ body{
 .pp-coach-controls,
 .error-control-card{
   border-radius:17px;
-  background:linear-gradient(180deg,#fff,#fcfdff);
+  background:linear-gradient(180deg,var(--kc-ffffff,#fff),var(--kc-fcfdff,#fcfdff));
 }
 
 /* Mesajlaşma */
 .messages-shell{
   border-radius:20px;
-  box-shadow:0 18px 48px rgba(25,47,78,.075);
+  box-shadow:0 18px 48px var(--kc-192f4e-a075,rgba(25,47,78,.075));
 }
-.message-students{background:#fcfdff}
+.message-students{background:var(--kc-fcfdff,#fcfdff)}
 .message-student-item.active{
-  background:linear-gradient(90deg,#edf5ff,#f7faff);
+  background:linear-gradient(90deg,var(--kc-edf5ff,#edf5ff),var(--kc-f7faff,#f7faff));
 }
 
 /* Ayarlar */
 .settings-sidebar,.settings-section{border-radius:20px}
 .settings-nav button.active{
-  background:linear-gradient(90deg,#edf5ff,#f6f9ff);
+  background:linear-gradient(90deg,var(--kc-edf5ff,#edf5ff),var(--kc-f6f9ff,#f6f9ff));
 }
 .settings-nav button.active>span{
-  box-shadow:inset 0 0 0 1px rgba(40,115,240,.08);
+  box-shadow:inset 0 0 0 1px var(--kc-2873f0-a080,rgba(40,115,240,.08));
 }
 
 /* İnce scrollbar */
-*{scrollbar-width:thin;scrollbar-color:#c7d3e0 transparent}
+*{scrollbar-width:thin;scrollbar-color:var(--kc-c7d3e0,#c7d3e0) transparent}
 *::-webkit-scrollbar{width:8px;height:8px}
 *::-webkit-scrollbar-track{background:transparent}
-*::-webkit-scrollbar-thumb{background:#c7d3e0;border-radius:99px;border:2px solid transparent;background-clip:padding-box}
-*::-webkit-scrollbar-thumb:hover{background:#aebdcd;background-clip:padding-box}
+*::-webkit-scrollbar-thumb{background:var(--kc-c7d3e0,#c7d3e0);border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:var(--kc-aebdcd,#aebdcd);background-clip:padding-box}
 
 /* Mobil cilası */
 @media(max-width:1000px){
@@ -342,7 +342,7 @@ body{
   }
   .coach-mobile-menu-reset{
     border-radius:12px;
-    box-shadow:0 10px 28px rgba(24,43,70,.12);
+    box-shadow:0 10px 28px var(--kc-182b46-a120,rgba(24,43,70,.12));
     backdrop-filter:blur(10px);
   }
 }

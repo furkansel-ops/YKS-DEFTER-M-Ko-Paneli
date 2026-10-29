@@ -21,7 +21,7 @@
   .coach-mobile-menu-reset:focus-visible,
   .coach-sidebar-v20 .coach-nav-item:focus-visible,
   .coach-sidebar-v20 .coach-signout-v20:focus-visible{
-    outline:2px solid #54aafc;outline-offset:3px;
+    outline:2px solid var(--kc-54aafc,#54aafc);outline-offset:3px;
   }
   .dashboard-page,.students-page,.programs-page,.reports-page,
   .pp-coach-page,.exams-page,.topics-page,.errors-page,

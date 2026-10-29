@@ -8,7 +8,7 @@ const read=file=>fs.readFileSync(path.join(root,file),"utf8");
 
 test("panel eski mavi görünümde; giriş ekranı stili en son yüklenir",()=>{
   const html=read("index.html");
-  assert.match(html,/coach-mobile-compat-v33\.css\?v=[^"]+">\s*<link rel="stylesheet" href="\.\/coach-auth-v34\.css\?v=1\.1\.0">/);
+  assert.match(html,/coach-mobile-compat-v33\.css\?v=[^"]+">\s*<link rel="stylesheet" href="\.\/coach-auth-v34\.css\?v=1\.1\.\d+[^"]*">/);
   assert.match(html,/<meta name="theme-color" content="#0d1728">/);
   assert.ok(!fs.existsSync(path.join(root,"coach-notebook-v34.css")));
   const css=fs.readdirSync(root).filter(f=>f.endsWith(".css")).map(read).join("\n").toLowerCase();

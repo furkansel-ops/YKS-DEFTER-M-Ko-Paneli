@@ -16,13 +16,13 @@
 }
 
 #programWeekBoard.program-student-shell {
-  --classic-bg: #101927;
-  --classic-line: #2a374c;
-  --classic-text: #e8edf5;
-  --classic-muted: #a2afc3;
-  --classic-accent: #73a7ff;
-  --classic-accent-soft: #1a2b45;
-  --classic-ok: #68d7a0;
+  --classic-bg: var(--kc-101927,#101927);
+  --classic-line: var(--kc-2a374c,#2a374c);
+  --classic-text: var(--kc-e8edf5,#e8edf5);
+  --classic-muted: var(--kc-a2afc3,#a2afc3);
+  --classic-accent: var(--kc-73a7ff,#73a7ff);
+  --classic-accent-soft: var(--kc-1a2b45,#1a2b45);
+  --classic-ok: var(--kc-68d7a0,#68d7a0);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 12px;
@@ -44,9 +44,9 @@
   gap: 12px;
   min-width: 0;
   padding: 11px 13px;
-  border: 1px solid #34d39938;
+  border: 1px solid var(--kc-34d399-a220,#34d39938);
   border-radius: 14px;
-  background: linear-gradient(135deg, #10b98114, #3b82f609);
+  background: linear-gradient(135deg, var(--kc-10b981-a078,#10b98114), var(--kc-3b82f6-a035,#3b82f609));
 }
 
 #programWeekBoard .student-program-live-strip > div {
@@ -65,8 +65,8 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 0 5px #34d3991a;
+  background: var(--kc-34d399,#34d399);
+  box-shadow: 0 0 0 5px var(--kc-34d399-a102,#34d3991a);
 }
 
 #programWeekBoard .student-program-live-strip b {
@@ -87,10 +87,10 @@
 #programWeekBoard .student-program-view-state {
   flex: none;
   padding: 6px 9px;
-  border: 1px solid #73a7ff26;
+  border: 1px solid var(--kc-73a7ff-a149,#73a7ff26);
   border-radius: 999px;
-  background: #73a7ff0b;
-  color: #a9caff;
+  background: var(--kc-73a7ff-a043,#73a7ff0b);
+  color: var(--kc-a9caff,#a9caff);
   font-size: 10px;
   font-weight: 800;
   white-space: nowrap;
@@ -98,7 +98,7 @@
 
 #programWeekBoard .student-program-title {
   padding: 0 3px;
-  color: #a0c0f2;
+  color: var(--kc-a0c0f2,#a0c0f2);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .07em;
@@ -110,7 +110,7 @@
   padding: 13px;
   border: 1px solid var(--classic-line);
   border-radius: 15px;
-  background: linear-gradient(145deg, #111b2c, #0f1827);
+  background: linear-gradient(145deg, var(--kc-111b2c,#111b2c), var(--kc-0f1827,#0f1827));
 }
 
 #programWeekBoard .student-program-week-top {
@@ -153,7 +153,7 @@
   margin: 10px 0;
   overflow: hidden;
   border-radius: 999px;
-  background: #ffffff0d;
+  background: var(--kc-ffffff-a051,#ffffff0d);
 }
 
 #programWeekBoard .student-program-week-bar i {
@@ -178,9 +178,9 @@
   min-width: 0;
   min-height: 46px;
   padding: 6px;
-  border: 1px solid #ffffff0b;
+  border: 1px solid var(--kc-ffffff-a043,#ffffff0b);
   border-radius: 11px;
-  background: #ffffff05;
+  background: var(--kc-ffffff-a020,#ffffff05);
   color: var(--classic-muted);
   font-size: 10px;
   line-height: 1.4;
@@ -206,7 +206,7 @@
   padding: 7px 3px;
   border: 1px solid transparent;
   border-radius: 10px;
-  background: #ffffff05;
+  background: var(--kc-ffffff-a020,#ffffff05);
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -217,11 +217,11 @@
 }
 
 #programWeekBoard .student-program-day-chip.all-done {
-  background: #68d7a014;
+  background: var(--kc-68d7a0-a078,#68d7a014);
 }
 
 #programWeekBoard .student-program-day-chip.day-marked {
-  box-shadow: inset 0 0 0 1px #68d7a048;
+  box-shadow: inset 0 0 0 1px var(--kc-68d7a0-a282,#68d7a048);
 }
 
 #programWeekBoard .student-program-day-chip span,
@@ -243,7 +243,7 @@
 
 #programWeekBoard .student-program-day-chip small {
   margin-top: 3px;
-  color: #f4c77b;
+  color: var(--kc-f4c77b,#f4c77b);
   font-size: 9px;
 }
 
@@ -253,7 +253,7 @@
   margin-top: 5px;
   overflow: hidden;
   border-radius: 99px;
-  background: #ffffff0d;
+  background: var(--kc-ffffff-a051,#ffffff0d);
 }
 
 #programWeekBoard .student-program-day-chip i em {
@@ -292,7 +292,7 @@
 }
 
 #programWeekBoard .student-program-legend i.moved {
-  background: #f4bc66;
+  background: var(--kc-f4bc66,#f4bc66);
 }
 
 /* Both tables share this scroller so every weekday stays aligned. */
@@ -302,12 +302,12 @@
   padding-bottom: 7px;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  scrollbar-color: #485b76 transparent;
+  scrollbar-color: var(--kc-485b76,#485b76) transparent;
   -webkit-overflow-scrolling: touch;
 }
 
 #programWeekBoard .student-program-scroller::-webkit-scrollbar-thumb {
-  background: #485b76;
+  background: var(--kc-485b76,#485b76);
 }
 
 #programWeekBoard .student-program-grid {
@@ -326,9 +326,9 @@
   min-width: 0;
   min-height: 44px;
   padding: 7px 8px;
-  border: 1px solid #ffffff12;
+  border: 1px solid var(--kc-ffffff-a071,#ffffff12);
   border-radius: 10px;
-  background: #ffffff05;
+  background: var(--kc-ffffff-a020,#ffffff05);
   color: var(--classic-text);
   font-size: 12px;
   line-height: 1.4;
@@ -343,8 +343,8 @@
   gap: 2px;
   min-height: 44px;
   border-color: transparent;
-  background: #73a7ff15;
-  color: #a9caff;
+  background: var(--kc-73a7ff-a082,#73a7ff15);
+  color: var(--kc-a9caff,#a9caff);
   font-size: 11px;
   font-weight: 800;
   text-align: center;
@@ -374,8 +374,8 @@
   align-items: center;
   justify-content: center;
   border-color: transparent;
-  background: #292824;
-  color: #f4c77b;
+  background: var(--kc-292824,#292824);
+  color: var(--kc-f4c77b,#f4c77b);
   font-size: 11px;
   font-weight: 800;
   text-align: center;
@@ -392,8 +392,8 @@
   min-height: 38px;
   padding: 11px;
   border-radius: 10px;
-  background: #73a7ff15;
-  color: #a9caff;
+  background: var(--kc-73a7ff-a082,#73a7ff15);
+  color: var(--kc-a9caff,#a9caff);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .07em;
@@ -410,7 +410,7 @@
   gap: 8px;
   min-height: 70px;
   padding: 8px;
-  background: #ffffff05;
+  background: var(--kc-ffffff-a020,#ffffff05);
   text-align: center;
 }
 
@@ -439,32 +439,32 @@
   place-items: center;
   width: 19px;
   height: 19px;
-  border: 1.5px solid #71819a;
+  border: 1.5px solid var(--kc-71819a,#71819a);
   border-radius: 6px;
-  color: #fff;
+  color: var(--kc-ffffff,#fff);
   font-size: 11px;
   font-weight: 900;
   line-height: 1;
 }
 
 #programWeekBoard .student-program-task.is-done {
-  background: #68d7a012;
+  background: var(--kc-68d7a0-a071,#68d7a012);
 }
 
 #programWeekBoard .student-program-task.is-done .student-program-tick {
   border-color: var(--classic-ok);
   background: var(--classic-ok);
-  color: #07170f;
+  color: var(--kc-07170f,#07170f);
 }
 
 #programWeekBoard .student-program-task.is-done .student-program-text {
-  color: #acb9ba;
+  color: var(--kc-acb9ba,#acb9ba);
   text-decoration: line-through;
-  text-decoration-color: #7aaa95;
+  text-decoration-color: var(--kc-7aaa95,#7aaa95);
 }
 
 #programWeekBoard .student-program-task.is-moved:not(.is-done) {
-  background: #f4bc660d;
+  background: var(--kc-f4bc66-a051,#f4bc660d);
 }
 
 #programWeekBoard .student-program-moved {
@@ -476,14 +476,14 @@
   width: 18px;
   height: 18px;
   border-radius: 999px;
-  background: #f4bc6618;
-  color: #f4bc66;
+  background: var(--kc-f4bc66-a094,#f4bc6618);
+  color: var(--kc-f4bc66,#f4bc66);
   font-size: 12px;
   font-weight: 900;
 }
 
 #programWeekBoard .student-program-empty {
-  color: #758399;
+  color: var(--kc-758399,#758399);
 }
 
 #programWeekBoard .classic-task-status {
@@ -493,11 +493,11 @@
 }
 
 #programWeekBoard .student-program-task.is-done .classic-task-status {
-  color: #8fe2b6;
+  color: var(--kc-8fe2b6,#8fe2b6);
 }
 
 #programWeekBoard .student-program-task.is-moved:not(.is-done) .classic-task-status {
-  color: #f4c77b;
+  color: var(--kc-f4c77b,#f4c77b);
 }
 
 #programWeekBoard .classic-task-actions {
@@ -518,10 +518,10 @@
   min-height: 28px;
   height: auto;
   padding: 4px 6px;
-  border: 1px solid #3b4c65;
+  border: 1px solid var(--kc-3b4c65,#3b4c65);
   border-radius: 7px;
-  background: #1a283b;
-  color: #bfd6f8;
+  background: var(--kc-1a283b,#1a283b);
+  color: var(--kc-bfd6f8,#bfd6f8);
   font-size: 11px;
   font-weight: 800;
   line-height: 1.2;
@@ -530,12 +530,12 @@
 
 #programWeekBoard .classic-task-actions button:hover {
   border-color: var(--classic-accent);
-  background: #263b58;
+  background: var(--kc-263b58,#263b58);
 }
 
 #programWeekBoard .classic-task-actions button:focus-visible,
 #programWeekBoard .student-program-scroller:focus-visible {
-  outline: 2px solid #9dc4ff;
+  outline: 2px solid var(--kc-9dc4ff,#9dc4ff);
   outline-offset: 2px;
 }
 
@@ -563,7 +563,7 @@
   flex: none;
   width: 17px;
   height: 17px;
-  border: 1.6px solid #71819a;
+  border: 1.6px solid var(--kc-71819a,#71819a);
   border-radius: 6px;
 }
 
@@ -581,8 +581,8 @@
 }
 
 #programWeekBoard .student-program-day-done.on {
-  background: #68d7a012;
-  color: #8fe2b6;
+  background: var(--kc-68d7a0-a071,#68d7a012);
+  color: var(--kc-8fe2b6,#8fe2b6);
 }
 
 #programWeekBoard .student-program-day-done.on .student-program-check-box {
@@ -592,7 +592,7 @@
 
 #programWeekBoard .student-program-day-done.on .student-program-check-box::after {
   content: "✓";
-  color: #07170f;
+  color: var(--kc-07170f,#07170f);
   font-size: 11px;
   font-weight: 900;
 }
@@ -605,7 +605,7 @@
 
 #programWeekBoard .student-program-head.today-col {
   background: var(--classic-accent-soft);
-  color: #c4dbff;
+  color: var(--kc-c4dbff,#c4dbff);
 }
 
 #programWeekBoard .student-program-hint {

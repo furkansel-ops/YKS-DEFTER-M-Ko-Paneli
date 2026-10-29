@@ -1,31 +1,31 @@
 /* v34 · Koç giriş/kayıt ekranı ve hesap kartı ekleri. Panelin mevcut mavi
    görünümünü kullanır (base-reset.css değişkenleri); başka sayfalara dokunmaz. */
 #authView.auth-page{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);place-items:stretch;padding:0;min-height:100vh;background:var(--bg)}
-.nb-auth-cover{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:44px 48px;color:#fff;background:radial-gradient(circle at 18% 12%,rgba(255,255,255,.16),transparent 38%),linear-gradient(155deg,#347beb,#1d4fae)}
+.nb-auth-cover{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:44px 48px;color:var(--kc-ffffff,#fff);background:radial-gradient(circle at 18% 12%,var(--kc-ffffff-a160,rgba(255,255,255,.16)),transparent 38%),linear-gradient(155deg,var(--kc-347beb,#347beb),var(--kc-1d4fae,#1d4fae))}
 .nb-auth-cover>*{position:relative;z-index:1}
 .nb-auth-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px}
-.nb-auth-brand .brand-mark{width:36px;height:36px;border-radius:11px;font-size:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);color:#fff}
-.nb-auth-cover h2{margin:auto 0 0;font-size:clamp(30px,3.4vw,42px);line-height:1.12;letter-spacing:-.03em;color:#fff}
+.nb-auth-brand .brand-mark{width:36px;height:36px;border-radius:11px;font-size:12px;background:var(--kc-ffffff-a180,rgba(255,255,255,.18));border:1px solid var(--kc-ffffff-a280,rgba(255,255,255,.28));color:var(--kc-ffffff,#fff)}
+.nb-auth-cover h2{margin:auto 0 0;font-size:clamp(30px,3.4vw,42px);line-height:1.12;letter-spacing:-.03em;color:var(--kc-ffffff,#fff)}
 .nb-auth-cover p{margin:0;max-width:400px;font-size:15px;line-height:1.55;opacity:.9}
 .nb-auth-feats{display:grid;gap:11px;margin:10px 0 0;padding:0;list-style:none}
 .nb-auth-feats li{display:flex;gap:10px;align-items:center;font-size:14px}
-.nb-auth-feats span{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.16);font-size:13px}
+.nb-auth-feats span{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--kc-ffffff-a160,rgba(255,255,255,.16));font-size:13px}
 .nb-auth-cover small{margin-top:auto;padding-top:24px;font-size:12.5px;opacity:.82}
-.nb-auth-cover small a{color:#fff}
-#authView .auth-card.nb-auth-panel{width:auto;max-width:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;display:flex;flex-direction:column;justify-content:center;padding:44px clamp(24px,5vw,64px);background:radial-gradient(circle at 85% 8%,#e6f0ff 0,transparent 36%),linear-gradient(155deg,#f7faff,#edf3f9)}
+.nb-auth-cover small a{color:var(--kc-ffffff,#fff)}
+#authView .auth-card.nb-auth-panel{width:auto;max-width:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;display:flex;flex-direction:column;justify-content:center;padding:44px clamp(24px,5vw,64px);background:radial-gradient(circle at 85% 8%,var(--kc-e6f0ff,#e6f0ff) 0,transparent 36%),linear-gradient(155deg,var(--kc-f7faff,#f7faff),var(--kc-edf3f9,#edf3f9))}
 .nb-auth-panel h1{margin:0;font-size:30px;letter-spacing:-.03em;color:var(--text)}
 .nb-auth-sub{margin:4px 0 0;color:var(--muted);font-size:14px}
-.nb-auth-seg{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:440px;margin-top:20px;padding:3px;border:1px solid var(--line);border-radius:11px;background:#eef3f9}
+.nb-auth-seg{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:440px;margin-top:20px;padding:3px;border:1px solid var(--line);border-radius:11px;background:var(--kc-eef3f9,#eef3f9)}
 .nb-auth-seg button{min-height:36px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-weight:700;cursor:pointer}
-.nb-auth-seg button[aria-selected="true"]{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(46,67,104,.14)}
+.nb-auth-seg button[aria-selected="true"]{background:var(--kc-ffffff,#fff);color:var(--text);box-shadow:0 1px 3px var(--kc-2e4368-a140,rgba(46,67,104,.14))}
 .nb-auth-form{display:grid;gap:12px;max-width:440px;margin-top:18px}
 .nb-auth-form[hidden]{display:none}
-.nb-auth-form label{display:grid;gap:6px;color:#53647b;font-size:12.5px;font-weight:650}
+.nb-auth-form label{display:grid;gap:6px;color:var(--kc-53647b,#53647b);font-size:12.5px;font-weight:650}
 .nb-auth-form .field{min-height:44px;font-size:15px}
 .nb-auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .nb-auth-link{justify-self:end;border:0;background:none;padding:2px 0;color:var(--accent);font-weight:700;font-size:13px;cursor:pointer}
 .nb-auth-form .btn{min-height:46px;font-size:15px}
-.nb-auth-or{display:flex;align-items:center;gap:10px;color:#98a4b5;font-size:12px}
+.nb-auth-or{display:flex;align-items:center;gap:10px;color:var(--kc-98a4b5,#98a4b5);font-size:12px}
 .nb-auth-or::before,.nb-auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
 .nb-auth-google svg{width:18px;height:18px}
 .nb-auth-note{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
@@ -39,31 +39,31 @@
 }
 
 /* Ayarlar › Hesap: şifre değiştirme düğmesi ikincil görünümde */
-.coach-settings-detail .settings-session-card #settingsPasswordBtn{background:#fff;color:var(--accent);border:1px solid var(--line);box-shadow:none;margin-right:8px}
+.coach-settings-detail .settings-session-card #settingsPasswordBtn{background:var(--kc-ffffff,#fff);color:var(--accent);border:1px solid var(--line);box-shadow:none;margin-right:8px}
 .coach-settings-detail .settings-session-card #settingsPasswordBtn[hidden]{display:none}
 
 /* Koç hesabını silme: tehlikeli alan ve onay penceresi */
-.coach-settings-detail .coach-danger-card{border-color:#f4c7cb;background:#fff6f7}
-.coach-settings-detail .coach-danger-card span{color:#c4323b}
-.coach-settings-detail .coach-danger-card #coachDeleteOpenBtn{background:#fff;color:#c4323b;border:1px solid #f0b9be;box-shadow:none}
-.coach-delete-backdrop{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:18px;background:rgba(9,18,33,.52);backdrop-filter:blur(3px)}
+.coach-settings-detail .coach-danger-card{border-color:var(--kc-f4c7cb,#f4c7cb);background:var(--kc-fff6f7,#fff6f7)}
+.coach-settings-detail .coach-danger-card span{color:var(--kc-c4323b,#c4323b)}
+.coach-settings-detail .coach-danger-card #coachDeleteOpenBtn{background:var(--kc-ffffff,#fff);color:var(--kc-c4323b,#c4323b);border:1px solid var(--kc-f0b9be,#f0b9be);box-shadow:none}
+.coach-delete-backdrop{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:18px;background:var(--kc-091221-a520,rgba(9,18,33,.52));backdrop-filter:blur(3px)}
 .coach-delete-backdrop.hidden{display:none}
-.coach-delete-modal{width:min(480px,100%);max-height:92vh;overflow-y:auto;border-radius:18px;background:#fff;padding:22px;box-shadow:0 30px 80px rgba(9,18,33,.35)}
-.coach-delete-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#fff3f4;color:#c4323b;font-size:20px;font-weight:900}
+.coach-delete-modal{width:min(480px,100%);max-height:92vh;overflow-y:auto;border-radius:18px;background:var(--kc-ffffff,#fff);padding:22px;box-shadow:0 30px 80px var(--kc-091221-a350,rgba(9,18,33,.35))}
+.coach-delete-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--kc-fff3f4,#fff3f4);color:var(--kc-c4323b,#c4323b);font-size:20px;font-weight:900}
 .coach-delete-modal h3{margin:12px 0 0;font-size:20px;letter-spacing:-.02em;color:var(--text)}
 .coach-delete-modal>p{margin:4px 0 0;color:var(--muted);font-size:13px}
 .coach-delete-list{display:grid;gap:7px;margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--text)}
 .coach-delete-list li{display:flex;gap:9px}
-.coach-delete-list li::before{content:"";width:6px;height:6px;margin-top:6px;border-radius:50%;background:#c4323b;flex:none}
-.coach-delete-list li.keep::before{background:#279164}
+.coach-delete-list li::before{content:"";width:6px;height:6px;margin-top:6px;border-radius:50%;background:var(--kc-c4323b,#c4323b);flex:none}
+.coach-delete-list li.keep::before{background:var(--kc-279164,#279164)}
 .coach-delete-list span{color:var(--muted);margin-left:4px}
-.coach-delete-field{display:grid;gap:6px;margin-top:12px;color:#53647b;font-size:12px;font-weight:650}
+.coach-delete-field{display:grid;gap:6px;margin-top:12px;color:var(--kc-53647b,#53647b);font-size:12px;font-weight:650}
 .coach-delete-field[hidden],.coach-delete-note[hidden]{display:none}
 .coach-delete-note{margin:12px 0 0;color:var(--muted);font-size:12.5px}
 .coach-delete-progress{margin:12px 0 0;color:var(--muted);font-size:12.5px}
 .coach-delete-progress:empty,.coach-delete-error:empty{display:none}
-.coach-delete-error{margin:12px 0 0;padding:9px 11px;border-radius:10px;background:#fff3f4;color:#bd4650;font-size:12.5px}
+.coach-delete-error{margin:12px 0 0;padding:9px 11px;border-radius:10px;background:var(--kc-fff3f4,#fff3f4);color:var(--kc-bd4650,#bd4650);font-size:12.5px}
 .coach-delete-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
 .coach-delete-actions .btn{min-height:44px}
-.coach-delete-confirm{background:#c4323b;border-color:#c4323b;color:#fff}
-.coach-delete-confirm:hover{background:#a92a32}
+.coach-delete-confirm{background:var(--kc-c4323b,#c4323b);border-color:var(--kc-c4323b,#c4323b);color:var(--kc-ffffff,#fff)}
+.coach-delete-confirm:hover{background:var(--kc-a92a32,#a92a32)}

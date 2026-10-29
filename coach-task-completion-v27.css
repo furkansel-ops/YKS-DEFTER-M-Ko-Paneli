@@ -4,19 +4,19 @@
 
 #programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"]{
   opacity:1!important;
-  background:#f0faf5!important;
-  border:1px solid #73c8a0!important;
-  box-shadow:inset 3px 0 0 #24a574,0 2px 7px rgba(19,118,76,.07);
+  background:var(--kc-f0faf5,#f0faf5)!important;
+  border:1px solid var(--kc-73c8a0,#73c8a0)!important;
+  box-shadow:inset 3px 0 0 var(--kc-24a574,#24a574),0 2px 7px var(--kc-13764c-a070,rgba(19,118,76,.07));
 }
 #programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"] .coach-v6-task-symbol{
-  background:#def5e8;
-  color:#177f53;
+  background:var(--kc-def5e8,#def5e8);
+  color:var(--kc-177f53,#177f53);
 }
 #programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"] .coach-v6-task-copy strong{
-  color:#1d7652;
+  color:var(--kc-1d7652,#1d7652);
 }
 #programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task[data-task-completed="true"] .coach-v6-task-copy>span{
-  color:#587469;
+  color:var(--kc-587469,#587469);
 }
 /* This is a status label, not a clickable completion toggle. */
 #programsPage #coachVisualWeekBoard .coach-v27-task-status{
@@ -30,10 +30,10 @@
   max-width:100%;
   min-height:21px;
   padding:3px 7px;
-  border:1px solid #dce3ed;
+  border:1px solid var(--kc-dce3ed,#dce3ed);
   border-radius:6px;
-  background:#fff;
-  color:#617089;
+  background:var(--kc-ffffff,#fff);
+  color:var(--kc-617089,#617089);
   font-size:9px;
   font-weight:800;
   line-height:1.2;
@@ -46,25 +46,25 @@
   line-height:1;
 }
 #programsPage #coachVisualWeekBoard .coach-v27-task-status.is-complete{
-  border-color:#a7dec1;
-  background:#d9f5e5;
-  color:#136d48;
+  border-color:var(--kc-a7dec1,#a7dec1);
+  background:var(--kc-d9f5e5,#d9f5e5);
+  color:var(--kc-136d48,#136d48);
 }
 #programsPage #coachVisualWeekBoard .coach-v27-task-status.is-pending{
-  border-color:#e0e5ee;
-  background:#f7f9fc;
-  color:#65758e;
+  border-color:var(--kc-e0e5ee,#e0e5ee);
+  background:var(--kc-f7f9fc,#f7f9fc);
+  color:var(--kc-65758e,#65758e);
 }
 /* Expanded edit/move controls must stack BELOW the completion status. */
 #programsPage #coachVisualWeekBoard .coach-v12-week-table .coach-v11-task-menu[open]{
   grid-row:3;
 }
 #programsPage #coachVisualWeekBoard .coach-v27-day-status[data-all-done="true"]{
-  color:#177c54!important;
+  color:var(--kc-177c54,#177c54)!important;
   font-weight:850!important;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day:has(> .coach-v6-day-head .coach-v27-day-status[data-all-done="true"]){
-  border-color:#a9dec3!important;
+  border-color:var(--kc-a9dec3,#a9dec3)!important;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v27-day-status{
   line-height:1.35;
@@ -73,8 +73,8 @@
 /* Existing classic grid: same true/false flags and unmistakable labels. */
 #programsPage #programWeekBoard .student-program-task[data-task-completed="true"]{
   opacity:1;
-  border-color:#4fa67e!important;
-  box-shadow:inset 3px 0 0 #31ad77;
+  border-color:var(--kc-4fa67e,#4fa67e)!important;
+  box-shadow:inset 3px 0 0 var(--kc-31ad77,#31ad77);
 }
 #programsPage #programWeekBoard .student-program-task .classic-task-status[data-completion-status="done"]{
   display:inline-flex;
@@ -82,10 +82,10 @@
   width:max-content;
   max-width:100%;
   padding:4px 7px;
-  border:1px solid #5aad87;
+  border:1px solid var(--kc-5aad87,#5aad87);
   border-radius:7px;
-  background:#113a2a;
-  color:#9ff3c7;
+  background:var(--kc-113a2a,#113a2a);
+  color:var(--kc-9ff3c7,#9ff3c7);
   font-size:10px;
   font-weight:850;
 }

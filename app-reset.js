@@ -303,6 +303,10 @@ function renderCoachDashboard(){
   if($("statCompleted"))$("statCompleted").textContent=String(completed);
   if($("statPending"))$("statPending").textContent=String(pending);
   if($("statProgress"))$("statProgress").textContent=progress+"%";
+  const onTarget=stats.filter(({row,program})=>studentActiveToday(row)&&program.todayPlanned>0&&program.todayDone>=program.todayPlanned).length;
+  if($("dashboardSummary"))$("dashboardSummary").textContent=rows.length
+    ?"Bugün hedefte: "+onTarget+" / "+rows.length+" öğrenci · Takip bekleyen: "+pending
+    :"Öğrenci eklediğinde bugünkü durum burada özetlenir.";
 
   const flow=$("dashboardFlow");
   if(flow){
@@ -329,8 +333,9 @@ function renderCoachDashboard(){
       statusRoot.innerHTML='<div class="dashboard-student-list">'+ordered.map(({row,program})=>{
         const name=studentName(row),overdue=Math.max(0,Math.round(reportNum(row?.share?.progress?.overdueTopics)));
         const active=studentActiveToday(row),needs=dashboardNeedsReview(row);
-        const label=overdue?overdue+" geciken konu":needs?"Kontrol et":active?"Bugün aktif":"Takipte";
-        const tone=needs?"attention":active?"active":"idle";
+        const planned=program.todayPlanned>0,reached=planned&&program.todayDone>=program.todayPlanned;
+        const label=overdue?overdue+" geciken konu":needs?"Takip et":reached?"Hedefte":planned?(active?"Geride":"Bugün girmedi"):active?"Bugün aktif":"Takipte";
+        const tone=needs?"attention":reached||(active&&!planned)?"active":planned?"behind":"idle";
         const progressText=program.planned?program.done+" / "+program.planned+" görev":"Bu hafta program yok";
         return '<button type="button" class="dashboard-student-row" data-dashboard-student="'+escHtml(row.studentUid)+'"><span class="dashboard-student-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-student-main"><b>'+escHtml(name)+'</b><small>'+escHtml(progressText)+'</small><span class="dashboard-progress"><i style="width:'+Math.max(0,Math.min(100,program.ratio))+'%"></i></span></span><span class="dashboard-student-pill '+tone+'">'+escHtml(label)+'</span><strong>'+program.ratio+'%</strong></button>';
       }).join("")+'</div>';
@@ -1470,8 +1475,18 @@ function readCoachUiPrefs(){
 function writeCoachUiPrefs(next){
   try{localStorage.setItem(COACH_UI_PREFS,JSON.stringify(next))}catch{}
 }
+const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#0a0f1c"},vivid:{name:"Canlı",color:"#6a4cf5"}};
+function coachThemeId(value){return COACH_THEMES[value]?value:"refined-blue"}
+function applyCoachTheme(value){
+  const theme=coachThemeId(value),root=document.documentElement;
+  if(theme==="refined-blue")delete root.dataset.theme;else root.dataset.theme=theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",COACH_THEMES[theme].color);
+  document.querySelectorAll("[data-coach-theme]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.coachTheme===theme)));
+  if($("appearanceThemeLabel"))$("appearanceThemeLabel").textContent=COACH_THEMES[theme].name;
+}
 function applyCoachUiPrefs(){
   const prefs=readCoachUiPrefs();
+  applyCoachTheme(prefs.theme);
   document.body.classList.toggle("coach-compact",prefs.compact===true);
   document.body.classList.toggle("coach-reduce-motion",prefs.reduceMotion===true);
   document.body.classList.toggle("coach-hide-quick-messages",prefs.quickMessages===false);
@@ -1520,7 +1535,7 @@ const COACH_SETTINGS_META={
   profile:{title:"Profil",description:"Koç bilgilerini ve öğrencilerin gördüğü profilini düzenle."},
   general:{title:"Panel ve çalışma",description:"Açılış ekranını ve panelin çalışma biçimini belirle."},
   messaging:{title:"Mesajlar",description:"Mesaj yazma ve hızlı yanıt tercihlerini düzenle."},
-  appearance:{title:"Görünüm",description:"Ekran yoğunluğunu ve hareket davranışını kendine göre ayarla."},
+  appearance:{title:"Görünüm",description:"Temayı, ekran yoğunluğunu ve hareket davranışını kendine göre ayarla."},
   account:{title:"Hesap ve oturum",description:"Google hesabını, senkron durumunu ve oturum bilgilerini gör."}
 };
 function openCoachSettingsOverview(){
@@ -1603,6 +1618,7 @@ function saveLocalPreference(key,value){
 $("settingsDefaultPage")?.addEventListener("change",event=>saveLocalPreference("defaultPage",event.currentTarget.value));
 $("settingsCompactMode")?.addEventListener("change",event=>saveLocalPreference("compact",event.currentTarget.checked));
 document.querySelectorAll("[data-density]").forEach(button=>button.addEventListener("click",()=>saveLocalPreference("compact",button.dataset.density==="compact")));
+document.querySelectorAll("[data-coach-theme]").forEach(button=>button.addEventListener("click",()=>saveLocalPreference("theme",coachThemeId(button.dataset.coachTheme))));
 $("settingsReduceMotion")?.addEventListener("change",event=>saveLocalPreference("reduceMotion",event.currentTarget.checked));
 $("settingsCtrlEnter")?.addEventListener("change",event=>saveLocalPreference("ctrlEnter",event.currentTarget.checked));
 $("settingsQuickMessages")?.addEventListener("change",event=>saveLocalPreference("quickMessages",event.currentTarget.checked));
@@ -3413,7 +3429,7 @@ $("programDaysClear")?.addEventListener("click",()=>coachWeekPreset([]));
 if($("coachV8ModalPicker")){$("coachV8ModalPicker").innerHTML=coachV8Picker("modal");coachV8BindPicker($("coachV8ModalPicker"),"modal","programTaskText")}
 $("programTaskAddDraft")?.addEventListener("click",coachV8AddModalToDraft);
 $("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});
-$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
+$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("dashboardBulkBtn")?.addEventListener("click",()=>{showCoachPage("programs");coachV35Open()});$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTaskBackdrop")?.addEventListener("keydown",event=>{
   if(event.key==="Escape"){event.preventDefault();closeProgramTaskModal();return}
   if(event.key!=="Tab")return;
