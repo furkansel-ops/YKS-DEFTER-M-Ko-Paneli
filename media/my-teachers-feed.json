@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-28T09:03:18.374Z",
+  "generatedAt": "2026-10-29T08:59:14.404Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-28T08:57:55.750Z"
+      "refreshedAt": "2026-10-29T08:53:32.691Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-28T09:01:57.218Z"
+      "refreshedAt": "2026-10-29T08:57:40.187Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4611,6 +4611,13 @@
       ],
       "videos": [
         {
+          "id": "H30R9do-Ptc",
+          "title": "10. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=H30R9do-Ptc",
+          "thumbnail": "https://i.ytimg.com/vi/H30R9do-Ptc/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "aGO23EnWfb8",
           "title": "11. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
           "url": "https://www.youtube.com/watch?v=aGO23EnWfb8",
@@ -4686,16 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=KQ2hB5Y4Vtg",
           "thumbnail": "https://i.ytimg.com/vi/KQ2hB5Y4Vtg/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "TBfaF7AI7sY",
-          "title": "9. Sınıf Kimya 7. Ders | Atom Modelleri 1 | Atomdan Periyodik Tabloya | MAARİF",
-          "url": "https://www.youtube.com/watch?v=TBfaF7AI7sY",
-          "thumbnail": "https://i.ytimg.com/vi/TBfaF7AI7sY/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-28T09:02:19.994Z"
+      "refreshedAt": "2026-10-29T08:58:06.760Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 473,
+      "videoCount": 476,
       "playlistCount": 5,
       "archiveComplete": true,
       "playlists": [
@@ -5291,8 +5291,15 @@
           "id": "PLMkKvY88diDE",
           "title": "10. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLMkKvY88diDE",
-          "videoCount": 6,
+          "videoCount": 7,
           "videos": [
+            {
+              "id": "qFQ7IHAbw8E",
+              "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qFQ7IHAbw8E",
+              "thumbnail": "https://i.ytimg.com/vi/qFQ7IHAbw8E/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "eU6MSTt1No4",
               "title": "Chemosynthesis | 10th Grade Biology Lecture | Dossier Materials | Biosem",
@@ -5342,8 +5349,15 @@
           "id": "PLNgjhYy7HAMY",
           "title": "9. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLNgjhYy7HAMY",
-          "videoCount": 5,
+          "videoCount": 6,
           "videos": [
+            {
+              "id": "Gezsr1bV8uE",
+              "title": "9th Grade Biology 1st Semester 1st Written Exam Maarif Model | GENERAL REVIEW | File Materials | ...",
+              "url": "https://www.youtube.com/watch?v=Gezsr1bV8uE",
+              "thumbnail": "https://i.ytimg.com/vi/Gezsr1bV8uE/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "gqNp3JRVRCE",
               "title": "Viruses: Living or Non-Living? Structure and Reproduction | 9th Grade Biology Lesson | Dosia Mate...",
@@ -5386,8 +5400,15 @@
           "id": "PLQUvAy0iZ3Fc",
           "title": "11. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLQUvAy0iZ3Fc",
-          "videoCount": 4,
+          "videoCount": 5,
           "videos": [
+            {
+              "id": "qsES0yYmA3s",
+              "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qsES0yYmA3s",
+              "thumbnail": "https://i.ytimg.com/vi/qsES0yYmA3s/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "0IieRml2qTg",
               "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
@@ -5423,7 +5444,7 @@
           "id": "PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
           "title": "BİOSEM GÜNDEM",
           "url": "https://www.youtube.com/playlist?list=PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
-          "videoCount": 13,
+          "videoCount": 14,
           "videos": [
             {
               "id": "67pqs5VIL4w",
@@ -5515,12 +5536,40 @@
               "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
               "thumbnail": "https://i.ytimg.com/vi/0IieRml2qTg/hqdefault.jpg",
               "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "qsES0yYmA3s",
+              "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qsES0yYmA3s",
+              "thumbnail": "https://i.ytimg.com/vi/qsES0yYmA3s/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
             }
           ],
           "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "qFQ7IHAbw8E",
+          "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=qFQ7IHAbw8E",
+          "thumbnail": "https://i.ytimg.com/vi/qFQ7IHAbw8E/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "Gezsr1bV8uE",
+          "title": "9th Grade Biology 1st Semester 1st Written Exam Maarif Model | GENERAL REVIEW | File Materials | ...",
+          "url": "https://www.youtube.com/watch?v=Gezsr1bV8uE",
+          "thumbnail": "https://i.ytimg.com/vi/Gezsr1bV8uE/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "qsES0yYmA3s",
+          "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
+          "url": "https://www.youtube.com/watch?v=qsES0yYmA3s",
+          "thumbnail": "https://i.ytimg.com/vi/qsES0yYmA3s/hqdefault.jpg",
+          "channel": "Biosem"
+        },
         {
           "id": "gqNp3JRVRCE",
           "title": "Viruses: Living or Non-Living? Structure and Reproduction | 9th Grade Biology Lesson | Dosia Mate...",
@@ -5583,30 +5632,9 @@
           "url": "https://www.youtube.com/watch?v=a-YofK21jZw",
           "thumbnail": "https://i.ytimg.com/vi/a-YofK21jZw/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "0IieRml2qTg",
-          "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
-          "thumbnail": "https://i.ytimg.com/vi/0IieRml2qTg/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "7Gdao-DhH6c",
-          "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=7Gdao-DhH6c",
-          "thumbnail": "https://i.ytimg.com/vi/7Gdao-DhH6c/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "SsuS5rgf5V0",
-          "title": "Plant Hormones | 11th Grade Biology Lecture | Course Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=SsuS5rgf5V0",
-          "thumbnail": "https://i.ytimg.com/vi/SsuS5rgf5V0/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-28T09:02:27.462Z"
+      "refreshedAt": "2026-10-29T08:58:15.667Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8125,7 +8153,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-28T09:02:36.973Z"
+      "refreshedAt": "2026-10-29T08:58:27.142Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8945,7 +8973,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-28T09:02:43.682Z"
+      "refreshedAt": "2026-10-29T08:58:34.645Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9774,7 +9802,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-28T09:02:45.947Z"
+      "refreshedAt": "2026-10-29T08:58:37.187Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9787,7 +9815,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2301,
+      "videoCount": 2302,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10776,7 +10804,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-28T09:03:18.370Z"
+      "refreshedAt": "2026-10-29T08:59:14.400Z"
     }
   }
 }
