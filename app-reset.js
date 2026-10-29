@@ -147,6 +147,8 @@ document.querySelectorAll("[data-coach-page]").forEach(button=>{
 });
 
 onAuthStateChanged(auth,async user=>{
+  // v34 e-posta/kayıt akışı sürerken bekle; akış bitince sayfa yenilenir.
+  if(window.__YKS_COACH_AUTH_BUSY__)return;
   if(!user){stopCoachShareRealtime();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
   try{
     const profile=await loadCoachProfile(user);

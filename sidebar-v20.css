@@ -3,7 +3,7 @@
   min-height:100vh;
   display:grid;
   grid-template-columns:220px minmax(0,1fr);
-  background:#f4f7fb;
+  background:#fbf8f4;
 }
 .coach-sidebar-v20{
   width:auto;
@@ -15,24 +15,24 @@
   position:sticky;
   top:0;
   overflow:auto;
-  background:linear-gradient(180deg,#0d1829 0%,#0b1524 100%);
-  border-right:1px solid #17243a;
-  color:#edf4ff;
+  background:linear-gradient(180deg,#7c2d10 0%,#7c2d10 100%);
+  border-right:1px solid #7c2d10;
+  color:#fbf7f2;
   z-index:20;
 }
 .coach-brand-v20{display:flex;align-items:center;gap:12px;padding:0 8px 8px}
 .coach-brand-v20 .brand-mark{
   width:38px;height:38px;border-radius:12px;
   display:grid;place-items:center;
-  background:linear-gradient(145deg,#72b7ff,#2f79eb);
-  color:#061323;font-weight:900;
-  box-shadow:0 9px 22px rgba(47,121,235,.24)
+  background:linear-gradient(145deg,#dfa992,#9c3a12);
+  color:#7c2d10;font-weight:900;
+  box-shadow:0 9px 22px rgba(156,58,18,.24)
 }
 .coach-brand-v20 .brand-copy b,.coach-brand-v20 .brand-copy span{display:block}
-.coach-brand-v20 .brand-copy b{font-size:16px;color:#fff}
-.coach-brand-v20 .brand-copy span{font-size:10px;color:#86a7d2;margin-top:2px}
+.coach-brand-v20 .brand-copy b{font-size:16px;color:#fffdf8}
+.coach-brand-v20 .brand-copy span{font-size:10px;color:#da9a7e;margin-top:2px}
 
-.coach-nav-v20{display:grid;gap:4px;margin-top:3px;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:2px;scrollbar-width:thin;scrollbar-color:#29415f transparent}
+.coach-nav-v20{display:grid;gap:4px;margin-top:3px;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:2px;scrollbar-width:thin;scrollbar-color:#7c2d10 transparent}
 .coach-nav-item{
   width:100%;
   min-height:39px;
@@ -40,7 +40,7 @@
   border:0;
   border-radius:10px;
   background:transparent;
-  color:#c9d5e7;
+  color:#ecdcc4;
   display:grid;
   grid-template-columns:24px 1fr;
   align-items:center;
@@ -48,15 +48,15 @@
   text-align:left;
   cursor:pointer;
 }
-.coach-nav-item>span{font-size:16px;color:#b4c6dd;text-align:center}
+.coach-nav-item>span{font-size:16px;color:#e6bdab;text-align:center}
 .coach-nav-item>b{font-size:12px;font-weight:650}
-.coach-nav-item:hover{background:#15243b;color:#fff}
+.coach-nav-item:hover{background:#7c2d10;color:#fffdf8}
 .coach-nav-item.on{
-  background:linear-gradient(90deg,#17365c,#162c4b);
-  color:#fff;
-  box-shadow:inset 3px 0 #31a7ff
+  background:linear-gradient(90deg,#7c2d10,#7c2d10);
+  color:#fffdf8;
+  box-shadow:inset 3px 0 #9c3a12
 }
-.coach-nav-item.on>span{color:#58c5ff}
+.coach-nav-item.on>span{color:#d9997e}
 
 .coach-sidebar-spacer{flex:1;min-height:4px}
 .coach-profile-v20{
@@ -65,36 +65,36 @@
   gap:10px;
   align-items:center;
   padding:11px;
-  border:1px solid #1b2a40;
+  border:1px solid #7c2d10;
   border-radius:13px;
-  background:#111e31
+  background:#7c2d10
 }
 .coach-profile-avatar{
   width:38px;height:38px;border-radius:50%;
   display:grid;place-items:center;
-  background:linear-gradient(145deg,#416ee6,#6e55d9);
-  color:#fff;font-weight:800
+  background:linear-gradient(145deg,#9c3a12,#9c3a12);
+  color:#fffdf8;font-weight:800
 }
 .coach-profile-v20 span,.coach-profile-v20 b{display:block}
-.coach-profile-v20 span{font-size:9px;color:#7f91aa}
-.coach-profile-v20 b{font-size:11px;color:#fff;margin-top:2px}
+.coach-profile-v20 span{font-size:9px;color:#a19588}
+.coach-profile-v20 b{font-size:11px;color:#fffdf8;margin-top:2px}
 .sidebar-footer{display:grid;gap:8px}
 .coach-signout-v20{
   width:100%;height:40px;
   border:0;border-radius:10px;
   background:transparent;
-  color:#9eb0c8;
+  color:#c4b6a2;
   text-align:left;
   padding:0 12px;
   cursor:pointer
 }
-.coach-signout-v20:hover{background:#15243b;color:#fff}
+.coach-signout-v20:hover{background:#7c2d10;color:#fffdf8}
 
 .coach-reset-canvas{
   min-width:0;
   min-height:100vh;
   position:relative;
-  background:#f4f7fb;
+  background:#fbf8f4;
 }
 .coach-mobile-menu-reset{
   position:fixed;
@@ -102,11 +102,11 @@
   top:12px;
   width:40px;
   height:40px;
-  border:1px solid #dbe3ee;
+  border:1px solid #f2e7d7;
   border-radius:10px;
-  background:#fff;
-  color:#1c2b40;
-  box-shadow:0 8px 22px rgba(30,46,72,.1);
+  background:#fffdf8;
+  color:#7c2d10;
+  box-shadow:0 8px 22px rgba(124,45,16,.1);
   z-index:12;
   cursor:pointer
 }
@@ -119,12 +119,12 @@
     width:min(86vw,240px);
     transform:translateX(-105%);
     transition:transform .22s ease;
-    box-shadow:0 20px 60px rgba(7,16,29,.25)
+    box-shadow:0 20px 60px rgba(124,45,16,.25)
   }
   .coach-sidebar-v20.open{transform:translateX(0)}
   .mobile-only{display:inline-flex!important;align-items:center;justify-content:center}
 }
 
 .coach-nav-v20::-webkit-scrollbar{width:5px}
-.coach-nav-v20::-webkit-scrollbar-thumb{background:#29415f;border-radius:999px}
+.coach-nav-v20::-webkit-scrollbar-thumb{background:#7c2d10;border-radius:999px}
 .coach-nav-v20::-webkit-scrollbar-track{background:transparent}

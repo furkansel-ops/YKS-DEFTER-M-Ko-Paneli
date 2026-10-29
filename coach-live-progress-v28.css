@@ -6,8 +6,8 @@
 #programsPage #coachVisualWeekBoard .coach-v28-pill{
   display:inline-flex;align-items:center;gap:5px;
   min-height:24px;max-width:100%;padding:3px 8px;
-  border:1px solid #e0e6ef;border-radius:7px;
-  background:#f6f8fc;color:#586a86;
+  border:1px solid #f1eade;border-radius:7px;
+  background:#fcf9f5;color:#7c7062;
   font-size:10px;font-weight:760;line-height:1.25;
   white-space:nowrap;font-variant-numeric:tabular-nums;
 }
@@ -18,14 +18,14 @@
   background:#e9f7ef;border-color:#caead8;color:#187851;
 }
 #programsPage #coachVisualWeekBoard .coach-v28-pill.pending{
-  background:#f6f8fc;border-color:#e0e6ef;color:#526581;
+  background:#fcf9f5;border-color:#f1eade;color:#766a5d;
 }
 #programsPage #coachVisualWeekBoard .coach-v28-pill.today{
-  background:#f1efff;border-color:#e2dcff;color:#6553bd;
+  background:#fbf8f3;border-color:#f6efe5;color:#9c3a12;
 }
 #programsPage #coachVisualWeekBoard .coach-v28-sync{
   display:inline-flex;align-items:center;min-width:0;
-  margin-left:2px;color:#71819c;font-size:10px;
+  margin-left:2px;color:#958778;font-size:10px;
   font-weight:630;line-height:1.3;white-space:normal;
 }
 @media(max-width:780px){

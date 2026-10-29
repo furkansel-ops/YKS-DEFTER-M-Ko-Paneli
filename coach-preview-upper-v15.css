@@ -8,12 +8,12 @@
 #programsPage .coach-v15-breadcrumb{
  display:flex;align-items:center;gap:10px;
  margin:0 0 16px;
- color:#6c7c9f;
+ color:#948677;
  font-size:12px;font-weight:680;
  letter-spacing:0;
 }
-#programsPage .coach-v15-breadcrumb strong{color:#4e6189;font-weight:760}
-#programsPage .coach-v15-breadcrumb [aria-hidden]{font-size:18px;color:#9aa9c6}
+#programsPage .coach-v15-breadcrumb strong{color:#786c5f;font-weight:760}
+#programsPage .coach-v15-breadcrumb [aria-hidden]{font-size:18px;color:#c1b39f}
 #programsPage .coach-v15-header-main{
  display:flex;align-items:center;justify-content:space-between;
  flex-wrap:wrap;gap:16px;
@@ -24,17 +24,17 @@
 #programsPage .coach-v15-title-icon{
  display:grid;place-items:center;flex:none;
  width:55px;height:55px;border-radius:14px;
- background:linear-gradient(145deg,#756cff,#5045ee);color:white;
- box-shadow:0 8px 22px #554df23b;
+ background:linear-gradient(145deg,#dea58d,#9c3a12);color:white;
+ box-shadow:0 8px 22px #d48a6b3b;
 }
 #programsPage .coach-v15-title-icon svg{width:27px;height:27px}
 #programsPage .coach-v15-title-group>div{min-width:0}
 #programsPage .coach-v15-title-group h1{
  margin:0 0 5px;font-size:clamp(23px,2.2vw,30px);
- font-weight:850;letter-spacing:-.045em;line-height:1.12;color:#1c2945;
+ font-weight:850;letter-spacing:-.045em;line-height:1.12;color:#7c2d10;
 }
 #programsPage .coach-v15-title-group p{
- margin:0;color:#7484a3;font-size:12px;line-height:1.45;
+ margin:0;color:#998c7e;font-size:12px;line-height:1.45;
 }
 #programsPage .coach-v15-header-tools{
  display:flex;align-items:center;justify-content:flex-end;
@@ -45,58 +45,58 @@
  grid-template-rows:auto 1fr;
  height:55px;min-width:185px;width:min(245px,100%);
  padding:8px 10px 7px 44px;
- border:1px solid #e2e7f0;border-radius:11px;
- background:#fff;box-shadow:0 2px 9px #24375709;
+ border:1px solid #f2ebe0;border-radius:11px;
+ background:#fffdf8;box-shadow:0 2px 9px #7c2d1009;
 }
 #programsPage .coach-v15-header .program-student-picker::before{
  position:absolute;content:"";
  left:10px;top:11px;width:27px;height:27px;
- border-radius:50%;background:linear-gradient(150deg,#dedbff,#a0b9f3);
- border:2px solid #fff;box-shadow:0 0 0 1px #dce3f1;
+ border-radius:50%;background:linear-gradient(150deg,#f6efe4,#e7beac);
+ border:2px solid #fffdf8;box-shadow:0 0 0 1px #f3e9da;
 }
 #programsPage .coach-v15-header .program-student-picker>span{
  font-size:9px;line-height:1.4;
- font-weight:820;letter-spacing:.04em;color:#7b8cb0;
+ font-weight:820;letter-spacing:.04em;color:#a29689;
 }
 #programsPage .coach-v15-header .program-student-picker select{
  min-width:0;width:100%;height:22px;
  padding:0 14px 0 0;border:0;outline-offset:3px;
- background:transparent;color:#223350;
+ background:transparent;color:#7c2d10;
  font-family:inherit;font-size:12px;font-weight:780;line-height:1.3;
  cursor:pointer;text-overflow:ellipsis;
 }
-#programsPage .coach-v15-header .program-student-picker select:disabled{color:#9aa8bc;cursor:not-allowed}
+#programsPage .coach-v15-header .program-student-picker select:disabled{color:#bdaf99;cursor:not-allowed}
 #programsPage .coach-v15-week-nav{
  display:flex;align-items:center;gap:0;
  min-width:0;height:48px;width:auto;
- border:1px solid #e1e6f0;border-radius:10px;
- background:#fff;overflow:visible;
+ border:1px solid #f2ebdf;border-radius:10px;
+ background:#fffdf8;overflow:visible;
 }
 #programsPage .coach-v15-week-nav button{
  flex:none;display:grid;place-items:center;
  width:37px;height:46px;margin:0;
- border:0;border-radius:0;background:#fff;
- color:#4f6093;font-family:inherit;font-size:21px;
+ border:0;border-radius:0;background:#fffdf8;
+ color:#7f7263;font-family:inherit;font-size:21px;
  font-weight:720;cursor:pointer;
 }
 #programsPage .coach-v15-week-nav button:first-child{
- border-right:1px solid #e9edf4;border-radius:10px 0 0 10px;
+ border-right:1px solid #f5f0e8;border-radius:10px 0 0 10px;
 }
-#programsPage .coach-v15-week-nav button:nth-of-type(2){border-left:1px solid #e9edf4}
+#programsPage .coach-v15-week-nav button:nth-of-type(2){border-left:1px solid #f5f0e8}
 #programsPage .coach-v15-week-nav strong{
  display:grid;place-items:center;
  min-width:146px;max-width:190px;height:46px;padding:0 11px;
- color:#273654;font-size:12px;font-weight:830;
+ color:#7c2d10;font-size:12px;font-weight:830;
  font-variant-numeric:tabular-nums;white-space:nowrap;
 }
 #programsPage .coach-v15-week-nav .week-nav-today{
  width:auto;min-width:105px;height:46px;
  margin-left:10px;padding:0 13px;
- border:1px solid #e1e6f0;border-radius:9px;
- color:#52618e;font-size:11px;font-weight:800;
- white-space:nowrap;box-shadow:0 2px 6px #24375707;
+ border:1px solid #f2ebdf;border-radius:9px;
+ color:#7d7163;font-size:11px;font-weight:800;
+ white-space:nowrap;box-shadow:0 2px 6px #7c2d1007;
 }
-#programsPage .coach-v15-week-nav button:hover:not(:disabled){background:#f5f3ff;color:#5e50dc}
+#programsPage .coach-v15-week-nav button:hover:not(:disabled){background:#fcf9f5;color:#9c3a12}
 #programsPage .coach-v15-week-nav button:disabled{opacity:.35;cursor:not-allowed}
 #programsPage .coach-v15-overview{
  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
@@ -106,33 +106,33 @@
  display:flex;align-items:center;gap:14px;
  position:relative;min-width:0;min-height:96px;
  padding:14px 15px;
- border:1px solid #e3e8f2;border-radius:14px;
- background:#fff;box-shadow:0 5px 19px #1c315e0b;
+ border:1px solid #f5ede0;border-radius:14px;
+ background:#fffdf8;box-shadow:0 5px 19px #7c2d100b;
  box-sizing:border-box;
 }
 #programsPage .coach-v15-stat-icon{
  display:grid;place-items:center;flex:none;
  width:55px;height:55px;border-radius:14px;
- color:#315cf2;background:#eaf0ff;
+ color:#9c3a12;background:#faf6ef;
 }
 #programsPage .coach-v15-stat-icon svg{width:26px;height:26px}
 #programsPage .coach-v15-stat-icon.progress{color:#1ab895;background:#e9faf6}
 #programsPage .coach-v15-stat-icon.subjects{color:#ed4c70;background:#fff0f3}
-#programsPage .coach-v15-stat-icon.average{color:#8253ee;background:#f2eaff}
+#programsPage .coach-v15-stat-icon.average{color:#d48c6d;background:#faf6ef}
 #programsPage .coach-v15-stat-body{
  display:grid;min-width:0;gap:3px;align-content:center;
 }
 #programsPage .coach-v15-stat-label{
- color:#546991;font-size:12px;font-weight:640;
+ color:#807365;font-size:12px;font-weight:640;
  line-height:1.3;
 }
 #programsPage .coach-v15-stat-body strong{
- color:#182743;font-size:24px;font-weight:850;
+ color:#7c2d10;font-size:24px;font-weight:850;
  line-height:1.15;letter-spacing:-.04em;
  font-variant-numeric:tabular-nums;
 }
 #programsPage .coach-v15-stat-body small{
- color:#7182a4;font-size:10px;line-height:1.45;
+ color:#988b7d;font-size:10px;line-height:1.45;
  overflow-wrap:anywhere;
 }
 #programsPage .coach-v15-stat[data-coach-summary="progress"] .coach-v15-stat-body small{color:#148b75}
@@ -144,30 +144,30 @@
 }
 #programsPage .coach-v15-progress-ring::after{
  content:"";position:absolute;inset:7px;
- border-radius:50%;background:#fff;
+ border-radius:50%;background:#fffdf8;
 }
 #programsPage .coach-v15-stat[data-coach-summary="progress"]{padding-right:42px}
 #programsPage .coach-v15-empty{
  display:flex;align-items:center;gap:12px;min-height:94px;
  grid-column:1/-1;padding:17px 20px;
- border:1px dashed #d9e2f1;border-radius:14px;background:#f9fbff;
- color:#647997;
+ border:1px dashed #f2e8d8;border-radius:14px;background:#fcf9f5;
+ color:#8d7f6e;
 }
 #programsPage .coach-v15-empty>span{
  display:grid;place-items:center;flex:none;width:40px;height:40px;
- border-radius:12px;background:#eeebff;color:#6555ea;font-size:20px;
+ border-radius:12px;background:#faf6f0;color:#d48a6b;font-size:20px;
 }
 #programsPage .coach-v15-empty>div{display:grid;gap:4px}
-#programsPage .coach-v15-empty strong{font-size:13px;color:#304363}
+#programsPage .coach-v15-empty strong{font-size:13px;color:#524a41}
 #programsPage .coach-v15-empty small{font-size:11px}
 #programsPage .coach-v15-actions{
  display:flex;justify-content:space-between;align-items:center;gap:12px;
  margin:0 0 14px;padding:11px 12px;
- border:1px solid #e1e7f2;border-radius:12px;background:#fff;
+ border:1px solid #f4ecdf;border-radius:12px;background:#fffdf8;
 }
 #programsPage .coach-v15-action-heading{display:grid;gap:2px;min-width:0}
-#programsPage .coach-v15-action-heading strong{color:#314363;font-size:12px;font-weight:830}
-#programsPage .coach-v15-action-heading span{color:#91a0b8;font-size:10px}
+#programsPage .coach-v15-action-heading strong{color:#534b41;font-size:12px;font-weight:830}
+#programsPage .coach-v15-action-heading span{color:#b8a891;font-size:10px}
 #programsPage .coach-v15-action-buttons{
  display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;
  gap:8px;width:auto;min-width:0;
@@ -177,11 +177,11 @@
  border-radius:9px;font-size:11px;font-weight:780;
 }
 #programsPage .coach-v15-action-buttons .program-primary{
- background:#6553ee;border-color:#6553ee;
- box-shadow:0 5px 13px #6553ee2b;
+ background:#d48c6d;border-color:#d48c6d;
+ box-shadow:0 5px 13px #d48c6d2b;
 }
 #programsPage .coach-v15-action-buttons .program-secondary{
- border-color:#e1e6f0;color:#596b91;
+ border-color:#f2ebdf;color:#837667;
 }
 /* The former toolbar is kept as real DOM for its existing label/data updates.
    Only its duplicate visual representation is hidden. */

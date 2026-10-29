@@ -17,7 +17,7 @@
   overflow-x:auto;
   overflow-y:visible;
   scrollbar-width:thin;
-  scrollbar-color:#c2cce0 transparent;
+  scrollbar-color:#dbd3c7 transparent;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week[data-density="wide"]:not([data-layout="list"]){
   grid-template-columns:repeat(7,minmax(210px,1fr));
@@ -29,15 +29,15 @@
   height:auto;
   min-height:190px;
   min-width:0;
-  border:1px solid #e0e7f4!important;
+  border:1px solid #f5ece0!important;
   border-radius:11px!important;
-  background:#fff;
+  background:#fffdf8;
   overflow:visible;
   box-shadow:0 2px 8px rgb(35 53 88 / 3%);
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day.is-today{
-  border-color:#aba1f2!important;
-  background:#fcfbff;
+  border-color:#e7beac!important;
+  background:#fcf9f5;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head{
   display:flex;
@@ -50,27 +50,27 @@
   min-height:104px;
   max-height:none;
   padding:13px 11px 10px;
-  border-bottom:1px solid #edf1f8;
+  border-bottom:1px solid #f9f4ec;
   border-radius:10px 10px 0 0;
-  background:#fbfcff;
+  background:#fcf9f5;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day.is-today .coach-v6-day-head{
-  background:#f7f5ff;
+  background:#fcf9f5;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head strong{
-  color:#22334f;
+  color:#7c2d10;
   font-size:12px;
   font-weight:810;
   line-height:1.25;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head span{
-  color:#637596;
+  color:#8b7d6e;
   font-size:10px;
   font-weight:560;
   line-height:1.35;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-day-head small{
-  color:#46708b;
+  color:#75695c;
   font-size:10px;
   font-weight:680;
   line-height:1.35;
@@ -82,7 +82,7 @@
   overflow:hidden;
   margin-top:6px;
   border-radius:999px;
-  background:#e7edf5;
+  background:#f7f0e6;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-progress span{
   display:block;
@@ -105,28 +105,28 @@
   min-width:0;
   margin-top:auto;
   padding:8px 7px;
-  border-top:1px solid #edf1f8;
-  background:#fff;
+  border-top:1px solid #f9f4ec;
+  background:#fffdf8;
   border-radius:0 0 10px 10px;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-add-day{
   display:block;
   width:100%;
   min-height:39px;
-  border:1px dashed #c8d5ed;
+  border:1px dashed #eddec8;
   border-radius:8px;
-  background:#fbfcff;
-  color:#53699a;
+  background:#fcf9f5;
+  color:#857768;
   font-size:11px;
   font-weight:760;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-add-day:hover{
-  border-color:#a59af3;
-  background:#f4f2ff;
-  color:#5f50d9;
+  border-color:#e6baa7;
+  background:#fcf9f5;
+  color:#9c3a12;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day .coach-v6-add-day:focus-visible{
-  outline:2px solid #6c5cf0;
+  outline:2px solid #d79275;
   outline-offset:2px;
 }
 
@@ -141,7 +141,7 @@
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"] .coach-v14-day{
   min-height:140px;
-  border:1px solid #e0e7f4!important;
+  border:1px solid #f5ece0!important;
   border-radius:11px!important;
 }
 #programsPage #coachVisualWeekBoard .coach-v14-week[data-layout="list"] .coach-v14-day .coach-v6-day-head{
@@ -173,12 +173,12 @@
   #programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-day{
     min-height:190px;
     height:auto;
-    border:1px solid #e0e7f4!important;
+    border:1px solid #f5ece0!important;
     border-radius:11px!important;
     overflow:visible;
   }
   #programsPage #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-day:last-child{
-    border:1px solid #e0e7f4!important;
+    border:1px solid #f5ece0!important;
   }
 }
 @media(max-width:490px){

@@ -1,15 +1,15 @@
 /* v24 · Dedicated Programlar > Video Ekle dialog, independent of Çalışma Ekle. */
 #programsPage .coach-video-open-btn{
-  border-color:#c8c4fa;
-  background:#f2efff;
-  color:#5947cc;
+  border-color:#efe2cf;
+  background:#fbf8f3;
+  color:#9c3a12;
   font-weight:800;
 }
-#programsPage .coach-video-open-btn:hover{background:#eae5ff;border-color:#ae9ff7}
+#programsPage .coach-video-open-btn:hover{background:#f9f3eb;border-color:#e8c0ae}
 .coach-video-picker-backdrop{
   position:fixed;inset:0;z-index:1150;
   padding:clamp(8px,2vw,18px);
-  background:rgba(11,25,47,.62);
+  background:rgba(124,45,16,.62);
   backdrop-filter:blur(3px);
   display:grid;place-items:center;
 }
@@ -21,41 +21,41 @@
   display:flex;flex-direction:column;
   min-width:0;min-height:0;
   overflow:hidden;
-  background:#fff;border:1px solid #dce3f0;
+  background:#fffdf8;border:1px solid #f3e9da;
   border-radius:16px;
-  box-shadow:0 24px 75px #10243e45;
+  box-shadow:0 24px 75px #7c2d1045;
 }
 .coach-video-picker-header{
   flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:12px 19px;background:linear-gradient(115deg,#fff,#f5f4ff);
-  border-bottom:1px solid #e4e8f2;
+  padding:12px 19px;background:linear-gradient(115deg,#fffdf8,#fcf9f5);
+  border-bottom:1px solid #f3ede3;
 }
 .coach-video-picker-header>div{min-width:0}
 .coach-video-picker-header span{
-  display:block;font-size:10px;font-weight:830;letter-spacing:.07em;color:#6c58d8;
+  display:block;font-size:10px;font-weight:830;letter-spacing:.07em;color:#9c3a12;
 }
 .coach-video-picker-header h2{
-  margin:3px 0;font-size:20px;line-height:1.2;letter-spacing:-.025em;color:#203252;
+  margin:3px 0;font-size:20px;line-height:1.2;letter-spacing:-.025em;color:#7c2d10;
 }
-.coach-video-picker-header p{margin:0;font-size:11px;color:#74829b;line-height:1.35}
+.coach-video-picker-header p{margin:0;font-size:11px;color:#968879;line-height:1.35}
 #coachVideoPickerClose{
   flex:none;width:34px;height:34px;
-  border:0;border-radius:9px;background:#ebeef8;
-  color:#5a6986;font-size:21px;cursor:pointer;
+  border:0;border-radius:9px;background:#f8f3eb;
+  color:#7d7163;font-size:21px;cursor:pointer;
 }
 .coach-video-picker-target{
   flex:0 0 auto;display:grid;
   grid-template-columns:190px minmax(220px,1fr) minmax(240px,1.25fr);
   align-items:center;gap:12px;
   padding:10px 16px;
-  background:#fff;border-bottom:1px solid #e6ebf5;
+  background:#fffdf8;border-bottom:1px solid #f6efe5;
 }
 .coach-video-picker-target>label{display:grid;gap:5px;min-width:0}
-.coach-video-picker-target>label span{font-size:10px;font-weight:820;color:#5b6d87}
+.coach-video-picker-target>label span{font-size:10px;font-weight:820;color:#7f7263}
 #coachVideoPickerDate{
   width:100%;min-width:0;height:34px;
-  border:1px solid #d8e1ef;border-radius:8px;
-  padding:0 8px;background:#fff;color:#2a3e59;
+  border:1px solid #f1e6d6;border-radius:8px;
+  padding:0 8px;background:#fffdf8;color:#7c2d10;
   font:650 12px inherit;
 }
 .coach-video-picker-days{
@@ -65,25 +65,25 @@
 .coach-video-picker-days button{
   min-width:0;min-height:43px;
   display:grid;place-items:center;align-content:center;gap:1px;
-  padding:3px 1px;border:1px solid #dce4f1;border-radius:8px;
-  background:#fff;color:#61738c;cursor:pointer;
+  padding:3px 1px;border:1px solid #f3e9da;border-radius:8px;
+  background:#fffdf8;color:#857768;cursor:pointer;
 }
 .coach-video-picker-days button strong{font-size:10px}
 .coach-video-picker-days button small{font-size:10px}
 .coach-video-picker-days button[aria-pressed="true"]{
-  background:#6654ee;color:#fff;border-color:#6654ee;
+  background:#d58c6d;color:#fffdf8;border-color:#d58c6d;
 }
 .coach-video-picker-selection{
   min-width:0;min-height:42px;
   display:flex;align-items:center;overflow-wrap:anywhere;
-  border:1px solid #e1e7f1;border-radius:9px;
-  background:#f8faff;padding:7px 10px;
-  color:#657691;font-size:11px;line-height:1.4;
+  border:1px solid #f4ebde;border-radius:9px;
+  background:#fcf9f5;padding:7px 10px;
+  color:#8a7c6c;font-size:11px;line-height:1.4;
 }
 .coach-video-picker-host.coach-v19-video-pane{
   flex:1 1 auto;min-height:0;min-width:0;
   overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
-  border-left:0;background:#f8faff;
+  border-left:0;background:#fcf9f5;
   padding:0 4px 6px;
 }
 .coach-video-picker-host .coach-video-library{
@@ -128,24 +128,24 @@
 .coach-video-picker-footer{
   flex:0 0 auto;display:flex;align-items:center;gap:9px;
   padding:11px 16px;
-  border-top:1px solid #e2e8f2;background:#fff;
+  border-top:1px solid #f4ece0;background:#fffdf8;
 }
 #coachVideoPickerStatus{
   margin-right:auto;min-width:0;max-width:75%;
-  font-size:11px;line-height:1.4;color:#64758f;
+  font-size:11px;line-height:1.4;color:#887a6b;
 }
 #coachVideoPickerStatus[data-status="error"]{color:#b64545}
 #coachVideoPickerStatus[data-status="success"]{color:#208465}
 .coach-video-picker-footer button{
   flex:none;min-height:37px;padding:7px 13px;
-  border:1px solid #dce3ef;border-radius:9px;
-  background:#fff;color:#596e89;font-size:11px;font-weight:800;cursor:pointer;
+  border:1px solid #f2e8d9;border-radius:9px;
+  background:#fffdf8;color:#7f7263;font-size:11px;font-weight:800;cursor:pointer;
 }
-#coachVideoPickerSave{background:#6756eb;color:#fff;border-color:#6756eb}
+#coachVideoPickerSave{background:#d48c6d;color:#fffdf8;border-color:#d48c6d}
 #coachVideoPickerSave:disabled{opacity:.48;cursor:not-allowed}
 .coach-video-picker-dialog button:focus-visible,
 .coach-video-picker-dialog input:focus-visible,
-.coach-video-picker-dialog select:focus-visible{outline:2px solid #6654ee;outline-offset:2px}
+.coach-video-picker-dialog select:focus-visible{outline:2px solid #d58c6d;outline-offset:2px}
 @media(min-width:1550px){
   .coach-video-picker-host .coach-video-results{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
