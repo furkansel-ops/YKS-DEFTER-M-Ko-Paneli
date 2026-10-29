@@ -1,70 +1,70 @@
 /* Coach weekly planning v7: drafts, deliberate send, explicit times and drag target */
 #programsPage .coach-v7-panel{
  display:grid;gap:13px;padding:17px 18px;
- border:1px solid #f0e3d1;border-radius:16px;
- background:linear-gradient(115deg,#fcf9f5,#fffdf8 68%);
- box-shadow:0 9px 24px #d489690b;
+ border:1px solid #c9c1ff;border-radius:16px;
+ background:linear-gradient(115deg,#faf9ff,#fff 68%);
+ box-shadow:0 9px 24px #6858e50b;
 }
 #programsPage .coach-v7-panel-head{
  display:flex;justify-content:space-between;gap:14px;align-items:center;
 }
 #programsPage .coach-v7-panel-head>div:first-child{min-width:0;flex:1}
-#programsPage .coach-v7-kicker{display:block;color:#d48a6b;font-size:10px;font-weight:830;letter-spacing:.09em}
+#programsPage .coach-v7-kicker{display:block;color:#6d56e9;font-size:10px;font-weight:830;letter-spacing:.09em}
 #programsPage .coach-v7-panel h3{
  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
- margin:5px 0 4px;font-size:18px;color:#3f372e;font-weight:840;
+ margin:5px 0 4px;font-size:18px;color:#252d48;font-weight:840;
 }
 #programsPage .coach-v7-panel h3 small{
  padding:4px 8px;border-radius:99px;
- background:#faf6ef;color:#9c3a12;font-size:10px;white-space:nowrap;
+ background:#edeaff;color:#604aeb;font-size:10px;white-space:nowrap;
 }
-#programsPage .coach-v7-panel p{margin:0;color:#958777;font-size:11px;line-height:1.55}
+#programsPage .coach-v7-panel p{margin:0;color:#71819b;font-size:11px;line-height:1.55}
 #programsPage .coach-v7-panel-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 #programsPage .coach-v7-panel-actions button,#programsPage .coach-v7-form-footer button{
- min-height:39px;padding:9px 13px;border:1px solid #f0e4d2;border-radius:9px;
- background:#fffdf8;color:#6d6255;font-size:12px;font-weight:730;cursor:pointer;
+ min-height:39px;padding:9px 13px;border:1px solid #d5dced;border-radius:9px;
+ background:#fff;color:#46577c;font-size:12px;font-weight:730;cursor:pointer;
 }
 #programsPage .coach-v7-panel-actions [data-v7-send],#programsPage .coach-v7-form-footer [data-v7-add]{
- background:#d68f71;color:#fffdf8;border-color:#d68f71;box-shadow:0 4px 13px #9c3a122b;
+ background:#6554f3;color:#fff;border-color:#6554f3;box-shadow:0 4px 13px #6450e72b;
 }
 #programsPage .coach-v7-panel-actions button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 #programsPage .coach-v7-form{
- display:grid;gap:12px;padding:13px;border:1px solid #f6efe5;
- border-radius:12px;background:#fffdf8;
+ display:grid;gap:12px;padding:13px;border:1px solid #e7e8f4;
+ border-radius:12px;background:#fff;
 }
 #programsPage .coach-v7-form-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(130px,1fr) minmax(0,2fr);gap:10px}
 #programsPage .coach-v7-form-grid label{
  display:grid;align-content:start;gap:6px;min-width:0;
- color:#51493f;font-size:11px;font-weight:780;
+ color:#32425e;font-size:11px;font-weight:780;
 }
-#programsPage .coach-v7-form-grid label small{color:#b8a890;font-size:10px;font-weight:490}
+#programsPage .coach-v7-form-grid label small{color:#94a1b4;font-size:10px;font-weight:490}
 #programsPage .coach-v7-form-grid input{
  width:100%;min-width:0;min-height:41px;padding:9px 11px;
- border:1px solid #f3eadc;border-radius:9px;
- background:#fcf9f5;color:#7c2d10;font-family:inherit;font-size:13px;
+ border:1px solid #dfe5f0;border-radius:9px;
+ background:#fbfcff;color:#253451;font-family:inherit;font-size:13px;
 }
 #programsPage .coach-v7-form-grid input:focus-visible{
- outline:2px solid #e0ac96;outline-offset:1px;border-color:#e0ac96;
+ outline:2px solid #8a7df9;outline-offset:1px;border-color:#8a7df9;
 }
 #programsPage .coach-v7-form-grid .coach-v7-wide{min-width:0}
 #programsPage .coach-v7-days-picker{
  display:flex;gap:13px;align-items:center;flex-wrap:wrap;
- padding-top:8px;border-top:1px solid #f7f2ea;
+ padding-top:8px;border-top:1px solid #eceef5;
 }
-#programsPage .coach-v7-days-picker>strong{font-size:12px;color:#524a41;white-space:nowrap}
+#programsPage .coach-v7-days-picker>strong{font-size:12px;color:#334360;white-space:nowrap}
 #programsPage .coach-v7-days-picker>div{display:flex;gap:5px;flex-wrap:wrap}
 #programsPage .coach-v7-days-picker button{
  min-width:42px;min-height:38px;padding:6px 9px;
- border:1px solid #f3e9da;border-radius:9px;
- background:#fcf9f5;color:#887a6b;font-size:11px;font-weight:780;cursor:pointer;
+ border:1px solid #dbe3f2;border-radius:9px;
+ background:#f9fbfe;color:#65748e;font-size:11px;font-weight:780;cursor:pointer;
 }
 #programsPage .coach-v7-days-picker button[aria-pressed=true]{
- border-color:#d68f71;background:#fbf7f2;color:#9c3a12;
- box-shadow:inset 0 0 0 1px #db9d83;
+ border-color:#6554f3;background:#efedff;color:#5947d7;
+ box-shadow:inset 0 0 0 1px #7c6cf2;
 }
 #programsPage .coach-v7-days-picker button:focus-visible,
 #programsPage .coach-v7-panel button:focus-visible{
- outline:2px solid #d58e70;outline-offset:2px;
+ outline:2px solid #6d57ee;outline-offset:2px;
 }
 #programsPage .coach-v7-form-footer{
  display:flex;align-items:center;justify-content:flex-end;gap:8px;
@@ -72,10 +72,10 @@
 #programsPage #coachV7FormError{
  flex:1;min-width:0;color:#c03f4a;font-size:11px;font-weight:710;
 }
-#programsPage .coach-v7-panel .coach-v7-note{color:#887a6b;font-size:10px}
+#programsPage .coach-v7-panel .coach-v7-note{color:#617292;font-size:10px}
 #programsPage .coach-v7-status:not(:empty){
- padding:10px 12px;border:1px solid #f2e8d9;border-radius:9px;
- background:#fcf9f4;color:#9c3a12;font-weight:680;
+ padding:10px 12px;border:1px solid #d7e3f4;border-radius:9px;
+ background:#f1f6ff;color:#416590;font-weight:680;
 }
 #programsPage .coach-v7-status[data-kind=success]:not(:empty){
  border-color:#bfe2d5;background:#effaf5;color:#207958;
@@ -87,20 +87,20 @@
  border-color:#f2dfba;background:#fff8e9;color:#88602b;
 }
 #programsPage .coach-v7-draft{
- --draft-accent:#9c3a12;
+ --draft-accent:#6859d7;
  display:grid;grid-template-columns:23px minmax(0,1fr);gap:6px;
- min-width:0;padding:9px 7px;border:1px dashed #e5b9a6;
- border-radius:10px;background:#fcf9f5;cursor:grab;
+ min-width:0;padding:9px 7px;border:1px dashed #a69bf0;
+ border-radius:10px;background:#f7f5ff;cursor:grab;
 }
-#programsPage .coach-v7-draft[data-subject=math]{--draft-accent:#9c3a12}
+#programsPage .coach-v7-draft[data-subject=math]{--draft-accent:#276ee6}
 #programsPage .coach-v7-draft[data-subject=chemistry]{--draft-accent:#dc8c20}
 #programsPage .coach-v7-draft[data-subject=biology]{--draft-accent:#2b986c}
 #programsPage .coach-v7-draft[data-subject=reading]{--draft-accent:#da5672}
-#programsPage .coach-v7-draft[data-subject=physics]{--draft-accent:#9c3a12}
+#programsPage .coach-v7-draft[data-subject=physics]{--draft-accent:#3c77d2}
 #programsPage .coach-v7-draft[data-subject=geometry]{--draft-accent:#8e59d7}
 #programsPage .coach-v7-draft-icon{
  display:grid;place-items:center;width:23px;height:23px;
- border-radius:7px;background:#f9f4ed;color:var(--draft-accent);
+ border-radius:7px;background:#ebe7ff;color:var(--draft-accent);
 }
 #programsPage .coach-v7-draft-icon svg{width:16px;height:16px}
 #programsPage .coach-v7-draft-main{display:grid;min-width:0;align-content:start;gap:4px}
@@ -110,37 +110,37 @@
 }
 #programsPage .coach-v7-draft-main strong small{
  display:inline-block;padding:2px 5px;border-radius:4px;
- background:#f9f3eb;color:#9c3a12;font-size:8px;
+ background:#ebe5ff;color:#6c55cc;font-size:8px;
 }
-#programsPage .coach-v7-draft-main span{font-size:10px;line-height:1.4;color:#5d5449;overflow-wrap:anywhere}
+#programsPage .coach-v7-draft-main span{font-size:10px;line-height:1.4;color:#3f4a67;overflow-wrap:anywhere}
 #programsPage .coach-v7-draft-main em{
  width:fit-content;padding:3px 6px;border-radius:5px;
- background:#f9f4ec;color:#9c3a12;
+ background:#eae8fd;color:#584ac5;
  font-size:9px;font-style:normal;font-weight:800;
 }
 #programsPage .coach-v7-draft-controls{
  display:flex;align-items:center;justify-content:flex-end;gap:4px;
  grid-column:1/-1;margin-top:3px;
 }
-#programsPage .coach-v7-draft-controls label{display:flex;align-items:center;gap:3px;color:#988b7d;font-size:9px}
+#programsPage .coach-v7-draft-controls label{display:flex;align-items:center;gap:3px;color:#78819d;font-size:9px}
 #programsPage .coach-v7-draft-controls select{
  max-width:68px;height:28px;padding:2px 1px;
- border:1px solid #f1e6d5;border-radius:6px;background:#fffdf8;
- color:#9c3a12;font-size:10px;
+ border:1px solid #d8d3f3;border-radius:6px;background:#fff;
+ color:#5548ac;font-size:10px;
 }
 #programsPage .coach-v7-draft-controls button{
- min-width:28px;height:28px;border:1px solid #f0e4d1;border-radius:7px;
- background:#fffdf8;color:#9c3a12;font-size:14px;font-weight:800;cursor:pointer;
+ min-width:28px;height:28px;border:1px solid #d9d4ed;border-radius:7px;
+ background:#fff;color:#6857bc;font-size:14px;font-weight:800;cursor:pointer;
 }
 #programsPage .coach-v7-draft.is-dragging,#programsPage .coach-v6-task.is-dragging{opacity:.55}
 #programsPage .coach-v6-day.is-drop-target{
- outline:2px dashed #d68f71;outline-offset:-2px;
- background:#fbf8f3;
+ outline:2px dashed #6f5aed;outline-offset:-2px;
+ background:#f2efff;
 }
 #programsPage .coach-v6-task[draggable=true]{cursor:grab}
 #programsPage .coach-v7-time-badge{
  width:fit-content;padding:3px 6px;border-radius:6px;
- background:#fffdf8a8;color:#9c3a12;font-size:10px;font-weight:780;
+ background:#ffffffa8;color:#5f51c7;font-size:10px;font-weight:780;
 }
 @media(max-width:1060px){
  #programsPage .coach-v7-panel-head{align-items:stretch;flex-direction:column}

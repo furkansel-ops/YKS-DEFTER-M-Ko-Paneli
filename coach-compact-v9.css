@@ -6,18 +6,18 @@
 #programsPage .coach-v7-panel h3{font-size:16px;margin:3px 0}
 #programsPage .coach-v7-panel-head p{max-width:580px}
 #programsPage .coach-v7-panel-actions button.coach-v9-expand{
-  border-color:#e9d8be;background:#fbf8f3;color:#9c3a12;
+  border-color:#b6adfa;background:#f2efff;color:#5846d8;
 }
-#programsPage .coach-v7-panel-actions button.coach-v9-expand:hover{background:#f8f2ea}
+#programsPage .coach-v7-panel-actions button.coach-v9-expand:hover{background:#e8e3ff}
 #programsPage .coach-v7-panel .coach-v7-note{font-size:10px;line-height:1.5}
 #programsPage .coach-v7-status:empty{display:none}
 #programsPage .coach-v6-days:not([data-layout="list"]){align-items:start}
 #programsPage .coach-v6-day{min-height:0;align-self:start}
 #programsPage .coach-v6-day-tasks{
   flex:0 1 auto;min-height:0;max-height:340px;overflow-y:auto;overflow-x:hidden;
-  overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#ecddc7 transparent;
+  overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#cbd4e8 transparent;
 }
-#programsPage .coach-v6-day-tasks:focus-visible{outline:2px solid #d58d6e;outline-offset:-2px}
+#programsPage .coach-v6-day-tasks:focus-visible{outline:2px solid #6856ed;outline-offset:-2px}
 #programsPage .coach-v6-day-head small{overflow-wrap:anywhere}
 #programsPage .coach-v6-days[data-layout="list"] .coach-v6-day-tasks{
   max-height:350px;align-content:start;

@@ -16,12 +16,12 @@
 }
 
 #programWeekBoard.program-student-shell {
-  --classic-bg: #7c2d10;
-  --classic-line: #423b34;
-  --classic-text: #f7f0e6;
-  --classic-muted: #c3b6a2;
-  --classic-accent: #dfaa93;
-  --classic-accent-soft: #7c2d10;
+  --classic-bg: #101927;
+  --classic-line: #2a374c;
+  --classic-text: #e8edf5;
+  --classic-muted: #a2afc3;
+  --classic-accent: #73a7ff;
+  --classic-accent-soft: #1a2b45;
   --classic-ok: #68d7a0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -46,7 +46,7 @@
   padding: 11px 13px;
   border: 1px solid #34d39938;
   border-radius: 14px;
-  background: linear-gradient(135deg, #10b98114, #9c3a1209);
+  background: linear-gradient(135deg, #10b98114, #3b82f609);
 }
 
 #programWeekBoard .student-program-live-strip > div {
@@ -87,10 +87,10 @@
 #programWeekBoard .student-program-view-state {
   flex: none;
   padding: 6px 9px;
-  border: 1px solid #dfaa9326;
+  border: 1px solid #73a7ff26;
   border-radius: 999px;
-  background: #dfaa930b;
-  color: #ead8be;
+  background: #73a7ff0b;
+  color: #a9caff;
   font-size: 10px;
   font-weight: 800;
   white-space: nowrap;
@@ -98,7 +98,7 @@
 
 #programWeekBoard .student-program-title {
   padding: 0 3px;
-  color: #e7bdab;
+  color: #a0c0f2;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .07em;
@@ -110,7 +110,7 @@
   padding: 13px;
   border: 1px solid var(--classic-line);
   border-radius: 15px;
-  background: linear-gradient(145deg, #7c2d10, #7c2d10);
+  background: linear-gradient(145deg, #111b2c, #0f1827);
 }
 
 #programWeekBoard .student-program-week-top {
@@ -153,7 +153,7 @@
   margin: 10px 0;
   overflow: hidden;
   border-radius: 999px;
-  background: #fffdf80d;
+  background: #ffffff0d;
 }
 
 #programWeekBoard .student-program-week-bar i {
@@ -178,9 +178,9 @@
   min-width: 0;
   min-height: 46px;
   padding: 6px;
-  border: 1px solid #fffdf80b;
+  border: 1px solid #ffffff0b;
   border-radius: 11px;
-  background: #fffdf805;
+  background: #ffffff05;
   color: var(--classic-muted);
   font-size: 10px;
   line-height: 1.4;
@@ -206,7 +206,7 @@
   padding: 7px 3px;
   border: 1px solid transparent;
   border-radius: 10px;
-  background: #fffdf805;
+  background: #ffffff05;
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -253,7 +253,7 @@
   margin-top: 5px;
   overflow: hidden;
   border-radius: 99px;
-  background: #fffdf80d;
+  background: #ffffff0d;
 }
 
 #programWeekBoard .student-program-day-chip i em {
@@ -302,12 +302,12 @@
   padding-bottom: 7px;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  scrollbar-color: #6a6054 transparent;
+  scrollbar-color: #485b76 transparent;
   -webkit-overflow-scrolling: touch;
 }
 
 #programWeekBoard .student-program-scroller::-webkit-scrollbar-thumb {
-  background: #6a6054;
+  background: #485b76;
 }
 
 #programWeekBoard .student-program-grid {
@@ -326,9 +326,9 @@
   min-width: 0;
   min-height: 44px;
   padding: 7px 8px;
-  border: 1px solid #fffdf812;
+  border: 1px solid #ffffff12;
   border-radius: 10px;
-  background: #fffdf805;
+  background: #ffffff05;
   color: var(--classic-text);
   font-size: 12px;
   line-height: 1.4;
@@ -343,8 +343,8 @@
   gap: 2px;
   min-height: 44px;
   border-color: transparent;
-  background: #dfaa9315;
-  color: #ead8be;
+  background: #73a7ff15;
+  color: #a9caff;
   font-size: 11px;
   font-weight: 800;
   text-align: center;
@@ -374,7 +374,7 @@
   align-items: center;
   justify-content: center;
   border-color: transparent;
-  background: #2c2721;
+  background: #292824;
   color: #f4c77b;
   font-size: 11px;
   font-weight: 800;
@@ -392,8 +392,8 @@
   min-height: 38px;
   padding: 11px;
   border-radius: 10px;
-  background: #dfaa9315;
-  color: #ead8be;
+  background: #73a7ff15;
+  color: #a9caff;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .07em;
@@ -410,7 +410,7 @@
   gap: 8px;
   min-height: 70px;
   padding: 8px;
-  background: #fffdf805;
+  background: #ffffff05;
   text-align: center;
 }
 
@@ -439,9 +439,9 @@
   place-items: center;
   width: 19px;
   height: 19px;
-  border: 1.5px solid #948677;
+  border: 1.5px solid #71819a;
   border-radius: 6px;
-  color: #fffdf8;
+  color: #fff;
   font-size: 11px;
   font-weight: 900;
   line-height: 1;
@@ -458,9 +458,9 @@
 }
 
 #programWeekBoard .student-program-task.is-done .student-program-text {
-  color: #c4b6a2;
+  color: #acb9ba;
   text-decoration: line-through;
-  text-decoration-color: #9f9385;
+  text-decoration-color: #7aaa95;
 }
 
 #programWeekBoard .student-program-task.is-moved:not(.is-done) {
@@ -483,7 +483,7 @@
 }
 
 #programWeekBoard .student-program-empty {
-  color: #958879;
+  color: #758399;
 }
 
 #programWeekBoard .classic-task-status {
@@ -518,10 +518,10 @@
   min-height: 28px;
   height: auto;
   padding: 4px 6px;
-  border: 1px solid #5a5146;
+  border: 1px solid #3b4c65;
   border-radius: 7px;
-  background: #7c2d10;
-  color: #eddfca;
+  background: #1a283b;
+  color: #bfd6f8;
   font-size: 11px;
   font-weight: 800;
   line-height: 1.2;
@@ -530,12 +530,12 @@
 
 #programWeekBoard .classic-task-actions button:hover {
   border-color: var(--classic-accent);
-  background: #7c2d10;
+  background: #263b58;
 }
 
 #programWeekBoard .classic-task-actions button:focus-visible,
 #programWeekBoard .student-program-scroller:focus-visible {
-  outline: 2px solid #e9c3b3;
+  outline: 2px solid #9dc4ff;
   outline-offset: 2px;
 }
 
@@ -563,7 +563,7 @@
   flex: none;
   width: 17px;
   height: 17px;
-  border: 1.6px solid #948677;
+  border: 1.6px solid #71819a;
   border-radius: 6px;
 }
 
@@ -605,7 +605,7 @@
 
 #programWeekBoard .student-program-head.today-col {
   background: var(--classic-accent-soft);
-  color: #f0e4d3;
+  color: #c4dbff;
 }
 
 #programWeekBoard .student-program-hint {

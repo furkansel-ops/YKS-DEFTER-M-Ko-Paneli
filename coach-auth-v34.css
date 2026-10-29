@@ -1,0 +1,43 @@
+/* v34 · Koç giriş/kayıt ekranı ve hesap kartı ekleri. Panelin mevcut mavi
+   görünümünü kullanır (base-reset.css değişkenleri); başka sayfalara dokunmaz. */
+#authView.auth-page{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);place-items:stretch;padding:0;min-height:100vh;background:var(--bg)}
+.nb-auth-cover{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:44px 48px;color:#fff;background:radial-gradient(circle at 18% 12%,rgba(255,255,255,.16),transparent 38%),linear-gradient(155deg,#347beb,#1d4fae)}
+.nb-auth-cover>*{position:relative;z-index:1}
+.nb-auth-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px}
+.nb-auth-brand .brand-mark{width:36px;height:36px;border-radius:11px;font-size:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);color:#fff}
+.nb-auth-cover h2{margin:auto 0 0;font-size:clamp(30px,3.4vw,42px);line-height:1.12;letter-spacing:-.03em;color:#fff}
+.nb-auth-cover p{margin:0;max-width:400px;font-size:15px;line-height:1.55;opacity:.9}
+.nb-auth-feats{display:grid;gap:11px;margin:10px 0 0;padding:0;list-style:none}
+.nb-auth-feats li{display:flex;gap:10px;align-items:center;font-size:14px}
+.nb-auth-feats span{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.16);font-size:13px}
+.nb-auth-cover small{margin-top:auto;padding-top:24px;font-size:12.5px;opacity:.82}
+.nb-auth-cover small a{color:#fff}
+#authView .auth-card.nb-auth-panel{width:auto;max-width:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;display:flex;flex-direction:column;justify-content:center;padding:44px clamp(24px,5vw,64px);background:radial-gradient(circle at 85% 8%,#e6f0ff 0,transparent 36%),linear-gradient(155deg,#f7faff,#edf3f9)}
+.nb-auth-panel h1{margin:0;font-size:30px;letter-spacing:-.03em;color:var(--text)}
+.nb-auth-sub{margin:4px 0 0;color:var(--muted);font-size:14px}
+.nb-auth-seg{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:440px;margin-top:20px;padding:3px;border:1px solid var(--line);border-radius:11px;background:#eef3f9}
+.nb-auth-seg button{min-height:36px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-weight:700;cursor:pointer}
+.nb-auth-seg button[aria-selected="true"]{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(46,67,104,.14)}
+.nb-auth-form{display:grid;gap:12px;max-width:440px;margin-top:18px}
+.nb-auth-form[hidden]{display:none}
+.nb-auth-form label{display:grid;gap:6px;color:#53647b;font-size:12.5px;font-weight:650}
+.nb-auth-form .field{min-height:44px;font-size:15px}
+.nb-auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nb-auth-link{justify-self:end;border:0;background:none;padding:2px 0;color:var(--accent);font-weight:700;font-size:13px;cursor:pointer}
+.nb-auth-form .btn{min-height:46px;font-size:15px}
+.nb-auth-or{display:flex;align-items:center;gap:10px;color:#98a4b5;font-size:12px}
+.nb-auth-or::before,.nb-auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.nb-auth-google svg{width:18px;height:18px}
+.nb-auth-note{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+.nb-auth-panel .status{max-width:440px;font-size:12.5px}
+@media(max-width:860px){
+  #authView.auth-page{grid-template-columns:1fr}
+  .nb-auth-cover{padding:28px 22px;gap:10px}
+  .nb-auth-cover h2{margin-top:18px;font-size:28px}
+  .nb-auth-feats,.nb-auth-cover small{display:none}
+  #authView .auth-card.nb-auth-panel{justify-content:flex-start;padding:28px 20px 40px}
+}
+
+/* Ayarlar › Hesap: şifre değiştirme düğmesi ikincil görünümde */
+.coach-settings-detail .settings-session-card #settingsPasswordBtn{background:#fff;color:var(--accent);border:1px solid var(--line);box-shadow:none;margin-right:8px}
+.coach-settings-detail .settings-session-card #settingsPasswordBtn[hidden]{display:none}

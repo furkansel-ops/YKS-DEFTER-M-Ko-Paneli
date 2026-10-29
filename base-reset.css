@@ -2,11 +2,11 @@
 :root{
   color-scheme:light;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --bg:#fbf8f4;
-  --line:#f1eadd;
-  --text:#7c2d10;
-  --muted:#948677;
-  --accent:#9c3a12;
+  --bg:#f4f7fb;
+  --line:#dfe6ef;
+  --text:#122036;
+  --muted:#71809a;
+  --accent:#2873f0;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
@@ -14,27 +14,27 @@ body{min-height:100vh}
 .hidden{display:none!important}
 button,input,textarea,select{font:inherit}
 button,a,input,textarea,select{transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease,opacity .18s ease}
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #dfa78f;outline-offset:2px}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #6fa9ff;outline-offset:2px}
 a{color:var(--accent)}
 .mobile-only{display:none}
 .overlay{display:none}
-.overlay.show{display:block;position:fixed;inset:0;z-index:19;background:rgba(124,45,16,.52);backdrop-filter:blur(3px)}
-.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#e0ab95,#9c3a12);color:#7c2d10;font-size:14px;font-weight:950}
-.kicker{display:block;color:#9c3a12;font-size:9px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
-.auth-page{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 15% 10%,#f7f1e7 0,transparent 34%),linear-gradient(155deg,#fcf9f5,#f9f4ed)}
-.auth-card{width:min(560px,100%);padding:30px;border:1px solid #f3e9db;border-radius:22px;background:rgba(255,253,248,.94);box-shadow:0 28px 80px rgba(124,45,16,.14);backdrop-filter:blur(18px)}
+.overlay.show{display:block;position:fixed;inset:0;z-index:19;background:rgba(9,18,33,.52);backdrop-filter:blur(3px)}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#76b7ff,#347beb);color:#07111f;font-size:14px;font-weight:950}
+.kicker{display:block;color:#4779c4;font-size:9px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.auth-page{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 15% 10%,#dfeeff 0,transparent 34%),linear-gradient(155deg,#f7faff,#edf3f9)}
+.auth-card{width:min(560px,100%);padding:30px;border:1px solid #dde6f1;border-radius:22px;background:rgba(255,255,255,.94);box-shadow:0 28px 80px rgba(46,67,104,.14);backdrop-filter:blur(18px)}
 .auth-brand{display:flex;align-items:center;gap:13px}.auth-card h1{margin:3px 0 0;font-size:31px;letter-spacing:-.03em}.auth-card p{color:var(--muted);line-height:1.65;font-size:12px}
 .auth-actions{display:grid;gap:10px;margin-top:19px}.auth-actions .btn{min-height:44px}
-.form{display:grid;gap:10px}.form label{display:grid;gap:7px;color:#73685b;font-size:11px;font-weight:650}.form textarea{min-height:86px;resize:vertical}
-.field{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fffdf8;color:var(--text);outline:none}.field:hover{border-color:#e0d9cf}.field:focus{border-color:#e0aa93;box-shadow:0 0 0 3px rgba(156,58,18,.1)}.field::placeholder{color:#baaa93}
-.btn{min-height:38px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#fffdf8;color:var(--text);font-weight:750;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover{background:#fcf9f5;border-color:#e0d9cf}.btn:disabled{opacity:.5;cursor:not-allowed}.btn.primary{border-color:var(--accent);background:var(--accent);color:#fffdf8;box-shadow:0 8px 18px rgba(156,58,18,.16)}.btn.primary:hover{background:#9c3a12}
-.status{margin-top:10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#fcf9f5;color:var(--muted);font-size:10.5px}.status.ok{color:#187f61;background:#eefaf6;border-color:#cdeade}.status.err{color:#bd4650;background:#fff3f4;border-color:#ffdadd}
+.form{display:grid;gap:10px}.form label{display:grid;gap:7px;color:#53647b;font-size:11px;font-weight:650}.form textarea{min-height:86px;resize:vertical}
+.field{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);outline:none}.field:hover{border-color:#cbd6e4}.field:focus{border-color:#7eadf4;box-shadow:0 0 0 3px rgba(40,115,240,.1)}.field::placeholder{color:#98a4b5}
+.btn{min-height:38px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--text);font-weight:750;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover{background:#f7f9fc;border-color:#cbd6e4}.btn:disabled{opacity:.5;cursor:not-allowed}.btn.primary{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 8px 18px rgba(40,115,240,.16)}.btn.primary:hover{background:#195fcf}
+.status{margin-top:10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#f8fafd;color:var(--muted);font-size:10.5px}.status.ok{color:#187f61;background:#eefaf6;border-color:#cdeade}.status.err{color:#bd4650;background:#fff3f4;border-color:#ffdadd}
 .link{color:var(--accent);text-decoration:none;font-weight:700}
 @media(max-width:560px){.auth-card{padding:22px}.auth-card h1{font-size:27px}}
 
 /* Auth boot gate v1.0.1 — prevents login flash on refresh */
 .coach-boot{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;gap:13px;background:var(--bg);color:var(--text)}
-.coach-boot-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#e0ab95,#9c3a12);color:#7c2d10;font-size:14px;font-weight:950;box-shadow:0 10px 26px rgba(156,58,18,.16)}
+.coach-boot-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#76b7ff,#347beb);color:#07111f;font-size:14px;font-weight:950;box-shadow:0 10px 26px rgba(40,115,240,.16)}
 .coach-boot>div:last-child{display:grid;gap:3px}
 .coach-boot b{font-size:14px;letter-spacing:-.01em}
 .coach-boot span{font-size:10px;color:var(--muted)}

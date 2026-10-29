@@ -6,16 +6,15 @@ const path=require("node:path");
 const root=path.resolve(__dirname,"..");
 const read=file=>fs.readFileSync(path.join(root,file),"utf8");
 
-test("Defter görünümü en son yüklenir ve eski mavi palet CSS'lerde kalmaz",()=>{
+test("panel eski mavi görünümde; giriş ekranı stili en son yüklenir",()=>{
   const html=read("index.html");
-  assert.match(html,/coach-mobile-compat-v33\.css\?v=[^"]+">\s*<link rel="stylesheet" href="\.\/coach-notebook-v34\.css\?v=1\.0\.0">/);
-  assert.match(html,/<meta name="theme-color" content="#f6f1e7">/);
+  assert.match(html,/coach-mobile-compat-v33\.css\?v=[^"]+">\s*<link rel="stylesheet" href="\.\/coach-auth-v34\.css\?v=1\.0\.0">/);
+  assert.match(html,/<meta name="theme-color" content="#0d1728">/);
+  assert.ok(!fs.existsSync(path.join(root,"coach-notebook-v34.css")));
   const css=fs.readdirSync(root).filter(f=>f.endsWith(".css")).map(read).join("\n").toLowerCase();
-  for(const blue of ["#2873f0","#1268f5","#edf5ff","#347beb","#76b7ff"])assert.ok(!css.includes(blue),blue+" kaldı");
-  const nb=read("coach-notebook-v34.css");
-  assert.match(nb,/--nb-deep:#7c2d10/);
-  assert.match(nb,/font-family:var\(--nb-serif\)!important/);
-  assert.doesNotMatch(nb,/@import|@font-face|url\(\s*["']?https?:/);
+  assert.ok(css.includes("#2873f0"),"mavi vurgu geri gelmeli");
+  for(const notebook of ["#7c2d10","#9c3a12","#f6f1e7","--nb-serif"])assert.ok(!css.includes(notebook),notebook+" kaldı");
+  assert.doesNotMatch(read("coach-auth-v34.css"),/@import|@font-face|url\(\s*["']?https?:/);
 });
 
 test("giriş ekranı e-posta, Google ve kayıt sekmesini aynı sayfada sunar; eski kimlikler korunur",()=>{
@@ -34,7 +33,6 @@ test("koç auth modülü doğrulanmamış e-postayı içeri almaz ve öğrenci h
   assert.match(js,/role:"coach",displayName:fields\.displayName/);
   assert.match(js,/sendPasswordResetEmail/);
   assert.match(js,/createUserWithEmailAndPassword/);
-  // Akış sürerken app-reset profil kontrolünü bekletir.
   assert.match(js,/window\.__YKS_COACH_AUTH_BUSY__=true/);
   assert.match(read("app-reset.js"),/if\(window\.__YKS_COACH_AUTH_BUSY__\)return;\s*if\(!user\)\{/);
 });

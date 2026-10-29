@@ -107,7 +107,7 @@
   min-height:0;
   min-width:0;
   border-radius:9px;
-  box-shadow:0 1px 5px #7c2d100a;
+  box-shadow:0 1px 5px #1228470a;
 }
 .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-thumb{
   grid-column:1;
@@ -165,7 +165,7 @@
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:4px;
   padding:5px 6px 6px;
-  border-top:1px solid #f9f3eb;
+  border-top:1px solid #edf0f7;
 }
 .coach-v19-video-pane .coach-video-card-actions button{
   display:flex;
@@ -183,7 +183,7 @@
 }
 .coach-v19-video-pane .coach-video-card-actions button:focus-visible,
 .coach-v19-video-pane .coach-video-thumb:focus-visible{
-  outline:2px solid #d79275;
+  outline:2px solid #6e60ec;
   outline-offset:-2px;
 }
 .coach-v19-video-pane .coach-video-card.skeleton{
