@@ -467,8 +467,9 @@ function v35Paste(h,text){
 const v35Sent=h=>h.writes.filter(x=>x.collection==='coachingActions'&&x.type==='program_task').map(x=>[x.payload.date,x.payload.text]);
 test('v35 toplu görev penceresi üst menüden açılır, Esc ve × ile kapanır, yazmadan önce hiçbir şey göndermez',t=>{
   const h=harness(t);
-  assert.equal(h.$('coachV10Bulk').hidden,true);
+  assert.equal(h.$('coachV10Bulk'),null,'pencere ilk açılışa kadar oluşturulmaz');
   const bulk=v35Open(h);
+  assert.equal(bulk.parentElement,h.document.body,'pencere sık yenilenen haftalık görünümün dışında durur');
   assert.equal(bulk.hidden,false);
   assert.equal(bulk.querySelector('[role="dialog"]').getAttribute('aria-modal'),'true');
   assert.match(bulk.textContent,/Deniz/);
@@ -529,6 +530,28 @@ test('v35 interrupted send keeps only the unsent remainder and never repeats sen
   h.writes.push=original;
   bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
   assert.deepEqual(v35Sent(h).map(x=>x[1]),['TYT Kimya · Mol Kavramı · Soru çözümü','TYT Kimya · Karışımlar · Soru çözümü','TYT Kimya · Asit-Baz-Tuz · Soru çözümü']);
+});
+test('v35 canlı paylaşım güncellemesi açık pencereyi, odağı ve gönderimi bozmaz; tekrar gönderim olmaz',async t=>{
+  const h=harness(t),bulk=v35Paste(h,'Pzt Kimya Mol Kavramı\nSal Kimya Karışımlar');
+  const box=bulk.querySelector('[data-v35-paste]');box.focus();
+  h.w.coachV6Test.seed(h.rows,'student-b','2026-10-05');
+  assert.equal(h.$('coachV10Bulk'),bulk,'aynı öğe kalır');
+  assert.equal(h.document.activeElement,box,'odak kaybolmaz');
+  assert.equal(box.value,'Pzt Kimya Mol Kavramı\nSal Kimya Karışımlar');
+  bulk.querySelector('[data-v10-bulk-add]').click();
+  h.w.coachV6Test.seed(h.rows,'student-b','2026-10-05');
+  bulk.querySelector('[data-v10-bulk-add]').click();
+  await v35Flush();
+  assert.equal(h.writes.length,2,'gönderim sırasında yenileme ve ikinci basış görevleri çoğaltmaz');
+  assert.match(h.$('coachV10Bulk').querySelector('[data-v10-bulk-error]').textContent,/2 görev öğrenciye gönderildi/);
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.equal(h.writes.length,2,'gönderilen satırlar temizlendiği için yeniden basmak bir şey göndermez');
+});
+test('v35 yapıştırma "Pzt, Per" gibi boşluklu gün listesini anlar',async t=>{
+  const h=harness(t),bulk=v35Paste(h,'Pzt, Per Fizik Optik\nÇar - Cum Kimya Mol Kavramı');
+  assert.equal(bulk.querySelectorAll('.coach-v35-line[data-state="ok"]').length,2);
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.deepEqual(v35Sent(h).map(x=>x[0]),['2026-10-05','2026-10-08','2026-10-07','2026-10-08','2026-10-09']);
 });
 test('v35 bulk input handles more than the former 100 task cap and sends each record once',async t=>{
   const h=harness(t),bulk=v35Paste(h,Array.from({length:120},(_,i)=>'Çar TYT Matematik Tekrar '+(i+1)).join('\n'));
