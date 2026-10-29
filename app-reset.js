@@ -2313,7 +2313,7 @@ function coachV7Context(studentUid,weekStart){
 function coachV7ComposerContext(key){
   if(coachV7ComposerScope===key)return;
   coachV7ComposerScope=key;coachV7EditingId=null;coachV7Drag=null;
-  coachV7ComposerDays=new Set([0]);coachV9ComposerOpen=false;coachV10ActiveDay=-1;coachV10BulkOpen=false;
+  coachV7ComposerDays=new Set([0]);coachV9ComposerOpen=false;coachV10ActiveDay=-1;coachV10BulkOpen=false;coachV35Bulk=null;
 }
 function coachV7SetNotice(key,message,kind="info"){
   coachV7Notices.set(key,{message,kind});
@@ -2413,7 +2413,7 @@ function coachV7DraftPanel(key,week){
   const escaped=escHtml;
   return '<section class="coach-v7-panel" aria-label="Göndermeden önce haftayı planla">'
     +'<div class="coach-v7-panel-head"><div><span class="coach-v7-kicker">2. AŞAMA · GÜVENLİ PLANLAMA</span><h3>Haftalık taslak <small>'+pending.length+' çalışma</small></h3><p>Görevleri önce buraya ekle, günlerini ve saatlerini düzenle. Sen onaylamadan öğrenciye gönderilmez.</p></div>'
-    +'<div class="coach-v7-panel-actions"><button type="button" class="coach-v10-bulk-toggle" data-v10-bulk-toggle aria-controls="coachV10Bulk" aria-expanded="'+coachV10BulkOpen+'">▤ Haftayı toplu yaz</button><button type="button" class="coach-v9-expand" data-v9-toggle aria-controls="coachV7InlineForm" aria-expanded="'+expanded+'">'+(expanded?'− Ders eklemeyi kapat':'＋ Ders ekle')+'</button><button type="button" data-v7-clear '+(!pending.length?'disabled':'')+'>Taslağı temizle</button><button type="button" data-v7-send '+(!pending.length||coachV7SendingKeys.has(key)?'disabled':'')+'>Taslağı Gönder ('+pending.length+')</button></div></div>'
+    +'<div class="coach-v7-panel-actions"><button type="button" class="coach-v10-bulk-toggle" data-v10-bulk-toggle aria-controls="coachV10Bulk" aria-expanded="'+coachV10BulkOpen+'">▤ Toplu görev yaz</button><button type="button" class="coach-v9-expand" data-v9-toggle aria-controls="coachV7InlineForm" aria-expanded="'+expanded+'">'+(expanded?'− Ders eklemeyi kapat':'＋ Ders ekle')+'</button><button type="button" data-v7-clear '+(!pending.length?'disabled':'')+'>Taslağı temizle</button><button type="button" data-v7-send '+(!pending.length||coachV7SendingKeys.has(key)?'disabled':'')+'>Taslağı Gönder ('+pending.length+')</button></div></div>'
     +'<div class="coach-v7-form" id="coachV7InlineForm" '+(!expanded?'hidden':'')+'>'+coachV8Picker("v7")+'<div class="coach-v7-form-grid">'
     +'<label class="coach-v7-wide">Çalışma adı<input type="text" id="coachV7DraftText" maxlength="550" placeholder="Örn. TYT Matematik · Problemler 30 soru" value="'+escaped(editing?.text||"")+'"></label>'
     +'<label>Başlangıç saati <small>İsteğe bağlı</small><input type="time" id="coachV7DraftTime" value="'+escaped(editing?.time||"")+'"></label>'
@@ -2496,13 +2496,239 @@ async function coachV7SendDraft(key,weekStart,studentUid){
 /* v10: no modal for the common path. One day -> type -> Enter; for a
    whole week paste one lesson per line into each weekday. Both operations
    add to the existing locally held v7 draft, never directly to Firestore. */
+/* v35: toplu görev penceresi. Tablo (sınav · ders · konu · çalışma · soru · günler) ya da
+   satır satır yapıştırma. Yalnız bu pencerede yazılan görevler, mevcut program_task
+   sözleşmesiyle ({text,date}) gün gün sırayla gönderilir; eski v7 taslaklarına dokunulmaz.
+   Metin tek görev penceresiyle aynı "TYT Kimya · Mol Kavramı · Soru çözümü · 40 soru"
+   biçimindedir; öğrenci uygulaması dersi ve konuyu bu metinden okur. */
+const COACH_V35_SUBJECTS=["Matematik","Türkçe","Paragraf","Geometri","Fizik","Kimya","Biyoloji","Edebiyat","Tarih","Coğrafya","Felsefe","Din Kültürü","Deneme"];
+const COACH_V35_ACTIVITIES=["Soru çözümü","Konu anlatımı","Tekrar","Deneme analizi","Ödev / Diğer"];
+const COACH_V35_DAYS=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+const COACH_V35_DAY_WORDS=[[/^(?:pzt|pt|pazartesi)$/,0],[/^(?:sal|sa|salı|sali)$/,1],[/^(?:çar|ça|car|çarşamba|carsamba)$/,2],[/^(?:per|pe|perşembe|persembe)$/,3],[/^(?:cum|cu|cuma)$/,4],[/^(?:cmt|ct|cumartesi)$/,5],[/^(?:paz|pz|pazar)$/,6]];
+let coachV35Bulk=null;
+function coachV35Row(){return {level:"TYT",subject:"",topic:"",activity:"Soru çözümü",count:"",days:[]}}
+function coachV35State(){if(!coachV35Bulk)coachV35Bulk={mode:"table",rows:[coachV35Row()],paste:"",pending:null};return coachV35Bulk}
+function coachV35SendLabel(st){
+  if(st.pending)return "Kalan "+st.pending.length+" görevi gönder";
+  const built=coachV35Items(st);return "Öğrenciye gönder"+(built.items?" ("+built.items.length+" görev)":"");
+}
+function coachV35Compose(row){
+  if(!row||!row.subject)return "";
+  const raw=String(row.count||"").trim(),n=Number(raw),topic=String(row.topic||"").trim(),pieces=[row.level+" "+row.subject];
+  if(topic)pieces.push(topic);
+  pieces.push(row.activity);
+  if(row.activity==="Soru çözümü"&&/^\d+$/.test(raw)&&n>=1&&n<=999)pieces.push(n+" soru");
+  return pieces.join(" · ");
+}
+function coachV35Day(token){
+  const value=String(token||"").toLocaleLowerCase("tr-TR");
+  for(const [pattern,day] of COACH_V35_DAY_WORDS)if(pattern.test(value))return day;
+  return -1;
+}
+function coachV35Days(token){
+  const value=String(token||"").toLocaleLowerCase("tr-TR").replace(/\s+/g," ").trim();
+  if(value==="her gün"||value==="hergün")return [0,1,2,3,4,5,6];
+  if(value==="hafta içi")return [0,1,2,3,4];
+  if(value==="hafta sonu")return [5,6];
+  const days=new Set();
+  for(const part of value.split(",")){
+    const range=part.split("-");
+    if(range.length===2){
+      const from=coachV35Day(range[0]),to=coachV35Day(range[1]);
+      if(from<0||to<from)return null;
+      for(let day=from;day<=to;day++)days.add(day);
+    }else{const day=coachV35Day(part);if(day<0)return null;days.add(day)}
+  }
+  return days.size?[...days].sort((a,b)=>a-b):null;
+}
+function coachV35ParseLine(line){
+  let rest=String(line||"").replace(/\s+/g," ").trim(),days=null;
+  const multi=rest.match(/^(her ?gün|hafta içi|hafta sonu)(?=\s|:|$)/i);
+  if(multi){days=coachV35Days(multi[1]);rest=rest.slice(multi[0].length)}
+  else{const first=rest.match(/^([^\s:]+)(?=\s|:|$)/);if(first){days=coachV35Days(first[1]);if(days)rest=rest.slice(first[0].length)}}
+  rest=rest.replace(/^[\s·:,-]+/,"").trim();
+  if(!days)return {ok:false,line,error:"Gün anlaşılmadı"};
+  if(!rest)return {ok:false,line,error:"Çalışma yazılmadı"};
+  let level="TYT",body=rest;
+  const exam=body.match(/^(TYT|AYT)\s+/i);if(exam){level=exam[1].toUpperCase();body=body.slice(exam[0].length)}
+  const low=body.toLocaleLowerCase("tr-TR");
+  const subject=COACH_V35_SUBJECTS.find(name=>{const l=name.toLocaleLowerCase("tr-TR");return low.startsWith(l)&&!/[a-zçğıöşüâî0-9]/i.test(low.charAt(l.length))})||"";
+  if(!subject)return {ok:true,free:true,days,text:rest};
+  body=body.slice(subject.length);
+  const count=body.match(/(\d{1,3})\s*soru(?=\s|·|,|$)/i);
+  if(count)body=body.replace(count[0]," ");
+  if(subject==="Deneme"&&/^\s*analiz/i.test(body))body=" deneme"+body;
+  let activity=COACH_V35_ACTIVITIES.find(name=>body.toLocaleLowerCase("tr-TR").includes(name.toLocaleLowerCase("tr-TR")))||"";
+  if(activity)body=body.replace(new RegExp(activity.replace(/[.*+?^${}()|[\]\\/]/g,"\\$&"),"i")," ");
+  else if(/konu anlat/i.test(body)){activity="Konu anlatımı";body=body.replace(/konu anlat\S*/i," ")}
+  if(!activity)activity=subject==="Deneme"?"Deneme analizi":"Soru çözümü";
+  const topic=body.replace(/[·,]/g," ").replace(/\s+/g," ").replace(/^[\s:-]+|[\s:-]+$/g,"").trim();
+  const known=(COACH_V18_TOPICS[level+"|"+subject]||[]).find(name=>name.toLocaleLowerCase("tr-TR")===topic.toLocaleLowerCase("tr-TR"));
+  const row={level,subject,topic:known||topic,activity,count:count?count[1]:"",days};
+  return {ok:true,days,row,text:coachV35Compose(row)};
+}
+function coachV35PasteLines(st){return String(st.paste||"").split(/\r?\n/).map(line=>line.trim()).filter(Boolean)}
+function coachV35Items(st){
+  if(st.mode==="paste"){
+    const lines=coachV35PasteLines(st);
+    if(!lines.length)return {error:"Önce en az bir satır yaz."};
+    const parsed=lines.map(coachV35ParseLine),bad=parsed.findIndex(item=>!item.ok);
+    if(bad>=0)return {error:(bad+1)+". satır: "+parsed[bad].error+". Hiçbir görev eklenmedi."};
+    return {items:parsed.flatMap(item=>item.days.map(day=>({day,text:item.text})))};
+  }
+  const used=st.rows.map((row,index)=>({row,index})).filter(({row})=>row.subject||row.days.length||String(row.topic||"").trim()||String(row.count||"").trim());
+  if(!used.length)return {error:"Önce en az bir satır doldur."};
+  for(const {row,index} of used){
+    const raw=String(row.count||"").trim();
+    if(!row.subject)return {error:(index+1)+". satırda ders seçilmedi. Hiçbir görev eklenmedi."};
+    if(!row.days.length)return {error:(index+1)+". satırda gün seçilmedi. Hiçbir görev eklenmedi."};
+    if(row.activity==="Soru çözümü"&&raw&&(!/^\d+$/.test(raw)||Number(raw)<1||Number(raw)>999))return {error:(index+1)+". satırda soru sayısı 1 ile 999 arasında olmalı."};
+  }
+  return {items:used.flatMap(({row})=>row.days.map(day=>({day,text:coachV35Compose(row)})))};
+}
+function coachV35Summary(st){
+  if(st.mode==="paste"){
+    const lines=coachV35PasteLines(st),ready=lines.filter(line=>coachV35ParseLine(line).ok).length;
+    return lines.length?ready+" / "+lines.length+" satır hazır":"";
+  }
+  const filled=st.rows.filter(row=>row.subject);
+  return filled.length+" satır · "+filled.reduce((sum,row)=>sum+row.days.length,0)+" görev";
+}
+function coachV35RowPreview(row){
+  const text=coachV35Compose(row);
+  return text?'Öğrenciye: <b>'+escHtml(text)+'</b> · '+row.days.length+' gün':'Ders seçince görev metni burada oluşur.';
+}
+function coachV35ParsedHtml(st){
+  return coachV35PasteLines(st).map(line=>{
+    const item=coachV35ParseLine(line),days=item.days?item.days.map(day=>COACH_V35_DAYS[day]).join(", "):"?";
+    const state=!item.ok?"bad":item.free?"free":"ok",badge=!item.ok?item.error:item.free?"Derssiz":"Hazır";
+    return '<div class="coach-v35-line" data-state="'+state+'"><b>'+escHtml(days)+'</b><span>'+escHtml(item.ok?item.text:line)+'</span><em>'+escHtml(badge)+'</em></div>';
+  }).join("");
+}
+function coachV35Body(){
+  const st=coachV35State(),options=(list,current)=>list.map(value=>'<option'+(value===current?' selected':'')+'>'+escHtml(value)+'</option>').join("");
+  if(st.mode==="paste")return '<p class="coach-v35-hint">Her satıra bir görev: <b>gün · ders · konu · çalışma · soru</b>. "Pzt", "Çar-Cum", "Pzt,Per", "hafta içi", "her gün" anlaşılır. Örnek: <code>Pzt Kimya Mol Kavramı 40 soru</code></p>'
+    +'<textarea data-v35-paste rows="7" maxlength="40000" aria-label="Toplu görev metni" placeholder="Pzt Kimya Mol Kavramı 40 soru&#10;Çar-Cum AYT Matematik Türev konu anlatımı">'+escHtml(st.paste)+'</textarea>'
+    +'<div class="coach-v35-parsed" data-v35-parsed>'+coachV35ParsedHtml(st)+'</div>';
+  return '<div class="coach-v35-rows">'+st.rows.map((row,index)=>{
+    const n=index+1,topics=COACH_V18_TOPICS[row.level+"|"+row.subject]||[];
+    return '<div class="coach-v35-row" data-v35-row="'+index+'">'
+      +'<label class="coach-v35-level"><span>Sınav</span><select data-v35-field="level" aria-label="'+n+'. satır sınav">'+options(["TYT","AYT"],row.level)+'</select></label>'
+      +'<label><span>Ders</span><select data-v35-field="subject" aria-label="'+n+'. satır ders"><option value="">Ders seç</option>'+options(COACH_V35_SUBJECTS,row.subject)+'</select></label>'
+      +'<label><span>Konu</span><input data-v35-field="topic" list="coachV35Topics'+index+'" maxlength="120" autocomplete="off" value="'+escHtml(row.topic)+'" placeholder="İsteğe bağlı" aria-label="'+n+'. satır konu"><datalist id="coachV35Topics'+index+'">'+topics.map(topic=>'<option value="'+escHtml(topic)+'"></option>').join("")+'</datalist></label>'
+      +'<label><span>Çalışma</span><select data-v35-field="activity" aria-label="'+n+'. satır çalışma türü">'+options(COACH_V35_ACTIVITIES,row.activity)+'</select></label>'
+      +'<label class="coach-v35-count"><span>Soru</span><input data-v35-field="count" inputmode="numeric" maxlength="3" value="'+escHtml(row.count)+'" placeholder="—" aria-label="'+n+'. satır soru sayısı"'+(row.activity!=="Soru çözümü"?' disabled':'')+'></label>'
+      +'<div class="coach-v35-days" role="group" aria-label="'+n+'. satır günleri">'+COACH_V35_DAYS.map((day,i)=>'<button type="button" data-v35-day="'+i+'" aria-pressed="'+row.days.includes(i)+'">'+day+'</button>').join("")+'</div>'
+      +'<button type="button" class="coach-v35-remove" data-v35-remove aria-label="'+n+'. satırı sil">×</button>'
+      +'<p class="coach-v35-preview" data-v35-preview>'+coachV35RowPreview(row)+'</p></div>';
+  }).join("")+'</div><div class="coach-v35-tools"><button type="button" data-v35-add-row>＋ Satır ekle</button><button type="button" data-v35-dup-row>⧉ Son satırı çoğalt</button></div>';
+}
 function coachV10WeekBulkPanel(){
-  const names=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
-  return '<section class="coach-v10-bulk" id="coachV10Bulk" '+(!coachV10BulkOpen?'hidden':'')+' aria-label="Haftayı topluca doldur">'
-    +'<div class="coach-v10-bulk-intro"><strong>Haftayı tek seferde doldur</strong><span>Her güne ayrı ayrı, her satıra bir ders yaz veya yapıştır. Henüz öğrenciye gönderilmez.</span></div>'
-    +'<div class="coach-v10-bulk-grid">'
-    +names.map((name,day)=>'<label><span>'+name+'</span><textarea rows="3" maxlength="40000" data-v10-bulk-day="'+day+'" placeholder="Her satıra bir çalışma…"></textarea></label>').join("")
-    +'</div><div class="coach-v10-bulk-bottom"><span data-v10-bulk-error role="alert"></span><button type="button" data-v10-bulk-add>＋ Hepsini taslağa ekle</button></div></section>';
+  const st=coachV35State();
+  const student=coachReportRows.find(row=>row.studentUid===selectedProgramStudentUid);
+  return '<section class="coach-v10-bulk coach-v35-bulk" id="coachV10Bulk" '+(!coachV10BulkOpen?'hidden':'')+'>'
+    +'<div class="coach-v35-dialog" role="dialog" aria-modal="true" aria-labelledby="coachV35Title">'
+    +'<div class="coach-v35-head"><div class="coach-v10-bulk-intro"><strong id="coachV35Title">Toplu görev yaz</strong><span>'+escHtml((student?studentName(student)+" · ":"")+formatProgramWeek(selectedProgramWeekStart))+' · Her satır doğru derse bağlanır; “Öğrenciye gönder”e basana kadar hiçbir şey gitmez.</span></div>'
+    +'<div class="coach-v35-head-actions"><div class="coach-v35-seg" role="group" aria-label="Yazma biçimi"><button type="button" data-v35-mode="table" aria-pressed="'+(st.mode==="table")+'">▦ Tablo</button><button type="button" data-v35-mode="paste" aria-pressed="'+(st.mode==="paste")+'">✎ Yapıştır</button></div>'
+    +'<button type="button" class="coach-v35-close" data-v35-close aria-label="Toplu görev penceresini kapat">×</button></div></div>'
+    +'<div class="coach-v35-body" data-v35-body>'+coachV35Body()+'</div>'
+    +'<div class="coach-v10-bulk-bottom"><span data-v10-bulk-error role="status" aria-live="polite"></span><small data-v35-sum>'+escHtml(coachV35Summary(st))+'</small><button type="button" data-v10-bulk-add>'+escHtml(coachV35SendLabel(st))+'</button></div></div></section>';
+}
+function coachV35Close(){
+  coachV10BulkOpen=false;const bulk=$("coachV10Bulk");if(bulk)bulk.hidden=true;
+  $("programBulkTasksBtn")?.focus({preventScroll:true});
+}
+function coachV35Open(){
+  const bulk=$("coachV10Bulk");
+  if(!bulk||!selectedProgramStudentUid){alert("Önce bir öğrenci ve hafta seç.");return false}
+  coachV10BulkOpen=true;bulk.hidden=false;
+  bulk.querySelector("[data-v35-field],[data-v35-paste]")?.focus({preventScroll:true});
+  return true;
+}
+async function coachV35Send(key,weekStart,studentUid,bulk){
+  const st=coachV35State(),status=bulk.querySelector("[data-v10-bulk-error]"),button=bulk.querySelector("[data-v10-bulk-add]");
+  const say=(text,kind)=>{if(status){status.textContent=text;status.dataset.kind=kind}};
+  if(coachV7SendingKeys.has(key)||!coachV7Context(studentUid,weekStart))return;
+  let items=st.pending;
+  if(!items){const built=coachV35Items(st);if(built.error){say(built.error,"error");return}items=built.items}
+  if(items.some(item=>!item.text.trim()||item.text.trim().length>600)){say("Her görev en fazla 600 karakter olabilir. Hiçbir görev gönderilmedi.","error");return}
+  if(!confirm(items.length+" görev öğrencinin programına gönderilsin mi?"))return;
+  const coachUid=auth.currentUser.uid;let sent=0;
+  coachV7SendingKeys.add(key);if(button)button.disabled=true;say("Gönderim başladı…","info");
+  try{
+    for(const item of items){
+      if(!coachV7Context(studentUid,weekStart)||auth.currentUser?.uid!==coachUid){
+        st.pending=items.slice(sent);say("Öğrenci veya hafta değişti. "+sent+" görev gönderildi, kalan "+st.pending.length+" gönderilmedi.","error");return;
+      }
+      await addDoc(collection(db,"coachingActions"),{
+        studentUid,coachUid,type:"program_task",payload:{text:item.text.trim(),date:programDayDate(weekStart,item.day)},
+        status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+      });
+      sent++;say(sent+"/"+items.length+" görev gönderiliyor…","info");
+    }
+    Object.assign(st,{rows:[coachV35Row()],paste:"",pending:null});
+    const body=bulk.querySelector("[data-v35-body]");if(body)body.innerHTML=coachV35Body();
+    const summary=bulk.querySelector("[data-v35-sum]");if(summary)summary.textContent=coachV35Summary(st);
+    say(items.length+" görev öğrenciye gönderildi ✓ Öğrenci uygulaması açılınca programına eklenir.","success");
+  }catch(error){
+    console.error("Toplu görev gönderimi",error);
+    st.pending=items.slice(sent);
+    say("Gönderim kesildi: "+sent+" görev gönderildi. Kalan "+st.pending.length+" görev için tekrar gönder; gönderilenler tekrarlanmaz.","error");
+  }finally{
+    coachV7SendingKeys.delete(key);
+    if(button){button.disabled=false;button.textContent=coachV35SendLabel(st)}
+  }
+}
+function coachV35Bind(bulk){
+  const st=coachV35State(),error=()=>bulk.querySelector("[data-v10-bulk-error]");
+  const sum=()=>{
+    const node=bulk.querySelector("[data-v35-sum]");if(node)node.textContent=coachV35Summary(st);
+    const send=bulk.querySelector("[data-v10-bulk-add]");if(send&&!send.disabled)send.textContent=coachV35SendLabel(st);
+  };
+  bulk.addEventListener("keydown",event=>{if(event.key==="Escape"){event.preventDefault();coachV35Close()}});
+  bulk.addEventListener("click",event=>{if(event.target===bulk)coachV35Close()});
+  const refresh=focus=>{
+    const body=bulk.querySelector("[data-v35-body]");if(body)body.innerHTML=coachV35Body();
+    sum();if(focus)bulk.querySelector(focus)?.focus({preventScroll:true});
+  };
+  const preview=index=>{const node=bulk.querySelector('[data-v35-row="'+index+'"] [data-v35-preview]');if(node)node.innerHTML=coachV35RowPreview(st.rows[index]);sum()};
+  bulk.addEventListener("click",event=>{
+    const button=event.target.closest("button");if(!button||!bulk.contains(button)||button.hasAttribute("data-v10-bulk-add"))return;
+    if(button.hasAttribute("data-v35-close")){coachV35Close();return}
+    const rowNode=button.closest("[data-v35-row]"),index=rowNode?Number(rowNode.dataset.v35Row):-1;
+    st.pending=null;
+    if(button.dataset.v35Mode){
+      st.mode=button.dataset.v35Mode==="paste"?"paste":"table";
+      bulk.querySelectorAll("[data-v35-mode]").forEach(node=>node.setAttribute("aria-pressed",String(node===button)));
+      const status=error();if(status)status.textContent="";
+      refresh(st.mode==="paste"?"[data-v35-paste]":null);return;
+    }
+    if(button.hasAttribute("data-v35-add-row")||button.hasAttribute("data-v35-dup-row")){
+      const last=st.rows[st.rows.length-1];
+      st.rows.push(button.hasAttribute("data-v35-dup-row")&&last?{...last,days:last.days.slice()}:coachV35Row());
+      refresh('[data-v35-row="'+(st.rows.length-1)+'"] [data-v35-field="subject"]');return;
+    }
+    const row=st.rows[index];if(!row)return;
+    if(button.hasAttribute("data-v35-remove")){st.rows.splice(index,1);if(!st.rows.length)st.rows.push(coachV35Row());refresh();return}
+    if(button.dataset.v35Day!==undefined){
+      const day=Number(button.dataset.v35Day);
+      row.days=row.days.includes(day)?row.days.filter(value=>value!==day):[...row.days,day].sort((a,b)=>a-b);
+      button.setAttribute("aria-pressed",String(row.days.includes(day)));preview(index);
+    }
+  });
+  const edit=event=>{
+    const target=event.target;
+    if(target.matches?.("[data-v35-paste]")){
+      st.paste=target.value;st.pending=null;const list=bulk.querySelector("[data-v35-parsed]");if(list)list.innerHTML=coachV35ParsedHtml(st);sum();return;
+    }
+    const field=target.dataset?.v35Field,rowNode=target.closest?.("[data-v35-row]");if(!field||!rowNode)return;
+    const index=Number(rowNode.dataset.v35Row),row=st.rows[index];if(!row||row[field]===target.value)return;
+    row[field]=target.value;st.pending=null;
+    if(field==="subject"||field==="level"){if(field==="subject")row.topic="";refresh('[data-v35-row="'+index+'"] [data-v35-field="'+field+'"]');return}
+    if(field==="activity"){const count=rowNode.querySelector('[data-v35-field="count"]');if(count)count.disabled=row.activity!=="Soru çözümü"}
+    preview(index);
+  };
+  bulk.addEventListener("input",edit);bulk.addEventListener("change",edit);
 }
 function coachV10InlineAdd(day){
   const names=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -2550,17 +2776,6 @@ function coachV10SaveDay(key,day){
   coachV10ActiveDay=day;
   renderProgramWorkspace();
   $("coachVisualWeekBoard")?.querySelector('[data-v10-input="'+day+'"]')?.focus({preventScroll:true});
-}
-function coachV10SaveBulk(key,root){
-  const boxes=[...root.querySelectorAll("[data-v10-bulk-day]")];
-  const items=boxes.flatMap(box=>String(box.value||"").split(/\r?\n/).map(text=>({
-    day:Number(box.dataset.v10BulkDay),text:text.trim()
-  })).filter(item=>item.text));
-  const error=root.querySelector("[data-v10-bulk-error]");
-  const result=coachV10Append(key,items);
-  if(!result.ok){if(error)error.textContent=result.error;return}
-  coachV10BulkOpen=false;
-  renderProgramWorkspace();
 }
 
 function renderCoachVisualWeek(program,week,row){
@@ -2721,10 +2936,11 @@ function bindCoachVisualWeekActions(weekStart){
     const bulk=$("coachV10Bulk");if(bulk)bulk.hidden=!coachV10BulkOpen;
     const toggle=root.querySelector("[data-v10-bulk-toggle]");
     toggle?.setAttribute("aria-expanded",String(coachV10BulkOpen));
-    if(coachV10BulkOpen)root.querySelector('[data-v10-bulk-day="0"]')?.focus({preventScroll:true});
+    if(coachV10BulkOpen)root.querySelector("#coachV10Bulk [data-v35-field],#coachV10Bulk [data-v35-paste]")?.focus({preventScroll:true});
   });
+  const bulkPanel=root.querySelector("#coachV10Bulk");if(bulkPanel)coachV35Bind(bulkPanel);
   root.querySelector("[data-v10-bulk-add]")?.addEventListener("click",()=>{
-    if(coachV7Context(studentUid,weekStart))coachV10SaveBulk(key,root);
+    if(bulkPanel&&coachV7Context(studentUid,weekStart))coachV35Send(key,weekStart,studentUid,bulkPanel);
   });
   root.querySelectorAll("[data-coach-add-day]").forEach(button=>button.addEventListener("click",()=>{
     if(!coachV7Context(studentUid,weekStart)||coachV7SendingKeys.has(key))return;
@@ -2890,20 +3106,30 @@ function todayIsoLocal(){
 }
 /* Structured coach lesson composer v18: UI-only metadata is flattened into the
    existing plain-text task contract. Never write extra Firestore fields. */
+/* Konu adları öğrenci uygulamasının müfredatıyla birebir aynıdır; öğrenci görevi bitirince
+   konu, Konular sayfasında bu adla eşleşip otomatik işaretlenir. */
 const COACH_V18_TOPICS={
-  "TYT|Matematik":["Temel Kavramlar","Sayı Basamakları","Bölme ve Bölünebilme","Rasyonel Sayılar","Üslü Sayılar","Köklü Sayılar","Denklemler","Problemler"],
-  "AYT|Matematik":["Fonksiyonlar","Polinomlar","Parabol","Trigonometri","Logaritma","Diziler","Limit","Türev","İntegral"],
-  "TYT|Türkçe":["Sözcükte Anlam","Cümlede Anlam","Paragraf","Yazım Kuralları","Noktalama İşaretleri","Dil Bilgisi"],
-  "AYT|Edebiyat":["Şiir Bilgisi","Edebî Akımlar","Tanzimat","Servetifünun","Millî Edebiyat","Cumhuriyet Dönemi"],
-  "TYT|Fizik":["Fizik Bilimine Giriş","Madde ve Özellikleri","Hareket ve Kuvvet","Isı ve Sıcaklık","Optik"],
-  "AYT|Fizik":["Vektörler","Kuvvet ve Hareket","Elektrik ve Manyetizma","Dalgalar","Modern Fizik"],
-  "TYT|Kimya":["Kimya Bilimi","Atom ve Periyodik Sistem","Kimyasal Türler","Maddenin Halleri","Karışımlar"],
-  "AYT|Kimya":["Modern Atom Teorisi","Gazlar","Çözeltiler","Kimyasal Tepkimelerde Enerji","Denge","Organik Kimya"],
-  "TYT|Biyoloji":["Canlıların Ortak Özellikleri","Hücre","Canlıların Sınıflandırılması","Ekosistem"],
-  "AYT|Biyoloji":["Sinir Sistemi","Endokrin Sistem","Fotosentez","Solunum","DNA ve Protein Sentezi","Kalıtım"],
-  "TYT|Geometri":["Doğruda Açılar","Üçgenler","Çokgenler","Dörtgenler","Çember ve Daire"],
-  "AYT|Geometri":["Analitik Geometri","Çemberin Analitiği","Katı Cisimler"],
-  "TYT|Paragraf":["Ana Düşünce","Yardımcı Düşünce","Paragrafın Yapısı"],
+  "TYT|Matematik":["Temel Kavramlar","Sayı Basamakları","Sayılar","Bölme-Bölünebilme","EBOB-EKOK","Rasyonel Sayılar","Ondalıklı Sayılar","Basit Eşitsizlik","Mutlak Değer","Üslü Sayılar","Köklü Sayılar","Çarpanlara Ayırma","Oran-Orantı","Denklem Çözme","Problemler","Kümeler","Mantık","Fonksiyonlar","Polinomlar","İkinci Dereceden Denklemler","Permütasyon-Kombinasyon","Olasılık","Veri ve İstatistik"],
+  "AYT|Matematik":["Fonksiyonlar","Polinomlar","İkinci Dereceden Denklemler","Karmaşık Sayılar","Logaritma","Diziler","Limit","Türev","İntegral","Trigonometri"],
+  "TYT|Türkçe":["Sözcükte Anlam","Cümlede Anlam","Paragraf","Ses Bilgisi","Yazım Kuralları","Noktalama","Sözcükte Yapı","Sözcük Türleri","Fiiller","Fiilimsi","Ek Fiil","Cümlenin Ögeleri","Cümle Türleri","Anlatım Bozukluğu"],
+  "AYT|Edebiyat":["Şiir Bilgisi","Söz Sanatları","Halk Edebiyatı","Divan Edebiyatı","Tanzimat","Servet-i Fünun","Milli Edebiyat","Cumhuriyet Dönemi","Roman-Hikaye","Tiyatro"],
+  "TYT|Fizik":["Fizik Bilimine Giriş","Madde ve Özellikleri","Hareket ve Kuvvet","İş-Güç-Enerji","Isı-Sıcaklık-Genleşme","Basınç","Kaldırma Kuvveti","Elektrostatik","Elektrik ve Manyetizma","Optik","Dalgalar"],
+  "AYT|Fizik":["Vektörler","Kuvvet-Denge","Tork","Basit Makineler","Newton Yasaları","İş-Güç-Enerji","İtme-Momentum","Elektrik-Manyetizma","Çembersel Hareket","Basit Harmonik Hareket","Dalga Mekaniği","Modern Fizik"],
+  "TYT|Kimya":["Kimya Bilimi","Atom ve Yapısı","Periyodik Sistem","Kimyasal Türler Arası Etkileşim","Maddenin Halleri","Kimyanın Temel Kanunları","Mol Kavramı","Kimyasal Hesaplamalar","Karışımlar","Asit-Baz-Tuz","Kimya Her Yerde"],
+  "AYT|Kimya":["Modern Atom Teorisi","Gazlar","Sıvı Çözeltiler","Kimyasal Tepkimelerde Enerji","Kimyasal Tepkimelerde Hız","Kimyasal Denge","Asit-Baz Dengesi","Çözünürlük Dengesi","Elektrokimya","Organik Kimya"],
+  "TYT|Biyoloji":["Canlıların Ortak Özellikleri","Canlıların Temel Bileşenleri","Hücre","Madde Geçişleri","Canlıların Sınıflandırılması","Hücre Bölünmeleri","Üreme","Kalıtım","Ekosistem Ekolojisi","Çevre Sorunları"],
+  "AYT|Biyoloji":["Sinir Sistemi","Endokrin Sistem","Duyu Organları","Destek-Hareket","Sindirim","Dolaşım-Bağışıklık","Solunum","Boşaltım","Üreme","Genetik","Ekosistem","Komünite","Popülasyon","Bitki Biyolojisi"],
+  "TYT|Geometri":["Temel Kavramlar","Üçgenler","Çokgenler","Dörtgenler","Çember-Daire","Analitik Geometri","Katı Cisimler"],
+  "AYT|Geometri":["Dörtgenler","Çember-Daire","Analitik-Doğru","Analitik-Çember","Katı Cisimler","Dönüşümler"],
+  "TYT|Tarih":["Tarih ve Zaman","İlk ve Orta Çağlarda Türk Dünyası","İlk Uygarlıklar","İslam Medeniyetinin Doğuşu","Türk-İslam Devletleri","Osmanlı Kuruluş","Osmanlı Yükselme","Osmanlı Değişim Çağı","Avrupa ve Osmanlı","XX. Yüzyıl Başlarında Osmanlı","Milli Mücadele","Atatürkçülük ve Türk İnkılabı"],
+  "AYT|Tarih":["Osmanlı Duraklama","Osmanlı Gerileme","Osmanlı Dağılma","İnkılap Tarihi","Kurtuluş Savaşı","Atatürk İlkeleri","Çağdaş Türk-Dünya Tarihi"],
+  "TYT|Coğrafya":["Doğa ve İnsan","Harita Bilgisi","Dünyanın Şekli ve Hareketleri","Atmosfer ve İklim","İç Kuvvetler","Dış Kuvvetler","Su-Toprak-Bitkiler","Nüfus","Göç","Yerleşme","Türkiye'nin Yer Şekilleri","Ekonomik Faaliyetler","Bölgeler","Doğal Afetler"],
+  "AYT|Coğrafya":["Ekosistem","Nüfus Politikaları","Şehirleşme","Ekonomik Faaliyetler","Türkiye Ekonomisi","Bölgeler","Ulaşım","Jeopolitik Konum","Ülkeler ve Bölgeler","Çevre ve Toplum","Küresel Ortam"],
+  "TYT|Felsefe":["Felsefeye Giriş","Bilgi Felsefesi","Varlık Felsefesi","Ahlak Felsefesi","Sanat Felsefesi","Din Felsefesi","Siyaset Felsefesi"],
+  "AYT|Felsefe":["Felsefeye Giriş","Bilgi Felsefesi","Varlık Felsefesi","Ahlak Felsefesi","Din Felsefesi","Siyaset Felsefesi","Sanat Felsefesi","Psikoloji","Sosyoloji","Mantık"],
+  "TYT|Din Kültürü":["Bilgi ve İnanç","İslam ve İbadet","Ahlak ve Değerler","Allah-İnsan İlişkisi","Hz. Muhammed","Vahiy ve Akıl","Din-Kültür-Medeniyet","Güncel Dinî Meseleler","Dinler Tarihi"],
+  "AYT|Din Kültürü":["Kur'an ve Yorumu","İslam ve Bilim","İslam Düşüncesinde Yorumlar","Din-Kültür-Medeniyet","Yaşayan Dinler"],
+  "TYT|Paragraf":["Paragraf"],
   "TYT|Deneme":["Genel TYT Denemesi","Branş Denemesi"],
   "AYT|Deneme":["Genel AYT Denemesi","Branş Denemesi"]
 };
@@ -3174,7 +3400,7 @@ $("programDaysClear")?.addEventListener("click",()=>coachWeekPreset([]));
 if($("coachV8ModalPicker")){$("coachV8ModalPicker").innerHTML=coachV8Picker("modal");coachV8BindPicker($("coachV8ModalPicker"),"modal","programTaskText")}
 $("programTaskAddDraft")?.addEventListener("click",coachV8AddModalToDraft);
 $("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});
-$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
+$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTaskBackdrop")?.addEventListener("keydown",event=>{
   if(event.key==="Escape"){event.preventDefault();closeProgramTaskModal();return}
   if(event.key!=="Tab")return;

@@ -453,47 +453,116 @@ test('v10 day editor can switch target day and escape without touching the draft
   assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('[data-v10-inline]:not([hidden])').length,0);
   assert.equal(h.writes.length,0);
 });
-test('v10 seven-day paste adds mixed counts atomically with correct day and no Firestore writes',t=>{
-  const h=harness(t),root=h.$('coachVisualWeekBoard');
+const v35Flush=()=>new Promise(resolve=>setImmediate(resolve));
+function v35Open(h){
+  h.$('programBulkTasksBtn').click();
+  return h.$('coachV10Bulk');
+}
+function v35Paste(h,text){
+  const bulk=v35Open(h);
+  bulk.querySelector('[data-v35-mode="paste"]').click();
+  const box=bulk.querySelector('[data-v35-paste]');box.value=text;box.dispatchEvent(new h.w.Event('input',{bubbles:true}));
+  return bulk;
+}
+const v35Sent=h=>h.writes.filter(x=>x.collection==='coachingActions'&&x.type==='program_task').map(x=>[x.payload.date,x.payload.text]);
+test('v35 toplu görev penceresi üst menüden açılır, Esc ve × ile kapanır, yazmadan önce hiçbir şey göndermez',t=>{
+  const h=harness(t);
   assert.equal(h.$('coachV10Bulk').hidden,true);
-  root.querySelector('[data-v10-bulk-toggle]').click();
-  assert.equal(h.$('coachV10Bulk').hidden,false);
-  root.querySelector('[data-v10-bulk-day="0"]').value='TYT Matematik · Problemler\nParagraf · 20 soru';
-  root.querySelector('[data-v10-bulk-day="3"]').value='\nAYT Biyoloji · Sinir Sistemi\n\n';
-  root.querySelector('[data-v10-bulk-day="6"]').value='Deneme analizi';
-  root.querySelector('[data-v10-bulk-add]').click();
-  const result=h.$('coachVisualWeekBoard');
-  assert.equal(result.querySelectorAll('.coach-v7-draft').length,4);
-  assert.equal(result.querySelector('.coach-v6-day[data-day="0"]').querySelectorAll('.coach-v7-draft').length,2);
-  assert.equal(result.querySelector('.coach-v6-day[data-day="3"]').querySelectorAll('.coach-v7-draft').length,1);
-  assert.equal(result.querySelector('.coach-v6-day[data-day="6"]').querySelectorAll('.coach-v7-draft').length,1);
+  const bulk=v35Open(h);
+  assert.equal(bulk.hidden,false);
+  assert.equal(bulk.querySelector('[role="dialog"]').getAttribute('aria-modal'),'true');
+  assert.match(bulk.textContent,/Deniz/);
+  bulk.dispatchEvent(new h.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  assert.equal(bulk.hidden,true);
+  v35Open(h).querySelector('[data-v35-close]').click();
   assert.equal(h.$('coachV10Bulk').hidden,true);
-  assert.match(result.querySelector('#coachV7DraftStatus').textContent,/4 çalışma taslağa eklendi/);
   assert.equal(h.writes.length,0);
 });
-test('v10 bulk validation is all-or-nothing; preserves text and never sends malformed work',t=>{
-  const h=harness(t),root=h.$('coachVisualWeekBoard');
-  root.querySelector('[data-v10-bulk-toggle]').click();
-  root.querySelector('[data-v10-bulk-day="0"]').value='Matematik · Problemler';
-  root.querySelector('[data-v10-bulk-day="1"]').value='x'.repeat(551);
-  root.querySelector('[data-v10-bulk-add]').click();
-  assert.equal(root.querySelectorAll('.coach-v7-draft').length,0);
-  assert.match(root.querySelector('[data-v10-bulk-error]').textContent,/550 karakter/);
-  assert.equal(root.querySelector('[data-v10-bulk-day="0"]').value,'Matematik · Problemler');
-  assert.equal(h.writes.length,0);
-  root.querySelector('[data-v10-bulk-day="1"]').value='Fizik · Hareket';
-  root.querySelector('[data-v10-bulk-add]').click();
-  assert.equal(h.$('coachVisualWeekBoard').querySelectorAll('.coach-v7-draft').length,2);
+test('v35 paste sends mixed lines with correct dates and subject-first text',async t=>{
+  const h=harness(t);
+  const bulk=v35Paste(h,'Pzt TYT Matematik Problemler 30 soru\nPzt Paragraf 20 soru\n\nPer AYT Biyoloji Sinir Sistemi konu anlatımı\nPaz Deneme analizi');
+  assert.equal(bulk.querySelectorAll('.coach-v35-line[data-state="ok"]').length,4);
+  assert.match(bulk.querySelector('[data-v10-bulk-add]').textContent,/Öğrenciye gönder \(4 görev\)/);
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.deepEqual(v35Sent(h),[
+    ['2026-10-05','TYT Matematik · Problemler · Soru çözümü · 30 soru'],
+    ['2026-10-05','TYT Paragraf · Soru çözümü · 20 soru'],
+    ['2026-10-08','AYT Biyoloji · Sinir Sistemi · Konu anlatımı'],
+    ['2026-10-11','TYT Deneme · Deneme analizi']
+  ]);
+  assert.ok(h.writes.every(x=>x.studentUid==='student-b'&&x.coachUid==='coach-test'&&x.status==='pending'));
+  assert.match(h.$('coachV10Bulk').querySelector('[data-v10-bulk-error]').textContent,/4 görev öğrenciye gönderildi/);
+  assert.equal(h.$('coachV10Bulk').querySelector('[data-v35-paste]').value,'');
 });
-test('v10 bulk input handles more than the former 100 task cap and retains each record',t=>{
-  const h=harness(t),root=h.$('coachVisualWeekBoard');
-  root.querySelector('[data-v10-bulk-toggle]').click();
-  root.querySelector('[data-v10-bulk-day="2"]').value=Array.from({length:120},(_,i)=>'TYT Matematik · Tekrar '+(i+1)).join('\n');
-  root.querySelector('[data-v10-bulk-add]').click();
-  const board=h.$('coachVisualWeekBoard');
-  assert.equal(board.querySelectorAll('.coach-v7-draft').length,120);
-  assert.match(board.querySelector('[data-v7-send]').textContent,/120/);
+test('v35 paste understands day ranges, lists, hafta içi and free tasks',async t=>{
+  const h=harness(t),bulk=v35Paste(h,'Çar-Cum Kimya Mol Kavramı 40 soru\nPzt,Per Fizik Optik\nhafta içi Paragraf 20 soru\nCmt kitap okuma');
+  assert.equal(bulk.querySelectorAll('.coach-v35-line[data-state="free"]').length,1);
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  const sent=v35Sent(h);
+  assert.equal(sent.length,3+2+5+1);
+  assert.deepEqual(sent.slice(0,3).map(x=>x[0]),['2026-10-07','2026-10-08','2026-10-09']);
+  assert.ok(sent.slice(0,3).every(x=>x[1]==='TYT Kimya · Mol Kavramı · Soru çözümü · 40 soru'));
+  assert.deepEqual(sent.at(-1),['2026-10-10','kitap okuma']);
+});
+test('v35 bulk validation is all-or-nothing; preserves text and never sends malformed work',async t=>{
+  const h=harness(t),bulk=v35Paste(h,'Pzt Matematik Problemler\nMatematik Problemler');
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.match(bulk.querySelector('[data-v10-bulk-error]').textContent,/2\. satır: Gün anlaşılmadı/);
+  assert.equal(bulk.querySelector('[data-v35-paste]').value,'Pzt Matematik Problemler\nMatematik Problemler');
+  const box=bulk.querySelector('[data-v35-paste]');box.value='Pzt Matematik Problemler\nSal '+'x'.repeat(601);box.dispatchEvent(new h.w.Event('input',{bubbles:true}));
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.match(bulk.querySelector('[data-v10-bulk-error]').textContent,/600 karakter/);
   assert.equal(h.writes.length,0);
+  box.value='Pzt Matematik Problemler\nSal Fizik Hareket ve Kuvvet';box.dispatchEvent(new h.w.Event('input',{bubbles:true}));
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.deepEqual(v35Sent(h).map(x=>x[1]),['TYT Matematik · Problemler · Soru çözümü','TYT Fizik · Hareket ve Kuvvet · Soru çözümü']);
+});
+test('v35 interrupted send keeps only the unsent remainder and never repeats sent tasks',async t=>{
+  const h=harness(t),bulk=v35Paste(h,'Pzt Kimya Mol Kavramı\nSal Kimya Karışımlar\nÇar Kimya Asit-Baz-Tuz');
+  let calls=0;
+  const original=h.writes.push.bind(h.writes);
+  h.writes.push=item=>{calls++;if(calls===2)throw new Error('ağ hatası');return original(item);};
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.equal(h.writes.length,1);
+  assert.match(bulk.querySelector('[data-v10-bulk-error]').textContent,/1 görev gönderildi\. Kalan 2 görev/);
+  assert.match(bulk.querySelector('[data-v10-bulk-add]').textContent,/Kalan 2 görevi gönder/);
+  h.writes.push=original;
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.deepEqual(v35Sent(h).map(x=>x[1]),['TYT Kimya · Mol Kavramı · Soru çözümü','TYT Kimya · Karışımlar · Soru çözümü','TYT Kimya · Asit-Baz-Tuz · Soru çözümü']);
+});
+test('v35 bulk input handles more than the former 100 task cap and sends each record once',async t=>{
+  const h=harness(t),bulk=v35Paste(h,Array.from({length:120},(_,i)=>'Çar TYT Matematik Tekrar '+(i+1)).join('\n'));
+  assert.match(bulk.querySelector('[data-v10-bulk-add]').textContent,/120 görev/);
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.equal(v35Sent(h).length,120);
+  assert.equal(new Set(v35Sent(h).map(x=>x[1])).size,120);
+});
+test('v35 table rows compose subject-first text for each selected day and validate missing days',async t=>{
+  const h=harness(t),bulk=v35Open(h);
+  const set=(selector,value)=>{const node=bulk.querySelector(selector);node.value=value;node.dispatchEvent(new h.w.Event('change',{bubbles:true}));};
+  set('[data-v35-row="0"] [data-v35-field="subject"]','Kimya');
+  assert.ok([...bulk.querySelectorAll('#coachV35Topics0 option')].some(o=>o.value==='Mol Kavramı'),'konu önerileri öğrenci müfredatından');
+  set('[data-v35-row="0"] [data-v35-field="topic"]','Mol Kavramı');
+  set('[data-v35-row="0"] [data-v35-field="count"]','40');
+  bulk.querySelector('[data-v35-row="0"] [data-v35-day="0"]').click();
+  bulk.querySelector('[data-v35-row="0"] [data-v35-day="2"]').click();
+  assert.match(bulk.querySelector('[data-v35-row="0"] [data-v35-preview]').textContent,/TYT Kimya · Mol Kavramı · Soru çözümü · 40 soru · 2 gün/);
+  bulk.querySelector('[data-v35-dup-row]').click();
+  set('[data-v35-row="1"] [data-v35-field="level"]','AYT');
+  set('[data-v35-row="1"] [data-v35-field="subject"]','Fizik');
+  bulk.querySelector('[data-v35-row="1"] [data-v35-day="0"]').click();
+  bulk.querySelector('[data-v35-row="1"] [data-v35-day="2"]').click();
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.match(bulk.querySelector('[data-v10-bulk-error]').textContent,/2\. satırda gün seçilmedi/);
+  assert.equal(h.writes.length,0);
+  bulk.querySelector('[data-v35-row="1"] [data-v35-day="4"]').click();
+  assert.match(bulk.querySelector('[data-v10-bulk-add]').textContent,/3 görev/);
+  bulk.querySelector('[data-v10-bulk-add]').click();await v35Flush();
+  assert.deepEqual(v35Sent(h),[
+    ['2026-10-05','TYT Kimya · Mol Kavramı · Soru çözümü · 40 soru'],
+    ['2026-10-07','TYT Kimya · Mol Kavramı · Soru çözümü · 40 soru'],
+    ['2026-10-09','AYT Fizik · Soru çözümü · 40 soru']
+  ]);
 });
 test('v10 per-day draft stays bound to the selected student and week',t=>{
   const h=harness(t);
@@ -771,12 +840,13 @@ test('upper controls preserve templates, quick entry, classic switch and unchang
   const idsBefore=[...h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]')].map(node=>node.dataset.programTaskId).sort();
   assert.deepEqual(idsBefore,['r-0-0','s-0-0','s-0-1','s-1-0','s-2-3']);
   const buttons=page.querySelectorAll('.coach-v15-action-buttons button');
-  assert.equal(buttons.length,4);
+  assert.equal(buttons.length,5);
   assert.ok(h.$('programAddVideoBtn'),'Video Ekle is beside Çalışma Ekle');
   assert.equal(h.$('programAddVideoBtn').previousElementSibling,h.$('programAddTaskBtn'));
   assert.ok(h.$('programTemplatesBtn'));
   assert.ok(h.$('programAddTaskBtn'));
   assert.ok(h.$('programAddWeekBtn'));
+  assert.equal(h.$('programBulkTasksBtn').previousElementSibling,h.$('programAddWeekBtn'),'Toplu Görev Yaz is beside Haftaya Toplu Ekle');
   h.$('programTemplatesBtn').click();
   assert.equal(h.$('programTemplatePopover').classList.contains('hidden'),false);
   h.$('programTemplateClose').click();
