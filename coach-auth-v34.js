@@ -1,6 +1,6 @@
 import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,GoogleAuthProvider,signInWithPopup,updateProfile}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,runTransaction,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,GoogleAuthProvider,signInWithPopup,updateProfile,EmailAuthProvider,reauthenticateWithCredential,reauthenticateWithPopup,deleteUser}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import{getFirestore,doc,getDoc,runTransaction,serverTimestamp,collection,query,where,getDocs,deleteDoc,updateDoc}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 /* v34 · Koç girişi ve kaydı: e-posta/şifre + Google, şifre sıfırlama.
@@ -30,7 +30,9 @@ function friendly(error){
     "auth/network-request-failed":"İnternet bağlantısı yok gibi görünüyor.",
     "auth/operation-not-allowed":"E-posta ile giriş açık değil.",
     "auth/popup-closed-by-user":"Google giriş penceresi kapatıldı.",
-    "auth/popup-blocked":"Tarayıcı Google giriş penceresini engelledi."
+    "auth/popup-blocked":"Tarayıcı Google giriş penceresini engelledi.",
+    "auth/requires-recent-login":"Güvenlik için tekrar giriş yapman gerekiyor.",
+    "auth/user-mismatch":"Seçilen Google hesabı bu koç hesabıyla aynı değil."
   };
   return map[code]||text(error?.message||"Bir sorun oluştu. Tekrar dene.",200);
 }
@@ -161,4 +163,71 @@ $("settingsPasswordBtn")?.addEventListener("click",async event=>{
   catch(error){button.textContent=friendly(error)}
   finally{setTimeout(()=>{button.disabled=false;button.textContent="Şifreyi değiştir"},4000)}
 });
+/* Koç hesabını silme. Sıra: kimlik doğrulama → koçun gönderdiği görev/mesajlar →
+   öğrenci bağlantılarını kapatma → profil → cihazdaki taslaklar → hesap. Bir adım
+   başarısız olursa hesap silinmez. Öğrencilerin kendi verilerine dokunulmaz. */
+const del={dialog:$("coachDeleteDialog"),password:$("coachDeletePassword"),confirm:$("coachDeleteConfirm"),button:$("coachDeleteConfirmBtn"),progress:$("coachDeleteProgress"),error:$("coachDeleteError")};
+let deleting=false;
+const typedSil=()=>text(del.confirm?.value,10).toLocaleUpperCase("tr-TR").replace(/İ/g,"I")==="SIL";
+function syncDeleteButton(){if(del.button)del.button.disabled=deleting||!typedSil()||(isPasswordUser(auth.currentUser)&&!del.password?.value)}
+function openDelete(){
+  const user=auth.currentUser;if(!user||!del.dialog)return;
+  const password=isPasswordUser(user);
+  $("coachDeletePasswordField").hidden=!password;$("coachDeleteGoogleNote").hidden=password;
+  $("coachDeleteEmail").textContent=user.email?`(${user.email})`:"";
+  del.password.value="";del.confirm.value="";del.progress.textContent="";del.error.textContent="";
+  del.dialog.classList.remove("hidden");del.dialog.setAttribute("aria-hidden","false");syncDeleteButton();
+  (password?del.password:del.confirm).focus();
+}
+function closeDelete(){if(deleting||!del.dialog)return;del.dialog.classList.add("hidden");del.dialog.setAttribute("aria-hidden","true");$("coachDeleteOpenBtn")?.focus()}
+async function deleteCoachData(uid){
+  const step=message=>{del.progress.textContent=message};
+  const byCoach=name=>getDocs(query(collection(db,name),where("coachUid","==",uid)));
+  step("Gönderdiğin görevler ve mesajlar siliniyor…");
+  for(const name of [COLLECTIONS.actions,"coachingMessages"]){const snap=await byCoach(name);for(const item of snap.docs)await deleteDoc(item.ref)}
+  step("Öğrenci bağlantıları kapatılıyor…");
+  const links=await byCoach(COLLECTIONS.links);
+  for(const item of links.docs)if(item.data()?.active===true)await updateDoc(item.ref,{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  step("Koç profili siliniyor…");
+  const profile=doc(db,COLLECTIONS.profiles,uid);
+  if((await getDoc(profile)).exists())await deleteDoc(profile);
+}
+function clearCoachDeviceData(){
+  try{for(const key of Object.keys(localStorage))if(key.startsWith("yks-coach-week-draft-v7:")||key==="yks_coach_ui_preferences_v2"||key===PENDING_KEY)localStorage.removeItem(key)}catch{}
+}
+async function runDelete(){
+  const user=auth.currentUser;if(!user||deleting||!typedSil())return;
+  deleting=true;window.__YKS_COACH_AUTH_BUSY__=true;syncDeleteButton();del.error.textContent="";
+  del.dialog.querySelectorAll("input,button").forEach(node=>{node.disabled=true});
+  try{
+    del.progress.textContent="Kimliğin doğrulanıyor…";
+    if(isPasswordUser(user))await reauthenticateWithCredential(user,EmailAuthProvider.credential(user.email,del.password.value));
+    else{const provider=new GoogleAuthProvider();provider.setCustomParameters({prompt:"select_account"});await reauthenticateWithPopup(user,provider)}
+    await deleteCoachData(user.uid);
+    clearCoachDeviceData();
+    del.progress.textContent="Hesap siliniyor…";
+    await deleteUser(user);
+    deleting=false;del.dialog.classList.add("hidden");
+    setTimeout(()=>{window.__YKS_COACH_AUTH_BUSY__=false;location.replace("./?hesap=silindi")},300);
+  }catch(error){
+    console.error("Koç hesabı silinemedi",error);
+    deleting=false;setTimeout(()=>{window.__YKS_COACH_AUTH_BUSY__=false},800);
+    const code=String(error?.code||"");
+    del.progress.textContent="";
+    del.error.textContent=code.startsWith("auth/")?friendly(error)
+      :code.includes("permission-denied")?"Bazı kayıtlar silinemedi, hesabın silinmedi. Biraz sonra tekrar dene."
+      :"Hesap silinemedi, hesabın olduğu gibi duruyor. Tekrar dene.";
+    del.dialog.querySelectorAll("input,button").forEach(node=>{node.disabled=false});syncDeleteButton();
+  }
+}
+$("coachDeleteOpenBtn")?.addEventListener("click",openDelete);
+$("coachDeleteCancel")?.addEventListener("click",closeDelete);
+del.button?.addEventListener("click",()=>void runDelete());
+del.dialog?.addEventListener("input",syncDeleteButton);
+del.dialog?.addEventListener("click",event=>{if(event.target===del.dialog)closeDelete()});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&del.dialog&&!del.dialog.classList.contains("hidden"))closeDelete()});
+if(new URLSearchParams(location.search).get("hesap")==="silindi"){
+  status("Koç hesabın silindi. Öğrencilerin verileri olduğu gibi duruyor.","ok");
+  try{history.replaceState(null,"",location.pathname+location.hash)}catch{}
+}
 document.documentElement.dataset.coachAuthV34="ready";

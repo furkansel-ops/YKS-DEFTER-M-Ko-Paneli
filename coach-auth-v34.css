@@ -41,3 +41,29 @@
 /* Ayarlar › Hesap: şifre değiştirme düğmesi ikincil görünümde */
 .coach-settings-detail .settings-session-card #settingsPasswordBtn{background:#fff;color:var(--accent);border:1px solid var(--line);box-shadow:none;margin-right:8px}
 .coach-settings-detail .settings-session-card #settingsPasswordBtn[hidden]{display:none}
+
+/* Koç hesabını silme: tehlikeli alan ve onay penceresi */
+.coach-settings-detail .coach-danger-card{border-color:#f4c7cb;background:#fff6f7}
+.coach-settings-detail .coach-danger-card span{color:#c4323b}
+.coach-settings-detail .coach-danger-card #coachDeleteOpenBtn{background:#fff;color:#c4323b;border:1px solid #f0b9be;box-shadow:none}
+.coach-delete-backdrop{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:18px;background:rgba(9,18,33,.52);backdrop-filter:blur(3px)}
+.coach-delete-backdrop.hidden{display:none}
+.coach-delete-modal{width:min(480px,100%);max-height:92vh;overflow-y:auto;border-radius:18px;background:#fff;padding:22px;box-shadow:0 30px 80px rgba(9,18,33,.35)}
+.coach-delete-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#fff3f4;color:#c4323b;font-size:20px;font-weight:900}
+.coach-delete-modal h3{margin:12px 0 0;font-size:20px;letter-spacing:-.02em;color:var(--text)}
+.coach-delete-modal>p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.coach-delete-list{display:grid;gap:7px;margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--text)}
+.coach-delete-list li{display:flex;gap:9px}
+.coach-delete-list li::before{content:"";width:6px;height:6px;margin-top:6px;border-radius:50%;background:#c4323b;flex:none}
+.coach-delete-list li.keep::before{background:#279164}
+.coach-delete-list span{color:var(--muted);margin-left:4px}
+.coach-delete-field{display:grid;gap:6px;margin-top:12px;color:#53647b;font-size:12px;font-weight:650}
+.coach-delete-field[hidden],.coach-delete-note[hidden]{display:none}
+.coach-delete-note{margin:12px 0 0;color:var(--muted);font-size:12.5px}
+.coach-delete-progress{margin:12px 0 0;color:var(--muted);font-size:12.5px}
+.coach-delete-progress:empty,.coach-delete-error:empty{display:none}
+.coach-delete-error{margin:12px 0 0;padding:9px 11px;border-radius:10px;background:#fff3f4;color:#bd4650;font-size:12.5px}
+.coach-delete-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.coach-delete-actions .btn{min-height:44px}
+.coach-delete-confirm{background:#c4323b;border-color:#c4323b;color:#fff}
+.coach-delete-confirm:hover{background:#a92a32}

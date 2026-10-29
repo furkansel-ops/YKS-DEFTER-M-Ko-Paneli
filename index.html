@@ -45,7 +45,7 @@
   <link rel="stylesheet" href="./coach-live-progress-v28.css?v=1.0.0-classic35">
   <link rel="stylesheet" href="./coach-responsive-v32.css?v=1.0.0-classic35">
   <link rel="stylesheet" href="./coach-mobile-compat-v33.css?v=1.0.0-classic35">
-  <link rel="stylesheet" href="./coach-auth-v34.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-auth-v34.css?v=1.1.0">
 </head>
 <body>
   <section id="bootView" class="coach-boot" aria-live="polite">
@@ -1259,6 +1259,11 @@
                 <button id="settingsPasswordBtn" type="button" hidden>Şifreyi değiştir</button>
                 <button id="settingsSignOutBtn" type="button">Çıkış yap</button>
               </div>
+
+              <div class="settings-session-card coach-danger-card">
+                <div><span>TEHLİKELİ ALAN</span><h3>Koç hesabını sil</h3><p>Öğrenci bağlantıların kapanır, gönderdiğin görevler ve mesajlaşmalar silinir. Öğrencilerin kendi programları ve verileri kalır.</p></div>
+                <button id="coachDeleteOpenBtn" type="button">Hesabı sil…</button>
+              </div>
             </section>
           </div>
         </div>
@@ -1375,8 +1380,32 @@
     </section>
   </div>
 
+
+  <div class="coach-delete-backdrop hidden" id="coachDeleteDialog" aria-hidden="true">
+    <section class="coach-delete-modal" role="alertdialog" aria-modal="true" aria-labelledby="coachDeleteTitle" aria-describedby="coachDeleteDesc">
+      <div class="coach-delete-icon" aria-hidden="true">!</div>
+      <h3 id="coachDeleteTitle">Koç hesabın silinsin mi?</h3>
+      <p id="coachDeleteDesc">Bu işlem geri alınamaz.</p>
+      <ul class="coach-delete-list">
+        <li>Koç profilin ve giriş bilgilerin<span id="coachDeleteEmail"></span></li>
+        <li>Öğrencilerinle bağlantıların kapanır; koç olarak artık verilerini göremezsin</li>
+        <li>Gönderdiğin görev/not kayıtları ve öğrencilerle mesajlaşmalar</li>
+        <li>Bu cihazdaki haftalık program taslakların</li>
+        <li class="keep">Öğrencilerin kendi programları, denemeleri ve çalışma verileri olduğu gibi kalır</li>
+      </ul>
+      <label class="coach-delete-field" id="coachDeletePasswordField">Güvenlik için şifren<input class="field" id="coachDeletePassword" type="password" autocomplete="current-password" maxlength="128"></label>
+      <p class="coach-delete-note" id="coachDeleteGoogleNote" hidden>Devam edince güvenlik için Google hesabını tekrar seçmen istenir.</p>
+      <label class="coach-delete-field">Onaylamak için SİL yaz<input class="field" id="coachDeleteConfirm" type="text" autocomplete="off" autocapitalize="characters" maxlength="10"></label>
+      <p class="coach-delete-progress" id="coachDeleteProgress" role="status"></p>
+      <p class="coach-delete-error" id="coachDeleteError" role="alert"></p>
+      <div class="coach-delete-actions">
+        <button class="btn" id="coachDeleteCancel" type="button">Vazgeç</button>
+        <button class="btn coach-delete-confirm" id="coachDeleteConfirmBtn" type="button" disabled>Hesabı kalıcı olarak sil</button>
+      </div>
+    </section>
+  </div>
   <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34"></script>
-  <script type="module" src="./coach-auth-v34.js?v=1.0.0"></script>
+  <script type="module" src="./coach-auth-v34.js?v=1.1.0"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
 </html>
