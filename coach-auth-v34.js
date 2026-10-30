@@ -1,6 +1,6 @@
 import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,GoogleAuthProvider,signInWithPopup,updateProfile,EmailAuthProvider,reauthenticateWithCredential,reauthenticateWithPopup,deleteUser}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,runTransaction,serverTimestamp,collection,query,where,getDocs,deleteDoc,updateDoc}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,runTransaction,serverTimestamp,collection,query,where,getDocs,deleteDoc,updateDoc,writeBatch}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 /* v34 · Koç girişi ve kaydı: e-posta/şifre + Google, şifre sıfırlama.
@@ -188,6 +188,13 @@ async function deleteCoachData(uid){
   step("Öğrenci bağlantıları kapatılıyor…");
   const links=await byCoach(COLLECTIONS.links);
   for(const item of links.docs)if(item.data()?.active===true)await updateDoc(item.ref,{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  step("Randevuların siliniyor…");
+  // v41: randevu ve saat kilidi birlikte silinir; kural yayında değilse izin hatası silmeyi durdurmaz.
+  try{
+    const appts=await byCoach("coachAppointments");
+    for(const item of appts.docs){const batch=writeBatch(db);batch.delete(item.ref);batch.delete(doc(db,"coachSlots",item.id));await batch.commit()}
+    const hours=doc(db,"coachAvailability",uid);if((await getDoc(hours)).exists())await deleteDoc(hours);
+  }catch(error){if(!String(error?.code||"").includes("permission-denied"))throw error}
   step("Koç notların siliniyor…");
   // coachNotes kuralı henüz yayında değilse belge de olamaz; izin hatası silmeyi durdurmaz.
   try{const notes=doc(db,"coachNotes",uid);if((await getDoc(notes)).exists())await deleteDoc(notes)}

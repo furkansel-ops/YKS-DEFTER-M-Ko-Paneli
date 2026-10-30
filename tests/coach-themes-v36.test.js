@@ -91,7 +91,7 @@ test("v36 renk eşlemesi: açık temalarda gri yazı okunur, Gece'de yarı sayda
 test("v36 yan menü öğrenci uygulaması gibi gruplu: Takip, Analiz, İletişim",t=>{
   const {doc}=fixture(t),nav=doc.querySelector("#coachNav");
   const order=[...nav.children].map(node=>node.classList.contains("coach-nav-group")?"#"+node.textContent:node.dataset.coachPage);
-  assert.deepEqual(order,["#Takip","home","students","programs","reports","#Analiz","paragraphProblem","exams","topics","errors","#İletişim","messages","settings"]);
+  assert.deepEqual(order,["#Takip","home","students","programs","reports","#Analiz","paragraphProblem","exams","topics","errors","#İletişim","messages","appointments","settings"]);
   const css=read("coach-themes-v36.css");
   assert.match(css,/@media\(min-width:760px\) and \(max-width:1179px\)\{[\s\S]*grid-template-columns:84px minmax\(0,1fr\)/);
   assert.match(css,/\.coach-mobile-menu-reset\.mobile-only,\.coach-shell-reset \.overlay\{display:none!important\}/);

@@ -1,6 +1,6 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot,writeBatch}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG,"yks-coach-panel");
@@ -57,6 +57,7 @@ function showApp(profile,user){
   finishBoot();
   void loadCoachReports(user.uid);
   void loadCoachMessages(user.uid);
+  void loadCoachAppointments(user.uid);
 }
 async function loadCoachProfile(user){
   const snap=await getDoc(doc(db,COLLECTIONS.profiles,user.uid));
@@ -132,14 +133,15 @@ window.addEventListener("pageshow",event=>{
   syncCoachVisualViewport();
 });
 
-const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",settings:"settingsPage"};
+const coachPages={home:"homePage",students:"studentsPage",programs:"programsPage",reports:"reportsPage",paragraphProblem:"paragraphProblemPage",exams:"examsPage",topics:"topicsPage",errors:"errorsPage",messages:"messagesPage",appointments:"appointmentsPage",settings:"settingsPage"};
 function showCoachPage(page){
   const targetId=coachPages[page];
   if(!targetId)return;
   closeProgramTaskModal();closeCoachVideoPicker();closeCoachMoveMenu();
   document.querySelectorAll("[data-coach-page]").forEach(item=>item.classList.toggle("on",item.dataset.coachPage===page));
-  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
+  document.querySelectorAll("#homePage,#studentsPage,#programsPage,#reportsPage,#paragraphProblemPage,#examsPage,#topicsPage,#errorsPage,#messagesPage,#appointmentsPage,#settingsPage").forEach(section=>section.classList.add("hidden"));
   $(targetId)?.classList.remove("hidden");
+  if(page==="appointments"){try{renderCoachAppointments()}catch(error){console.error("Randevular",error)}}
   if(page==="home"){try{refreshDashboardGreeting();renderCoachDashboard();renderDashboardDayReviews()}catch(error){console.error("Ana panel yenileme",error)}}
   if(page==="settings"){try{openCoachSettingsOverview()}catch(error){console.error("Ayarlar görünümü",error)}}
   closeSidebar(true);
@@ -151,7 +153,7 @@ document.querySelectorAll("[data-coach-page]").forEach(button=>{
 onAuthStateChanged(auth,async user=>{
   // v34 e-posta/kayıt akışı sürerken bekle; akış bitince sayfa yenilenir.
   if(window.__YKS_COACH_AUTH_BUSY__)return;
-  if(!user){stopCoachShareRealtime();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
+  if(!user){stopCoachShareRealtime();stopCoachAppointments();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
   try{
     const profile=await loadCoachProfile(user);
     if(!profile){
@@ -184,6 +186,8 @@ document.querySelectorAll("[data-student-filter]").forEach(button=>button.addEve
 
 
 let coachReportRows=[];
+// v41 · Randevular durumu (aşağıdaki "Randevular" bölümü kullanır).
+let coachAppointments=[],coachAvailability=null,coachApptStop=null,coachApptUid="";
 let coachShareStops=[],coachRealtimeRenderTimer=null;
 function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null}
 function renderCoachRealtimeViews(){
@@ -387,6 +391,14 @@ function coachTodoItems(){
     const pending=coachPendingReplies(row.studentUid);
     if(pending.count)items.push({kind:"msg",row,title:studentName(row)+" · "+pending.count+" mesaj cevap bekliyor",sub:"“"+text(pending.last?.text,70)+"” · "+messageTimestamp(pending.last?.createdAt)});
   }
+  // v41 · Onay bekleyen randevu istekleri ve bugünkü görüşmeler.
+  const today=todayIsoLocal();
+  for(const appt of coachAppointments){
+    if(apptIsPast(appt.date,appt.time))continue;
+    const row={studentUid:appt.studentUid},name=apptStudentName(appt.studentUid);
+    if(appt.status==="requested")items.push({kind:"appt",row,appt,title:name+" · "+apptRelativeDay(appt.date)+" "+appt.time+" randevu istiyor",sub:appt.topic?"Konu: "+appt.topic:"Konu yazılmadı"});
+    else if(appt.date===today)items.push({kind:"apptToday",row,appt,title:name+" · bugün "+appt.time+" görüşme",sub:appt.link?"Görüşme linki hazır":"Görüşme linki eklenmedi"});
+  }
   for(const row of rows){
     const name=studentName(row),program=dashboardProgramStats(row),overdue=Math.max(0,Math.round(reportNum(row?.share?.progress?.overdueTopics)));
     if(dashboardNeedsReview(row)){
@@ -410,8 +422,10 @@ function coachTodoItems(){
   return items;
 }
 function coachTodoButtons(item){
-  const uid=escHtml(item.row.studentUid),b=(action,label,primary)=>'<button type="button" class="'+(primary?"primary":"")+'" data-todo-action="'+action+'" data-todo-student="'+uid+'"'+(item.week?' data-todo-week="'+escHtml(item.week)+'"':"")+'>'+label+'</button>';
+  const uid=escHtml(item.row.studentUid),b=(action,label,primary)=>'<button type="button" class="'+(primary?"primary":"")+'" data-todo-action="'+action+'" data-todo-student="'+uid+'"'+(item.week?' data-todo-week="'+escHtml(item.week)+'"':"")+(item.appt?' data-todo-appt="'+escHtml(item.appt.id)+'"':"")+'>'+label+'</button>';
   if(item.kind==="msg")return b("reply","Cevapla",true);
+  if(item.kind==="appt")return b("appt-approve","Onayla",true)+b("appt-open","Randevulara git");
+  if(item.kind==="apptToday")return item.appt.link?b("appt-join","Görüşmeye katıl",true)+b("appt-open","Randevu"):b("appt-link","Link ekle",true);
   if(item.kind==="bad")return b("write","Mesaj yaz",true)+b("report","Raporu aç");
   if(item.kind==="warn")return b("remind","Hatırlat",true)+b("program","Programı aç");
   return b("plan","Haftayı hazırla",true);
@@ -419,7 +433,7 @@ function coachTodoButtons(item){
 let coachTodoExpanded=false;
 function renderCoachTodo(){
   const root=$("dashboardTodo");if(!root)return;
-  const items=coachTodoItems(),icons={msg:"✉",bad:"!",warn:"◔",plan:"▦"};
+  const items=coachTodoItems(),icons={msg:"✉",appt:"◷",apptToday:"▶",bad:"!",warn:"◔",plan:"▦"};
   if($("dashboardTodoCount"))$("dashboardTodoCount").textContent=items.length?items.length+" iş":"";
   if(!coachReportRows.length){root.innerHTML='<p class="coach-v38-todo-empty">Öğrenci eklediğinde bugün yapman gerekenler burada sıralanır.</p>';return}
   if(!items.length){root.innerHTML='<p class="coach-v38-todo-empty">Bugün için bekleyen iş yok.</p>';return}
@@ -430,8 +444,16 @@ function renderCoachTodo(){
   root.querySelector("[data-todo-more]")?.addEventListener("click",()=>{coachTodoExpanded=!coachTodoExpanded;renderCoachTodo()});
   const remind=new Map(items.filter(item=>item.kind==="warn").map(item=>[item.row.studentUid,item]));
   root.querySelectorAll("[data-todo-action]").forEach(button=>button.addEventListener("click",()=>{
+    const action=button.dataset.todoAction;
+    if(action.startsWith("appt-")){
+      const appt=coachAppointments.find(item=>item.id===button.dataset.todoAppt);if(!appt)return;
+      if(action==="appt-approve")void approveCoachAppointment(appt.id);
+      else if(action==="appt-join")window.open(appt.link,"_blank","noopener,noreferrer");
+      else openCoachAppointmentDay(appt.date,action==="appt-link"?{mode:"link",id:appt.id}:null);
+      return;
+    }
     const uid=button.dataset.todoStudent,row=coachReportRows.find(item=>item.studentUid===uid);if(!row)return;
-    const action=button.dataset.todoAction,first=coachFirstName(studentName(row));
+    const first=coachFirstName(studentName(row));
     if(action==="reply"||action==="write")openCoachMessageThread(uid,"");
     else if(action==="remind"){
       const item=remind.get(uid);
@@ -456,6 +478,214 @@ function openCoachProgramWeek(studentUid,weekStart,bulk){
   hydrateProgramStudents();renderProgramWorkspace();
   if(bulk)coachV35Open();
 }
+
+// v41 · Randevular. Koçun uygun saatleri coachAvailability/{koçUid}; her randevu
+// coachAppointments/{koçUid_YYYYMMDD_SSDD} ve aynı kimlikte bir saat kilidi coachSlots.
+// Kilit ve randevu birlikte yazılıp birlikte silinir; kural aynı saate ikinci kaydı reddeder.
+const APPT_DAYS=[["1","Pazartesi"],["2","Salı"],["3","Çarşamba"],["4","Perşembe"],["5","Cuma"],["6","Cumartesi"],["0","Pazar"]];
+const APPT_DEFAULT_DAYS={"1":{on:true,start:"18:00",end:"21:00"},"2":{on:true,start:"18:00",end:"21:00"},"3":{on:true,start:"18:00",end:"21:00"},"4":{on:true,start:"18:00",end:"21:00"},"5":{on:true,start:"18:00",end:"21:00"},"6":{on:true,start:"11:00",end:"14:00"},"0":{on:false,start:"11:00",end:"14:00"}};
+const apptView={month:"",day:"",form:null};
+function apptIso(date){const pad=n=>String(n).padStart(2,"0");return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())}
+function apptId(coachUid,date,time){return coachUid+"_"+date.replace(/-/g,"")+"_"+time.replace(":","")}
+function apptMinutes(time){const [h,m]=String(time||"0:0").split(":").map(Number);return h*60+m}
+function apptClock(minutes){const pad=n=>String(n).padStart(2,"0");return pad(Math.floor(minutes/60))+":"+pad(minutes%60)}
+function apptDateLabel(date,opts={weekday:"long",day:"numeric",month:"long"}){try{return new Intl.DateTimeFormat("tr-TR",opts).format(new Date(date+"T12:00:00"))}catch{return date}}
+function apptRelativeDay(date){const today=apptIso(new Date()),tomorrow=apptIso(new Date(Date.now()+864e5));return date===today?"bugün":date===tomorrow?"yarın":apptDateLabel(date,{day:"numeric",month:"long",weekday:"long"})}
+function apptIsPast(date,time){return new Date(date+"T"+time+":00").getTime()<Date.now()}
+function apptStudentName(uid){const row=coachReportRows.find(item=>item.studentUid===uid);return row?studentName(row):"Öğrenci"}
+function apptSlotsFor(availability,date){
+  const day=availability?.days?.[String(new Date(date+"T12:00:00").getDay())],duration=Number(availability?.duration)||30,out=[];
+  if(!day?.on||!day.start||!day.end)return out;
+  for(let minute=apptMinutes(day.start);minute+duration<=apptMinutes(day.end);minute+=duration)out.push(apptClock(minute));
+  return out;
+}
+function apptValidLink(value){const link=text(value,300);return!link||/^https:\/\/\S+$/.test(link)?link:null}
+function apptError(error){
+  const code=String(error?.code||"");
+  return code.includes("permission-denied")?"Bu saat az önce doldu ya da bu işlem için izin yok. Takvim yenilendi.":"İşlem yapılamadı: "+text(error?.message||"bilinmeyen hata",120);
+}
+function renderCoachApptBadge(){
+  const pending=coachAppointments.filter(item=>item.status==="requested"&&!apptIsPast(item.date,item.time)).length,node=$("coachNavApptBadge");
+  if(node){node.textContent=pending?String(pending):"";node.hidden=!pending;node.setAttribute("aria-label",pending?pending+" onay bekleyen randevu":"")}
+}
+function applyCoachAppointmentSnapshot(snap){
+  coachAppointments=snap.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  renderCoachApptBadge();renderCoachTodo();
+  if(!$("appointmentsPage")?.classList.contains("hidden"))renderCoachAppointments();
+}
+async function loadCoachAppointments(coachUid){
+  if(!coachUid||(coachApptStop&&coachApptUid===coachUid))return;
+  try{coachApptStop?.()}catch{}
+  coachApptUid=coachUid;
+  try{const snap=await getDoc(doc(db,"coachAvailability",coachUid));coachAvailability=snap.exists()?snap.data():null}catch(error){console.error("Uygun saatler",error);coachAvailability=null}
+  try{
+    coachApptStop=onSnapshot(query(collection(db,"coachAppointments"),where("coachUid","==",coachUid)),applyCoachAppointmentSnapshot,error=>{console.error("Randevular",error);coachApptStop=null;coachApptUid=""});
+  }catch(error){console.error("Randevu dinleyicisi",error)}
+}
+function stopCoachAppointments(){try{coachApptStop?.()}catch{}coachApptStop=null;coachApptUid="";coachAppointments=[];coachAvailability=null}
+function openCoachAppointmentDay(date,form=null){
+  apptView.day=date;apptView.month=date.slice(0,7);apptView.form=form;
+  showCoachPage("appointments");
+}
+function renderCoachAppointments(){
+  if(!$("appointmentsPage"))return;
+  const today=apptIso(new Date());
+  if(!apptView.day)apptView.day=today;
+  if(!apptView.month)apptView.month=apptView.day.slice(0,7);
+  renderCoachApptMonth(today);renderCoachApptDay(today);renderCoachApptPending();renderCoachApptHours();
+}
+function renderCoachApptMonth(today){
+  const [year,month]=apptView.month.split("-").map(Number),first=new Date(year,month-1,1),lead=(first.getDay()+6)%7,days=new Date(year,month,0).getDate();
+  if($("apptMonthTitle"))$("apptMonthTitle").textContent=new Intl.DateTimeFormat("tr-TR",{month:"long",year:"numeric"}).format(first);
+  const busy=new Set(coachAppointments.map(item=>item.date));
+  let html=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"].map(name=>'<b aria-hidden="true">'+name+'</b>').join("");
+  for(let i=0;i<lead;i++)html+='<span></span>';
+  for(let day=1;day<=days;day++){
+    const date=apptIso(new Date(year,month-1,day)),classes=["coach-v41-date"];
+    if(date===apptView.day)classes.push("on");if(date===today)classes.push("today");if(busy.has(date))classes.push("busy");if(date<today)classes.push("past");
+    html+='<button type="button" class="'+classes.join(" ")+'" data-appt-day="'+date+'" aria-label="'+escHtml(apptDateLabel(date))+(busy.has(date)?", randevu var":"")+'"'+(date===apptView.day?' aria-pressed="true"':' aria-pressed="false"')+'>'+day+'</button>';
+  }
+  const root=$("apptMonth");if(!root)return;
+  root.innerHTML=html;
+  root.querySelectorAll("[data-appt-day]").forEach(button=>button.addEventListener("click",()=>{apptView.day=button.dataset.apptDay;apptView.form=null;renderCoachAppointments()}));
+}
+function apptStudentOptions(selected=""){
+  return messageRows().map(row=>'<option value="'+escHtml(row.studentUid)+'"'+(row.studentUid===selected?" selected":"")+'>'+escHtml(studentName(row))+'</option>').join("");
+}
+function apptItemHtml(appt,today){
+  const name=apptStudentName(appt.studentUid),past=apptIsPast(appt.date,appt.time),form=apptView.form?.id===appt.id?apptView.form:null;
+  const pill=appt.status==="requested"?'<span class="coach-v41-pill wait">Onayın bekleniyor</span>':'<span class="coach-v41-pill ok">Kesin</span>';
+  let html='<div class="coach-v41-item" data-appt-id="'+escHtml(appt.id)+'"><time>'+escHtml(appt.time)+'</time><div class="coach-v41-item-copy"><b>'+escHtml(name)+(appt.createdBy==="student"?' <small>istedi</small>':'')+'</b><small>'+escHtml(appt.topic||"Konu yazılmadı")+(appt.note?' · '+escHtml(appt.note):'')+'</small>'
+    +(appt.link?'<a class="coach-v41-link" href="'+escHtml(appt.link)+'" target="_blank" rel="noopener noreferrer">🔗 '+escHtml(appt.link.replace(/^https:\/\//,""))+'</a>':'')+'</div>'+pill+'</div>';
+  if(past)return html;
+  html+='<div class="coach-v41-actions">'
+    +(appt.status==="requested"?'<button type="button" class="coach-v41-primary" data-appt-approve="'+escHtml(appt.id)+'">Onayla</button>':'')
+    +'<button type="button" data-appt-form="link" data-appt-target="'+escHtml(appt.id)+'">'+(appt.link?"Linki değiştir":"Link ekle")+'</button>'
+    +'<button type="button" data-appt-form="move" data-appt-target="'+escHtml(appt.id)+'">'+(appt.status==="requested"?"Başka saat öner":"Saati değiştir")+'</button>'
+    +'<button type="button" class="coach-v41-danger" data-appt-cancel="'+escHtml(appt.id)+'">'+(appt.status==="requested"?"Reddet":"İptal et")+'</button></div>';
+  if(form?.mode==="link")html+='<form class="coach-v41-form" data-appt-link-form="'+escHtml(appt.id)+'"><label>Görüşme linki<input type="url" inputmode="url" maxlength="300" placeholder="https://meet.google.com/…" value="'+escHtml(appt.link||"")+'"></label><button type="submit" class="coach-v41-primary">Kaydet</button><small>Öğrenci linki randevu kesinleşince görür.</small></form>';
+  if(form?.mode==="move")html+='<form class="coach-v41-form" data-appt-move-form="'+escHtml(appt.id)+'"><label>Yeni gün<input type="date" min="'+today+'" value="'+escHtml(form.date||appt.date)+'" data-appt-move-date></label><label>Yeni saat<input type="time" step="300" value="'+escHtml(form.time||appt.time)+'" data-appt-move-time></label><button type="submit" class="coach-v41-primary">Kesinleştir</button><small>Yeni saat kesin olur, öğrenci görür.</small></form>';
+  return html;
+}
+function renderCoachApptDay(today){
+  const date=apptView.day,list=$("apptDayList");if(!list)return;
+  if($("apptDayTitle"))$("apptDayTitle").textContent=apptDateLabel(date);
+  const duration=Number(coachAvailability?.duration)||30;
+  const appts=coachAppointments.filter(item=>item.date===date),slots=apptSlotsFor(coachAvailability,date);
+  const times=[...new Set([...slots,...appts.map(item=>item.time)])].sort();
+  if($("apptDaySub"))$("apptDaySub").textContent=slots.length?duration+" dakikalık görüşmeler · "+slots.length+" saat açık":"Bu gün uygun saat açık değil";
+  const pastDay=date<today;
+  let html=times.map(time=>{
+    const appt=appts.find(item=>item.time===time);
+    if(appt)return apptItemHtml(appt,today);
+    if(pastDay||apptIsPast(date,time))return'<div class="coach-v41-item free past"><time>'+time+'</time><span class="coach-v41-muted">Geçti</span></div>';
+    const open=apptView.form?.mode==="new"&&apptView.form.time===time;
+    return'<div class="coach-v41-item free"><time>'+time+'</time><span class="coach-v41-muted">Boş</span><button type="button" data-appt-new="'+time+'">+ Randevu koy</button></div>'+(open?apptNewForm(time):"");
+  }).join("");
+  if(!pastDay){
+    const custom=apptView.form?.mode==="new"&&!times.includes(apptView.form.time);
+    html+='<div class="coach-v41-item free"><span class="coach-v41-muted">Listede olmayan bir saat mi?</span><button type="button" data-appt-new="">+ Başka saate randevu koy</button></div>'+(custom?apptNewForm(""):"");
+  }
+  list.innerHTML=html||'<p class="coach-v41-muted">Bu gün için randevu yok.</p>';
+  bindCoachApptList(list,today);
+}
+function apptNewForm(time){
+  const students=apptStudentOptions(apptView.form?.studentUid||"");
+  if(!students)return'<p class="coach-v41-muted">Randevu koymak için önce bir öğrenci eklemelisin.</p>';
+  return'<form class="coach-v41-form" data-appt-new-form><label>Öğrenci<select data-appt-student>'+students+'</select></label>'
+    +(time?'<input type="hidden" data-appt-time value="'+time+'">':'<label>Saat<input type="time" step="300" required data-appt-time></label>')
+    +'<label>Konu<input type="text" maxlength="120" placeholder="Örn. Deneme analizi" data-appt-topic></label><label>Görüşme linki (isteğe bağlı)<input type="url" inputmode="url" maxlength="300" placeholder="https://meet.google.com/…" data-appt-link></label><button type="submit" class="coach-v41-primary">Randevuyu kesinleştir</button></form>';
+}
+function bindCoachApptList(root,today){
+  root.querySelectorAll("[data-appt-new]").forEach(button=>button.addEventListener("click",()=>{apptView.form={mode:"new",time:button.dataset.apptNew};renderCoachAppointments();root.querySelector("[data-appt-new-form] select,[data-appt-new-form] input")?.focus()}));
+  root.querySelectorAll("[data-appt-form]").forEach(button=>button.addEventListener("click",()=>{apptView.form={mode:button.dataset.apptForm,id:button.dataset.apptTarget};renderCoachAppointments();root.querySelector(".coach-v41-form input")?.focus()}));
+  root.querySelectorAll("[data-appt-approve]").forEach(button=>button.addEventListener("click",()=>void approveCoachAppointment(button.dataset.apptApprove)));
+  root.querySelectorAll("[data-appt-cancel]").forEach(button=>button.addEventListener("click",()=>void cancelCoachAppointment(button.dataset.apptCancel)));
+  root.querySelector("[data-appt-new-form]")?.addEventListener("submit",event=>{
+    event.preventDefault();const form=event.currentTarget;
+    const time=form.querySelector("[data-appt-time]")?.value||"",link=apptValidLink(form.querySelector("[data-appt-link]")?.value);
+    if(!/^\d{2}:\d{2}$/.test(time)){alert("Saat seç.");return}
+    if(link===null){alert("Link https:// ile başlamalı.");return}
+    void createCoachAppointment(form.querySelector("[data-appt-student]").value,apptView.day,time,text(form.querySelector("[data-appt-topic]")?.value,120),link);
+  });
+  root.querySelector("[data-appt-link-form]")?.addEventListener("submit",event=>{
+    event.preventDefault();const link=apptValidLink(event.currentTarget.querySelector("input")?.value);
+    if(link===null){alert("Link https:// ile başlamalı.");return}
+    void updateCoachAppointment(event.currentTarget.dataset.apptLinkForm,{link});
+  });
+  root.querySelector("[data-appt-move-form]")?.addEventListener("submit",event=>{
+    event.preventDefault();const form=event.currentTarget,date=form.querySelector("[data-appt-move-date]").value,time=form.querySelector("[data-appt-move-time]").value;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^\d{2}:\d{2}$/.test(time)||apptIsPast(date,time)){alert("İleri bir gün ve saat seç.");return}
+    void moveCoachAppointment(form.dataset.apptMoveForm,date,time);
+  });
+}
+function renderCoachApptPending(){
+  const root=$("apptPending");if(!root)return;
+  const pending=coachAppointments.filter(item=>item.status==="requested"&&!apptIsPast(item.date,item.time));
+  root.innerHTML=pending.length?pending.map(appt=>'<div class="coach-v41-item"><time>'+escHtml(appt.time)+'</time><div class="coach-v41-item-copy"><b>'+escHtml(apptStudentName(appt.studentUid))+'</b><small>'+escHtml(apptDateLabel(appt.date))+' · '+escHtml(appt.topic||"Konu yazılmadı")+'</small></div><div class="coach-v41-actions"><button type="button" class="coach-v41-primary" data-appt-approve="'+escHtml(appt.id)+'">Onayla</button><button type="button" data-appt-goto="'+escHtml(appt.date)+'">Güne git</button></div></div>').join(""):'<p class="coach-v41-muted">Onay bekleyen istek yok.</p>';
+  root.querySelectorAll("[data-appt-approve]").forEach(button=>button.addEventListener("click",()=>void approveCoachAppointment(button.dataset.apptApprove)));
+  root.querySelectorAll("[data-appt-goto]").forEach(button=>button.addEventListener("click",()=>openCoachAppointmentDay(button.dataset.apptGoto)));
+}
+function renderCoachApptHours(){
+  const root=$("apptHours");if(!root)return;
+  const days=coachAvailability?.days||APPT_DEFAULT_DAYS;
+  if($("apptHoursState"))$("apptHoursState").textContent=coachAvailability?"":"Henüz kaydedilmedi; öğrenciler boş saat göremez.";
+  if($("apptDuration"))$("apptDuration").value=String(coachAvailability?.duration||30);
+  if(root.dataset.ready==="1"&&root.dataset.dirty==="1")return;
+  root.innerHTML=APPT_DAYS.map(([key,name])=>{const day=days[key]||{on:false,start:"18:00",end:"21:00"};return'<label class="coach-v41-hour" data-appt-hour="'+key+'"><input type="checkbox"'+(day.on?" checked":"")+' data-appt-on><b>'+name+'</b><input type="time" step="300" value="'+escHtml(day.start)+'" aria-label="'+name+' başlangıç" data-appt-start><span>–</span><input type="time" step="300" value="'+escHtml(day.end)+'" aria-label="'+name+' bitiş" data-appt-end></label>'}).join("");
+  root.dataset.ready="1";root.dataset.dirty="0";
+  root.oninput=()=>{root.dataset.dirty="1"};
+}
+async function saveCoachAvailability(){
+  const user=auth.currentUser,root=$("apptHours");if(!user||!root)return;
+  const days={};
+  for(const row of root.querySelectorAll("[data-appt-hour]")){
+    const on=row.querySelector("[data-appt-on]").checked,start=row.querySelector("[data-appt-start]").value,end=row.querySelector("[data-appt-end]").value;
+    if(on&&(!start||!end||apptMinutes(end)<=apptMinutes(start))){alert(row.querySelector("b").textContent+": bitiş saati başlangıçtan sonra olmalı.");return}
+    days[row.dataset.apptHour]={on,start:start||"18:00",end:end||"21:00"};
+  }
+  const duration=Number($("apptDuration")?.value)||30,button=$("apptHoursSave");
+  if(button)button.disabled=true;
+  try{
+    await setDoc(doc(db,"coachAvailability",user.uid),{days,duration,updatedAt:serverTimestamp()});
+    coachAvailability={days,duration};root.dataset.dirty="0";
+    if($("apptHoursState"))$("apptHoursState").textContent="Kaydedildi ✓";
+    renderCoachAppointments();
+  }catch(error){console.error("Uygun saatler kaydedilemedi",error);alert(apptError(error))}
+  finally{if(button)button.disabled=false}
+}
+async function createCoachAppointment(studentUid,date,time,topic,link){
+  const user=auth.currentUser;if(!user||!studentUid)return;
+  const id=apptId(user.uid,date,time),batch=writeBatch(db),now=serverTimestamp();
+  batch.set(doc(db,"coachSlots",id),{coachUid:user.uid,date,time});
+  batch.set(doc(db,"coachAppointments",id),{coachUid:user.uid,studentUid,date,time,duration:Number(coachAvailability?.duration)||30,status:"confirmed",createdBy:"coach",topic,link,note:"",createdAt:now,updatedAt:now});
+  try{await batch.commit();apptView.form=null;renderCoachAppointments()}catch(error){console.error("Randevu oluşturulamadı",error);alert(apptError(error))}
+}
+async function updateCoachAppointment(id,patch){
+  try{await updateDoc(doc(db,"coachAppointments",id),{...patch,updatedAt:serverTimestamp()});apptView.form=null;renderCoachAppointments()}catch(error){console.error("Randevu güncellenemedi",error);alert(apptError(error))}
+}
+function approveCoachAppointment(id){return updateCoachAppointment(id,{status:"confirmed"})}
+async function cancelCoachAppointment(id){
+  const appt=coachAppointments.find(item=>item.id===id);if(!appt)return;
+  const verb=appt.status==="requested"?"reddetmek":"iptal etmek";
+  if(!confirm(apptStudentName(appt.studentUid)+" ile "+apptDateLabel(appt.date)+" "+appt.time+" randevusunu "+verb+" istiyor musun? Saat yeniden boşalır."))return;
+  const batch=writeBatch(db);batch.delete(doc(db,"coachAppointments",id));batch.delete(doc(db,"coachSlots",id));
+  try{await batch.commit();apptView.form=null}catch(error){console.error("Randevu iptal edilemedi",error);alert(apptError(error))}
+}
+async function moveCoachAppointment(id,date,time){
+  const user=auth.currentUser,appt=coachAppointments.find(item=>item.id===id);if(!user||!appt)return;
+  const next=apptId(user.uid,date,time);if(next===id){apptView.form=null;renderCoachAppointments();return}
+  const batch=writeBatch(db),now=serverTimestamp();
+  batch.delete(doc(db,"coachAppointments",id));batch.delete(doc(db,"coachSlots",id));
+  batch.set(doc(db,"coachSlots",next),{coachUid:user.uid,date,time});
+  batch.set(doc(db,"coachAppointments",next),{coachUid:user.uid,studentUid:appt.studentUid,date,time,duration:appt.duration||30,status:"confirmed",createdBy:"coach",topic:appt.topic||"",link:appt.link||"",note:text("Koç saati değiştirdi (önce "+apptDateLabel(appt.date,{day:"numeric",month:"long"})+" "+appt.time+")",200),createdAt:now,updatedAt:now});
+  try{await batch.commit();apptView.day=date;apptView.month=date.slice(0,7);apptView.form=null;renderCoachAppointments()}catch(error){console.error("Randevu taşınamadı",error);alert(apptError(error))}
+}
+document.querySelectorAll("[data-appt-month]").forEach(button=>button.addEventListener("click",()=>{
+  const [year,month]=(apptView.month||apptIso(new Date()).slice(0,7)).split("-").map(Number),next=new Date(year,month-1+Number(button.dataset.apptMonth),1);
+  apptView.month=apptIso(next).slice(0,7);renderCoachAppointments();
+}));
+$("apptHoursSave")?.addEventListener("click",()=>void saveCoachAvailability());
 function renderDashboardDayReviews(){
   const root=$("dashboardDayReviews"),summary=$("dashboardDayReviewSummary");if(!root)return;
   const today=todayIsoLocal(),items=coachReportRows.map(row=>({row,review:studentDayReview(row,today)})).filter(item=>item.review).sort((a,b)=>reportNum(b.review?.at)-reportNum(a.review?.at));

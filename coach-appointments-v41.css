@@ -1,0 +1,66 @@
+/* Koç Paneli · v41 Randevular — takvim, gün listesi, onay bekleyenler, uygun saatler.
+   Renkler yalnız tema değişkenlerinden (coach-themes-v36.css) gelir. */
+.coach-v41-appointments{display:block}
+.coach-v41-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-bottom:16px}
+@media(min-width:1180px){.coach-v41-grid{grid-template-columns:minmax(300px,.8fr) minmax(0,1.4fr);align-items:start}}
+.coach-v41-card{padding:18px;border:1px solid var(--k-line);border-radius:16px;background:var(--k-surface);color:var(--k-ink);margin-bottom:16px}
+.coach-v41-grid .coach-v41-card{margin-bottom:0}
+.coach-v41-card h2{margin:0 0 4px;font-size:16px;color:var(--k-ink)}
+.coach-v41-muted{margin:0;color:var(--k-muted);font-size:12.5px}
+.coach-v41-month-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.coach-v41-month-head b{font-size:15px;text-transform:capitalize}
+.coach-v41-month-head button{width:40px;height:40px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-soft);color:var(--k-ink);font:inherit;font-size:18px;cursor:pointer}
+.coach-v41-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:10px}
+.coach-v41-month>b{text-align:center;font-size:11.5px;color:var(--k-muted);padding:4px 0}
+.coach-v41-date{position:relative;min-height:40px;border:0;border-radius:10px;background:var(--k-soft);color:var(--k-ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.coach-v41-date.past{color:var(--k-muted);background:transparent}
+.coach-v41-date.today{box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--k-accent) 45%,transparent)}
+.coach-v41-date.busy::after{content:"";position:absolute;left:50%;bottom:5px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--k-accent)}
+.coach-v41-date.on{background:var(--k-accent);color:var(--k-on-accent)}
+.coach-v41-date.on.busy::after{background:var(--k-on-accent)}
+.coach-v41-date:focus-visible,.coach-v41-month-head button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+.coach-v41-day-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.coach-v41-day-head h2{text-transform:capitalize}
+.coach-v41-list{display:grid;gap:8px}
+.coach-v41-item{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--k-line);border-radius:12px;background:var(--k-soft)}
+.coach-v41-item.free{background:transparent;border-style:dashed}
+.coach-v41-item.free:not(:has(time)){grid-template-columns:minmax(0,1fr) auto}
+.coach-v41-item.past{opacity:.6}
+.coach-v41-item time{font-weight:800;font-size:14px}
+.coach-v41-item-copy{min-width:0}
+.coach-v41-item-copy b{display:block;font-size:13.5px}
+.coach-v41-item-copy b small{display:inline;font-size:12px;font-weight:700;color:var(--k-muted)}
+.coach-v41-item-copy small{display:block;font-size:12px;color:var(--k-muted);overflow-wrap:anywhere}
+.coach-v41-link{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;color:var(--k-accent);overflow-wrap:anywhere}
+.coach-v41-pill{font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.coach-v41-pill.ok{background:color-mix(in srgb,var(--k-ok) 15%,var(--k-surface));color:var(--k-ok)}
+.coach-v41-pill.wait{background:color-mix(in srgb,var(--k-warn) 16%,var(--k-surface));color:var(--k-warn)}
+.coach-v41-actions{display:flex;flex-wrap:wrap;gap:6px;margin:-2px 0 4px 62px}
+.coach-v41-item>.coach-v41-actions{margin:0}
+.coach-v41-actions button,.coach-v41-item>button,.coach-v41-form button,.coach-v41-hours-foot button{min-height:40px;padding:0 13px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.coach-v41-primary{background:var(--k-accent)!important;border-color:var(--k-accent)!important;color:var(--k-on-accent)!important}
+.coach-v41-danger{color:var(--k-bad)!important}
+.coach-v41-actions button:focus-visible,.coach-v41-form button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+.coach-v41-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end;margin:-2px 0 6px;padding:12px;border:1px solid color-mix(in srgb,var(--k-accent) 35%,var(--k-line));border-radius:12px;background:color-mix(in srgb,var(--k-accent) 6%,var(--k-surface))}
+.coach-v41-form label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--k-muted)}
+.coach-v41-form :is(input,select),.coach-v41-hours-foot select{min-height:42px;padding:0 10px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:13px}
+.coach-v41-form small{grid-column:1/-1;font-size:12px;color:var(--k-muted)}
+.coach-v41-hours{display:grid;gap:6px;margin:4px 0 12px}
+.coach-v41-hour{display:grid;grid-template-columns:24px 110px minmax(90px,140px) 12px minmax(90px,140px);gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--k-soft);font-size:13px}
+.coach-v41-hour input[type=checkbox]{width:20px;height:20px;accent-color:var(--k-accent)}
+.coach-v41-hour input[type=time]{min-height:40px;padding:0 8px;border:1px solid var(--k-line);border-radius:9px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:13px}
+.coach-v41-hour:has(input[type=checkbox]:not(:checked)) input[type=time]{opacity:.45}
+.coach-v41-hours-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.coach-v41-hours-foot label{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700}
+@media(max-width:600px){
+  .coach-v41-card{padding:14px}
+  .coach-v41-item{grid-template-columns:46px minmax(0,1fr)}
+  .coach-v41-item .coach-v41-pill,.coach-v41-item>button{grid-column:2;justify-self:start}
+  .coach-v41-actions{margin-left:0}
+  .coach-v41-hour{grid-template-columns:24px 1fr;row-gap:6px}
+  .coach-v41-hour input[type=time]{grid-column:2}
+  .coach-v41-hour span{display:none}
+}
+/* Bugün yapılacaklar listesindeki randevu satırları */
+.coach-v38-task[data-todo-kind="appt"] .coach-v38-task-icon{background:color-mix(in srgb,var(--k-warn) 16%,var(--k-surface));color:var(--k-warn)}
+.coach-v38-task[data-todo-kind="apptToday"] .coach-v38-task-icon{background:color-mix(in srgb,var(--k-ok) 15%,var(--k-surface));color:var(--k-ok)}

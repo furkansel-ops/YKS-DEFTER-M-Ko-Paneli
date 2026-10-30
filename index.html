@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="./coach-theme-tokens-v36.css?v=1.0.1">
   <link rel="stylesheet" href="./coach-themes-v36.css?v=1.1.0">
   <link rel="stylesheet" href="./coach-layout-v40.css?v=1.1.0">
+  <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -123,6 +124,7 @@
         <button class="coach-nav-item" type="button" data-coach-page="errors"><span>✎</span><b>Hata Defteri</b></button>
         <span class="coach-nav-group" aria-hidden="true">İletişim</span>
         <button class="coach-nav-item" type="button" data-coach-page="messages"><span>✉</span><b>Mesajlar</b><i class="coach-v38-badge" id="coachNavMessageBadge" hidden></i></button>
+        <button class="coach-nav-item" type="button" data-coach-page="appointments"><span>◷</span><b>Randevular</b><i class="coach-v38-badge" id="coachNavApptBadge" hidden></i></button>
         <button class="coach-nav-item" type="button" data-coach-page="settings"><span>⚙</span><b>Ayarlar</b></button>
       </nav>
 
@@ -921,6 +923,31 @@
           </section>
         </div>
       </section>
+      <section class="students-page coach-v41-appointments hidden" id="appointmentsPage">
+        <header class="students-head">
+          <div><span class="dashboard-eyebrow">GÖRÜŞMELER</span><h1>Randevular</h1><p>Öğrencilerinle görüşme saatlerini tek takvimden yönet. Dolu saatler herkes için kapanır.</p></div>
+        </header>
+        <div class="coach-v41-grid">
+          <section class="coach-v41-card coach-v41-calendar" aria-label="Takvim">
+            <div class="coach-v41-month-head"><button type="button" data-appt-month="-1" aria-label="Önceki ay">‹</button><b id="apptMonthTitle">—</b><button type="button" data-appt-month="1" aria-label="Sonraki ay">›</button></div>
+            <div class="coach-v41-month" id="apptMonth" role="grid"></div>
+            <p class="coach-v41-muted">Noktalı günlerde randevu var.</p>
+          </section>
+          <section class="coach-v41-card coach-v41-day" aria-labelledby="apptDayTitle">
+            <div class="coach-v41-day-head"><div><h2 id="apptDayTitle">—</h2><p class="coach-v41-muted" id="apptDaySub"></p></div></div>
+            <div id="apptDayList" class="coach-v41-list"></div>
+          </section>
+        </div>
+        <section class="coach-v41-card" aria-labelledby="apptPendingTitle">
+          <h2 id="apptPendingTitle">Onay bekleyen istekler</h2>
+          <div id="apptPending" class="coach-v41-list"></div>
+        </section>
+        <section class="coach-v41-card" aria-labelledby="apptHoursTitle">
+          <div class="coach-v41-day-head"><div><h2 id="apptHoursTitle">Uygun saatlerin</h2><p class="coach-v41-muted">Öğrenciler yalnız bu saatlerdeki boşlukları görür.</p></div><span class="coach-v41-muted" id="apptHoursState"></span></div>
+          <div id="apptHours" class="coach-v41-hours"></div>
+          <div class="coach-v41-hours-foot"><label>Görüşme süresi <select id="apptDuration"><option value="20">20 dk</option><option value="30" selected>30 dk</option><option value="45">45 dk</option><option value="60">60 dk</option></select></label><button type="button" class="coach-v41-primary" id="apptHoursSave">Saatleri kaydet</button></div>
+        </section>
+      </section>
       <section class="messages-page hidden" id="messagesPage">
         <header class="messages-head">
           <div>
@@ -1432,8 +1459,8 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39"></script>
-  <script type="module" src="./coach-auth-v34.js?v=1.1.1"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41"></script>
+  <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
 </html>
