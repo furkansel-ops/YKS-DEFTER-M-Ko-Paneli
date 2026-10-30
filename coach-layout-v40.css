@@ -45,3 +45,20 @@
 /* 5 · İki köşe ölçüsü: büyük kartlar 16px, kart içi kutular 12px */
 .coach-shell-reset :is(.dash-panel,.students-card,.messages-shell,.coach-settings-category-list,.coach-settings-profile,.pp-coach-state,.coach-v15-stat){border-radius:16px}
 .coach-shell-reset :is(.dashboard-day-review-empty,.message-compose-box){border-radius:12px}
+
+/* 6 · Alçak pencerede (dizüstü, küçük monitör) yan menünün tamamı kaydırmadan görünür */
+@media(min-width:1180px) and (max-height:760px){
+  .coach-shell-reset .coach-sidebar-v20{padding-top:12px;padding-bottom:10px;gap:6px}
+  .coach-shell-reset .coach-brand-v20{padding-bottom:4px}
+  .coach-shell-reset .coach-brand-v20 .brand-mark{width:32px;height:32px;border-radius:10px}
+  .coach-shell-reset .coach-nav-item{min-height:32px}
+  .coach-nav-group{padding:7px 12px 2px}
+  .coach-shell-reset .coach-profile-v20{grid-template-columns:30px 1fr;padding:7px 9px}
+  .coach-shell-reset .coach-profile-avatar{width:30px;height:30px}
+  .coach-shell-reset .coach-signout-v20{height:34px}
+}
+@media(min-width:760px) and (max-width:1179px) and (max-height:760px){
+  .coach-shell-reset .coach-sidebar-v20{padding-top:10px;padding-bottom:8px;gap:4px}
+  .coach-shell-reset .coach-nav-item{padding:5px 2px;gap:1px}
+  .coach-shell-reset .coach-nav-item>span{font-size:15px}
+}

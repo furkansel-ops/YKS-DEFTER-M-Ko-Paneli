@@ -44,3 +44,12 @@ test("v40 kart köşeleri iki ölçüde: büyük kart 16px, kart içi kutu 12px"
   assert.match(css,/\.dash-panel,\.students-card,\.messages-shell,\.coach-settings-category-list,\.coach-settings-profile,\.pp-coach-state,\.coach-v15-stat\)\{border-radius:16px\}/);
   assert.match(css,/\.dashboard-day-review-empty,\.message-compose-box\)\{border-radius:12px\}/);
 });
+
+test("v40 alçak pencerede yan menü kaydırmadan sığar; normal yükseklikte değişmez",()=>{
+  const pc=block("min-width:1180px) and (max-height:760px"),rail=block("min-width:760px) and (max-width:1179px) and (max-height:760px");
+  assert.match(pc,/\.coach-nav-item\{min-height:32px\}/);
+  assert.match(pc,/\.coach-nav-group\{padding:7px 12px 2px\}/);
+  assert.match(pc,/\.coach-signout-v20\{height:34px\}/);
+  assert.match(rail,/\.coach-nav-item\{padding:5px 2px;gap:1px\}/);
+  assert.doesNotMatch(block("min-width:1180px"),/min-height:32px/,"yüksek pencerede menü aynı kalır");
+});
