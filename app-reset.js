@@ -50,6 +50,7 @@ function showApp(profile,user){
   refreshDashboardGreeting();
   const dashDate=$("dashboardDate");if(dashDate)dashDate.textContent=new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
   hydrateCoachSettings(profile,user);
+  loadCoachNotes();
   const pref=readCoachUiPrefs().defaultPage||"home";
   showCoachPage(coachPages[pref]?pref:"home");
   $("appView")?.classList.remove("hidden");
@@ -345,6 +346,115 @@ function renderCoachDashboard(){
   }
 
   document.querySelectorAll("[data-dashboard-student]").forEach(button=>button.addEventListener("click",()=>dashboardStudentOpen(button.dataset.dashboardStudent)));
+  renderCoachTodo();
+  renderCoachMessageBadges();
+}
+
+// v38 · Bugün yapılacaklar: cevap bekleyen mesajlar, takip edilecekler, gelecek haftası boş olanlar.
+function coachPendingReplies(studentUid){
+  const actions=messageActionsFor(studentUid);
+  let count=0;
+  for(let i=actions.length-1;i>=0&&actions[i]?.senderRole==="student";i--)count++;
+  return{count,last:count?actions.at(-1):null};
+}
+function coachPendingReplyTotal(){
+  return messageRows().reduce((sum,row)=>sum+coachPendingReplies(row.studentUid).count,0);
+}
+function renderCoachMessageBadges(){
+  const total=coachPendingReplyTotal(),label=total?String(total>99?"99+":total):"";
+  for(const id of ["coachNavMessageBadge","dashboardMessageBadge"]){
+    const node=$(id);if(!node)continue;
+    node.textContent=label;node.hidden=!total;
+    node.setAttribute("aria-label",total?total+" cevap bekleyen mesaj":"");
+  }
+}
+function coachTodayRemainingTasks(row){
+  const week=programWeeks(row).find(item=>item?.week===programCurrentWeekStart());if(!week)return[];
+  const data=week.data||{},day=(new Date().getDay()+6)%7;
+  if(data?.done?.[day])return[];
+  return collectProgramDayTasks(row?.share?.program||{},week,day).filter(task=>!data?.dn?.[task.id]);
+}
+function coachNextWeekEmpty(row){
+  const next=shiftProgramWeek(programCurrentWeekStart(),1),week=programWeeks(row).find(item=>item?.week===next);
+  if(!week)return next;
+  for(let day=0;day<7;day++)if(collectProgramDayTasks(row?.share?.program||{},week,day).length)return"";
+  return next;
+}
+function coachFirstName(name){return text(name,80).split(/\s+/)[0]||"merhaba"}
+function coachTodoItems(){
+  const rows=messageRows(),items=[],weekday=(new Date().getDay()+6)%7;
+  for(const row of rows){
+    const pending=coachPendingReplies(row.studentUid);
+    if(pending.count)items.push({kind:"msg",row,title:studentName(row)+" · "+pending.count+" mesaj cevap bekliyor",sub:"“"+text(pending.last?.text,70)+"” · "+messageTimestamp(pending.last?.createdAt)});
+  }
+  for(const row of rows){
+    const name=studentName(row),program=dashboardProgramStats(row),overdue=Math.max(0,Math.round(reportNum(row?.share?.progress?.overdueTopics)));
+    if(dashboardNeedsReview(row)){
+      const review=studentDayReview(row,todayIsoLocal());
+      items.push({kind:"bad",row,title:name+" · "+(overdue?overdue+" geciken konu":"takip et"),sub:review?.mood==="hard"?"Gün sonu notu: zor geçti":"Son hareket: "+studentLastActivity(row)});
+      continue;
+    }
+    if(program.todayPlanned>0&&program.todayDone<program.todayPlanned){
+      const remaining=coachTodayRemainingTasks(row),active=studentActiveToday(row);
+      const left=remaining.map(task=>task.text).slice(0,2).join(", ");
+      items.push({kind:"warn",row,remaining:program.todayPlanned-program.todayDone,active,
+        title:name+" · bugün "+program.todayDone+" / "+program.todayPlanned+" görev",
+        sub:active?(left?"Kalan: "+left:"Görevler bitmedi"):"Bugün henüz girmedi"});
+    }
+  }
+  // Perşembe'den itibaren gelecek haftası hiç görev içermeyen öğrenciler.
+  if(weekday>=3)for(const row of rows){
+    const next=coachNextWeekEmpty(row);
+    if(next)items.push({kind:"plan",row,week:next,title:studentName(row)+" · gelecek hafta ("+formatProgramWeek(next)+") boş",sub:"Bu haftanın programı Pazar biter"});
+  }
+  return items;
+}
+function coachTodoButtons(item){
+  const uid=escHtml(item.row.studentUid),b=(action,label,primary)=>'<button type="button" class="'+(primary?"primary":"")+'" data-todo-action="'+action+'" data-todo-student="'+uid+'"'+(item.week?' data-todo-week="'+escHtml(item.week)+'"':"")+'>'+label+'</button>';
+  if(item.kind==="msg")return b("reply","Cevapla",true);
+  if(item.kind==="bad")return b("write","Mesaj yaz",true)+b("report","Raporu aç");
+  if(item.kind==="warn")return b("remind","Hatırlat",true)+b("program","Programı aç");
+  return b("plan","Haftayı hazırla",true);
+}
+let coachTodoExpanded=false;
+function renderCoachTodo(){
+  const root=$("dashboardTodo");if(!root)return;
+  const items=coachTodoItems(),icons={msg:"✉",bad:"!",warn:"◔",plan:"▦"};
+  if($("dashboardTodoCount"))$("dashboardTodoCount").textContent=items.length?items.length+" iş":"";
+  if(!coachReportRows.length){root.innerHTML='<p class="coach-v38-todo-empty">Öğrenci eklediğinde bugün yapman gerekenler burada sıralanır.</p>';return}
+  if(!items.length){root.innerHTML='<p class="coach-v38-todo-empty">Bugün için bekleyen iş yok.</p>';return}
+  // Kalabalık sınıflarda liste uzamasın: ilk 6 iş görünür, gerisi tek dokunuşla açılır.
+  const LIMIT=6,shown=coachTodoExpanded?items:items.slice(0,LIMIT);
+  root.innerHTML=shown.map(item=>'<div class="coach-v38-task" data-todo-kind="'+item.kind+'"><span class="coach-v38-task-icon" aria-hidden="true">'+icons[item.kind]+'</span><div class="coach-v38-task-copy"><b>'+escHtml(item.title)+'</b><small>'+escHtml(item.sub)+'</small></div><div class="coach-v38-task-actions">'+coachTodoButtons(item)+'</div></div>').join("")
+    +(items.length>LIMIT?'<button type="button" class="coach-v38-more" data-todo-more>'+(coachTodoExpanded?"Daha az göster":(items.length-LIMIT)+" iş daha göster")+'</button>':"");
+  root.querySelector("[data-todo-more]")?.addEventListener("click",()=>{coachTodoExpanded=!coachTodoExpanded;renderCoachTodo()});
+  const remind=new Map(items.filter(item=>item.kind==="warn").map(item=>[item.row.studentUid,item]));
+  root.querySelectorAll("[data-todo-action]").forEach(button=>button.addEventListener("click",()=>{
+    const uid=button.dataset.todoStudent,row=coachReportRows.find(item=>item.studentUid===uid);if(!row)return;
+    const action=button.dataset.todoAction,first=coachFirstName(studentName(row));
+    if(action==="reply"||action==="write")openCoachMessageThread(uid,"");
+    else if(action==="remind"){
+      const item=remind.get(uid);
+      openCoachMessageThread(uid,item?.active?"Merhaba "+first+", bugün "+item.remaining+" görevin kaldı. Takıldığın bir yer var mı?":"Merhaba "+first+", bugün seni göremedim. Programındaki görevlere başlayabildin mi?");
+    }
+    else if(action==="report")dashboardStudentOpen(uid);
+    else if(action==="program"||action==="plan")openCoachProgramWeek(uid,action==="plan"?button.dataset.todoWeek:programCurrentWeekStart(),action==="plan");
+  }));
+}
+function openCoachMessageThread(studentUid,draft){
+  showCoachPage("messages");
+  selectedMessageStudent=studentUid;
+  renderMessageStudents();renderMessageConversation(studentUid);
+  const input=$("messageInput");if(!input)return;
+  input.value=draft;
+  if($("messageCharCount"))$("messageCharCount").textContent=String(draft.length);
+  input.focus({preventScroll:true});
+}
+function openCoachProgramWeek(studentUid,weekStart,bulk){
+  showCoachPage("programs");
+  selectedProgramStudentUid=studentUid;selectedProgramWeekStart=weekStart||programCurrentWeekStart();
+  hydrateProgramStudents();renderProgramWorkspace();
+  if(bulk)coachV35Open();
 }
 function renderDashboardDayReviews(){
   const root=$("dashboardDayReviews"),summary=$("dashboardDayReviewSummary");if(!root)return;
@@ -1392,6 +1502,7 @@ function applyCoachMessageSnapshot(snap){
   coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a?.createdAt?.toMillis?.()||0)-(b?.createdAt?.toMillis?.()||0));
   renderMessageStudents();
   if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
+  renderCoachMessageBadges();renderCoachTodo();
 }
 async function loadCoachMessages(coachUid){
   if(!coachUid)return;
@@ -1427,9 +1538,9 @@ function renderMessageStudents(){
     $("messageNoStudent")?.classList.remove("hidden");$("messageConversation")?.classList.add("hidden");$("messageInfoEmpty")?.classList.remove("hidden");$("messageInfoPanel")?.classList.add("hidden");return;
   }
   list.innerHTML=rows.map(row=>{
-    const name=studentName(row),actions=messageActionsFor(row.studentUid),last=actions.at(-1),incoming=actions.filter(x=>x.senderRole==="student").length;
+    const name=studentName(row),actions=messageActionsFor(row.studentUid),last=actions.at(-1),incoming=actions.filter(x=>x.senderRole==="student").length,pending=coachPendingReplies(row.studentUid).count;
     const hidden=rowMatchesMessageFilter(row)?"":" hidden";
-    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small><span class="message-mini-badges">'+(incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
+    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small><span class="message-mini-badges">'+(pending?'<i class="coach-v38-pending" title="Cevap bekleyen mesaj">'+pending+'</i>':incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
   }).join("");
   document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{selectedMessageStudent=btn.dataset.messageStudent;const input=$("messageInput");if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";renderMessageStudents();renderMessageConversation(selectedMessageStudent)}));
   if(!selectedMessageStudent&&rows.length){selectedMessageStudent=rows[0].studentUid;renderMessageStudents();renderMessageConversation(selectedMessageStudent)}
@@ -1477,6 +1588,24 @@ function readCoachUiPrefs(){
 function writeCoachUiPrefs(next){
   try{localStorage.setItem(COACH_UI_PREFS,JSON.stringify(next))}catch{}
 }
+// v38 · Koç notları: her koç hesabı için ayrı, bu cihazda saklanır.
+const COACH_NOTES_PREFIX="yks_coach_notes_v1:";
+function coachNotesKey(){return COACH_NOTES_PREFIX+(auth.currentUser?.uid||"guest")}
+function loadCoachNotes(){
+  const input=$("coachNotesInput");if(!input)return;
+  try{input.value=localStorage.getItem(coachNotesKey())||""}catch{input.value=""}
+  if($("coachNotesState"))$("coachNotesState").textContent="Yazdıkça kaydedilir";
+}
+let coachNotesTimer=0;
+$("coachNotesInput")?.addEventListener("input",event=>{
+  const value=String(event.currentTarget.value||"").slice(0,2000);
+  clearTimeout(coachNotesTimer);
+  coachNotesTimer=setTimeout(()=>{
+    let saved=true;
+    try{if(value)localStorage.setItem(coachNotesKey(),value);else localStorage.removeItem(coachNotesKey())}catch{saved=false}
+    if($("coachNotesState"))$("coachNotesState").textContent=saved?"Kaydedildi":"Kaydedilemedi (tarayıcı depolaması kapalı)";
+  },400);
+});
 const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#0a0f1c"},vivid:{name:"Canlı",color:"#6a4cf5"}};
 function coachThemeId(value){return COACH_THEMES[value]?value:"refined-blue"}
 function applyCoachTheme(value){

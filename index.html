@@ -48,7 +48,7 @@
   <link rel="stylesheet" href="./coach-mobile-compat-v33.css?v=1.0.0-theme36-type37">
   <link rel="stylesheet" href="./coach-auth-v34.css?v=1.1.1-theme36-type37">
   <link rel="stylesheet" href="./coach-theme-tokens-v36.css?v=1.0.1">
-  <link rel="stylesheet" href="./coach-themes-v36.css?v=1.0.2">
+  <link rel="stylesheet" href="./coach-themes-v36.css?v=1.1.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -121,7 +121,7 @@
         <button class="coach-nav-item" type="button" data-coach-page="topics"><span>◫</span><b>Konular</b></button>
         <button class="coach-nav-item" type="button" data-coach-page="errors"><span>✎</span><b>Hata Defteri</b></button>
         <span class="coach-nav-group" aria-hidden="true">İletişim</span>
-        <button class="coach-nav-item" type="button" data-coach-page="messages"><span>✉</span><b>Mesajlar</b></button>
+        <button class="coach-nav-item" type="button" data-coach-page="messages"><span>✉</span><b>Mesajlar</b><i class="coach-v38-badge" id="coachNavMessageBadge" hidden></i></button>
         <button class="coach-nav-item" type="button" data-coach-page="settings"><span>⚙</span><b>Ayarlar</b></button>
       </nav>
 
@@ -143,7 +143,7 @@
         <div class="coach-v36-top">
         <header class="dashboard-head coach-v36-hero">
           <div><span class="dashboard-eyebrow">Koç paneli · <span id="dashboardDate"></span></span><h1><span id="dashboardGreeting">Merhaba</span>, <span id="dashboardCoachName">Koç</span></h1><p id="dashboardSummary">Öğrencilerinin bugünkü durumunu tek ekrandan takip et.</p>
-          <div class="coach-v36-hero-actions"><button type="button" id="dashboardBulkBtn" aria-haspopup="dialog">▤ Toplu görev yaz</button><button type="button" data-go-page="messages">✉ Mesajlar</button></div></div>
+          <div class="coach-v36-hero-actions"><button type="button" id="dashboardBulkBtn" aria-haspopup="dialog">▤ Toplu görev yaz</button><button type="button" data-go-page="messages">✉ Mesajlar <span class="coach-v38-badge" id="dashboardMessageBadge" hidden></span></button></div></div>
         </header>
         <section class="dashboard-stats">
           <article class="stat-card"><span class="stat-icon">♟</span><div><small>Aktif Öğrenci</small><strong id="statStudents">—</strong><em>Toplam öğrenci</em></div></article>
@@ -152,6 +152,10 @@
           <article class="stat-card"><span class="stat-icon">↗</span><div><small>Haftalık İlerleme</small><strong id="statProgress">—</strong><em>Genel ortalama</em></div></article>
         </section>
         </div>
+        <section class="dash-panel coach-v38-todo" aria-labelledby="dashboardTodoTitle">
+          <div class="panel-title"><div><h2 id="dashboardTodoTitle">Bugün yapılacaklar</h2><p>Cevap bekleyen mesajlar, takip edilecekler, gelecek haftası boş olanlar</p></div><span class="coach-v38-count" id="dashboardTodoCount"></span></div>
+          <div class="coach-v38-todo-list" id="dashboardTodo"><p class="coach-v38-todo-empty">Öğrenci verileri yükleniyor.</p></div>
+        </section>
         <section class="dashboard-grid">
           <article class="dash-panel dash-wide coach-v36-status">
             <div class="panel-title"><div><h2>Öğrenci Durumu</h2><p>Takip gerektiren öğrenciler burada öne çıkacak</p></div><button data-go-page="students">Öğrencilere git →</button></div>
@@ -178,8 +182,9 @@
             </div>
           </article>
           <article class="dash-panel coach-v36-note">
-            <div class="panel-title"><div><h2>Koç Notları</h2><p>Bugün gözden geçir</p></div></div>
-            <div class="coach-note"><span>✦</span><p>Panel sade tutuldu. Gerçek öğrenci verileri geldikçe kartlar otomatik olarak anlam kazanacak.</p></div>
+            <div class="panel-title"><div><h2>Koç notların</h2><p>Bu haftanın aklında kalsın</p></div></div>
+            <textarea class="coach-v38-notes" id="coachNotesInput" aria-label="Koç notların" maxlength="2000" rows="5" placeholder="Örn. Mehmet: Cuma deneme sonrası konuş."></textarea>
+            <div class="coach-v38-notes-foot"><span id="coachNotesState">Yazdıkça kaydedilir</span><span>Bu cihazda saklanır</span></div>
           </article>
         </section>
       </section>
@@ -1426,7 +1431,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.0"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
