@@ -131,7 +131,9 @@ test("v41 uygun saatler kaydedilir; bitiş başlangıçtan önceyse uyarır",asy
   const {w,doc,ops}=fixture(t,"coachAvailability=null;");
   doc.querySelector('[data-coach-page="appointments"]').click();
   assert.match(doc.querySelector("#apptHoursState").textContent,/Henüz kaydedilmedi/);
-  doc.querySelector("#apptDuration").value="45";
+  doc.querySelector('[data-appt-duration="45"]').click();
+  assert.equal(doc.querySelector('[data-appt-duration="45"]').getAttribute("aria-pressed"),"true");
+  assert.equal(doc.querySelector("#apptHoursState").textContent,"Kaydedilmedi");
   doc.querySelector("#apptHoursSave").click();await flush();
   assert.equal(ops.sets.at(-1).path,"coachAvailability/coach");
   assert.equal(ops.sets.at(-1).data.duration,45);
@@ -139,6 +141,29 @@ test("v41 uygun saatler kaydedilir; bitiş başlangıçtan önceyse uyarır",asy
   const monday=doc.querySelector('[data-appt-hour="1"]');monday.querySelector("[data-appt-end]").value="17:00";
   doc.querySelector("#apptHoursSave").click();await flush();
   assert.match(ops.alerts.at(-1),/Pazartesi: bitiş saati/);
+});
+
+test("v41.1 hazır seçenek, gün anahtarı ve 'Tüm açık günlere uygula' taslağı değiştirir; çubuk ve toplam güncellenir",async t=>{
+  const {w,doc,ops}=fixture(t,"coachAvailability=null;");
+  doc.querySelector('[data-coach-page="appointments"]').click();
+  const row=key=>doc.querySelector('[data-appt-hour="'+key+'"]');
+  // Varsayılan: hafta içi 18–21 (5×6), cumartesi 11–14 (6), pazar kapalı → 36.
+  assert.equal(doc.querySelector("#apptWeekTotal").textContent,"Haftada 36 görüşme saati");
+  assert.match(row("1").querySelector(".coach-v41-bar span").textContent,/18:00–21:00 · 6 görüşme/);
+  doc.querySelector('[data-appt-preset="every"]').click();
+  assert.equal(doc.querySelector("#apptWeekTotal").textContent,"Haftada 70 görüşme saati");
+  assert.equal(row("0").querySelector("[data-appt-on]").getAttribute("aria-checked"),"true");
+  row("0").querySelector("[data-appt-on]").click();
+  assert.equal(row("0").querySelector("[data-appt-on]").getAttribute("aria-checked"),"false");
+  assert.match(row("0").textContent,/Kapalı/);
+  const start=row("3").querySelector("[data-appt-start]");start.value="19:00";start.dispatchEvent(new w.Event("change",{bubbles:true}));
+  row("3").querySelector("[data-appt-apply]").click();
+  assert.equal(row("1").querySelector("[data-appt-start]").value,"19:00");
+  assert.equal(row("0").querySelector("[data-appt-start]").value,"17:00","kapalı gün değişmez");
+  doc.querySelector('[data-appt-preset="off"]').click();
+  assert.equal(doc.querySelector("#apptWeekTotal").textContent,"Hiç açık saat yok");
+  doc.querySelector("#apptHoursSave").click();await flush();
+  assert.equal(plain(ops.sets.at(-1).data.days["1"]).on,false);
 });
 
 test("v41 Bugün yapılacaklar: onay bekleyen istek ve bugünkü görüşme, Onayla düğmesi çalışır",async t=>{
