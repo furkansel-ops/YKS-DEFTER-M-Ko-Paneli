@@ -1,0 +1,47 @@
+/* Koç Paneli · v40 — sayfa geçişlerinde başlık aynı yerde, telefonda rahat dokunma, tek kart köşesi.
+   Yalnız hiza, boşluk ve boyut; renkler coach-themes-v36.css / coach-theme-tokens-v36.css'te. */
+
+/* 1 · Her sayfa aynı kenar boşluğunda başlar, başlıklar aynı boyda */
+.coach-shell-reset :is(.students-page,.programs-page,.reports-page,.pp-coach-page,.exams-page,.topics-page,.errors-page,.messages-page,.settings-page) h1{line-height:1.12;letter-spacing:-.03em;margin:6px 0 5px}
+@media(min-width:1180px){
+  .coach-shell-reset :is(.dashboard-page,.students-page,.programs-page,.reports-page,.pp-coach-page,.exams-page,.topics-page,.errors-page,.messages-page,.settings-page){padding:34px clamp(24px,4vw,54px) 48px}
+  .coach-shell-reset :is(.students-page,.programs-page,.reports-page,.pp-coach-page,.exams-page,.topics-page,.errors-page,.messages-page,.settings-page) h1{font-size:36px}
+  #programsPage .coach-v15-title-group h1{font-size:36px}
+  /* Ayarlar dar kalır ama diğer sayfalarla aynı sol kenardan başlar */
+  .coach-shell-reset .settings-page,.coach-shell-reset .settings-page>.settings-head{margin-left:0}
+}
+@media(min-width:760px) and (max-width:1179px){
+  .coach-shell-reset :is(.students-page,.programs-page,.reports-page,.pp-coach-page,.exams-page,.topics-page,.errors-page,.messages-page,.settings-page) h1{font-size:28px}
+  #programsPage .coach-v15-title-group h1{font-size:28px}
+}
+/* Programlar: ikon yol satırına geçer, başlık diğer sayfalarla aynı hizada */
+#programsPage .programs-head.coach-v15-header{position:relative}
+#programsPage .programs-head .coach-v15-breadcrumb{padding-left:32px;min-height:24px;margin-bottom:0}
+#programsPage .programs-head .coach-v15-title-icon{position:absolute;left:0;top:0;width:24px;height:24px;flex:none;border-radius:7px}
+#programsPage .programs-head .coach-v15-title-icon svg{width:15px;height:15px}
+#programsPage .programs-head .coach-v15-header-main{align-items:flex-start;margin-top:0}
+#programsPage .programs-head .coach-v15-title-group{gap:0;min-height:0;align-items:flex-start}
+#programsPage .programs-head .coach-v15-title-group h1{margin-top:6px}
+
+/* 2 · Açılır listeler kutunun tamamını kaplar: kutunun neresine dokunulursa açılır */
+.coach-shell-reset main label:has(> :is(#reportStudentSelect,#examStudentSelect,#examTypeSelect,#errorStudentSelect,#errorSubjectSelect,#topicStudentSelect,#topicExamSelect,#topicSubjectSelect,#topicStatusSelect,#topicSearchInput,#programStudentSelect)){position:relative;min-height:48px}
+.coach-shell-reset main :is(#reportStudentSelect,#examStudentSelect,#examTypeSelect,#errorStudentSelect,#errorSubjectSelect){position:absolute;inset:0;width:100%;height:100%;margin:0;padding:23px 11px 7px;box-sizing:border-box;background:transparent}
+.coach-shell-reset main :is(#topicStudentSelect,#topicExamSelect,#topicSubjectSelect,#topicStatusSelect,#topicSearchInput){position:absolute;inset:0;width:100%;height:100%;margin:0;padding:27px 12px 8px;box-sizing:border-box;background:transparent}
+.coach-shell-reset #programsPage .coach-v15-header .program-student-picker #programStudentSelect{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:27px 10px 6px 45px;box-sizing:border-box;background:transparent}
+.coach-shell-reset main label:has(> #topicSearchInput),.coach-shell-reset main label:has(> :is(#topicStudentSelect,#topicExamSelect,#topicSubjectSelect,#topicStatusSelect)){min-height:53px}
+.coach-shell-reset main label:has(> #programStudentSelect){min-height:55px}
+
+/* 3-4 · Telefon: 16px kenar, parmakla rahat dokunulan düğmeler */
+@media(max-width:759px){
+  .coach-shell-reset :is(.dashboard-page,.students-page,.programs-page,.reports-page,.pp-coach-page,.exams-page,.topics-page,.errors-page,.messages-page,.settings-page){padding-left:16px;padding-right:16px}
+  .coach-shell-reset :is(label.student-search,label.message-search,label.report-search){min-height:44px;align-items:center}
+  .coach-shell-reset :is(label.student-search,label.message-search,label.report-search)>input{align-self:stretch;height:auto;min-height:42px}
+  .coach-shell-reset :is(.message-list-filters button,[data-message-template],#topicQuickFilters button,.coach-v6-add-day,.student-actions button){min-height:40px}
+  .coach-shell-reset #messageSendBtn{min-height:44px}
+  .coach-shell-reset #programsPage.programs-page{padding-left:16px;padding-right:16px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-add-day{height:auto;min-height:40px}
+}
+
+/* 5 · İki köşe ölçüsü: büyük kartlar 16px, kart içi kutular 12px */
+.coach-shell-reset :is(.dash-panel,.students-card,.messages-shell,.coach-settings-category-list,.coach-settings-profile,.pp-coach-state,.coach-v15-stat){border-radius:16px}
+.coach-shell-reset :is(.dashboard-day-review-empty,.message-compose-box){border-radius:12px}
