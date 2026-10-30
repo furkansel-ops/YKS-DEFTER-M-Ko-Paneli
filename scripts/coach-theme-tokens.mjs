@@ -1,12 +1,13 @@
 // Koç paneli renklerini öğrencideki üç temaya bağlar.
 // 1) Kök dizindeki CSS dosyalarındaki ham renkleri var(--kc-ANAHTAR,ham-renk) yapar
-//    (Sade Mavi = yedek değer, yani bugünkü görünüm birebir kalır).
-// 2) Tüm --kc-* anahtarlarından Gece ve Canlı karşılıklarını coach-theme-tokens-v36.css'e yazar.
+//    (Sade Mavi = yedek değer; yalnız okunmayan açık gri yazılar koyulaştırılır).
+// 2) Tüm --kc-* anahtarlarından Sade Mavi, Gece ve Canlı karşılıklarını coach-theme-tokens-v36.css'e yazar.
 // Tekrar çalıştırmak güvenlidir: sarılmış renklere dokunmaz, token dosyasını baştan üretir.
 import fs from "node:fs";
 import path from "node:path";
+import {fileURLToPath} from "node:url";
 
-const root=path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,"$1")),"..");
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const OUT="coach-theme-tokens-v36.css";
 const SKIP=new Set([OUT,"coach-themes-v36.css"]);
 const files=fs.readdirSync(root).filter(name=>name.endsWith(".css")&&!SKIP.has(name));
@@ -35,7 +36,8 @@ const keys=new Map();
 let wrapped=0;
 for(const name of files){
   const file=path.join(root,name),source=fs.readFileSync(file,"utf8");
-  const next=source.replace(/\{([^{}]*)\}/g,(block,body)=>"{"+body.replace(COLOR,match=>{
+  // Her bildirimin değeri ({ ; } veya yorum sonundan sonra gelen "özellik:değer") taranır; iç içe kurallar da dahil.
+  const next=source.replace(/(^|[{;}]|\*\/)(\s*[\w-]+\s*:)([^;{}]*)/g,(all,lead,prop,value)=>lead+prop+value.replace(COLOR,match=>{
     if(match.startsWith("var(")){
       const key=match.slice(9,match.indexOf(","));
       keys.set(key,parse(match.slice(match.indexOf(",")+1,-1).trim()));
@@ -44,7 +46,7 @@ for(const name of files){
     const rgba=parse(match);if(!rgba)return match;
     const key=keyOf(rgba);keys.set(key,rgba);wrapped++;
     return "var(--kc-"+key+","+match+")";
-  })+"}");
+  }));
   if(next!==source)fs.writeFileSync(file,next);
 }
 
@@ -69,7 +71,8 @@ function night([r,g,b,a]){
   const [h,s,l]=toHsl(r,g,b);
   if(a<1){
     if(l<.35)return css([0,0,0],a<.3?Math.min(.7,a*2.2):Math.min(.88,a*1.35));
-    if(l>.9&&s<.3)return a>=.5?css([18,26,44],a):css([r,g,b],a);
+    // Koyu yüzeyler açılınca üstlerindeki yarı saydam beyazlar kaybolur; onlar da koyu iz olur.
+    if(l>.9&&s<.3)return a>=.5?css([18,26,44],a):css([4,8,18],Math.min(1,a*1.2));
     return css(fromHsl(h,Math.min(1,s),clamp(.6+l*.18,.62,.78)),Math.min(1,a*1.6));
   }
   if(l>=.8){
@@ -92,11 +95,22 @@ function vivid([r,g,b,a]){
   if(h>=190&&h<=235)return css(fromHsl(252+(h-217)*.3,Math.min(s,.75),l),a);
   return css([r,g,b],a);
 }
+// Açık temalar: açık gri yazılar (orta açıklıkta nötrler) beyaz zeminde 4.5:1'e ulaşacak kadar koyulaşır.
+function readable(rgba,base=([r,g,b,a])=>css([r,g,b],a)){
+  const [r,g,b,a]=rgba,[h,s,l]=toHsl(r,g,b);
+  // Panelin ana mavisi yazı ve beyaz yazılı düğme zemini olarak 4.5:1'in altında kalıyordu.
+  if(keyOf(rgba)==="2873f0"&&base(rgba)==="#2873f0")return"#2366dc";
+  if(a<1||s>=.3||l<.5||l>=.72)return null;
+  const [h2,s2]=toHsl(...parseCss(base(rgba)));
+  return css(fromHsl(h2,s2,.44),1);
+}
+function parseCss(value){return value.startsWith("#")?parse(value).slice(0,3):value.match(/[\d.]+/g).slice(0,3).map(Number)}
 
 const sorted=[...keys.keys()].sort();
-const lines=map=>sorted.map(key=>"--kc-"+key+":"+map(keys.get(key))+";").join("");
+const lines=map=>sorted.map(key=>{const value=map(keys.get(key));return value?"--kc-"+key+":"+value+";":""}).join("");
 fs.writeFileSync(path.join(root,OUT),
-  "/* Üretildi: scripts/coach-theme-tokens.mjs — elle düzenleme. Sade Mavi = var() yedekleri. */\n"
+  "/* Üretildi: scripts/coach-theme-tokens.mjs — elle düzenleme. Sade Mavi = var() yedekleri + okunur griler. */\n"
+  +":root:not([data-theme]){"+lines(rgba=>readable(rgba))+"}\n"
   +":root[data-theme=\"night\"]{color-scheme:dark;"+lines(night)+"}\n"
-  +":root[data-theme=\"vivid\"]{"+lines(vivid)+"}\n");
+  +":root[data-theme=\"vivid\"]{"+lines(rgba=>readable(rgba,vivid)||vivid(rgba))+"}\n");
 console.log(files.length+" dosya, "+wrapped+" yeni sarma, "+sorted.length+" renk anahtarı");

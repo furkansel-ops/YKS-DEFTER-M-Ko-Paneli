@@ -2,8 +2,8 @@
    gruplu yan menü, tablette ikon şeridi ve ana sayfa özet kartı.
    Panel renkleri coach-theme-tokens-v36.css'teki --kc-* değerlerinden gelir. */
 :root{
-  --k-bg:#f4f7fb;--k-surface:#fff;--k-soft:#f1f5fa;--k-ink:#14243a;--k-muted:#6b7a92;--k-line:#e0e7f0;
-  --k-accent:#2873f0;--k-on-accent:#fff;--k-ok:#13906b;--k-warn:#c9740c;--k-bad:#c4323b;
+  --k-bg:#f4f7fb;--k-surface:#fff;--k-soft:#f1f5fa;--k-ink:#14243a;--k-muted:#596780;--k-line:#e0e7f0;
+  --k-accent:#2366dc;--k-on-accent:#fff;--k-ok:#0d7556;--k-warn:#9a5806;--k-bad:#b02a33;
   --k-hero:linear-gradient(140deg,#2f6bea,#1d4cc4);--k-hero-ink:#fff;--k-hero-btn:#fff;--k-hero-btn-ink:#1d4cc4;
   --k-side:#fff;--k-side-ink:#5f6b80;--k-side-on:#e9f0fe;--k-side-on-ink:#2453b8;
 }
@@ -16,7 +16,7 @@
 }
 :root[data-theme="vivid"]{
   --k-bg:#fbf8f4;--k-surface:#fff;--k-soft:#f4efe8;--k-ink:#1b1830;--k-muted:#615c76;--k-line:#ece5dc;
-  --k-accent:#5a3ee0;--k-on-accent:#fff;--k-ok:#128a5c;--k-warn:#e0750f;--k-bad:#d13b52;
+  --k-accent:#5a3ee0;--k-on-accent:#fff;--k-ok:#0d7550;--k-warn:#9e5306;--k-bad:#b32a40;
   --k-hero:linear-gradient(135deg,#6a4cf5 0%,#a845e8 55%,#f0705a 100%);--k-hero-ink:#fff;--k-hero-btn:#fff;--k-hero-btn-ink:#4a2fc4;
   --k-side:#fff;--k-side-ink:#615c76;--k-side-on:#f0ebff;--k-side-on-ink:#4a2fc4;
 }
@@ -54,6 +54,8 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
 @media(min-width:1180px){
   .coach-shell-reset{grid-template-columns:232px minmax(0,1fr)}
 }
+/* Telefon çekmecesi: parmakla dokunmaya yetecek yükseklik */
+@media(max-width:759px){.coach-shell-reset .coach-nav-item,.coach-shell-reset .coach-signout-v20{min-height:44px}}
 /* Tablet: ikon şeridi, menü düğmesi yok */
 @media(min-width:760px) and (max-width:1179px){
   .coach-shell-reset{display:grid;grid-template-columns:84px minmax(0,1fr)}
@@ -77,7 +79,7 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
 .coach-v36-hero h1{margin:6px 0 4px;color:inherit}
 .coach-v36-hero p{margin:0;color:inherit;opacity:.9;font-size:13px}
 .coach-v36-hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.coach-v36-hero-actions button{min-height:40px;padding:0 15px;border:0;border-radius:12px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.18);color:inherit}
+.coach-v36-hero-actions button{min-height:44px;padding:0 15px;border:0;border-radius:12px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.18);color:inherit}
 .coach-v36-hero-actions button:first-child{background:var(--k-hero-btn);color:var(--k-hero-btn-ink)}
 .coach-v36-hero-actions button:focus-visible{outline:2px solid var(--k-hero-ink);outline-offset:2px}
 .coach-v36-top .dashboard-stats{margin:0;gap:10px}

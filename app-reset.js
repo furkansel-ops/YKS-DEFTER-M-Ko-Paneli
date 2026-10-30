@@ -63,7 +63,8 @@ async function loadCoachProfile(user){
   const profile=snap.data();
   return profile?.role==="coach"?profile:null;
 }
-function coachMobileNavActive(){return window.innerWidth<=1000}
+// v36: 760px ve üstünde yan menü her zaman görünür (tablette ikon şeridi); çekmece yalnız telefonda.
+function coachMobileNavActive(){return window.innerWidth<=759}
 function openSidebar(){
   if(!coachMobileNavActive())return;
   $("sidebar")?.classList.add("open");
@@ -303,7 +304,8 @@ function renderCoachDashboard(){
   if($("statCompleted"))$("statCompleted").textContent=String(completed);
   if($("statPending"))$("statPending").textContent=String(pending);
   if($("statProgress"))$("statProgress").textContent=progress+"%";
-  const onTarget=stats.filter(({row,program})=>studentActiveToday(row)&&program.todayPlanned>0&&program.todayDone>=program.todayPlanned).length;
+  // Özet sayısı listedeki "Hedefte" etiketiyle aynı kuralı kullanır.
+  const onTarget=stats.filter(({row,program})=>!dashboardNeedsReview(row)&&program.todayPlanned>0&&program.todayDone>=program.todayPlanned).length;
   if($("dashboardSummary"))$("dashboardSummary").textContent=rows.length
     ?"Bugün hedefte: "+onTarget+" / "+rows.length+" öğrenci · Takip bekleyen: "+pending
     :"Öğrenci eklediğinde bugünkü durum burada özetlenir.";
@@ -3429,7 +3431,7 @@ $("programDaysClear")?.addEventListener("click",()=>coachWeekPreset([]));
 if($("coachV8ModalPicker")){$("coachV8ModalPicker").innerHTML=coachV8Picker("modal");coachV8BindPicker($("coachV8ModalPicker"),"modal","programTaskText")}
 $("programTaskAddDraft")?.addEventListener("click",coachV8AddModalToDraft);
 $("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});
-$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("dashboardBulkBtn")?.addEventListener("click",()=>{showCoachPage("programs");coachV35Open()});$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
+$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("dashboardBulkBtn")?.addEventListener("click",()=>{if(!coachReportRows.length){showCoachPage("students");openStudentConnect();return}showCoachPage("programs");coachV35Open()});$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTaskBackdrop")?.addEventListener("keydown",event=>{
   if(event.key==="Escape"){event.preventDefault();closeProgramTaskModal();return}
   if(event.key!=="Tab")return;

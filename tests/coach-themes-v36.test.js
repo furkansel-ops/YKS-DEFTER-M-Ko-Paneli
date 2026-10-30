@@ -62,16 +62,30 @@ test("v36 panel CSS'inde ham renk kalmaz; her renk anahtarının Gece ve Canlı 
   const raw=/#[0-9a-fA-F]{3,8}\b|rgba?\(\s*\d+\s*[\s,]\s*\d+\s*[\s,]\s*\d+\s*(?:[,/]\s*[\d.]+%?\s*)?\)|(?<![-\w])(?:white|black)(?![-\w])/;
   for(const name of sheets()){
     const css=read(name);
-    for(const [,body] of css.matchAll(/\{([^{}]*)\}/g)){
-      const rest=body.replace(/var\(--kc-[\w-]+,[^()]*(?:\([^()]*\)[^()]*)*\)/g,"");
-      assert.doesNotMatch(rest,raw,name+": temaya bağlanmamış renk → "+rest.trim().slice(0,120));
-    }
+    // Dosyanın tamamı taranır (iç içe kurallar ve yorum sonrası bildirimler dahil); yalnız yorumlar ve sarılmış renkler çıkarılır.
+    const rest=css.replace(/\/\*[\s\S]*?\*\//g,"").replace(/var\(--kc-[\w-]+,[^()]*(?:\([^()]*\)[^()]*)*\)/g,"");
+    const found=rest.match(raw);
+    assert.equal(found,null,name+": temaya bağlanmamış renk → "+(found?rest.slice(Math.max(0,found.index-60),found.index+20):""));
     for(const [,key] of css.matchAll(/var\(--kc-([\w-]+),/g)){
       assert.ok(night.includes("--kc-"+key+":"),name+": Gece karşılığı yok "+key);
       assert.ok(vivid.includes("--kc-"+key+":"),name+": Canlı karşılığı yok "+key);
     }
   }
   assert.match(night,/color-scheme:dark/);
+});
+
+test("v36 renk eşlemesi: açık temalarda gri yazı okunur, Gece'de yarı saydam beyazlar koyu iz olur",()=>{
+  const tokens=read("coach-theme-tokens-v36.css");
+  const value=(scope,key)=>{const at=tokens.indexOf(scope);return tokens.slice(at,tokens.indexOf("}",at)).match(new RegExp("--kc-"+key+":([^;]+);"))?.[1]};
+  const lum=hex=>{const n=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.03928?v/12.92:((v+.055)/1.055)**2.4);return .2126*n[0]+.7152*n[1]+.0722*n[2]};
+  const onWhite=hex=>1.05/(lum(hex)+.05);
+  for(const scope of [":root:not([data-theme])",':root[data-theme="vivid"]'])
+    for(const key of ["71809a","9aa6b5","8a97a8"]){
+      const hex=value(scope,key);
+      assert.ok(hex&&onWhite(hex)>=4.5,scope+" "+key+" → "+hex+" beyazda "+(hex?onWhite(hex).toFixed(2):"yok"));
+    }
+  assert.match(value(':root[data-theme="night"]',"ffffff-a140"),/^rgba\(4,8,18,/);
+  assert.ok(onWhite(value(":root:not([data-theme])","2873f0"))>=4.5,"Sade Mavi ana mavisi beyazla 4.5:1");
 });
 
 test("v36 yan menü öğrenci uygulaması gibi gruplu: Takip, Analiz, İletişim",t=>{
@@ -110,4 +124,22 @@ test("v36 ana sayfa: özet kart, Toplu görev yaz ve renkli durum etiketleri",t=
   assert.deepEqual([pills.Zeynep.textContent,pills.Zeynep.classList.contains("attention")],["2 geciken konu",true]);
   assert.deepEqual([pills.Ali.textContent,pills.Ali.classList.contains("behind")],["Bugün girmedi",true]);
   assert.equal(doc.querySelector("#dashboardSummary").textContent,"Bugün hedefte: 1 / 4 öğrenci · Takip bekleyen: 1");
+});
+
+test("v36 öğrencisi olmayan koçta Toplu görev yaz öğrenci eklemeyi açar",t=>{
+  const {doc}=fixture(t);
+  doc.querySelector("#dashboardBulkBtn").click();
+  assert.equal(doc.querySelector("#studentsPage").classList.contains("hidden"),false);
+  assert.equal(doc.querySelector("#studentConnectBackdrop").classList.contains("hidden"),false);
+  assert.equal(doc.querySelector("#coachV10Bulk"),null);
+});
+
+test("v36 tablette (760px+) çekmece kapanı devreye girmez; ikon şeridi her zaman görünür",t=>{
+  const {w,doc}=fixture(t);
+  w.innerWidth=900;
+  doc.querySelector("#menuBtn").click();
+  assert.equal(doc.querySelector("#sidebar").classList.contains("open"),false);
+  w.innerWidth=390;
+  doc.querySelector("#menuBtn").click();
+  assert.equal(doc.querySelector("#sidebar").classList.contains("open"),true);
 });
