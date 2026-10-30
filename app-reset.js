@@ -1588,23 +1588,56 @@ function readCoachUiPrefs(){
 function writeCoachUiPrefs(next){
   try{localStorage.setItem(COACH_UI_PREFS,JSON.stringify(next))}catch{}
 }
-// v38 · Koç notları: her koç hesabı için ayrı, bu cihazda saklanır.
+// v38/v39 · Koç notları: coachNotes/{koçUid} belgesinde tüm cihazlarda eşitlenir.
+// Cihazdaki kopya hızlı açılış ve bağlantı/izin sorunu için yedektir.
 const COACH_NOTES_PREFIX="yks_coach_notes_v1:";
 function coachNotesKey(){return COACH_NOTES_PREFIX+(auth.currentUser?.uid||"guest")}
-function loadCoachNotes(){
+function coachNotesState(state,scope){
+  if($("coachNotesState"))$("coachNotesState").textContent=state;
+  if(scope&&$("coachNotesScope"))$("coachNotesScope").textContent=scope;
+}
+function readLocalCoachNotes(){try{return localStorage.getItem(coachNotesKey())||""}catch{return""}}
+function writeLocalCoachNotes(value){try{if(value)localStorage.setItem(coachNotesKey(),value);else localStorage.removeItem(coachNotesKey());return true}catch{return false}}
+let coachNotesEdited=false;
+async function loadCoachNotes(){
   const input=$("coachNotesInput");if(!input)return;
-  try{input.value=localStorage.getItem(coachNotesKey())||""}catch{input.value=""}
-  if($("coachNotesState"))$("coachNotesState").textContent="Yazdıkça kaydedilir";
+  const local=readLocalCoachNotes(),uid=auth.currentUser?.uid;
+  input.value=local;coachNotesEdited=false;
+  coachNotesState("Yazdıkça kaydedilir","Bu cihazda saklanır");
+  if(!uid)return;
+  try{
+    const snap=await getDoc(doc(db,"coachNotes",uid));
+    if(snap.exists()){
+      const remote=text(snap.data()?.text,2000);
+      // Açılıştan beri yazmaya başladıysa koçun yazdığını ezme.
+      if(!coachNotesEdited){input.value=remote;writeLocalCoachNotes(remote)}
+    }else if(local){
+      await setDoc(doc(db,"coachNotes",uid),{text:local,updatedAt:serverTimestamp()});
+    }
+    coachNotesState("Yazdıkça kaydedilir","Tüm cihazlarında");
+  }catch(error){
+    console.error("Koç notları",error);
+    coachNotesState("Yazdıkça kaydedilir","Bu cihazda saklanır");
+  }
+}
+async function saveCoachNotes(value){
+  const local=writeLocalCoachNotes(value),uid=auth.currentUser?.uid;
+  if(!uid){coachNotesState(local?"Bu cihazda kaydedildi":"Kaydedilemedi");return}
+  try{
+    await setDoc(doc(db,"coachNotes",uid),{text:value,updatedAt:serverTimestamp()});
+    coachNotesState("Kaydedildi","Tüm cihazlarında");
+  }catch(error){
+    console.error("Koç notları kaydedilemedi",error);
+    coachNotesState(local?"Bu cihazda kaydedildi":"Kaydedilemedi","Bu cihazda saklanır");
+  }
 }
 let coachNotesTimer=0;
 $("coachNotesInput")?.addEventListener("input",event=>{
   const value=String(event.currentTarget.value||"").slice(0,2000);
+  coachNotesEdited=true;
   clearTimeout(coachNotesTimer);
-  coachNotesTimer=setTimeout(()=>{
-    let saved=true;
-    try{if(value)localStorage.setItem(coachNotesKey(),value);else localStorage.removeItem(coachNotesKey())}catch{saved=false}
-    if($("coachNotesState"))$("coachNotesState").textContent=saved?"Kaydedildi":"Kaydedilemedi (tarayıcı depolaması kapalı)";
-  },400);
+  coachNotesState("Kaydediliyor…");
+  coachNotesTimer=setTimeout(()=>void saveCoachNotes(value),800);
 });
 const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#0a0f1c"},vivid:{name:"Canlı",color:"#6a4cf5"}};
 function coachThemeId(value){return COACH_THEMES[value]?value:"refined-blue"}

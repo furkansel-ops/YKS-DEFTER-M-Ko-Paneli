@@ -188,12 +188,16 @@ async function deleteCoachData(uid){
   step("Öğrenci bağlantıları kapatılıyor…");
   const links=await byCoach(COLLECTIONS.links);
   for(const item of links.docs)if(item.data()?.active===true)await updateDoc(item.ref,{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  step("Koç notların siliniyor…");
+  // coachNotes kuralı henüz yayında değilse belge de olamaz; izin hatası silmeyi durdurmaz.
+  try{const notes=doc(db,"coachNotes",uid);if((await getDoc(notes)).exists())await deleteDoc(notes)}
+  catch(error){if(!String(error?.code||"").includes("permission-denied"))throw error}
   step("Koç profili siliniyor…");
   const profile=doc(db,COLLECTIONS.profiles,uid);
   if((await getDoc(profile)).exists())await deleteDoc(profile);
 }
 function clearCoachDeviceData(){
-  try{for(const key of Object.keys(localStorage))if(key.startsWith("yks-coach-week-draft-v7:")||key==="yks_coach_ui_preferences_v2"||key===PENDING_KEY)localStorage.removeItem(key)}catch{}
+  try{for(const key of Object.keys(localStorage))if(key.startsWith("yks-coach-week-draft-v7:")||key.startsWith("yks_coach_notes_v1:")||key==="yks_coach_ui_preferences_v2"||key===PENDING_KEY)localStorage.removeItem(key)}catch{}
 }
 async function runDelete(){
   const user=auth.currentUser;if(!user||deleting||!typedSil())return;

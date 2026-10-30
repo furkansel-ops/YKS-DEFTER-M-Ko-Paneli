@@ -97,17 +97,56 @@ test("v38 bekleyen iş yoksa sakin bir boş durum gösterilir",t=>{
   assert.equal(doc.querySelector("#coachNavMessageBadge").hidden,true);
 });
 
-test("v38 koç notları koç hesabına göre bu cihazda saklanır; yer tutucu metin kaldırıldı",t=>{
+const flush=()=>new Promise(resolve=>setImmediate(resolve));
+function cloud(w,{remote=null,fail=false}={}){
+  const store={},writes=[];
+  if(remote!==null)store["coachNotes/coach-1"]={text:remote};
+  w.getDoc=async ref=>{const key=ref.parts.join("/");if(fail)throw Object.assign(new Error("izin"),{code:"permission-denied"});return{exists:()=>Boolean(store[key]),data:()=>store[key]}};
+  w.setDoc=async(ref,data)=>{if(fail)throw Object.assign(new Error("izin"),{code:"permission-denied"});writes.push(data);store[ref.parts.join("/")]=data};
+  return{store,writes};
+}
+
+test("v39 koç notları buluta kaydedilir ve tüm cihazlarda açılır; yer tutucu metin kaldırıldı",async t=>{
   const {w,doc}=fixture(t);
   assert.doesNotMatch(read("index.html"),/Panel sade tutuldu/);
-  const input=doc.querySelector("#coachNotesInput");
+  const {store}=cloud(w),input=doc.querySelector("#coachNotesInput");
   input.value="Mehmet: Cuma deneme sonrası konuş.";
   input.dispatchEvent(new w.Event("input",{bubbles:true}));
-  w.__timer();
+  assert.equal(doc.querySelector("#coachNotesState").textContent,"Kaydediliyor…");
+  w.__timer();await flush();
+  assert.equal(store["coachNotes/coach-1"].text,"Mehmet: Cuma deneme sonrası konuş.");
+  assert.deepEqual(Object.keys(store["coachNotes/coach-1"]).sort(),["text","updatedAt"]);
   assert.equal(w.localStorage.getItem("yks_coach_notes_v1:coach-1"),"Mehmet: Cuma deneme sonrası konuş.");
   assert.equal(doc.querySelector("#coachNotesState").textContent,"Kaydedildi");
-  input.value="";w.eval("loadCoachNotes()");
-  assert.equal(input.value,"Mehmet: Cuma deneme sonrası konuş.");
+  assert.equal(doc.querySelector("#coachNotesScope").textContent,"Tüm cihazlarında");
+});
+
+test("v39 başka cihazda yazılan not açılışta buluttan gelir",async t=>{
+  const {w,doc}=fixture(t);
+  cloud(w,{remote:"Zeynep velisini ara"});
+  w.localStorage.setItem("yks_coach_notes_v1:coach-1","eski not");
+  w.eval("loadCoachNotes()");await flush();
+  assert.equal(doc.querySelector("#coachNotesInput").value,"Zeynep velisini ara");
+  assert.equal(w.localStorage.getItem("yks_coach_notes_v1:coach-1"),"Zeynep velisini ara");
+});
+
+test("v39 yalnız bu cihazda olan eski not ilk açılışta buluta taşınır",async t=>{
+  const {w}=fixture(t);
+  const {writes}=cloud(w);
+  w.localStorage.setItem("yks_coach_notes_v1:coach-1","cihazdaki not");
+  w.eval("loadCoachNotes()");await flush();
+  assert.deepEqual(writes.map(x=>x.text),["cihazdaki not"]);
+});
+
+test("v39 kural yayında değilken not kaybolmaz: bu cihazda saklanır",async t=>{
+  const {w,doc}=fixture(t);
+  cloud(w,{fail:true});
+  const input=doc.querySelector("#coachNotesInput");
+  input.value="kural yokken";input.dispatchEvent(new w.Event("input",{bubbles:true}));
+  w.__timer();await flush();
+  assert.equal(w.localStorage.getItem("yks_coach_notes_v1:coach-1"),"kural yokken");
+  assert.equal(doc.querySelector("#coachNotesState").textContent,"Bu cihazda kaydedildi");
+  assert.equal(doc.querySelector("#coachNotesScope").textContent,"Bu cihazda saklanır");
 });
 
 test("v38 uzun listede ilk 6 iş görünür, gerisi düğmeyle açılır",t=>{

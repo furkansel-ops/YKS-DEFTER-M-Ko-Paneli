@@ -22,7 +22,7 @@ test("giriş ekranı e-posta, Google ve kayıt sekmesini aynı sayfada sunar; es
   assert.match(html,/id="authView" class="auth-page hidden"/);
   for(const id of ["authStatus","signInBtn","nbLoginForm","nbRegisterForm","nbAuthTitle"])assert.match(html,new RegExp('id="'+id+'"'));
   assert.match(html,/data-nb-mode="register"/);
-  assert.match(html,/<script type="module" src="\.\/coach-auth-v34\.js\?v=1\.1\.0"><\/script>/);
+  assert.match(html,/<script type="module" src="\.\/coach-auth-v34\.js\?v=1\.1\.\d+"><\/script>/);
   assert.match(read("register.html"),/location\.replace\("\.\/#register"\)/);
 });
 
@@ -55,4 +55,9 @@ test("koç hesabını silme: önce kimlik, sonra koçun verileri, en son hesap; 
   assert.doesNotMatch(data2,/coachingShares|studentCoachAccess|users\//);
   assert.match(js,/key\.startsWith\("yks-coach-week-draft-v7:"\)/);
   assert.doesNotMatch(js,/localStorage\.clear/);
+  // v39: koç notları buluttan ve cihazdan silinir; kural yayında değilse izin hatası silmeyi durdurmaz.
+  const notes=data2.indexOf('doc(db,"coachNotes",uid)'),profile=data2.indexOf("Koç profili siliniyor");
+  assert.ok(notes>0&&notes<profile,"notlar profilden önce silinir");
+  assert.match(data2,/catch\(error\)\{if\(!String\(error\?\.code\|\|""\)\.includes\("permission-denied"\)\)throw error\}/);
+  assert.match(js,/key\.startsWith\("yks_coach_notes_v1:"\)/);
 });
