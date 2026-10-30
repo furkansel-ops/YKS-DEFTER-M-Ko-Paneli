@@ -24,10 +24,10 @@
 #programsPage .coach-v6-logo{display:grid;place-items:center;flex:none;width:45px;height:45px;border-radius:13px;background:linear-gradient(140deg,var(--kc-9387ff,#9387ff),var(--kc-6153ed,#6153ed));color:var(--kc-ffffff,#fff);box-shadow:0 8px 20px var(--kc-6854f2-a165,#6854f22a)}
 #programsPage .coach-v6-logo svg{width:24px;height:24px}
 #programsPage .coach-v6-title>div{min-width:0;flex:1}
-#programsPage .coach-v6-kicker{display:block;margin-bottom:3px;color:var(--kc-6554ed,#6554ed);font-size:10px;font-weight:850;letter-spacing:.09em}
+#programsPage .coach-v6-kicker{display:block;margin-bottom:3px;color:var(--kc-6554ed,#6554ed);font-size:12px;font-weight:850;letter-spacing:.09em}
 #programsPage .coach-v6-title h2{margin:0;color:var(--kc-202641,#202641);font-size:23px;font-weight:840;line-height:1.3;letter-spacing:-.035em}
 #programsPage .coach-v6-title p{margin:4px 0 0;color:var(--cw-muted);font-size:12px;line-height:1.5}
-#programsPage .coach-v6-sync{flex:none;padding:7px 11px;border:1px solid var(--kc-d6e9e4,#d6e9e4);border-radius:20px;background:var(--kc-f3fbf8,#f3fbf8);color:var(--kc-248769,#248769);font-size:10px;font-weight:740}
+#programsPage .coach-v6-sync{flex:none;padding:7px 11px;border:1px solid var(--kc-d6e9e4,#d6e9e4);border-radius:20px;background:var(--kc-f3fbf8,#f3fbf8);color:var(--kc-248769,#248769);font-size:12px;font-weight:740}
 #programsPage .coach-v6-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;min-width:0}
 #programsPage .coach-v6-metric{
  display:flex;gap:12px;align-items:center;min-width:0;min-height:105px;padding:15px 16px;
@@ -41,16 +41,16 @@
 #programsPage .coach-v6-metric>div:last-child{display:grid;gap:4px;min-width:0}
 #programsPage .coach-v6-metric span{font-size:12px;color:var(--kc-536484,#536484);font-weight:640}
 #programsPage .coach-v6-metric strong{font-size:25px;line-height:1.15;font-weight:850;color:var(--kc-1f2a45,#1f2a45);font-variant-numeric:tabular-nums}
-#programsPage .coach-v6-metric small{font-size:10px;line-height:1.4;color:var(--kc-71829b,#71829b)}
+#programsPage .coach-v6-metric small{font-size:12px;line-height:1.4;color:var(--kc-71829b,#71829b)}
 #programsPage .coach-v6-metric[data-stat="done"] small{color:var(--kc-20977b,#20977b)}
 #programsPage .coach-v6-sheet{min-width:0;padding:17px 16px 16px;border:1px solid var(--cw-line);border-radius:17px;background:var(--kc-ffffff,#fff);box-shadow:0 9px 22px var(--kc-20386b-a043,#20386b0b)}
 #programsPage .coach-v6-sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:1px 2px 16px}
 #programsPage .coach-v6-sheet-head h3{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 5px;font-size:17px;font-weight:820;color:var(--cw-ink)}
-#programsPage .coach-v6-week-label{display:inline-block;padding:5px 9px;border-radius:8px;background:var(--kc-f0edff,#f0edff);color:var(--kc-6954e7,#6954e7);font-size:10px;font-weight:800;white-space:nowrap}
-#programsPage .coach-v6-sheet-head p{margin:0;font-size:11px;line-height:1.5;color:var(--cw-muted)}
+#programsPage .coach-v6-week-label{display:inline-block;padding:5px 9px;border-radius:8px;background:var(--kc-f0edff,#f0edff);color:var(--kc-6954e7,#6954e7);font-size:12px;font-weight:800;white-space:nowrap}
+#programsPage .coach-v6-sheet-head p{margin:0;font-size:12px;line-height:1.5;color:var(--cw-muted)}
 #programsPage .coach-v6-sheet-tabs{display:flex;gap:5px;flex:none}
 #programsPage .coach-v6-sheet-tabs button{
- min-height:37px;padding:8px 12px;border:1px solid var(--cw-line);border-radius:9px;background:var(--kc-ffffff,#fff);color:var(--kc-60708d,#60708d);font-size:11px;font-weight:780;cursor:pointer;
+ min-height:37px;padding:8px 12px;border:1px solid var(--cw-line);border-radius:9px;background:var(--kc-ffffff,#fff);color:var(--kc-60708d,#60708d);font-size:12px;font-weight:780;cursor:pointer;
 }
 #programsPage .coach-v6-sheet-tabs button[aria-pressed="true"]{background:var(--kc-6554f3,#6554f3);border-color:var(--kc-6554f3,#6554f3);color:var(--kc-ffffff,#fff);box-shadow:0 4px 12px var(--kc-6755ef-a180,#6755ef2e)}
 #programsPage .coach-v6-sheet-tabs button:focus-visible{outline:2px solid var(--kc-6554f3,#6554f3);outline-offset:2px}
@@ -69,9 +69,9 @@
  border-bottom:1px solid var(--cw-line);background:var(--kc-f9faff,#f9faff);text-align:center;
 }
 #programsPage .coach-v6-day.is-today .coach-v6-day-head{background:var(--kc-f0edff,#f0edff)}
-#programsPage .coach-v6-day-head strong{font-size:11px;font-weight:790;color:var(--kc-263754,#263754)}
-#programsPage .coach-v6-day-head span{font-size:10px;font-weight:720;color:var(--kc-64738f,#64738f)}
-#programsPage .coach-v6-day-head small{font-size:9px;color:var(--kc-92a0b2,#92a0b2);line-height:1.35}
+#programsPage .coach-v6-day-head strong{font-size:12px;font-weight:790;color:var(--kc-263754,#263754)}
+#programsPage .coach-v6-day-head span{font-size:12px;font-weight:720;color:var(--kc-64738f,#64738f)}
+#programsPage .coach-v6-day-head small{font-size:12px;color:var(--kc-92a0b2,#92a0b2);line-height:1.35}
 #programsPage .coach-v6-day-tasks{display:grid;gap:7px;align-content:start;padding:8px 5px;flex:1;min-width:0}
 #programsPage .coach-v6-task{
  --cw-sub:var(--kc-64748b,#64748b);--cw-sub-bg:var(--kc-f1f5f9,#f1f5f9);
@@ -97,9 +97,9 @@
 #programsPage .coach-v6-task-symbol{display:grid;place-items:center;width:23px;height:23px;border-radius:7px;background:color-mix(in srgb,var(--cw-sub) 17%,var(--kc-ffffff,#fff));color:var(--cw-sub)}
 #programsPage .coach-v6-task-symbol svg{width:16px;height:16px}
 #programsPage .coach-v6-task-copy{display:grid;align-content:start;gap:4px;min-width:0}
-#programsPage .coach-v6-task-copy strong{font-size:10px;font-weight:820;color:var(--cw-sub);line-height:1.3;overflow-wrap:anywhere}
-#programsPage .coach-v6-task-copy span{font-size:10px;font-weight:520;color:var(--kc-35435b,#35435b);line-height:1.4;overflow-wrap:anywhere}
-#programsPage .coach-v6-task-copy small{font-size:9px;color:var(--cw-sub);line-height:1.3}
+#programsPage .coach-v6-task-copy strong{font-size:12px;font-weight:820;color:var(--cw-sub);line-height:1.3;overflow-wrap:anywhere}
+#programsPage .coach-v6-task-copy span{font-size:12px;font-weight:520;color:var(--kc-35435b,#35435b);line-height:1.4;overflow-wrap:anywhere}
+#programsPage .coach-v6-task-copy small{font-size:12px;color:var(--cw-sub);line-height:1.3}
 #programsPage .coach-v6-task[data-task-completed="true"]{opacity:.8}
 #programsPage .coach-v6-task-actions{
  display:flex;grid-column:1/-1;justify-content:flex-end;gap:4px;margin-top:1px;
@@ -110,11 +110,11 @@
 }
 #programsPage .coach-v6-task-actions button:hover{border-color:var(--cw-sub);background:var(--kc-ffffff,#fff)}
 #programsPage .coach-v6-task-actions button:focus-visible{outline:2px solid var(--cw-sub);outline-offset:1px}
-#programsPage .coach-v6-day-empty{padding:22px 7px;color:var(--kc-98a3b8,#98a3b8);font-size:10px;line-height:1.5;text-align:center}
+#programsPage .coach-v6-day-empty{padding:22px 7px;color:var(--kc-98a3b8,#98a3b8);font-size:12px;line-height:1.5;text-align:center}
 #programsPage .coach-v6-add-day{
  min-height:38px;width:calc(100% - 12px);margin:4px 6px 8px;padding:6px;
  border:1px dashed var(--kc-cddaf4,#cddaf4);border-radius:8px;background:var(--kc-fcfdff,#fcfdff);
- color:var(--kc-6c76bd,#6c76bd);font-size:11px;font-weight:820;cursor:pointer;
+ color:var(--kc-6c76bd,#6c76bd);font-size:12px;font-weight:820;cursor:pointer;
 }
 #programsPage .coach-v6-add-day:hover{border-color:var(--kc-6654e9,#6654e9);background:var(--kc-f5f3ff,#f5f3ff)}
 #programsPage .coach-v6-add-day:focus-visible{outline:2px solid var(--kc-6654e9,#6654e9);outline-offset:2px}
@@ -146,13 +146,13 @@
 }
 @media(max-width:490px){
  #programsPage .coach-v6-title h2{font-size:20px}
- #programsPage .coach-v6-sync{font-size:9px}
+ #programsPage .coach-v6-sync{font-size:12px}
  #programsPage .coach-v6-metric{gap:6px;padding:10px;min-height:80px}
  #programsPage .coach-v6-metric-icon{width:30px;height:30px;border-radius:9px}
  #programsPage .coach-v6-metric-icon svg{width:16px;height:16px}
- #programsPage .coach-v6-metric span{font-size:10px}
+ #programsPage .coach-v6-metric span{font-size:12px}
  #programsPage .coach-v6-metric strong{font-size:18px}
- #programsPage .coach-v6-metric small{font-size:9px}
+ #programsPage .coach-v6-metric small{font-size:12px}
  #programsPage .coach-v6-days:not([data-layout="list"]){grid-template-columns:minmax(0,1fr)}
  #programsPage .coach-v6-day-head{display:flex;align-items:center;gap:8px;justify-content:flex-start}
  #programsPage .coach-v6-day-head small{margin-left:auto}

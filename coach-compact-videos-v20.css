@@ -12,13 +12,13 @@
   line-height:1.25;
 }
 .coach-v19-video-pane .coach-v19-pane-intro>small{
-  font-size:10px;
+  font-size:12px;
   line-height:1.35;
 }
 .coach-v19-video-pane .coach-v19-linked{
   margin:7px 10px 0;
   padding:7px 9px;
-  font-size:10px;
+  font-size:12px;
   line-height:1.35;
 }
 .coach-v19-video-pane .coach-video-library{
@@ -53,15 +53,15 @@
 .coach-v19-video-pane .coach-video-seg button{
   min-width:0;
   padding:0 5px;
-  font-size:10px;
+  font-size:12px;
 }
 .coach-v19-video-pane .coach-video-filters select{
   height:32px;
-  font-size:11px;
+  font-size:12px;
   padding:0 8px;
 }
 .coach-v19-video-pane .coach-video-filters label>span{
-  font-size:10px;
+  font-size:12px;
   margin:0 0 3px;
 }
 .coach-v19-video-pane .coach-video-tools{
@@ -77,7 +77,7 @@
   min-height:27px;
   height:27px;
   padding:0 8px;
-  font-size:10px;
+  font-size:12px;
 }
 .coach-v19-video-pane .coach-video-search{
   height:30px;
@@ -88,7 +88,7 @@
 .coach-v19-video-pane .coach-video-meta{
   padding:8px 10px 0;
   gap:6px;
-  font-size:10px;
+  font-size:12px;
 }
 
 /* Compact two-column results; each card uses a small landscape thumbnail
@@ -129,7 +129,7 @@
   bottom:4px;
   padding:2px 4px;
   border-radius:4px;
-  font-size:8px;
+  font-size:11.5px;
 }
 .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-body{
   grid-column:2;
@@ -141,18 +141,18 @@
   padding:7px 7px 5px;
 }
 .coach-v19-video-pane .coach-video-card-body small{
-  font-size:9px;
+  font-size:12px;
   line-height:1.2;
 }
 .coach-v19-video-pane .coach-video-card-body b{
-  font-size:10.5px;
+  font-size:12px;
   line-height:1.3;
   overflow-wrap:anywhere;
   -webkit-line-clamp:2;
 }
 .coach-v19-video-pane .coach-video-card-body em{
   display:block;
-  font-size:9px;
+  font-size:12px;
   line-height:1.25;
   white-space:nowrap;
   overflow:hidden;
@@ -176,7 +176,7 @@
   min-height:31px;
   height:auto;
   padding:4px 3px;
-  font-size:9px;
+  font-size:12px;
   line-height:1.15;
   white-space:normal;
   text-wrap:balance;
@@ -227,7 +227,7 @@
   }
   .coach-v19-video-pane .coach-video-card-actions button{
     min-height:35px;
-    font-size:10px;
+    font-size:12px;
   }
 }
 @media (max-width:375px){
@@ -246,7 +246,7 @@
     grid-template-columns:repeat(3,minmax(0,1fr));
   }
   .coach-v19-video-pane .coach-video-card-actions button{
-    font-size:9px;
+    font-size:12px;
   }
 }
 @media (prefers-reduced-motion:reduce){

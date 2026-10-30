@@ -9,7 +9,7 @@
   border-color:var(--kc-b6adfa,#b6adfa);background:var(--kc-f2efff,#f2efff);color:var(--kc-5846d8,#5846d8);
 }
 #programsPage .coach-v7-panel-actions button.coach-v9-expand:hover{background:var(--kc-e8e3ff,#e8e3ff)}
-#programsPage .coach-v7-panel .coach-v7-note{font-size:10px;line-height:1.5}
+#programsPage .coach-v7-panel .coach-v7-note{font-size:12px;line-height:1.5}
 #programsPage .coach-v7-status:empty{display:none}
 #programsPage .coach-v6-days:not([data-layout="list"]){align-items:start}
 #programsPage .coach-v6-day{min-height:0;align-self:start}

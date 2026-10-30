@@ -55,7 +55,7 @@
  border:2px solid var(--kc-ffffff,#fff);box-shadow:0 0 0 1px var(--kc-dce3f1,#dce3f1);
 }
 #programsPage .coach-v15-header .program-student-picker>span{
- font-size:9px;line-height:1.4;
+ font-size:12px;line-height:1.4;
  font-weight:820;letter-spacing:.04em;color:var(--kc-7b8cb0,#7b8cb0);
 }
 #programsPage .coach-v15-header .program-student-picker select{
@@ -93,7 +93,7 @@
  width:auto;min-width:105px;height:46px;
  margin-left:10px;padding:0 13px;
  border:1px solid var(--kc-e1e6f0,#e1e6f0);border-radius:9px;
- color:var(--kc-52618e,#52618e);font-size:11px;font-weight:800;
+ color:var(--kc-52618e,#52618e);font-size:12px;font-weight:800;
  white-space:nowrap;box-shadow:0 2px 6px var(--kc-243757-a027,#24375707);
 }
 #programsPage .coach-v15-week-nav button:hover:not(:disabled){background:var(--kc-f5f3ff,#f5f3ff);color:var(--kc-5e50dc,#5e50dc)}
@@ -132,7 +132,7 @@
  font-variant-numeric:tabular-nums;
 }
 #programsPage .coach-v15-stat-body small{
- color:var(--kc-7182a4,#7182a4);font-size:10px;line-height:1.45;
+ color:var(--kc-7182a4,#7182a4);font-size:12px;line-height:1.45;
  overflow-wrap:anywhere;
 }
 #programsPage .coach-v15-stat[data-coach-summary="progress"] .coach-v15-stat-body small{color:var(--kc-148b75,#148b75)}
@@ -159,7 +159,7 @@
 }
 #programsPage .coach-v15-empty>div{display:grid;gap:4px}
 #programsPage .coach-v15-empty strong{font-size:13px;color:var(--kc-304363,#304363)}
-#programsPage .coach-v15-empty small{font-size:11px}
+#programsPage .coach-v15-empty small{font-size:12px}
 #programsPage .coach-v15-actions{
  display:flex;justify-content:space-between;align-items:center;gap:12px;
  margin:0 0 14px;padding:11px 12px;
@@ -167,14 +167,14 @@
 }
 #programsPage .coach-v15-action-heading{display:grid;gap:2px;min-width:0}
 #programsPage .coach-v15-action-heading strong{color:var(--kc-314363,#314363);font-size:12px;font-weight:830}
-#programsPage .coach-v15-action-heading span{color:var(--kc-91a0b8,#91a0b8);font-size:10px}
+#programsPage .coach-v15-action-heading span{color:var(--kc-91a0b8,#91a0b8);font-size:12px}
 #programsPage .coach-v15-action-buttons{
  display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;
  gap:8px;width:auto;min-width:0;
 }
 #programsPage .coach-v15-action-buttons button{
  flex:none;height:39px;min-height:39px;padding:0 14px;
- border-radius:9px;font-size:11px;font-weight:780;
+ border-radius:9px;font-size:12px;font-weight:780;
 }
 #programsPage .coach-v15-action-buttons .program-primary{
  background:var(--kc-6553ee,#6553ee);border-color:var(--kc-6553ee,#6553ee);
@@ -211,15 +211,15 @@
  #programsPage .coach-v15-header-tools{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
  #programsPage .coach-v15-header .program-student-picker{width:100%;min-width:0}
  #programsPage .coach-v15-week-nav{width:100%;justify-content:space-between}
- #programsPage .coach-v15-week-nav strong{min-width:0;flex:1;font-size:11px;padding:0 4px}
- #programsPage .coach-v15-week-nav .week-nav-today{min-width:85px;margin-left:6px;padding:0 8px;font-size:10px}
+ #programsPage .coach-v15-week-nav strong{min-width:0;flex:1;font-size:12px;padding:0 4px}
+ #programsPage .coach-v15-week-nav .week-nav-today{min-width:85px;margin-left:6px;padding:0 8px;font-size:12px}
  #programsPage .coach-v15-overview{gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
  #programsPage .coach-v15-stat{min-height:104px;padding:11px;gap:8px;align-items:flex-start;flex-direction:column}
  #programsPage .coach-v15-stat-icon{height:30px;width:30px;border-radius:9px}
  #programsPage .coach-v15-stat-icon svg{width:16px;height:16px}
  #programsPage .coach-v15-stat-body strong{font-size:20px}
- #programsPage .coach-v15-stat-label{font-size:10px}
- #programsPage .coach-v15-stat-body small{font-size:9px}
+ #programsPage .coach-v15-stat-label{font-size:12px}
+ #programsPage .coach-v15-stat-body small{font-size:12px}
  #programsPage .coach-v15-stat[data-coach-summary="progress"]{padding-right:32px}
  #programsPage .coach-v15-progress-ring{width:23px;height:23px;right:8px;top:12px}
  #programsPage .coach-v15-progress-ring::after{inset:5px}

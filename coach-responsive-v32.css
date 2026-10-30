@@ -85,13 +85,13 @@
   }
   .stat-card{gap:9px}
   .stat-card strong{font-size:23px}
-  .report-kpi>span,.exam-kpi>span,.topic-kpi>span,.error-kpi>span{font-size:9px;line-height:1.35}
+  .report-kpi>span,.exam-kpi>span,.topic-kpi>span,.error-kpi>span{font-size:12px;line-height:1.35}
   .report-kpi>strong,.exam-kpi>strong,.topic-kpi>strong,.error-kpi>strong{font-size:22px}
-  .report-kpi>small,.exam-kpi>small,.topic-kpi>small,.error-kpi>small{font-size:9px;line-height:1.35}
+  .report-kpi>small,.exam-kpi>small,.topic-kpi>small,.error-kpi>small{font-size:12px;line-height:1.35}
   .dash-panel{padding:14px;min-height:0}
   .report-card-head{min-height:0;padding:12px 13px;gap:8px}
   .report-card-head h2{font-size:14px;line-height:1.35}
-  .report-card-head p{font-size:10px;line-height:1.45}
+  .report-card-head p{font-size:12px;line-height:1.45}
   .report-overview-grid,.report-detail-grid,.report-side-stack{grid-template-columns:minmax(0,1fr)}
   .report-kpis,.report-student-hero{min-width:0}
   .report-day{min-width:93px}
@@ -109,12 +109,12 @@
   #programsPage .coach-v15-title-group{gap:10px}
   #programsPage .coach-v15-title-icon{width:42px;height:42px;border-radius:11px}
   #programsPage .coach-v15-title-group h1{font-size:24px}
-  #programsPage .coach-v15-title-group p{font-size:11px}
+  #programsPage .coach-v15-title-group p{font-size:12px}
   #programsPage .coach-v15-header-tools{width:100%;gap:9px}
   #programsPage .coach-v15-header .program-student-picker{min-width:0;max-width:100%}
   #programsPage .coach-v15-actions{display:grid;gap:9px;padding:11px;margin-bottom:10px}
   #programsPage .coach-v15-action-heading{gap:2px}
-  #programsPage .coach-v15-action-heading span{font-size:10px}
+  #programsPage .coach-v15-action-heading span{font-size:12px}
   #programsPage .coach-v15-action-buttons{
     display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
     justify-content:stretch;align-items:stretch;gap:7px;width:100%;
@@ -122,7 +122,7 @@
   #programsPage .coach-v15-action-buttons button{
     box-sizing:border-box;flex:none;width:100%;min-width:0;
     min-height:44px;height:auto;
-    padding:8px 7px;font-size:11px;line-height:1.35;white-space:normal;
+    padding:8px 7px;font-size:12px;line-height:1.35;white-space:normal;
   }
   #programsPage .coach-v15-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   #programsPage .coach-v15-stat{min-width:0;min-height:0;padding:11px}
@@ -145,7 +145,7 @@
     align-items:center;text-align:left;justify-items:stretch;padding:8px;
   }
   .settings-nav button small{display:none}
-  .settings-nav button b{font-size:11px;overflow-wrap:anywhere}
+  .settings-nav button b{font-size:12px;overflow-wrap:anywhere}
   .message-students{max-height:220px}
   .message-chat{min-height:360px}
   :where(.report-refresh,.exam-refresh,.topic-refresh,.error-refresh,
@@ -154,8 +154,8 @@
 @media(max-width:400px){
   .dashboard-stats,.students-summary,.report-kpis,.exam-kpis,.topic-kpis,.error-kpis{gap:7px}
   .stat-card,.report-kpi,.exam-kpi,.topic-kpi,.error-kpi{padding:10px}
-  #programsPage .coach-v15-week-nav strong{font-size:10px;min-width:0}
-  #programsPage .coach-v15-action-buttons button{font-size:10.5px}
+  #programsPage .coach-v15-week-nav strong{font-size:12px;min-width:0}
+  #programsPage .coach-v15-action-buttons button{font-size:12px}
   #programsPage .coach-v15-title-group h1{font-size:22px}
   #reportsPage .report-v29-task{grid-template-columns:31px minmax(0,1fr);row-gap:5px}
   #reportsPage .report-v29-task>em{grid-column:2;justify-self:start}

@@ -79,7 +79,7 @@
   display: block;
   margin-top: 3px;
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -91,7 +91,7 @@
   border-radius: 999px;
   background: var(--kc-73a7ff-a043,#73a7ff0b);
   color: var(--kc-a9caff,#a9caff);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -127,7 +127,7 @@
 #programWeekBoard .student-program-week-top span {
   display: block;
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -182,7 +182,7 @@
   border-radius: 11px;
   background: var(--kc-ffffff-a020,#ffffff05);
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.4;
   text-align: center;
   overflow-wrap: anywhere;
@@ -232,7 +232,7 @@
 
 #programWeekBoard .student-program-day-chip span {
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -244,7 +244,7 @@
 #programWeekBoard .student-program-day-chip small {
   margin-top: 3px;
   color: var(--kc-f4c77b,#f4c77b);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 #programWeekBoard .student-program-day-chip i {
@@ -270,7 +270,7 @@
   gap: 8px 14px;
   padding: 0 3px;
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -345,7 +345,7 @@
   border-color: transparent;
   background: var(--kc-73a7ff-a082,#73a7ff15);
   color: var(--kc-a9caff,#a9caff);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   text-align: center;
 }
@@ -353,7 +353,7 @@
 #programWeekBoard .student-program-head small {
   display: block;
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -376,13 +376,13 @@
   border-color: transparent;
   background: var(--kc-292824,#292824);
   color: var(--kc-f4c77b,#f4c77b);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   text-align: center;
 }
 
 #programWeekBoard .student-program-tag {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 900;
   letter-spacing: .04em;
 }
@@ -442,7 +442,7 @@
   border: 1.5px solid var(--kc-71819a,#71819a);
   border-radius: 6px;
   color: var(--kc-ffffff,#fff);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
   line-height: 1;
 }
@@ -488,7 +488,7 @@
 
 #programWeekBoard .classic-task-status {
   color: var(--classic-muted);
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
@@ -522,7 +522,7 @@
   border-radius: 7px;
   background: var(--kc-1a283b,#1a283b);
   color: var(--kc-bfd6f8,#bfd6f8);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   line-height: 1.2;
   cursor: pointer;
@@ -552,7 +552,7 @@
   min-height: 48px;
   border-color: transparent;
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 750;
   text-align: center;
 }
@@ -577,7 +577,7 @@
 
 #programWeekBoard .student-program-day-done small {
   color: var(--classic-muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 #programWeekBoard .student-program-day-done.on {
@@ -593,7 +593,7 @@
 #programWeekBoard .student-program-day-done.on .student-program-check-box::after {
   content: "✓";
   color: var(--kc-07170f,#07170f);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
 }
 
@@ -612,7 +612,7 @@
   margin: 0;
   padding: 0 3px;
   color: var(--classic-muted);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
@@ -678,7 +678,7 @@ html.program-task-open body { padding-right: var(--program-scrollbar-width, 0px)
 
   #programWeekBoard .student-program-day-chip span,
   #programWeekBoard .student-program-day-chip small {
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 

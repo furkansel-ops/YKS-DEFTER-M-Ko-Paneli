@@ -14,7 +14,7 @@
   color:var(--kc-263452,#263452);font-size:12px;font-weight:800;
 }
 #programsPage .coach-v8-picker-heading span,.program-builder-modal .coach-v8-picker-heading span{
-  color:var(--kc-78859d,#78859d);font-size:10px;line-height:1.4;
+  color:var(--kc-78859d,#78859d);font-size:12px;line-height:1.4;
 }
 #programsPage .coach-v8-level,.program-builder-modal .coach-v8-level{
   display:flex;gap:3px;flex:none;padding:3px;border:1px solid var(--kc-e4e7f1,#e4e7f1);border-radius:10px;background:var(--kc-f0f2fa,#f0f2fa);
@@ -22,7 +22,7 @@
 #programsPage .coach-v8-level button,.program-builder-modal .coach-v8-level button{
   min-width:45px;min-height:33px;padding:6px 9px;
   border:0;border-radius:7px;background:transparent;color:var(--kc-6d7891,#6d7891);
-  font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;
 }
 #programsPage .coach-v8-level button[aria-pressed="true"],.program-builder-modal .coach-v8-level button[aria-pressed="true"]{
   background:var(--kc-6554ef,#6554ef);color:var(--kc-ffffff,#fff);box-shadow:0 3px 9px var(--kc-6956e6-a204,#6956e634);
@@ -35,7 +35,7 @@
   min-width:0;min-height:44px;padding:9px 8px;
   border:1px solid var(--kc-e0e5f0,#e0e5f0);border-radius:10px;
   background:var(--kc-ffffff,#fff);color:var(--kc-40516f,#40516f);font-family:inherit;
-  font-size:11px;font-weight:760;text-align:left;cursor:pointer;
+  font-size:12px;font-weight:760;text-align:left;cursor:pointer;
   transition:border-color .14s ease,background-color .14s ease;
 }
 #programsPage .coach-v8-preset-grid button:hover,.program-builder-modal .coach-v8-preset-grid button:hover{
@@ -60,11 +60,11 @@
 #programsPage .coach-v8-shortcuts button{
   min-height:35px;padding:6px 11px;
   border:1px solid var(--kc-dce1ef,#dce1ef);border-radius:8px;
-  background:var(--kc-ffffff,#fff);color:var(--kc-5548aa,#5548aa);font-size:11px;font-weight:740;cursor:pointer;
+  background:var(--kc-ffffff,#fff);color:var(--kc-5548aa,#5548aa);font-size:12px;font-weight:740;cursor:pointer;
 }
 #programsPage .coach-v8-shortcuts button:hover{border-color:var(--kc-9d91f0,#9d91f0);background:var(--kc-f4f1ff,#f4f1ff)}
 #programsPage #coachV8DraftCount{
-  font-size:11px;line-height:1.5;font-weight:760;color:var(--kc-6251d0,#6251d0);
+  font-size:12px;line-height:1.5;font-weight:760;color:var(--kc-6251d0,#6251d0);
 }
 .program-builder-modal .coach-v8-modal-host{margin-bottom:15px}
 .program-builder-modal .program-task-draft{
@@ -83,11 +83,11 @@
 @media(max-width:530px){
   #programsPage .coach-v8-picker,.program-builder-modal .coach-v8-picker{padding:11px}
   #programsPage .coach-v8-preset-grid,.program-builder-modal .coach-v8-preset-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
-  #programsPage .coach-v8-preset-grid button,.program-builder-modal .coach-v8-preset-grid button{min-height:41px;padding:7px;font-size:10px}
+  #programsPage .coach-v8-preset-grid button,.program-builder-modal .coach-v8-preset-grid button{min-height:41px;padding:7px;font-size:12px}
   .program-builder-modal .coach-v8-picker-heading{align-items:flex-start;flex-wrap:wrap}
   #programsPage .coach-v8-day-tools{display:grid;gap:6px}
   #programsPage .coach-v8-shortcuts button{padding:7px}
-  .program-builder-modal .program-task-draft{padding:8px 9px;font-size:11px}
+  .program-builder-modal .program-task-draft{padding:8px 9px;font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){
   #programsPage .coach-v8-preset-grid button,.program-builder-modal .coach-v8-preset-grid button{transition:none}

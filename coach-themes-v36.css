@@ -34,7 +34,7 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
 .coach-shell-reset .coach-brand-v20 .brand-copy span{color:var(--k-muted)}
 .coach-shell-reset .coach-nav-v20{gap:2px;scrollbar-color:var(--k-line) transparent}
 .coach-shell-reset .coach-nav-v20::-webkit-scrollbar-thumb{background:var(--k-line)}
-.coach-nav-group{display:block;padding:12px 12px 4px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--k-muted)}
+.coach-nav-group{display:block;padding:12px 12px 4px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--k-muted)}
 .coach-nav-group:first-child{padding-top:2px}
 .coach-shell-reset .coach-nav-item,.coach-shell-reset .coach-nav-item:hover,.coach-shell-reset .coach-nav-item.on{border-color:transparent}
 .coach-shell-reset .coach-nav-item{min-height:38px;border-radius:11px;color:var(--k-side-ink);box-shadow:none}
@@ -65,7 +65,7 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
   .coach-shell-reset .coach-sidebar-v20,.coach-shell-reset .coach-nav-v20{overflow-x:hidden}
   .coach-shell-reset .coach-nav-v20{width:100%;padding-right:0;justify-items:center}
   .coach-shell-reset .coach-nav-item{width:70px;min-height:0;padding:8px 2px;grid-template-columns:1fr;justify-items:center;gap:3px;text-align:center}
-  .coach-shell-reset .coach-nav-item>b{font-size:10px;line-height:1.2;font-weight:750}
+  .coach-shell-reset .coach-nav-item>b{font-size:12px;line-height:1.2;font-weight:750}
   .coach-shell-reset .coach-profile-v20{grid-template-columns:1fr;padding:4px;border:0;background:none}
   .coach-shell-reset .coach-signout-v20{width:70px;text-align:center;padding:0}
   .coach-shell-reset .coach-mobile-menu-reset.mobile-only,.coach-shell-reset .overlay{display:none!important}
@@ -75,7 +75,7 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
 /* Ana sayfa: özet kart + 4 sayı */
 .coach-v36-top{display:grid;gap:12px;margin-bottom:16px}
 .dashboard-head.coach-v36-hero{display:block;margin:0;padding:22px 24px;border:0;border-radius:18px;background:var(--k-hero);color:var(--k-hero-ink)}
-.coach-v36-hero .dashboard-eyebrow{color:inherit;opacity:.85;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.coach-v36-hero .dashboard-eyebrow{color:inherit;opacity:.85;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .coach-v36-hero h1{margin:6px 0 4px;color:inherit}
 .coach-v36-hero p{margin:0;color:inherit;opacity:.9;font-size:13px}
 .coach-v36-hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
@@ -108,7 +108,7 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
 .coach-v36-themes button[aria-pressed="true"]{border-color:var(--k-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--k-accent) 28%,transparent)}
 .coach-v36-themes button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
 .coach-v36-themes b{font-size:13px}
-.coach-v36-themes small{font-size:11px;color:var(--k-muted)}
+.coach-v36-themes small{font-size:12px;color:var(--k-muted)}
 .coach-v36-swatch{display:block;height:46px;margin-bottom:4px;border-radius:10px;border:1px solid var(--k-line)}
 .coach-v36-swatch[data-swatch="refined-blue"]{background:linear-gradient(90deg,#f5f7fb 0 55%,#2f6bea 55% 78%,#e9f0fe 78%)}
 .coach-v36-swatch[data-swatch="night"]{background:linear-gradient(90deg,#0a0f1c 0 55%,#7aa2ff 55% 78%,#1a2440 78%)}

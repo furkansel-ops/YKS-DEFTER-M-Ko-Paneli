@@ -34,7 +34,7 @@
   border-radius:6px;
   background:var(--kc-ffffff,#fff);
   color:var(--kc-617089,#617089);
-  font-size:9px;
+  font-size:12px;
   font-weight:800;
   line-height:1.2;
   white-space:normal;
@@ -86,16 +86,16 @@
   border-radius:7px;
   background:var(--kc-113a2a,#113a2a);
   color:var(--kc-9ff3c7,#9ff3c7);
-  font-size:10px;
+  font-size:12px;
   font-weight:850;
 }
 #programsPage #programWeekBoard .student-program-task .classic-task-status[data-completion-status="pending"]{
-  font-size:10px;
+  font-size:12px;
   font-weight:750;
 }
 @media(max-width:770px){
   #programsPage #coachVisualWeekBoard .coach-v27-task-status{
-    font-size:10px;
+    font-size:12px;
     min-height:23px;
   }
 }

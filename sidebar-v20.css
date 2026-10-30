@@ -30,7 +30,7 @@
 }
 .coach-brand-v20 .brand-copy b,.coach-brand-v20 .brand-copy span{display:block}
 .coach-brand-v20 .brand-copy b{font-size:16px;color:var(--kc-ffffff,#fff)}
-.coach-brand-v20 .brand-copy span{font-size:10px;color:var(--kc-86a7d2,#86a7d2);margin-top:2px}
+.coach-brand-v20 .brand-copy span{font-size:12px;color:var(--kc-86a7d2,#86a7d2);margin-top:2px}
 
 .coach-nav-v20{display:grid;gap:4px;margin-top:3px;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:2px;scrollbar-width:thin;scrollbar-color:var(--kc-29415f,#29415f) transparent}
 .coach-nav-item{
@@ -76,8 +76,8 @@
   color:var(--kc-ffffff,#fff);font-weight:800
 }
 .coach-profile-v20 span,.coach-profile-v20 b{display:block}
-.coach-profile-v20 span{font-size:9px;color:var(--kc-7f91aa,#7f91aa)}
-.coach-profile-v20 b{font-size:11px;color:var(--kc-ffffff,#fff);margin-top:2px}
+.coach-profile-v20 span{font-size:12px;color:var(--kc-7f91aa,#7f91aa)}
+.coach-profile-v20 b{font-size:12px;color:var(--kc-ffffff,#fff);margin-top:2px}
 .sidebar-footer{display:grid;gap:8px}
 .coach-signout-v20{
   width:100%;height:40px;

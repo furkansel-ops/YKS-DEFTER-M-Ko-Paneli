@@ -43,16 +43,16 @@
     padding:6px 5px 4px;
   }
   .coach-v19-video-pane .coach-video-card-body b{
-    font-size:10px;
+    font-size:12px;
     line-height:1.25;
     overflow-wrap:anywhere;
   }
   .coach-v19-video-pane .coach-video-card-body small{
-    font-size:9px;
+    font-size:12px;
     line-height:1.2;
   }
   .coach-v19-video-pane .coach-video-card-body em{
-    font-size:8px;
+    font-size:11.5px;
     line-height:1.2;
   }
   .coach-v19-video-pane .coach-video-card:not(.skeleton) .coach-video-card-actions{
@@ -67,7 +67,7 @@
     min-height:34px;
     height:auto;
     padding:3px 2px;
-    font-size:8.5px;
+    font-size:11.5px;
     line-height:1.15;
     overflow-wrap:anywhere;
     white-space:normal;

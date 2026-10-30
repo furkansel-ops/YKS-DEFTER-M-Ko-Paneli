@@ -23,11 +23,11 @@
   padding:8px 5px 7px;gap:2px;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head strong{
-  font-size:11px;line-height:1.2;
+  font-size:12px;line-height:1.2;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head span,
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head small{
-  font-size:9px;line-height:1.2;
+  font-size:12px;line-height:1.2;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v14-progress{
   height:4px;margin-top:3px;
@@ -56,13 +56,13 @@
   gap:2px;min-width:0;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy strong{
-  font-size:10px;line-height:1.2;overflow-wrap:anywhere;
+  font-size:12px;line-height:1.2;overflow-wrap:anywhere;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy span{
-  font-size:9px;line-height:1.25;overflow-wrap:anywhere;
+  font-size:12px;line-height:1.25;overflow-wrap:anywhere;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy small{
-  font-size:9px;line-height:1.2;
+  font-size:12px;line-height:1.2;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-task-menu summary{
   width:18px;min-height:26px;height:26px;
@@ -78,20 +78,20 @@
   gap:2px;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft-main strong{
-  font-size:10px;line-height:1.2;
+  font-size:12px;line-height:1.2;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v7-draft-main span{
-  font-size:9px;line-height:1.25;
+  font-size:12px;line-height:1.25;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-empty{
-  padding:8px 3px;font-size:9px;
+  padding:8px 3px;font-size:12px;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v11-day-footer{
   padding:5px 4px;
 }
 #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-add-day{
   min-height:31px;height:31px;
-  padding:3px;font-size:10px;border-radius:7px;
+  padding:3px;font-size:12px;border-radius:7px;
 }
 /* More space comes from tighter, natural-flow cards rather than hidden text. */
 @media (min-width:1001px) and (max-height:790px){

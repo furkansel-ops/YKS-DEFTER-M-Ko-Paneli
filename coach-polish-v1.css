@@ -94,7 +94,7 @@ body{
   display:inline-flex;
   align-items:center;
   gap:7px;
-  font-size:9px;
+  font-size:12px;
   font-weight:900;
   letter-spacing:.15em;
   color:var(--kc-2873f0,#2873f0);
@@ -367,7 +367,7 @@ body{
   ){border-radius:16px}
 }
 @media(max-width:480px){
-  .dashboard-eyebrow{font-size:8px}
+  .dashboard-eyebrow{font-size:11.5px}
   .dashboard-head h1,.students-head h1,.programs-head h1,
   .reports-head h1,.pp-coach-head h1,.exams-head h1,
   .topics-head h1,.errors-head h1,.messages-head h1,.settings-head h1{

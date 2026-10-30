@@ -24,7 +24,8 @@ test('right pane alone gets dense two-column horizontal video cards and smaller 
   assert.match(css,/\.coach-v19-video-pane \.coach-video-card:not\(\.skeleton\) \.coach-video-thumb\{[\s\S]*?grid-column:1/);
   assert.match(css,/\.coach-v19-video-pane \.coach-video-card:not\(\.skeleton\) \.coach-video-card-actions\{[\s\S]*?grid-column:1\/-1/);
   assert.match(css,/\.coach-v19-video-pane \.coach-video-card-actions button\{[\s\S]*?min-height:31px/);
-  assert.match(css,/\.coach-v19-video-pane \.coach-video-card-body b\{[\s\S]*?font-size:10\.5px/);
+  // v37: yoğun kartlarda da başlık en az 12px (yazı boyutu alt sınırı).
+  assert.match(css,/\.coach-v19-video-pane \.coach-video-card-body b\{[\s\S]*?font-size:12px/);
   assert.doesNotMatch(css,/#programsPage|#coachVisualWeekBoard|\.coach-v14-week|\.coach-v19-left|#programTaskText|display:none!important/);
 });
 
