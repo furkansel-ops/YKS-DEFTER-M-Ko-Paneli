@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-29T08:59:14.404Z",
+  "generatedAt": "2026-10-30T09:03:06.226Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-29T08:53:32.691Z"
+      "refreshedAt": "2026-10-30T08:57:41.106Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-29T08:57:40.187Z"
+      "refreshedAt": "2026-10-30T09:01:45.596Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1181,
+      "videoCount": 1182,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,6 +4611,13 @@
       ],
       "videos": [
         {
+          "id": "J8dfba1c3iU",
+          "title": "9. Sınıf Kimya 1. Dönem 1. Yazılı | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=J8dfba1c3iU",
+          "thumbnail": "https://i.ytimg.com/vi/J8dfba1c3iU/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "H30R9do-Ptc",
           "title": "10. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
           "url": "https://www.youtube.com/watch?v=H30R9do-Ptc",
@@ -4686,16 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=QHgFF1oigdI",
           "thumbnail": "https://i.ytimg.com/vi/QHgFF1oigdI/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "KQ2hB5Y4Vtg",
-          "title": "9. Sınıf Kimya 8. Ders | Bohr ve Modern Atom Teorisi | Atomdan Periyodik Tabloya | MAARİF",
-          "url": "https://www.youtube.com/watch?v=KQ2hB5Y4Vtg",
-          "thumbnail": "https://i.ytimg.com/vi/KQ2hB5Y4Vtg/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-29T08:58:06.760Z"
+      "refreshedAt": "2026-10-30T09:02:07.939Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4708,7 +4708,7 @@
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
       "videoCount": 476,
-      "playlistCount": 5,
+      "playlistCount": 6,
       "archiveComplete": true,
       "playlists": [
         {
@@ -5288,6 +5288,43 @@
           "contentComplete": true
         },
         {
+          "id": "PLPiKfgD2PWLY",
+          "title": "Biyoloji 26-27 Yazılı Hazırlıkları",
+          "url": "https://www.youtube.com/playlist?list=PLPiKfgD2PWLY",
+          "videoCount": 4,
+          "videos": [
+            {
+              "id": "qFQ7IHAbw8E",
+              "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qFQ7IHAbw8E",
+              "thumbnail": "https://i.ytimg.com/vi/qFQ7IHAbw8E/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "Gezsr1bV8uE",
+              "title": "9th Grade Biology 1st Semester 1st Written Exam Maarif Model | GENERAL REVIEW | File Materials | ...",
+              "url": "https://www.youtube.com/watch?v=Gezsr1bV8uE",
+              "thumbnail": "https://i.ytimg.com/vi/Gezsr1bV8uE/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "qsES0yYmA3s",
+              "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qsES0yYmA3s",
+              "thumbnail": "https://i.ytimg.com/vi/qsES0yYmA3s/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "CzV0hQL74Ho",
+              "title": "12th grade biology 1st term 1st written exam | General review",
+              "url": "https://www.youtube.com/watch?v=CzV0hQL74Ho",
+              "thumbnail": "https://i.ytimg.com/vi/CzV0hQL74Ho/hqdefault.jpg",
+              "channel": "Biosem"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLMkKvY88diDE",
           "title": "10. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLMkKvY88diDE",
@@ -5444,27 +5481,34 @@
           "id": "PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
           "title": "BİOSEM GÜNDEM",
           "url": "https://www.youtube.com/playlist?list=PLqLwBmByktJUN3fvEMX_9lDI-Db8AkRhy",
-          "videoCount": 14,
+          "videoCount": 10,
           "videos": [
+            {
+              "id": "Gezsr1bV8uE",
+              "title": "9th Grade Biology 1st Semester 1st Written Exam Maarif Model | GENERAL REVIEW | File Materials | ...",
+              "url": "https://www.youtube.com/watch?v=Gezsr1bV8uE",
+              "thumbnail": "https://i.ytimg.com/vi/Gezsr1bV8uE/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "qFQ7IHAbw8E",
+              "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qFQ7IHAbw8E",
+              "thumbnail": "https://i.ytimg.com/vi/qFQ7IHAbw8E/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "qsES0yYmA3s",
+              "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
+              "url": "https://www.youtube.com/watch?v=qsES0yYmA3s",
+              "thumbnail": "https://i.ytimg.com/vi/qsES0yYmA3s/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "67pqs5VIL4w",
               "title": "MAARIF MODEL LECTURES 2026 - 2027 I 9TH-10TH-11TH GRADE BIOLOGY I File Materials",
               "url": "https://www.youtube.com/watch?v=67pqs5VIL4w",
               "thumbnail": "https://i.ytimg.com/vi/67pqs5VIL4w/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
-            },
-            {
-              "id": "WDWC3qzN_hI",
-              "title": "The Importance of Biology | 9th Grade Biology Lecture | File Materials | Biosem",
-              "url": "https://www.youtube.com/watch?v=WDWC3qzN_hI",
-              "thumbnail": "https://i.ytimg.com/vi/WDWC3qzN_hI/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
-            },
-            {
-              "id": "Z5fVahdYsx8",
-              "title": "Living Things and Response 11th Grade Maarif Model",
-              "url": "https://www.youtube.com/watch?v=Z5fVahdYsx8",
-              "thumbnail": "https://i.ytimg.com/vi/Z5fVahdYsx8/hqdefault.jpg",
               "channel": "Biosem Biyoloji"
             },
             {
@@ -5479,13 +5523,6 @@
               "title": "Biyoloji Zemin Hazırla 2027",
               "url": "https://www.youtube.com/watch?v=IQwcp4Az-Go",
               "thumbnail": "https://i.ytimg.com/vi/IQwcp4Az-Go/hqdefault.jpg",
-              "channel": "Biosem"
-            },
-            {
-              "id": "eeBlHMSaL4Q",
-              "title": "Start Your 39-Day TYT Biology Bootcamp! | Book Review and Bootcamp Schedule",
-              "url": "https://www.youtube.com/watch?v=eeBlHMSaL4Q",
-              "thumbnail": "https://i.ytimg.com/vi/eeBlHMSaL4Q/hqdefault.jpg",
               "channel": "Biosem"
             },
             {
@@ -5515,34 +5552,6 @@
               "url": "https://www.youtube.com/watch?v=VtEB4Q7S08g",
               "thumbnail": "https://i.ytimg.com/vi/VtEB4Q7S08g/hqdefault.jpg",
               "channel": "Biosem"
-            },
-            {
-              "id": "1yQc35hxhlE",
-              "title": "Energy and ATP Structure | 10th Grade Biology Lecture | Study Materials | Biosem",
-              "url": "https://www.youtube.com/watch?v=1yQc35hxhlE",
-              "thumbnail": "https://i.ytimg.com/vi/1yQc35hxhlE/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
-            },
-            {
-              "id": "7Gdao-DhH6c",
-              "title": "Tropism and Nasty Movements | 11th Grade Biology Lecture | Course Materials | Biosem",
-              "url": "https://www.youtube.com/watch?v=7Gdao-DhH6c",
-              "thumbnail": "https://i.ytimg.com/vi/7Gdao-DhH6c/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
-            },
-            {
-              "id": "0IieRml2qTg",
-              "title": "Auxin Experiments | 11th Grade Biology Lesson | Dosia Materials | Biosem",
-              "url": "https://www.youtube.com/watch?v=0IieRml2qTg",
-              "thumbnail": "https://i.ytimg.com/vi/0IieRml2qTg/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
-            },
-            {
-              "id": "qsES0yYmA3s",
-              "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
-              "url": "https://www.youtube.com/watch?v=qsES0yYmA3s",
-              "thumbnail": "https://i.ytimg.com/vi/qsES0yYmA3s/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
             }
           ],
           "contentComplete": true
@@ -5634,7 +5643,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-29T08:58:15.667Z"
+      "refreshedAt": "2026-10-30T09:02:15.620Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8153,7 +8162,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-29T08:58:27.142Z"
+      "refreshedAt": "2026-10-30T09:02:24.822Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8973,7 +8982,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-29T08:58:34.645Z"
+      "refreshedAt": "2026-10-30T09:02:31.532Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9802,7 +9811,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-29T08:58:37.187Z"
+      "refreshedAt": "2026-10-30T09:02:33.952Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9815,7 +9824,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2302,
+      "videoCount": 2306,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10720,6 +10729,27 @@
       ],
       "videos": [
         {
+          "id": "lIWVoykFdDk",
+          "title": "11TH GRADE 1ST TERM 1ST WRITTEN EXAM QUESTIONS / SCENARIO 3 / COMMON EXAM",
+          "url": "https://www.youtube.com/watch?v=lIWVoykFdDk",
+          "thumbnail": "https://i.ytimg.com/vi/lIWVoykFdDk/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "UexT5bTZzm8",
+          "title": "10.Sınıf Edebiyat 1.Dönem 1.Yazılı FULL TEKRAR | Maarif Modeli Sınava Hazırlık",
+          "url": "https://www.youtube.com/watch?v=UexT5bTZzm8",
+          "thumbnail": "https://i.ytimg.com/vi/UexT5bTZzm8/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "AUNik_SckG4",
+          "title": "9th Grade 1st Semester 1st Exam FULL REVIEW / Maarif Model",
+          "url": "https://www.youtube.com/watch?v=AUNik_SckG4",
+          "thumbnail": "https://i.ytimg.com/vi/AUNik_SckG4/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "DNYX3GbpnXk",
           "title": "10TH GRADE 1ST SEMESTER 1ST WRITTEN EXAM QUESTIONS / COMMON EXAM",
           "url": "https://www.youtube.com/watch?v=DNYX3GbpnXk",
@@ -10781,30 +10811,9 @@
           "url": "https://www.youtube.com/watch?v=ZykHyxgQJek",
           "thumbnail": "https://i.ytimg.com/vi/ZykHyxgQJek/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "JOhK1vsltUc",
-          "title": "MODES OF EXPRESSION IN PARAGRAPHS Question Solving / INTENSIVE PARAGRAPH BOOTCAMP",
-          "url": "https://www.youtube.com/watch?v=JOhK1vsltUc",
-          "thumbnail": "https://i.ytimg.com/vi/JOhK1vsltUc/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "N45IkTXW_nI",
-          "title": "LETTER AND PETITION EXPLANATION / 11th Grade Literature Unit 1: I Have Something to Say! / 2027",
-          "url": "https://www.youtube.com/watch?v=N45IkTXW_nI",
-          "thumbnail": "https://i.ytimg.com/vi/N45IkTXW_nI/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "BHyXwvUOmnk",
-          "title": "PARAGRAFTA BOŞLUK DOLDURMA Soru Çözümü / MEŞAKKAT PARAGRAF KAMPI",
-          "url": "https://www.youtube.com/watch?v=BHyXwvUOmnk",
-          "thumbnail": "https://i.ytimg.com/vi/BHyXwvUOmnk/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-29T08:59:14.400Z"
+      "refreshedAt": "2026-10-30T09:03:06.220Z"
     }
   }
 }
