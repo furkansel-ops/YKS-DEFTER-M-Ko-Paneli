@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-30T09:03:06.226Z",
+  "generatedAt": "2026-10-31T08:56:03.999Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-30T08:57:41.106Z"
+      "refreshedAt": "2026-10-31T08:50:35.742Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-30T09:01:45.596Z"
+      "refreshedAt": "2026-10-31T08:54:39.301Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,7 +3559,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1182,
+      "videoCount": 1183,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4611,6 +4611,13 @@
       ],
       "videos": [
         {
+          "id": "67vB2jOFKDo",
+          "title": "12. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | Kimya ve Elektrik | Yazılı Provası",
+          "url": "https://www.youtube.com/watch?v=67vB2jOFKDo",
+          "thumbnail": "https://i.ytimg.com/vi/67vB2jOFKDo/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "J8dfba1c3iU",
           "title": "9. Sınıf Kimya 1. Dönem 1. Yazılı | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
           "url": "https://www.youtube.com/watch?v=J8dfba1c3iU",
@@ -4686,16 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=XbACJ9I4SjA",
           "thumbnail": "https://i.ytimg.com/vi/XbACJ9I4SjA/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "QHgFF1oigdI",
-          "title": "11. Sınıf Kimya 9. Ders | Çarpışma Teorisi ve Aktivasyon Enerjisi | Tepkimelerde Hız | MAARİF",
-          "url": "https://www.youtube.com/watch?v=QHgFF1oigdI",
-          "thumbnail": "https://i.ytimg.com/vi/QHgFF1oigdI/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-30T09:02:07.939Z"
+      "refreshedAt": "2026-10-31T08:55:02.520Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -4707,7 +4707,7 @@
         "Biyoloji"
       ],
       "archiveIndex": "media/my-teachers/biosem/index.json",
-      "videoCount": 476,
+      "videoCount": 479,
       "playlistCount": 6,
       "archiveComplete": true,
       "playlists": [
@@ -5291,8 +5291,29 @@
           "id": "PLPiKfgD2PWLY",
           "title": "Biyoloji 26-27 Yazılı Hazırlıkları",
           "url": "https://www.youtube.com/playlist?list=PLPiKfgD2PWLY",
-          "videoCount": 4,
+          "videoCount": 7,
           "videos": [
+            {
+              "id": "UUsD9WLOk0w",
+              "title": "10. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+              "url": "https://www.youtube.com/watch?v=UUsD9WLOk0w",
+              "thumbnail": "https://i.ytimg.com/vi/UUsD9WLOk0w/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "8YMJB_dAXUc",
+              "title": "9. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+              "url": "https://www.youtube.com/watch?v=8YMJB_dAXUc",
+              "thumbnail": "https://i.ytimg.com/vi/8YMJB_dAXUc/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
+            {
+              "id": "NpFekQ4jX7Y",
+              "title": "11. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+              "url": "https://www.youtube.com/watch?v=NpFekQ4jX7Y",
+              "thumbnail": "https://i.ytimg.com/vi/NpFekQ4jX7Y/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "qFQ7IHAbw8E",
               "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
@@ -5328,8 +5349,15 @@
           "id": "PLMkKvY88diDE",
           "title": "10. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLMkKvY88diDE",
-          "videoCount": 7,
+          "videoCount": 8,
           "videos": [
+            {
+              "id": "UUsD9WLOk0w",
+              "title": "10. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+              "url": "https://www.youtube.com/watch?v=UUsD9WLOk0w",
+              "thumbnail": "https://i.ytimg.com/vi/UUsD9WLOk0w/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "qFQ7IHAbw8E",
               "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
@@ -5386,8 +5414,15 @@
           "id": "PLNgjhYy7HAMY",
           "title": "9. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLNgjhYy7HAMY",
-          "videoCount": 6,
+          "videoCount": 7,
           "videos": [
+            {
+              "id": "8YMJB_dAXUc",
+              "title": "9. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+              "url": "https://www.youtube.com/watch?v=8YMJB_dAXUc",
+              "thumbnail": "https://i.ytimg.com/vi/8YMJB_dAXUc/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "Gezsr1bV8uE",
               "title": "9th Grade Biology 1st Semester 1st Written Exam Maarif Model | GENERAL REVIEW | File Materials | ...",
@@ -5437,8 +5472,15 @@
           "id": "PLQUvAy0iZ3Fc",
           "title": "11. SINIF Maarif Model 2027 | MEB | BİYOLOJİ",
           "url": "https://www.youtube.com/playlist?list=PLQUvAy0iZ3Fc",
-          "videoCount": 5,
+          "videoCount": 6,
           "videos": [
+            {
+              "id": "NpFekQ4jX7Y",
+              "title": "11. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+              "url": "https://www.youtube.com/watch?v=NpFekQ4jX7Y",
+              "thumbnail": "https://i.ytimg.com/vi/NpFekQ4jX7Y/hqdefault.jpg",
+              "channel": "Biosem Biyoloji"
+            },
             {
               "id": "qsES0yYmA3s",
               "title": "11th Grade Biology 1st Term 1st Written Exam Full Review | Maarif Model | Dosia Materials | Biosem",
@@ -5559,6 +5601,27 @@
       ],
       "videos": [
         {
+          "id": "UUsD9WLOk0w",
+          "title": "10. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+          "url": "https://www.youtube.com/watch?v=UUsD9WLOk0w",
+          "thumbnail": "https://i.ytimg.com/vi/UUsD9WLOk0w/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "8YMJB_dAXUc",
+          "title": "9. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+          "url": "https://www.youtube.com/watch?v=8YMJB_dAXUc",
+          "thumbnail": "https://i.ytimg.com/vi/8YMJB_dAXUc/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
+          "id": "NpFekQ4jX7Y",
+          "title": "11. Sınıf 1. Dönem 1. Yazılı Provaları | Tüm Senaryolar",
+          "url": "https://www.youtube.com/watch?v=NpFekQ4jX7Y",
+          "thumbnail": "https://i.ytimg.com/vi/NpFekQ4jX7Y/hqdefault.jpg",
+          "channel": "Biosem"
+        },
+        {
           "id": "qFQ7IHAbw8E",
           "title": "10th Grade Biology 1st Semester 1st Exam Maarif Model | GENERAL REVIEW | Course Materials | Biosem",
           "url": "https://www.youtube.com/watch?v=qFQ7IHAbw8E",
@@ -5620,30 +5683,9 @@
           "url": "https://www.youtube.com/watch?v=YVRxCVqiR3w",
           "thumbnail": "https://i.ytimg.com/vi/YVRxCVqiR3w/hqdefault.jpg",
           "channel": "Biosem"
-        },
-        {
-          "id": "A1C0OD4u9SY",
-          "title": "Fotosentez Çalışmaları | 10. Sınıf Biyoloji Konu Anlatımı | Dosia Materyalleri | Biosem",
-          "url": "https://www.youtube.com/watch?v=A1C0OD4u9SY",
-          "thumbnail": "https://i.ytimg.com/vi/A1C0OD4u9SY/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "bT9Vt0qHqbw",
-          "title": "Photosynthesis Stages | 10th Grade Biology Lecture | Course Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=bT9Vt0qHqbw",
-          "thumbnail": "https://i.ytimg.com/vi/bT9Vt0qHqbw/hqdefault.jpg",
-          "channel": "Biosem"
-        },
-        {
-          "id": "a-YofK21jZw",
-          "title": "Introduction to Photosynthesis | 10th Grade Biology Lesson | Course Materials | Biosem",
-          "url": "https://www.youtube.com/watch?v=a-YofK21jZw",
-          "thumbnail": "https://i.ytimg.com/vi/a-YofK21jZw/hqdefault.jpg",
-          "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-30T09:02:15.620Z"
+      "refreshedAt": "2026-10-31T08:55:10.371Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8162,7 +8204,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-30T09:02:24.822Z"
+      "refreshedAt": "2026-10-31T08:55:20.290Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8175,8 +8217,8 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/kadir-gumus/index.json",
-      "videoCount": 232,
-      "playlistCount": 19,
+      "videoCount": 235,
+      "playlistCount": 22,
       "archiveComplete": true,
       "playlists": [
         {
@@ -8632,6 +8674,54 @@
           "contentComplete": true
         },
         {
+          "id": "PLSDZelLtC7Mg",
+          "title": "11. SINIF - MAARİF (ÖZET KONU ANLATIM) (TÜRK DİLİ VE EDEBİYATI)",
+          "url": "https://www.youtube.com/playlist?list=PLSDZelLtC7Mg",
+          "videoCount": 1,
+          "videos": [
+            {
+              "id": "pnvekAoGApE",
+              "title": "1. Traditional Turkish Theater (Orta Oyunu) (Grade 11, Theme 1) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=pnvekAoGApE",
+              "thumbnail": "https://i.ytimg.com/vi/pnvekAoGApE/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLTUbSm81UVOc",
+          "title": "10. SINIF - MAARİF (ÖZET KONU ANLATIM) (TÜRK DİLİ VE EDEBİYATI)",
+          "url": "https://www.youtube.com/playlist?list=PLTUbSm81UVOc",
+          "videoCount": 1,
+          "videos": [
+            {
+              "id": "r859PLlkI2A",
+              "title": "1. Sav - Sagu - Koşuk - Epic (Pre-Islamic Turkish Poetry) (10th Grade 1st Theme) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=r859PLlkI2A",
+              "thumbnail": "https://i.ytimg.com/vi/r859PLlkI2A/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLbJSnKeFOIks",
+          "title": "9. SINIF - MAARİF (ÖZET KONU ANLATIM) (TÜRK DİLİ VE EDEBİYATI)",
+          "url": "https://www.youtube.com/playlist?list=PLbJSnKeFOIks",
+          "videoCount": 1,
+          "videos": [
+            {
+              "id": "kxXTe0hXV2o",
+              "title": "1. Fine Arts and Literature (9th Grade Theme 1) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=kxXTe0hXV2o",
+              "thumbnail": "https://i.ytimg.com/vi/kxXTe0hXV2o/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLYdcKFkWayl8",
           "title": "1. DÖNEM 1. YAZILILAR (2027) (5-6-7-8. SINIFLAR)",
           "url": "https://www.youtube.com/playlist?list=PLYdcKFkWayl8",
@@ -8741,162 +8831,30 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLwy7o4Q68j6QbQQA_t8LAtalEkPQ-CwdQ",
-          "title": "KPSS ÇIKTI ÇIKIYOR - TÜRKÇE - İKİZ SORULAR",
-          "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6QbQQA_t8LAtalEkPQ-CwdQ",
-          "videoCount": 8,
-          "videos": [
-            {
-              "id": "Oz1eM5bb9H8",
-              "title": "1. ÇIKTI ÇIKIYOR KPSS- SES BİLGİSİ - ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=Oz1eM5bb9H8",
-              "thumbnail": "https://i.ytimg.com/vi/Oz1eM5bb9H8/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "qPXySlnF2MM",
-              "title": "2. ÇIKTI ÇIKIYOR KPSS- YAZIM KURALLARI - ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=qPXySlnF2MM",
-              "thumbnail": "https://i.ytimg.com/vi/qPXySlnF2MM/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "e3G-3OsdhN0",
-              "title": "3. PAST AND PROBABLE KPSS - PUNCTUATION MARKS - OSYM TWIN QUESTIONS",
-              "url": "https://www.youtube.com/watch?v=e3G-3OsdhN0",
-              "thumbnail": "https://i.ytimg.com/vi/e3G-3OsdhN0/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "8NRM51JtMZY",
-              "title": "4. ÇIKTI ÇIKIYOR KPSS- SÖZCÜKTE YAPI - ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=8NRM51JtMZY",
-              "thumbnail": "https://i.ytimg.com/vi/8NRM51JtMZY/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "C_KT2LOCyO0",
-              "title": "5. ÇIKTI ÇIKIYOR KPSS- SÖZCÜK TÜRLERİ - ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=C_KT2LOCyO0",
-              "thumbnail": "https://i.ytimg.com/vi/C_KT2LOCyO0/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "nC4rIUz7O5E",
-              "title": "6. ÇIKTI ÇIKIYOR KPSS- SÖZCÜK GRUPLARI - ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=nC4rIUz7O5E",
-              "thumbnail": "https://i.ytimg.com/vi/nC4rIUz7O5E/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "xxSJzzz4osI",
-              "title": "7. ÇIKTI ÇIKIYOR KPSS- CÜMLENİN ÖGELERİ- ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=xxSJzzz4osI",
-              "thumbnail": "https://i.ytimg.com/vi/xxSJzzz4osI/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "eEQ2Nj_3g_Y",
-              "title": "8. ÇIKTI ÇIKIYOR KPSS- FİİLİMSİLER- ÖSYM İKİZ SORULARI",
-              "url": "https://www.youtube.com/watch?v=eEQ2Nj_3g_Y",
-              "thumbnail": "https://i.ytimg.com/vi/eEQ2Nj_3g_Y/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLwy7o4Q68j6RaCe6YNfgqNLY4xmz43ucV",
-          "title": "TEKERRÜR - KPSS - SORULARLA TEKRAR",
-          "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6RaCe6YNfgqNLY4xmz43ucV",
-          "videoCount": 6,
-          "videos": [
-            {
-              "id": "6leoc2GyejQ",
-              "title": "8th REVISION KPSS - SENTENCE COMPONENTS QUESTION SOLUTIONS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=6leoc2GyejQ",
-              "thumbnail": "https://i.ytimg.com/vi/6leoc2GyejQ/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "eoRT6-vSGx0",
-              "title": "7. Repeated KPSS - Word Groups - Question Solution (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=eoRT6-vSGx0",
-              "thumbnail": "https://i.ytimg.com/vi/eoRT6-vSGx0/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "XnAwgEefTGY",
-              "title": "6th REPETITION KPSS -VERBS- QUESTION SOLUTION (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=XnAwgEefTGY",
-              "thumbnail": "https://i.ytimg.com/vi/XnAwgEefTGY/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "fmT-7_SK2zk",
-              "title": "5TH REPETITION KPSS -WORD TYPES- QUESTION SOLUTION (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=fmT-7_SK2zk",
-              "thumbnail": "https://i.ytimg.com/vi/fmT-7_SK2zk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "37BrMog3itU",
-              "title": "3rd REPETITION KPSS - PUNCTUATION MARKS - QUESTION SOLUTIONS (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=37BrMog3itU",
-              "thumbnail": "https://i.ytimg.com/vi/37BrMog3itU/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "TThrShy7etI",
-              "title": "1st REPETITION KPSS - PHONOLOGY - QUESTION SOLVING (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=TThrShy7etI",
-              "thumbnail": "https://i.ytimg.com/vi/TThrShy7etI/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLwy7o4Q68j6TI4pcXdP4FUcQws_Wj1zgM",
-          "title": "AYT - TÜRK DİLİ VE EDEBİYATI - DENEME",
-          "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6TI4pcXdP4FUcQws_Wj1zgM",
-          "videoCount": 4,
-          "videos": [
-            {
-              "id": "s0qbENiFUdQ",
-              "title": "AYT EDEBİYAT DENEME (2026 AYT EDEBİYAT SON PROVA) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=s0qbENiFUdQ",
-              "thumbnail": "https://i.ytimg.com/vi/s0qbENiFUdQ/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "_kMEqFoTSVM",
-              "title": "AYT LITERATURE PRACTICE TEST (2023 AYT LITERATURE TWIN) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=_kMEqFoTSVM",
-              "thumbnail": "https://i.ytimg.com/vi/_kMEqFoTSVM/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "1wK9NGJ2tv0",
-              "title": "AYT Literature Practice Test (2024 AYT Literature Twin) by Kadir Gümüş",
-              "url": "https://www.youtube.com/watch?v=1wK9NGJ2tv0",
-              "thumbnail": "https://i.ytimg.com/vi/1wK9NGJ2tv0/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "boPAyIVPC08",
-              "title": "AYT Literature Practice Test (2025 AYT Literature Twin) Kadir Gümüş",
-              "url": "https://www.youtube.com/watch?v=boPAyIVPC08",
-              "thumbnail": "https://i.ytimg.com/vi/boPAyIVPC08/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "kxXTe0hXV2o",
+          "title": "1. Fine Arts and Literature (9th Grade Theme 1) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=kxXTe0hXV2o",
+          "thumbnail": "https://i.ytimg.com/vi/kxXTe0hXV2o/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "pnvekAoGApE",
+          "title": "1. Traditional Turkish Theater (Orta Oyunu) (Grade 11, Theme 1) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=pnvekAoGApE",
+          "thumbnail": "https://i.ytimg.com/vi/pnvekAoGApE/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "r859PLlkI2A",
+          "title": "1. Sav - Sagu - Koşuk - Epic (Pre-Islamic Turkish Poetry) (10th Grade 1st Theme) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=r859PLlkI2A",
+          "thumbnail": "https://i.ytimg.com/vi/r859PLlkI2A/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
         {
           "id": "Zc65IjkVCxg",
           "title": "10th Grade - Turkish Language - Education 1st Term 1st Written Exam - OYSS (Kadir GÜMÜŞ) - Nation...",
@@ -8941,7 +8899,7 @@
         },
         {
           "id": "ZSsorj9Rw9Y",
-          "title": "5TH GRADE - TURKISH - MINISTRY OF EDUCATION 1ST SEMESTER 1ST EXAM - OYSS (Kadir GÜMÜŞ)",
+          "title": "5. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
           "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -8959,30 +8917,9 @@
           "url": "https://www.youtube.com/watch?v=N6THHBvda6A",
           "thumbnail": "https://i.ytimg.com/vi/N6THHBvda6A/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "inlVEvfehJ4",
-          "title": "11 ) 2024 KPSS LİSANS SORU İKİZİ(KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=inlVEvfehJ4",
-          "thumbnail": "https://i.ytimg.com/vi/inlVEvfehJ4/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "Ea0P4QgDbnI",
-          "title": "9) 2024 KPSS Undergraduate Exam Question Twin (Kadir Gümüş)",
-          "url": "https://www.youtube.com/watch?v=Ea0P4QgDbnI",
-          "thumbnail": "https://i.ytimg.com/vi/Ea0P4QgDbnI/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "jD6oeZ9MusM",
-          "title": "8) 2024 KPSS ASSOCIATE DEGREE QUESTION TWIN (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=jD6oeZ9MusM",
-          "thumbnail": "https://i.ytimg.com/vi/jD6oeZ9MusM/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-30T09:02:31.532Z"
+      "refreshedAt": "2026-10-31T08:55:27.533Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9811,7 +9748,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-30T09:02:33.952Z"
+      "refreshedAt": "2026-10-31T08:55:29.867Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10813,7 +10750,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-30T09:03:06.220Z"
+      "refreshedAt": "2026-10-31T08:56:03.988Z"
     }
   }
 }
