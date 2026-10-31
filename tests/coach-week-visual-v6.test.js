@@ -121,7 +121,7 @@ test('weekly quick actions section is removed without affecting existing lesson 
   assert.equal(visual.textContent.includes('Hızlı İşlemler'),false);
   assert.equal(visual.querySelectorAll('[data-coach-add-day]').length,7);
   assert.ok(visual.querySelector('[data-v10-bulk-toggle]'));
-  assert.ok(h.$('programAddWeekBtn'));
+  assert.equal(h.$('programAddWeekBtn'),null,'v45: hafta içi günler Çalışma ekle penceresinde seçilir');
   assert.ok(h.$('programTemplatesBtn'));
   assert.ok(h.$('programAddTaskBtn'));
   assert.equal(h.writes.length,0);
@@ -313,7 +313,7 @@ test('v8 repeated drafting keeps selected days, allowing multiple subjects witho
 
 test('v8 modal quick presets allow draft-first bulk planning without any Firestore action',t=>{
   const h=harness(t);
-  h.$('programAddWeekBtn').click();
+  h.$('programAddTaskBtn').click();h.$('programDaysWeekdays').click();
   const picker=h.$('coachV8ModalPicker');
   assert.equal(picker.querySelectorAll('[data-v8-preset]').length,8);
   picker.querySelector('[data-v8-level="AYT"]').click();
@@ -862,16 +862,15 @@ test('upper controls preserve templates, quick entry, classic switch and unchang
   const h=harness(t),page=h.$('programsPage');
   const idsBefore=[...h.$('coachVisualWeekBoard').querySelectorAll('[data-program-task-id]')].map(node=>node.dataset.programTaskId).sort();
   assert.deepEqual(idsBefore,['r-0-0','s-0-0','s-0-1','s-1-0','s-2-3']);
-  // v44: telefondaki ⋯ düğmesi beş işlemin yanına eklendi; işlemler aynı kalır.
+  // v44: telefondaki ⋯ düğmesi eklendi; v45: Haftaya Toplu Ekle Çalışma ekle penceresine katıldı.
   const buttons=page.querySelectorAll('.coach-v15-action-buttons button:not(.coach-v44-more)');
-  assert.equal(buttons.length,5);
+  assert.equal(buttons.length,4);
   assert.equal(page.querySelector('.coach-v15-action-buttons .coach-v44-more').previousElementSibling,h.$('programBulkTasksBtn'));
   assert.ok(h.$('programAddVideoBtn'),'Video Ekle is beside Çalışma Ekle');
   assert.equal(h.$('programAddVideoBtn').previousElementSibling,h.$('programAddTaskBtn'));
   assert.ok(h.$('programTemplatesBtn'));
   assert.ok(h.$('programAddTaskBtn'));
-  assert.ok(h.$('programAddWeekBtn'));
-  assert.equal(h.$('programBulkTasksBtn').previousElementSibling,h.$('programAddWeekBtn'),'Toplu Görev Yaz is beside Haftaya Toplu Ekle');
+  assert.equal(h.$('programBulkTasksBtn').previousElementSibling,h.$('programAddVideoBtn'),'Toplu Görev Yaz is beside Video Ekle');
   h.$('programTemplatesBtn').click();
   assert.equal(h.$('programTemplatePopover').classList.contains('hidden'),false);
   h.$('programTemplateClose').click();
@@ -947,7 +946,7 @@ test('table-only stylesheet suppresses duplicate panels without deleting old pro
   assert.match(app,/function renderProgramWorkspace/);
   assert.match(html,/id="programAddTaskBtn"/);
   assert.match(html,/id="programTemplatesBtn"/);
-  assert.match(html,/id="programAddWeekBtn"/);
+  assert.doesNotMatch(html,/id="programAddWeekBtn"/);
 });
 
 

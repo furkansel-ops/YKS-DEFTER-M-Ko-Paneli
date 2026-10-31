@@ -45,8 +45,8 @@ const pressed=doc=>[...doc.querySelectorAll("[data-coach-v44-day]")].filter(node
 
 test("v44 stil dosyası yüklenir; önbellek etiketi yenilendi; ⋯ düğmesi işlemlerin sonunda",()=>{
   const html=read("index.html");
-  assert.match(html,/<link rel="stylesheet" href="\.\/coach-programs-v44\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-students43-programs44"/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/coach-programs-v44\.css\?v=1\.0\.\d+">/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-students43-programs44[^"]*"/);
   assert.match(html,/id="programBulkTasksBtn"[^>]*>▤ Toplu Görev Yaz<\/button>\s*<button type="button" class="program-secondary coach-v44-more" id="programMoreBtn" aria-expanded="false"/);
 });
 
@@ -98,7 +98,7 @@ test("v44 4: ⋯ menüsü açılır; seçilince, dışarı dokununca ve Esc ile 
 test("v44 stilleri: telefonda kısa başlık, tek kart, tek sıra sayı ve işlem, gün şeridi ve tek gün",()=>{
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*#programsPage :is\(\.coach-v15-breadcrumb,\.coach-v15-title-icon,#coachV15Subtitle\)\{display:none\}/);
   assert.match(css,/#programsPage \.coach-v15-overview\{grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
-  assert.match(css,/#programsPage :is\(#programTemplatesBtn,#programAddVideoBtn,#programAddWeekBtn\)\{display:none;/);
+  assert.match(css,/#programsPage :is\(#programTemplatesBtn,#programAddVideoBtn\)\{display:none;/);
   assert.match(css,/\.coach-v14-week\.coach-v44-week:not\(\[data-layout="list"\]\)>\.coach-v14-day:not\(\.is-picked\)\{display:none\}/);
   assert.match(css,/#programsPage \.coach-v44-more,#programsPage \.coach-v44-daystrip\{display:none\}/,"masaüstünde şerit ve ⋯ yok");
 });

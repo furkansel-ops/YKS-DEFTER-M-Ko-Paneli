@@ -53,7 +53,8 @@
   <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.3.0">
   <link rel="stylesheet" href="./coach-home-v42.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-students-v43.css?v=1.0.0">
-  <link rel="stylesheet" href="./coach-programs-v44.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-programs-v44.css?v=1.0.1">
+  <link rel="stylesheet" href="./coach-task-composer-v45.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -313,7 +314,6 @@
             <button type="button" class="program-secondary" id="programTemplatesBtn">▤ Şablonlar</button>
             <button type="button" class="program-primary" id="programAddTaskBtn">＋ Çalışma Ekle</button>
             <button type="button" class="program-secondary coach-video-open-btn" id="programAddVideoBtn">▶ Video Ekle</button>
-            <button type="button" class="program-secondary" id="programAddWeekBtn">▦ Haftaya Toplu Ekle</button>
             <button type="button" class="program-secondary" id="programBulkTasksBtn" aria-haspopup="dialog">▤ Toplu Görev Yaz</button>
             <button type="button" class="program-secondary coach-v44-more" id="programMoreBtn" aria-expanded="false" aria-label="Diğer program işlemleri">⋯</button>
           </div>
@@ -1413,28 +1413,29 @@
         <label class="coach-v18-date"><span>Hafta ve başlangıç tarihi</span><input id="programTaskDate" type="date" required></label>
         <section class="coach-fast-days" id="programTaskDaysArea" aria-label="Çalışmanın ekleneceği günler">
           <div class="coach-fast-days-heading">
-            <div><b>Hangi günlerde çalışılacak?</b><small>Birden fazla gün seçebilirsin. Seçili haftanın tarihleri gösterilir.</small></div>
+            <div><b>Günler</b></div>
+            <div class="coach-v45-week" role="group" aria-label="Hafta"><button type="button" id="programTaskPrevWeek" aria-label="Önceki hafta">‹</button><strong id="programTaskWeekLabel">—</strong><button type="button" id="programTaskNextWeek" aria-label="Sonraki hafta">›</button></div>
             <span id="programTaskDayCount" role="status" aria-live="polite">1 gün</span>
           </div>
           <div class="coach-fast-day-grid" id="programTaskDayGrid" role="group" aria-label="Haftanın günleri"></div>
           <div class="coach-fast-shortcuts">
             <button type="button" id="programDaysWeekdays">Hafta içi</button>
-            <button type="button" id="programDaysAll">7 gün</button>
-            <button type="button" id="programDaysClear">Seçimi temizle</button>
+            <button type="button" id="programDaysAll">Her gün</button>
+            <button type="button" id="programDaysClear">Temizle</button>
           </div>
           <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
         </section>
         <details class="coach-v18-quick"><summary>Hazır çalışma örnekleri <span>İsteğe bağlı</span></summary><div id="coachV8ModalPicker" class="coach-v8-modal-host"></div></details>
         <label class="coach-v18-task-text"><span>Görev metni <em>Düzenlenebilir</em></span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
         <label class="coach-v22-legacy-video-link"><span>Video bağlantısı · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://youtu.be/..."></label>
-        <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderdikten sonra sıradaki çalışmayı ekle <small>Pencere açık kalsın, yeni görevi hızla yaz.</small></span></label>
-        <div class="program-task-info">Çalışmalar öğrencinin YKS Defterim programına <b>Koç ·</b> etiketiyle gönderilir. Gönderim, öğrenci cihazında uygulandığı anlamına gelmez.</div>
+        <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderince pencere açık kalsın <small>Sıradaki çalışmayı hemen yazabilirsin.</small></span></label>
+        <div class="program-task-info">Öğrencinin programına <b>Koç ·</b> etiketiyle gider.</div>
         <div class="program-task-status hidden" id="programTaskStatus"></div>
       </div>
       <footer>
         <button type="button" class="program-task-delete hidden" id="programTaskDelete">Görevi Sil</button>
         <button type="button" class="program-task-cancel" id="programTaskCancel">Vazgeç</button>
-        <button type="button" class="program-task-draft" id="programTaskAddDraft">Önce Taslağa Ekle</button>
+        <button type="button" class="program-task-draft" id="programTaskAddDraft">Taslağa ekle</button>
         <button type="button" class="program-task-send" id="programTaskSend">Programa ekle</button>
       </footer>
       </div>
@@ -1470,7 +1471,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>

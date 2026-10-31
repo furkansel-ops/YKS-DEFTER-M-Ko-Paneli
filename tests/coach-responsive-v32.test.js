@@ -106,7 +106,7 @@ test("responsive CSS scopes 7-column timetable to a horizontal scroll and keeps 
 
 test("mobile CSS does not hide any main page, program editing tool or report source",()=>{
   const css=read("coach-responsive-v32.css"),html=read("index.html");
-  for(const id of ["homePage","studentsPage","programsPage","reportsPage","examsPage","topicsPage","errorsPage","settingsPage","programAddTaskBtn","programTemplatesBtn","programAddWeekBtn","reportEvidenceAnalysis"])assert.ok(html.includes('id="'+id+'"'),id);
+  for(const id of ["homePage","studentsPage","programsPage","reportsPage","examsPage","topicsPage","errorsPage","settingsPage","programAddTaskBtn","programTemplatesBtn","programDaysWeekdays","reportEvidenceAnalysis"])assert.ok(html.includes('id="'+id+'"'),id);
   assert.doesNotMatch(css,/display:none\s*!important/);
   assert.doesNotMatch(css,/position:\s*absolute/);
   assert.doesNotMatch(css,/coach-v11-task-menu.*display:none/);

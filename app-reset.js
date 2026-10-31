@@ -3821,6 +3821,8 @@ function coachV18Apply(force=false){
   const countLabel=$("programBuilderCount")?.closest("label");
   if(countLabel)countLabel.hidden=activity!=="Soru çözümü";
   if(!textarea)return;
+  const bottom=$("programBuilderApply")?.closest(".coach-v18-builder-bottom");
+  bottom?.classList.remove("is-manual");
   if(!generated){
     if(hint)hint.textContent="Bir ders seçerek başlayabilirsin.";
     return;
@@ -3829,7 +3831,10 @@ function coachV18Apply(force=false){
     textarea.value=generated;coachV18LastAutoText=generated;
     textarea.dispatchEvent(new Event("input",{bubbles:true}));
     if(hint)hint.textContent="Görev metni hazır; göndermeden önce kontrol edebilirsin.";
-  }else if(hint)hint.textContent="Elle yazdığın metin korundu. Değiştirmek için ‘Görev metnini oluştur’a bas.";
+  }else{
+    bottom?.classList.add("is-manual");
+    if(hint)hint.textContent="Elle yazdığın metin korundu. Değiştirmek için ‘Görev metnini oluştur’a bas.";
+  }
 }
 function coachV18Reset(){
   coachV18LastAutoText="";
@@ -3841,6 +3846,8 @@ function coachV18Reset(){
   if($("programBuilderHint"))$("programBuilderHint").textContent="Bir ders seçerek başlayabilirsin.";
   const countLabel=$("programBuilderCount")?.closest("label");if(countLabel)countLabel.hidden=false;
   const quick=$("coachV8ModalPicker")?.closest("details");if(quick)quick.open=false;
+  $("programBuilderApply")?.closest(".coach-v18-builder-bottom")?.classList.remove("is-manual");
+  coachV45ShowOtherSubjects(false);coachV45SyncChips();
 }
 function coachV18ReflectPreset(id,level,text){
   const item=COACH_V8_PRESETS.find(p=>p.id===id);
@@ -3855,6 +3862,7 @@ function coachV18ReflectPreset(id,level,text){
   coachV18Topics();coachV18LastAutoText=text;
   const countLabel=$("programBuilderCount")?.closest("label");if(countLabel)countLabel.hidden=type!=="Soru çözümü";
   if($("programBuilderHint"))$("programBuilderHint").textContent="Hazır örnek seçildi; metni düzenleyebilirsin.";
+  coachV45SyncChips();
 }
 $("programBuilderLevel")?.querySelectorAll("[data-plan-level]").forEach(button=>
   button.addEventListener("click",()=>{coachV18SetLevel(button.dataset.planLevel);coachV18Apply()}));
@@ -3863,6 +3871,64 @@ $("programBuilderSubject")?.addEventListener("change",()=>{coachV18Topics();coac
   $(id)?.addEventListener("input",()=>coachV18Apply()));
 $("programBuilderTopic")?.addEventListener("change",coachV19SyncVideoFilters);
 $("programBuilderApply")?.addEventListener("click",()=>coachV18Apply(true));
+
+// v45 · Çalışma ekle: ders ve çalışma türü yongayla seçilir; gizli seçim kutuları kaynak olarak kalır.
+// Hafta, tarih kutusu yerine tek satırda değişir; seçili günler yeni haftada da aynı günler olur.
+const COACH_V45_MAIN_SUBJECTS=["Matematik","Türkçe","Paragraf","Geometri","Fizik","Kimya","Biyoloji","Deneme"];
+function coachV45MountChips(){
+  const subject=$("programBuilderSubject"),activity=$("programBuilderActivity");
+  if(!subject||!activity||$("programBuilderSubjectChips"))return;
+  const chip=(group,value,label,extra="")=>'<button type="button" data-v45-'+group+'="'+escHtml(value)+'" aria-pressed="false"'+extra+'>'+escHtml(label)+'</button>';
+  const others=[...subject.options].map(option=>option.value).filter(value=>value&&!COACH_V45_MAIN_SUBJECTS.includes(value));
+  const subjects=document.createElement("div");
+  subjects.className="coach-v45-chips";subjects.id="programBuilderSubjectChips";subjects.setAttribute("role","group");subjects.setAttribute("aria-label","Ders");
+  subjects.innerHTML=COACH_V45_MAIN_SUBJECTS.map(value=>chip("subject",value,value)).join("")
+    +'<button type="button" class="coach-v45-more" id="programBuilderMoreSubjects" aria-expanded="false">Diğer ⌄</button>'
+    +others.map(value=>chip("subject",value,value," data-v45-other hidden")).join("");
+  subject.closest("label")?.after(subjects);
+  const types=document.createElement("div");
+  types.className="coach-v45-chips";types.id="programBuilderActivityChips";types.setAttribute("role","group");types.setAttribute("aria-label","Çalışma türü");
+  types.innerHTML=[...activity.options].map(option=>chip("activity",option.value,option.value==="Ödev / Diğer"?"Diğer":option.textContent)).join("");
+  activity.closest("label")?.after(types);
+  subjects.addEventListener("click",event=>{
+    const more=event.target.closest("#programBuilderMoreSubjects");
+    if(more){coachV45ShowOtherSubjects(more.getAttribute("aria-expanded")!=="true");return}
+    const button=event.target.closest("[data-v45-subject]");if(!button)return;
+    subject.value=button.dataset.v45Subject;subject.dispatchEvent(new Event("change",{bubbles:true}));coachV45SyncChips();
+  });
+  types.addEventListener("click",event=>{
+    const button=event.target.closest("[data-v45-activity]");if(!button)return;
+    activity.value=button.dataset.v45Activity;activity.dispatchEvent(new Event("input",{bubbles:true}));coachV45SyncChips();
+  });
+}
+function coachV45ShowOtherSubjects(open){
+  $("programBuilderMoreSubjects")?.setAttribute("aria-expanded",String(open));
+  $("programBuilderSubjectChips")?.querySelectorAll("[data-v45-other]").forEach(button=>{button.hidden=!open});
+}
+function coachV45SyncChips(){
+  const subject=$("programBuilderSubject")?.value||"",activity=$("programBuilderActivity")?.value||"";
+  $("programBuilderSubjectChips")?.querySelectorAll("[data-v45-subject]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.v45Subject===subject)));
+  $("programBuilderActivityChips")?.querySelectorAll("[data-v45-activity]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.v45Activity===activity)));
+  coachV45ShowOtherSubjects(Boolean(subject)&&!COACH_V45_MAIN_SUBJECTS.includes(subject)||$("programBuilderMoreSubjects")?.getAttribute("aria-expanded")==="true");
+}
+function coachV45WeekLabel(){
+  const label=$("programTaskWeekLabel");if(!label)return;
+  const week=coachWeekStartForDate($("programTaskDate")?.value||"");
+  label.textContent=week?formatProgramWeek(week):"—";
+  ["programTaskPrevWeek","programTaskNextWeek"].forEach(id=>{if($(id))$(id).disabled=Boolean(coachProgramEditContext)});
+}
+function coachV45ShiftWeek(step){
+  const input=$("programTaskDate");if(!input||coachProgramEditContext)return;
+  const date=new Date(input.value+"T12:00:00");if(Number.isNaN(date.getTime()))return;
+  const days=[0,1,2,3,4,5,6].filter(day=>coachWeeklySelectedDates.has(programDayDate(coachWeeklyDraftWeek,day)));
+  date.setDate(date.getDate()+7*step);input.value=apptIso(date);
+  coachSetWeekDraft(input.value);coachWeekPreset(days);
+}
+coachV45MountChips();
+$("programBuilderSubject")?.addEventListener("change",coachV45SyncChips);
+$("programBuilderActivity")?.addEventListener("input",coachV45SyncChips);
+$("programTaskPrevWeek")?.addEventListener("click",()=>coachV45ShiftWeek(-1));
+$("programTaskNextWeek")?.addEventListener("click",()=>coachV45ShiftWeek(1));
 
 function coachProgramTaskText(){return String($("programTaskText")?.value||"").trim()}
 function coachProgramResource(){
@@ -3905,11 +3971,9 @@ function renderCoachWeekDayChoices(){
     ?number+" gün seçildi: "+[...coachWeeklySelectedDates].sort().map(day=>programDayLabel(week,Math.round((new Date(day+"T12:00:00")-new Date(week+"T12:00:00"))/86400000))).join(", ")
     :"Göndermek için en az bir gün seç.";
 }
-function coachSetWeekDraft(date,bulk=false){
+function coachSetWeekDraft(date){
   const week=coachWeekStartForDate(date);coachWeeklyDraftWeek=week||programCurrentWeekStart();
-  coachWeeklySelectedDates=new Set(
-    bulk?Array.from({length:5},(_,day)=>programDayDate(coachWeeklyDraftWeek,day)):[date].filter(x=>coachWeekStartForDate(x))
-  );
+  coachWeeklySelectedDates=new Set([date].filter(x=>coachWeekStartForDate(x)));
   renderCoachWeekDayChoices();updateCoachProgramBuilder();
 }
 function coachWeekPreset(days){
@@ -3923,6 +3987,7 @@ function updateCoachProgramBuilder(){
   if(send)send.textContent=editing?"Değişiklikleri kaydet":coachWeeklySelectedDates.size>1?coachWeeklySelectedDates.size+" güne gönder":"Görevi gönder";
   if($("programTaskDate"))$("programTaskDate").disabled=editing;
   if(remove){remove.classList.toggle("hidden",!editing||!/^Koç ·/.test(coachProgramEditContext?.prefix||""));remove.disabled=false}
+  coachV45WeekLabel();
 }
 function coachProgramSplitExisting(value){
   const raw=String(value||"").trim(),prefix=raw.match(/^Koç ·(?: Deneme sonrası ·)?\s*/)?.[0]||"",withoutPrefix=raw.slice(prefix.length);
@@ -3947,7 +4012,7 @@ function openProgramTaskModal(prefill="",options={}){
   const today=todayIsoLocal(),start=week.week||programCurrentWeekStart();
   const date=edit?programDayDate(options.weekStart||start,editDay):(/^\d{4}-\d{2}-\d{2}$/.test(String(options.date||""))?String(options.date):(today>=start&&today<=programDayDate(start,6)?today:start));
   if($("programTaskDate"))$("programTaskDate").value=date;
-  coachSetWeekDraft(date,!edit&&Boolean(options.bulk));
+  coachSetWeekDraft(date);
   if($("programTaskKeepOpen"))$("programTaskKeepOpen").checked=false;
   if(!edit)coachV8Levels.modal="TYT";
   $("coachV8ModalPicker")?.querySelectorAll("[data-v8-level]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.v8Level===coachV8Levels.modal)));
@@ -3996,7 +4061,7 @@ $("programDaysClear")?.addEventListener("click",()=>coachWeekPreset([]));
 if($("coachV8ModalPicker")){$("coachV8ModalPicker").innerHTML=coachV8Picker("modal");coachV8BindPicker($("coachV8ModalPicker"),"modal","programTaskText")}
 $("programTaskAddDraft")?.addEventListener("click",coachV8AddModalToDraft);
 $("programAddTaskBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal()});
-$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("dashboardBulkBtn")?.addEventListener("click",()=>{if(!coachReportRows.length){showCoachPage("students");openStudentConnect();return}showCoachPage("programs");coachV35Open()});$("programAddWeekBtn")?.addEventListener("click",()=>{coachProgramEditContext=null;openProgramTaskModal("",{bulk:true})});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
+$("programBulkTasksBtn")?.addEventListener("click",coachV35Open);$("dashboardBulkBtn")?.addEventListener("click",()=>{if(!coachReportRows.length){showCoachPage("students");openStudentConnect();return}showCoachPage("programs");coachV35Open()});$("programTaskClose")?.addEventListener("click",closeProgramTaskModal);$("programTaskCancel")?.addEventListener("click",closeProgramTaskModal);$("programTaskBackdrop")?.addEventListener("click",e=>{if(e.target===e.currentTarget)closeProgramTaskModal()});
 $("programTaskBackdrop")?.addEventListener("keydown",event=>{
   if(event.key==="Escape"){event.preventDefault();closeProgramTaskModal();return}
   if(event.key!=="Tab")return;
@@ -4007,13 +4072,13 @@ $("programTaskBackdrop")?.addEventListener("keydown",event=>{
   else if(!event.shiftKey&&(active===last||!controls.includes(active))){event.preventDefault();first.focus({preventScroll:true})}
 });
 $("programTemplatesBtn")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.toggle("hidden"));
-// v44 · Telefonda Şablonlar, Video ekle ve Haftaya toplu ekle ⋯ menüsünde; seçilince ya da dışarı dokununca kapanır.
+// v44 · Telefonda Şablonlar ve Video ekle ⋯ menüsünde; seçilince ya da dışarı dokununca kapanır.
 function coachV44SetMore(open){
   const box=document.querySelector("#programsPage .coach-v15-actions"),button=$("programMoreBtn");if(!box||!button)return;
   box.classList.toggle("is-more-open",open);button.setAttribute("aria-expanded",String(open));
 }
 $("programMoreBtn")?.addEventListener("click",()=>coachV44SetMore(!document.querySelector("#programsPage .coach-v15-actions")?.classList.contains("is-more-open")));
-["programTemplatesBtn","programAddVideoBtn","programAddWeekBtn"].forEach(id=>$(id)?.addEventListener("click",()=>coachV44SetMore(false)));
+["programTemplatesBtn","programAddVideoBtn"].forEach(id=>$(id)?.addEventListener("click",()=>coachV44SetMore(false)));
 document.addEventListener("click",event=>{if(!event.target.closest?.("#programsPage .coach-v15-action-buttons"))coachV44SetMore(false)});
 document.addEventListener("keydown",event=>{
   if(event.key!=="Escape"||!document.querySelector("#programsPage .coach-v15-actions.is-more-open"))return;

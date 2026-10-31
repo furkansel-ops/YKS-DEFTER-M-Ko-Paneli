@@ -50,9 +50,12 @@ function harness(t){
     deferNextWrite(){let resolve;const promise=new Promise(r=>{resolve=r});pauseNext={promise};return resolve}
   };
 }
+// v45: "Haftaya Toplu Ekle" Çalışma ekle penceresine katıldı; hafta içi günler oradan seçilir.
+const openWeek=h=>{h.$('programAddTaskBtn').click();h.$('programDaysWeekdays').click()};
 test('planner is mounted without replacing the original classic week table',t=>{
   const h=harness(t);
-  assert.ok(h.$('programAddWeekBtn'));
+  assert.equal(h.$('programAddWeekBtn'),null);
+  assert.ok(h.$('programDaysWeekdays'));
   assert.ok(h.$('programTaskDayGrid'));
   assert.ok(h.$('programWeekBoard').querySelector('.student-program-scroller'));
   assert.match(read('index.html'),/coach-fast-planner\.css\?v=1\.0\.0/);
@@ -74,7 +77,7 @@ test('normal mode picks one day; changing the date moves day selector to another
   assert.equal(h.writes[0].studentUid,'student-b');
 });
 test('bulk mode supports 5/7/0 shortcuts, then queues selected dates in order',async t=>{
-  const h=harness(t);h.$('programAddWeekBtn').click();
+  const h=harness(t);openWeek(h);
   assert.deepEqual(h.selected(),['2026-10-05','2026-10-06','2026-10-07','2026-10-08','2026-10-09']);
   assert.equal(h.$('programTaskSend').textContent,'5 güne gönder');
   h.$('programDaysAll').click();assert.equal(h.selected().length,7);
@@ -88,7 +91,7 @@ test('bulk mode supports 5/7/0 shortcuts, then queues selected dates in order',a
   assert.match(h.$('programTaskStatus').textContent,/Öğrencinin uygulamasında işlenmesi bekleniyor/);
 });
 test('keep-open adds another subject without reopening or carrying over the previous text',async t=>{
-  const h=harness(t);h.$('programAddWeekBtn').click();
+  const h=harness(t);openWeek(h);
   h.$('programTaskKeepOpen').checked=true;h.change('programTaskText','Paragraf · 20 soru');
   h.$('programTaskSend').click();await h.settle();
   assert.equal(h.$('programTaskBackdrop').classList.contains('hidden'),false);
@@ -101,7 +104,7 @@ test('keep-open adds another subject without reopening or carrying over the prev
   assert.deepEqual(h.writes.slice(5).map(x=>x.payload.date),['2026-10-06','2026-10-07','2026-10-08','2026-10-09']);
 });
 test('a partial network failure allows retry of only unsent weekdays',async t=>{
-  const h=harness(t);h.$('programAddWeekBtn').click();h.change('programTaskText','TYT Biyoloji · Hücre');
+  const h=harness(t);openWeek(h);h.change('programTaskText','TYT Biyoloji · Hücre');
   h.failOnWrite(3);h.$('programTaskSend').click();await h.settle();
   assert.deepEqual(h.writes.map(x=>x.payload.date),['2026-10-05','2026-10-06']);
   assert.deepEqual(h.selected(),['2026-10-07','2026-10-08','2026-10-09']);
@@ -110,7 +113,7 @@ test('a partial network failure allows retry of only unsent weekdays',async t=>{
   assert.deepEqual(h.writes.map(x=>x.payload.date),['2026-10-05','2026-10-06','2026-10-07','2026-10-08','2026-10-09']);
 });
 test('switching the selected student mid-send prevents dispatch of the remaining dates',async t=>{
-  const h=harness(t);h.$('programAddWeekBtn').click();h.change('programTaskText','Fizik · Kuvvet');
+  const h=harness(t);openWeek(h);h.change('programTaskText','Fizik · Kuvvet');
   const release=h.deferNextWrite();h.$('programTaskSend').click();await h.settle();
   assert.equal(h.writes.length,1);
   h.change('programStudentSelect','student-a','change');
@@ -121,7 +124,7 @@ test('switching the selected student mid-send prevents dispatch of the remaining
   assert.equal(h.w.fastWeekTest.student(),'student-a');
 });
 test('edit mode cannot access the bulk days, and closing resets the draft',t=>{
-  const h=harness(t);h.$('programAddWeekBtn').click();h.$('programTaskCancel').click();
+  const h=harness(t);openWeek(h);h.$('programTaskCancel').click();
   assert.equal(h.selected().length,0);
   assert.match(read('coach-fast-planner.css'),/data-editing/);
   assert.match(read('app-reset.js'),/payload:\{operation:"edit",sourceWeek:edit\.weekStart,taskId:edit\.taskId,text:editedTask\}/);

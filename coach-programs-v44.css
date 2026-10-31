@@ -32,7 +32,7 @@
   #programsPage .coach-v15-overview .coach-v15-stat strong{display:block;margin:0;font-size:17px;line-height:1.2}
   #programsPage .coach-v15-overview .coach-v15-stat::after{content:attr(data-short);display:block;font-size:11px;font-weight:700;color:var(--k-muted)}
 
-  /* 4 — işlemler tek sıra; Şablonlar, Video ekle, Haftaya toplu ekle ⋯ menüsünde */
+  /* 4 — işlemler tek sıra; Şablonlar ve Video ekle ⋯ menüsünde */
   #programsPage .coach-v15-actions{display:block;padding:0;border:0;background:transparent;box-shadow:none}
   #programsPage .coach-v15-action-heading{display:none}
   #programsPage .coach-v15-action-buttons{display:flex;flex-wrap:wrap;gap:6px;width:100%}
@@ -41,8 +41,8 @@
   #programsPage #programBulkTasksBtn{order:2;flex:0 1 auto}
   #programsPage .coach-v15-action-buttons>.coach-v44-more{display:grid;place-items:center;order:3;flex:none;width:40px;padding:0;font-size:16px;font-weight:900;color:var(--k-muted)}
   #programsPage .coach-v15-actions.is-more-open .coach-v44-more{border-color:var(--k-accent);color:var(--k-accent)}
-  #programsPage :is(#programTemplatesBtn,#programAddVideoBtn,#programAddWeekBtn){display:none;order:4;flex:1 1 100%;justify-content:flex-start;text-align:left}
-  #programsPage .coach-v15-actions.is-more-open :is(#programTemplatesBtn,#programAddVideoBtn,#programAddWeekBtn){display:flex;align-items:center}
+  #programsPage :is(#programTemplatesBtn,#programAddVideoBtn){display:none;order:4;flex:1 1 100%;justify-content:flex-start;text-align:left}
+  #programsPage .coach-v15-actions.is-more-open :is(#programTemplatesBtn,#programAddVideoBtn){display:flex;align-items:center}
 
   /* 5 — gün şeridi */
   #programsPage .coach-v44-daystrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:0 0 8px}
