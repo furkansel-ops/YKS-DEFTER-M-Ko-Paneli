@@ -2850,14 +2850,34 @@ const COACH_V6_LESSONS=[
   ["english","İngilizce",/^(?:ingilizce|english|ydt)(?=\s|·|:|$)/i],
   ["exam","Deneme",/^(?:deneme)(?=\s|·|:|$)/i]
 ];
+// v49: metinde ders adı yoksa ders, geçen en uzun konu adından çıkarılır ("Üslü sayılar 30 soru" → Matematik);
+// satır adına ancak bundan sonra bakılır. Aynı konu farklı derslerde geçiyorsa (Temel Kavramlar) belirsiz kalır.
+function coachV6SubjectFromTopic(text){
+  let lists;try{lists=COACH_V18_TOPICS}catch{return null}
+  const low=String(text||"").toLocaleLowerCase("tr-TR"),letter=/[a-zçğıöşüâîû0-9]/i;
+  let best=0,keys=new Set();
+  for(const [scope,topics] of Object.entries(lists)){
+    const lesson=COACH_V6_LESSONS.find(([,,pattern])=>pattern.test(scope.split("|")[1].toLocaleLowerCase("tr-TR")));if(!lesson)continue;
+    for(const topic of topics){
+      const name=topic.toLocaleLowerCase("tr-TR"),at=low.indexOf(name);
+      if(at<0||letter.test(low.charAt(at-1))||letter.test(low.charAt(at+name.length)))continue;
+      if(name.length>best){best=name.length;keys=new Set()}
+      if(name.length===best)keys.add(lesson[0]);
+    }
+  }
+  if(keys.size!==1)return null;
+  const [key,title]=COACH_V6_LESSONS.find(item=>item[0]===[...keys][0]);
+  return{key,title};
+}
 function coachV6Subject(task){
   const raw=String(task.text||"").replace(/^Koç\s*·\s*(?:Deneme sonrası\s*·\s*)?/i,"").trim();
-  const trimPrefix=value=>String(value||"").replace(/^(?:TYT|AYT|YDT)\s+/i,"").toLocaleLowerCase("tr-TR");
-  for(const value of [raw,task.label]){
-    const candidate=trimPrefix(value);
-    for(const [key,title,pattern] of COACH_V6_LESSONS)
-      if(pattern.test(candidate))return{key,title};
-  }
+  const named=value=>{
+    const candidate=String(value||"").replace(/^(?:TYT|AYT|YDT)\s+/i,"").toLocaleLowerCase("tr-TR");
+    for(const [key,title,pattern] of COACH_V6_LESSONS)if(pattern.test(candidate))return{key,title};
+    return null;
+  };
+  const found=named(raw)||coachV6SubjectFromTopic(raw)||named(task.label);
+  if(found)return found;
   if(task.id?.startsWith("r-"))return{key:"routine",title:"Rutin"};
   return{key:"other",title:"Çalışma"};
 }
