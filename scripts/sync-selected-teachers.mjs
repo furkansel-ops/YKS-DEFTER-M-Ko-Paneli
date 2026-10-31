@@ -81,7 +81,9 @@ function unique(items){
 }
 async function ytdlp(url,timeout){
   return await new Promise((resolve,reject)=>{
+    // GitHub sunucusu ABD'de; dil istenmezse YouTube başlıkların otomatik İngilizce çevirisini döndürür.
     const args=["-m","yt_dlp","--flat-playlist","--dump-single-json","--no-warnings",
+      "--extractor-args","youtube:lang=tr","--add-headers","Accept-Language:tr-TR,tr;q=0.9",
       "--ignore-errors","--socket-timeout","12","--retries","1","--extractor-retries","1",url];
     const child=spawn("python3",args,{stdio:["ignore","pipe","pipe"]});
     let result="",err="",done=false;
