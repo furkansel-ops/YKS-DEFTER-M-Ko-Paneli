@@ -33,5 +33,5 @@ test("v49 konu birden çok derste geçiyorsa ya da hiç geçmiyorsa satır adın
 });
 
 test("v49 önbellek etiketi yenilendi",()=>{
-  assert.match(read("index.html"),/app-reset\.js\?v=1\.0\.70-[^"]*-multi48-subj49"/);
+  assert.match(read("index.html"),/app-reset\.js\?v=1\.0\.70-[^"]*-multi48-subj49[^"]*"/);
 });
