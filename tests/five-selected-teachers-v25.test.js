@@ -30,6 +30,8 @@ test('all public videos are indexed in pages, not silently clipped to 240 or 500
   assert.doesNotMatch(script,/--playlist-end|slice\(0,240\)|slice\(0,40\)/);
   // ABD sunucusunda YouTube otomatik İngilizce başlık döndürmesin; kanalın asıl (Türkçe) başlıkları gelsin.
   assert.match(script,/"--extractor-args","youtube:lang=tr","--add-headers","Accept-Language:tr-TR,tr;q=0\.9"/);
+  // Video sekmesi alınamayan kanalda (3D Yayınları zaman aşımı, Aker Kartal boş) korunan eski başlıklar listelerden güncellenir.
+  assert.match(script,/videos=videos\.map\(v=>freshTitles\.has\(v\?\.id\)\?\{\.\.\.v,title:freshTitles\.get\(v\.id\)\}:v\)/);
   assert.match(script,/Keeping previous catalog/);
 });
 

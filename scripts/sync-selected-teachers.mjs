@@ -162,6 +162,10 @@ async function snapshot(channel,previous){
         {...item,videos:[],videoCount:0,contentComplete:false};
     }
   });
+  // Kanalın video sekmesi alınamayıp eski liste korunduğunda başlıklar eski kalır (ör. eski İngilizce çeviriler);
+  // listelerden yeni taranan aynı videonun başlığı varsa o kullanılır.
+  const freshTitles=new Map(enriched.flatMap(x=>x.videos||[]).filter(v=>v?.id&&v.title).map(v=>[v.id,v.title]));
+  videos=videos.map(v=>freshTitles.has(v?.id)?{...v,title:freshTitles.get(v.id)}:v);
   // Include public videos found inside playlists, not only recent uploads.
   const allVideos=unique([...videos,...enriched.flatMap(x=>x.videos||[])]);
   const pages=[];const dir=resolve(FOLDER,slug(name));
