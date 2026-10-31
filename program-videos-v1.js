@@ -134,15 +134,15 @@
     section.className="coach-video-library";
     section.innerHTML=
       '<div class="coach-video-head"><div><span>HOCALAR &amp; VİDEOLAR</span><h3>Güncel video kütüphanesi</h3><p>TYT / AYT, ders, hoca ve içerik türüne göre ara; videoyu veya oynatma listesini öğrencinin programına tek tıkla ekle.</p></div><div class="coach-video-live"><i></i><b>YKS medya</b><small>Güncel arşiv</small></div></div>'+
-      '<div class="coach-video-filters">'+
+      '<div class="coach-video-controls"><div class="coach-video-filters">'+
         '<div class="coach-video-seg" id="coachVideoScope"><button type="button" data-scope="TYT" class="active">TYT</button><button type="button" data-scope="AYT">AYT</button></div>'+
         '<label><span>Ders</span><select id="coachVideoSubject"></select></label>'+
         '<label class="coach-video-topic-field"><span>Konu</span><select id="coachVideoTopic"><option value="">Tüm konular</option></select></label>'+
         '<label class="coach-video-teacher-field"><span>Hoca</span><select id="coachVideoTeacher"></select></label>'+
-        '<div class="coach-video-seg" id="coachVideoMode"><button type="button" data-mode="videos" class="active">Videolar</button><button type="button" data-mode="playlists">Oynatma listeleri</button></div>'+
+        '<div class="coach-video-seg" id="coachVideoMode"><button type="button" data-mode="videos" class="active">Videolar</button><button type="button" data-mode="playlists">Listeler</button></div>'+
       '</div>'+
       '<div class="coach-video-tools"><div class="coach-video-cats" id="coachVideoCategories"></div><label class="coach-video-search"><span>⌕</span><input id="coachVideoSearch" type="search" placeholder="Başlıkta ara..."></label><button type="button" id="coachVideoRefresh" class="coach-video-refresh">↻ Yenile</button></div>'+
-      '<div class="coach-video-meta"><span id="coachVideoStatus">Kaynak hazırlanıyor…</span><a id="coachVideoChannel" href="#" target="_blank" rel="noopener noreferrer" class="hidden">YouTube kanalını aç ↗</a></div>'+
+      '<div class="coach-video-meta"><span id="coachVideoStatus">Kaynak hazırlanıyor…</span><a id="coachVideoChannel" href="#" target="_blank" rel="noopener noreferrer" class="hidden">YouTube kanalını aç ↗</a></div></div>'+
       '<div class="coach-video-results" id="coachVideoResults"></div>'+
       '<div class="coach-video-more-row"><button type="button" id="coachVideoMore" class="coach-video-more hidden">Daha fazla getir</button></div>';
     target.appendChild(section);
@@ -199,13 +199,13 @@
       const playlistVideoRecommend=event.target.closest("[data-playlist-video-recommend]");
       if(playlistVideoRecommend){const item=state.selectedPlaylist?.videos?.[Number(playlistVideoRecommend.dataset.playlistVideoRecommend)];if(item)recommendResource(item);return;}
       const playlistAdd=event.target.closest("[data-playlist-video-add]");
-      if(playlistAdd){const item=state.selectedPlaylist?.videos?.[Number(playlistAdd.dataset.playlistVideoAdd)];if(item)addToProgram(item);return;}
+      if(playlistAdd){const item=state.selectedPlaylist?.videos?.[Number(playlistAdd.dataset.playlistVideoAdd)];if(item)addToProgram(item,playlistAdd);return;}
       const playlistOpen=event.target.closest("[data-playlist-video-open]");
       if(playlistOpen){const item=state.selectedPlaylist?.videos?.[Number(playlistOpen.dataset.playlistVideoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");return;}
       const recommend=event.target.closest("[data-video-recommend]");
       if(recommend){const item=state.items[Number(recommend.dataset.videoRecommend)];if(item)recommendResource(item);return;}
       const add=event.target.closest("[data-video-add]"),open=event.target.closest("[data-video-open]");
-      if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item);}
+      if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item,add);}
       if(open){const item=state.items[Number(open.dataset.videoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");}
     });
     $("coachVideoResults")?.addEventListener("input",event=>{
@@ -558,18 +558,28 @@
     window.dispatchEvent(new CustomEvent("yks:coach-resource-recommend",{detail}));
   }
 
-  function addToProgram(item){
+  // v46: Video ekle penceresinde seçilen kart yeşil olur, düğmesi "✓ Seçildi" yazar.
+  function markPicked(button){
+    document.querySelectorAll("#coachVideoResults .coach-video-card.is-picked").forEach(card=>{
+      card.classList.remove("is-picked");
+      card.querySelectorAll(".is-picked-button").forEach(b=>{b.classList.remove("is-picked-button");b.textContent=coachVideoPickLabel();});
+    });
+    const card=button?.closest(".coach-video-card");if(!card)return;
+    card.classList.add("is-picked");button.classList.add("is-picked-button");button.textContent="✓ Seçildi";
+  }
+  function addToProgram(item,button){
     const standalone=$("coachVideoPickerBackdrop");
     if(standalone&&!standalone.classList.contains("hidden")){
       if(!$("programStudentSelect")?.value){setStatus("Önce programın öğrencisini seç.");return;}
       const url=String(item?.url||"");
       if(!/^https?:\/\//i.test(url)||!url)return;
+      markPicked(button);
       window.dispatchEvent(new CustomEvent("yks:coach-video-picked",{detail:{
         kind:item.kind==="playlist"?"playlist":"video",
         title:String(item.title||"").slice(0,300),
         url,teacher:state.teacher,subject:state.subject,topic:state.topic,scope:state.scope
       }}));
-      setStatus("Kaynak seçildi. Yukarıdaki tarih ve Programa Ekle alanını kullan.");
+      setStatus("Kaynak seçildi. Günü kontrol edip alttaki ekle düğmesine bas.");
       return;
     }
     const modal=$("programTaskBackdrop");

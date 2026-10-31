@@ -40,7 +40,7 @@ test('official YKS playlists pinned independently of sparse /playlists channel t
 
 test('updated sources keep original task sending flow and show new asset version',()=>{
  const html=read('index.html'),js=read('program-videos-v1.js');
- assert.match(html,/program-videos-v1\.js\?v=1\.9\.4/);
+ assert.match(html,/program-videos-v1\.js\?v=1\.9\.5/);
  assert.match(html,/id="programAddVideoBtn"/);
  assert.match(html,/id="programAddTaskBtn"/);
  assert.match(js,/yks:coach-video-picked/);

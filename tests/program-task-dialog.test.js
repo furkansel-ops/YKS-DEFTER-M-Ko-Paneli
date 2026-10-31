@@ -329,3 +329,52 @@ test('video picker cancel, student switch and invalid dates never create program
   assert.equal(h.$('coachVideoPickerSave').disabled,true,'old student selection must not survive');
   h.$('coachVideoPickerClose').click();
 });
+
+test('v46 Video ekle: gün satırı haftayı değiştirir, seçilen video alt şeritte ve kart işaretli',async t=>{
+  const h=harness(t),w=h.w;
+  const feed={teachers:{'Eyüp B.':{channelName:'Eyüp B.',videos:[
+    {id:'abc123XYZ99',title:'TYT Matematik Problemler Konu anlatımı',url:'https://www.youtube.com/watch?v=abc123XYZ99'},
+    {id:'def456UVW88',title:'Fonksiyon Soru Çözümü',url:'https://www.youtube.com/watch?v=def456UVW88'}
+  ]}}};
+  w.fetch=async()=>({ok:true,json:async()=>feed});
+  w.eval(read('program-videos-v1.js'));
+  h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  h.click('programAddVideoBtn');
+  for(let i=0;i<40;i++)await Promise.resolve();
+  assert.equal(h.$('coachVideoPickerTitle').textContent,'Video ekle');
+  assert.equal(h.$('coachVideoPickerWeekLabel').textContent,'5 Eki – 11 Eki');
+  assert.equal(h.$('coachVideoPickerSave').textContent,"Pazartesi'ye ekle");
+  assert.equal(h.$('coachVideoPickerSelection').textContent,'Bir video seç');
+  assert.ok(h.$('programVideoLibrary').querySelector('.coach-video-controls .coach-video-filters'),'filtreler sabit üst kutuda');
+  const add=i=>h.$('coachVideoResults').querySelector('[data-video-add="'+i+'"]');
+  add(0).click();
+  assert.equal(add(0).textContent,'✓ Seçildi');assert.ok(add(0).closest('.coach-video-card').classList.contains('is-picked'));
+  assert.equal(h.$('coachVideoPickerSelection').querySelector('b').textContent,'TYT Matematik Problemler Konu anlatımı');
+  assert.equal(h.$('coachVideoPickerSelection').querySelector('small').textContent,'Eyüp B.');
+  add(1).click();
+  assert.equal(add(0).textContent,'Seç','önceki seçim kalkar');assert.equal(add(0).closest('.coach-video-card').classList.contains('is-picked'),false);
+  assert.equal(add(1).textContent,'✓ Seçildi');
+  h.$('coachVideoPickerDays').querySelector('[data-video-date="2026-10-07"]').click();
+  assert.equal(h.$('coachVideoPickerSave').textContent,"Çarşamba'ya ekle");
+  h.$('coachVideoPickerNextWeek').click();
+  assert.equal(h.$('coachVideoPickerDate').value,'2026-10-14');
+  assert.equal(h.$('coachVideoPickerWeekLabel').textContent,'12 Eki – 18 Eki');
+  assert.equal(h.$('coachVideoPickerSave').textContent,"Çarşamba'ya ekle",'aynı gün yeni haftada');
+  h.$('coachVideoPickerPrevWeek').click();
+  assert.equal(h.$('coachVideoPickerDate').value,'2026-10-07');
+  assert.equal(h.writes.length,0,'gün ve hafta değiştirmek hiçbir şey göndermez');
+  h.$('coachVideoPickerClose').click();
+});
+
+test('v46 Video ekle stilleri yalnız tema değişkenleri ve en az 11px yazı kullanır',()=>{
+  const css=read('coach-video-picker-v46.css'),html=read('index.html');
+  assert.match(html,/<link rel="stylesheet" href="\.\/coach-video-picker-v46\.css\?v=1\.0\.0">/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-composer45-video46"/);
+  assert.match(css,/#coachVideoPickerBackdrop \.coach-video-controls\{position:sticky;top:0;/);
+  assert.match(css,/#coachVideoPickerBackdrop \.coach-video-card-actions>button:first-child\{display:none\}/,'resim zaten videoyu açar');
+  assert.match(css,/#coachVideoPickerBackdrop #coachVideoPickerCancel\{display:none\}/);
+  assert.match(css,/#coachVideoPickerStatus:not\(\[data-status="error"\]\):not\(\[data-status="success"\]\)\{display:none\}/);
+  assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);
+  assert.doesNotMatch(css,/rgba?\(|hsl\(/);
+  for(const [,size] of css.matchAll(/font-size:(\d+(?:\.\d+)?)px/g))assert.ok(Number(size)>=11,size);
+});

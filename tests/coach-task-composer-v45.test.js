@@ -46,7 +46,7 @@ function fixture(t){
 test("v45 stil dosyası yüklenir; Haftaya Toplu Ekle kalktı; hafta satırı ve kısa etiketler",()=>{
   const html=read("index.html");
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-task-composer-v45\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-programs44-composer45"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-programs44-composer45[^"]*"/);
   assert.doesNotMatch(html,/programAddWeekBtn/);
   assert.match(html,/<button type="button" id="programTaskPrevWeek" aria-label="Önceki hafta">‹<\/button><strong id="programTaskWeekLabel">—<\/strong><button type="button" id="programTaskNextWeek" aria-label="Sonraki hafta">›<\/button>/);
   assert.match(html,/id="programDaysAll">Her gün</);assert.match(html,/id="programDaysClear">Temizle</);

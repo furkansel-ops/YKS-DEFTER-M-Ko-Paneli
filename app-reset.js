@@ -2375,6 +2375,7 @@ function renderCoachVideoPickerDays(){
   if(!grid||!input)return;
   const week=coachWeekStartForDate(input.value);
   grid.replaceChildren();
+  coachV46VideoWeek();coachV46SaveLabel();
   if(!week)return;
   for(let i=0;i<7;i++){
     const date=programDayDate(week,i),button=document.createElement("button");
@@ -2421,10 +2422,10 @@ function openCoachVideoPicker(){
   const today=todayIsoLocal();
   if($("coachVideoPickerDate"))$("coachVideoPickerDate").value=(today>=week&&today<=programDayDate(week,6))?today:week;
   renderCoachVideoPickerDays();
-  if($("coachVideoPickerStudent"))$("coachVideoPickerStudent").textContent=studentName(row)+" · Video veya oynatma listesi seçip programa ekle";
-  if($("coachVideoPickerSelection"))$("coachVideoPickerSelection").textContent="Henüz video seçilmedi. Aşağıdaki hoca ve video listesinden bir kaynak seç.";
+  if($("coachVideoPickerStudent"))$("coachVideoPickerStudent").textContent=studentName(row);
+  coachV46ShowSelection();
   if($("coachVideoPickerSave"))$("coachVideoPickerSave").disabled=true;
-  coachVideoPickerStatus("Bir video seç; eklemek için alttaki Programa Ekle butonuna bas.","");
+  coachVideoPickerStatus("Bir video seç; eklemek için alttaki ekle düğmesine bas.","");
   const gutter=Math.max(0,window.innerWidth-document.documentElement.clientWidth),padding=parseFloat(getComputedStyle(document.body).paddingRight)||0;
   document.documentElement.style.setProperty("--program-scrollbar-width",(gutter+padding)+"px");
   document.documentElement.classList.add("program-task-open");
@@ -2446,9 +2447,38 @@ document.addEventListener("keydown",event=>{
     closeCoachVideoPicker();
   }
 });
+// v46 · Video ekle: gün Çalışma ekle'deki gibi "‹ hafta ›" satırında; seçilen video alt şeritte,
+// ekleme düğmesi seçili günü söyler ("Cumartesi'ye ekle").
+const COACH_V46_DAY_TO=["Pazartesi'ye","Salı'ya","Çarşamba'ya","Perşembe'ye","Cuma'ya","Cumartesi'ye","Pazar'a"];
+function coachV46VideoWeek(){
+  const label=$("coachVideoPickerWeekLabel"),week=coachWeekStartForDate($("coachVideoPickerDate")?.value||"");
+  if(label)label.textContent=week?formatProgramWeek(week):"—";
+}
+function coachV46SaveLabel(){
+  const save=$("coachVideoPickerSave"),date=String($("coachVideoPickerDate")?.value||""),week=coachWeekStartForDate(date);
+  if(!save)return;
+  const day=week?[0,1,2,3,4,5,6].find(i=>programDayDate(week,i)===date):undefined;
+  save.textContent=day===undefined?"Programa ekle":COACH_V46_DAY_TO[day]+" ekle";
+}
+function coachV46ShowSelection(){
+  const node=$("coachVideoPickerSelection"),selected=coachVideoPickerSelection;if(!node)return;
+  node.replaceChildren();node.classList.toggle("has-pick",Boolean(selected));
+  if(!selected){node.textContent="Bir video seç";return}
+  const title=document.createElement("b"),by=document.createElement("small");
+  title.textContent=(selected.kind==="playlist"?"Liste · ":"")+selected.title;by.textContent=selected.teacher;
+  node.append(title,by);
+}
+function coachV46VideoShiftWeek(step){
+  const input=$("coachVideoPickerDate");if(!input||coachVideoPickerBusy)return;
+  const date=new Date(input.value+"T12:00:00");if(Number.isNaN(date.getTime()))return;
+  date.setDate(date.getDate()+7*step);input.value=apptIso(date);
+  input.dispatchEvent(new Event("change",{bubbles:true}));
+}
+$("coachVideoPickerPrevWeek")?.addEventListener("click",()=>coachV46VideoShiftWeek(-1));
+$("coachVideoPickerNextWeek")?.addEventListener("click",()=>coachV46VideoShiftWeek(1));
 $("coachVideoPickerDate")?.addEventListener("change",()=>{
   renderCoachVideoPickerDays();
-  coachVideoPickerStatus(coachVideoPickerSelection?"Gün seçildi. Programa Ekle diyerek gönderebilirsin.":"Önce hoca listesinden bir video seç.","");
+  coachVideoPickerStatus(coachVideoPickerSelection?"Gün seçildi. Alttaki ekle düğmesiyle gönderebilirsin.":"Önce hoca listesinden bir video seç.","");
 });
 window.addEventListener("yks:coach-video-picked",event=>{
   if($("coachVideoPickerBackdrop")?.classList.contains("hidden")||!coachVideoPickerStudentUid
@@ -2468,10 +2498,9 @@ window.addEventListener("yks:coach-video-picked",event=>{
   const maxText=600-url.length-3;
   if(maxText<20){coachVideoPickerStatus("Bu bağlantı programa eklemek için fazla uzun.","error");return}
   coachVideoPickerSelection={kind,url,title,teacher,subject,scope,text:description.slice(0,maxText).trim()+" — "+url};
-  const summary=$("coachVideoPickerSelection");
-  if(summary)summary.textContent=(kind==="playlist"?"Liste seçildi: ":"Video seçildi: ")+title+" · "+teacher;
+  coachV46ShowSelection();
   if($("coachVideoPickerSave"))$("coachVideoPickerSave").disabled=false;
-  coachVideoPickerStatus("Kaynak seçildi. Gününü kontrol edip Programa Ekle butonuna bas.","success");
+  coachVideoPickerStatus("Kaynak seçildi. Günü kontrol edip alttaki ekle düğmesine bas.","success");
 });
 $("coachVideoPickerSave")?.addEventListener("click",async()=>{
   if(coachVideoPickerBusy)return;

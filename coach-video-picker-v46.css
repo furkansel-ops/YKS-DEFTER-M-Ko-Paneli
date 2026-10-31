@@ -1,0 +1,64 @@
+/* Koç Paneli · v46 Video ekle — gün tek satır, filtreler üstte sabit üç satır, kısa video kartı,
+   seçilen video alt şeritte; telefonda kısa başlık. Renkler yalnız tema değişkenlerinden (--k-*), yazılar en az 11px. */
+
+/* 2 — gün tek satır; tarih kutusu kaynak olarak gizli kalır */
+#coachVideoPickerBackdrop .coach-v46-date{display:none}
+#coachVideoPickerBackdrop .coach-video-picker-target{grid-template-columns:auto minmax(0,1fr);gap:8px 14px}
+#coachVideoPickerBackdrop .coach-v46-dayhead{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+#coachVideoPickerBackdrop .coach-v46-dayhead b{font-size:12.5px;color:var(--k-ink)}
+#coachVideoPickerBackdrop .coach-v46-week{display:flex;align-items:center;gap:4px}
+#coachVideoPickerBackdrop .coach-v46-week button{width:32px;height:32px;padding:0;border:0;border-radius:10px;background:var(--k-soft);color:var(--k-muted);font:inherit;font-size:16px;font-weight:900;cursor:pointer}
+#coachVideoPickerBackdrop .coach-v46-week strong{min-width:96px;text-align:center;font-size:12.5px;color:var(--k-ink)}
+
+/* 3 · 4 — filtreler üstte sabit: TYT/AYT · Ders · Hoca / arama · Konu / Video-Liste · türler / bilgi · Yenile */
+#coachVideoPickerBackdrop .coach-video-controls{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:78px repeat(4,minmax(0,1fr));gap:6px;margin:0 0 8px;padding:10px;border:1px solid var(--k-line);border-radius:14px;background:var(--k-surface);box-shadow:0 6px 14px color-mix(in srgb,var(--k-ink) 6%,transparent)}
+#coachVideoPickerBackdrop .coach-video-controls :is(.coach-video-filters,.coach-video-tools){display:contents}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoScope{grid-row:1;grid-column:1 / 2;width:100%}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoScope button{min-width:0;padding:0 4px;font-size:12px}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label:nth-of-type(1){grid-row:1;grid-column:2 / 4}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label:nth-of-type(3){grid-row:1;grid-column:4 / 6}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-search{grid-row:2;grid-column:1 / 4;width:auto;min-width:0}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label:nth-of-type(2){grid-row:2;grid-column:4 / 6}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoMode{grid-row:3;grid-column:1 / 3;width:100%}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoMode button{min-width:0;padding:0 6px;font-size:12px;white-space:nowrap}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoCategories{grid-row:3;grid-column:3 / 6;display:flex;flex-wrap:nowrap;gap:5px;min-width:0;overflow-x:auto;scrollbar-width:none}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoCategories button{flex:none}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-meta{grid-row:4;grid-column:1 / 4;display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;min-width:0;margin:0;padding:0;font-size:11.5px;color:var(--k-muted)}
+#coachVideoPickerBackdrop .coach-video-controls #coachVideoRefresh{grid-row:4;grid-column:4 / 6;justify-self:end;min-height:32px;padding:0 8px;font-size:12px;white-space:nowrap}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label{display:block;min-width:0;margin:0}
+#coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#coachVideoPickerBackdrop .coach-video-controls :is(select,.coach-video-search,.coach-video-seg){height:38px;min-height:38px}
+#coachVideoPickerBackdrop .coach-video-controls select{width:100%;min-width:0;padding:0 4px 0 8px;font-size:12px;text-overflow:ellipsis}
+
+/* 5 — kısa video kartı: resim (dokununca açılır) · başlık ve hoca · Seç ve ✉ */
+#coachVideoPickerBackdrop .coach-video-card:not(.skeleton){grid-template-columns:96px minmax(0,1fr) auto;grid-template-rows:auto;align-items:center;gap:0 10px;min-height:0;padding:8px}
+#coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-thumb{grid-column:1;grid-row:1;width:96px;height:54px;min-height:54px;border-radius:9px;overflow:hidden}
+#coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-card-body{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:2px;min-width:0;padding:0}
+#coachVideoPickerBackdrop .coach-video-card-body b{order:1;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12.5px;line-height:1.3;color:var(--k-ink)}
+#coachVideoPickerBackdrop .coach-video-card-body small{order:2;font-size:11px;color:var(--k-muted)}
+#coachVideoPickerBackdrop .coach-video-card-body em{display:none}
+#coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-card-actions{grid-column:3;grid-row:1;display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding:0;border:0;background:transparent}
+#coachVideoPickerBackdrop .coach-video-card-actions>button:first-child{display:none}
+#coachVideoPickerBackdrop .coach-video-card-actions .primary{order:-1;min-height:32px;height:32px;padding:0 12px;font-size:12px;white-space:nowrap}
+#coachVideoPickerBackdrop .coach-video-card-actions .recommend{position:relative;width:34px;min-height:30px;height:30px;padding:0;overflow:hidden;text-indent:200%;white-space:nowrap}
+#coachVideoPickerBackdrop .coach-video-card-actions .recommend::after{content:"✉";position:absolute;inset:0;display:grid;place-items:center;text-indent:0;font-size:14px}
+#coachVideoPickerBackdrop .coach-video-card.is-picked{border-color:var(--k-ok);box-shadow:inset 3px 0 0 var(--k-ok)}
+#coachVideoPickerBackdrop .coach-video-card-actions .is-picked-button{border-color:var(--k-ok);background:var(--k-ok);color:var(--k-on-accent)}
+
+/* 6 — seçilen video alt şeritte; × zaten var; durum yazısı yalnız hata ve başarıda */
+#coachVideoPickerBackdrop #coachVideoPickerCancel{display:none}
+#coachVideoPickerBackdrop .coach-video-picker-footer{flex-wrap:wrap;gap:8px 10px}
+#coachVideoPickerBackdrop .coach-video-picker-footer .coach-video-picker-selection{flex:1 1 0;display:block;min-width:0;min-height:0;padding:0;border:0;background:transparent;color:var(--k-muted);font-size:12px}
+#coachVideoPickerBackdrop .coach-video-picker-selection b{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px;color:var(--k-ink)}
+#coachVideoPickerBackdrop .coach-video-picker-selection small{display:block;font-size:11px;color:var(--k-muted)}
+#coachVideoPickerBackdrop #coachVideoPickerStatus{order:-1;flex:1 1 100%;font-size:12px}
+#coachVideoPickerBackdrop #coachVideoPickerStatus:not([data-status="error"]):not([data-status="success"]){display:none}
+#coachVideoPickerBackdrop #coachVideoPickerSave{flex:none;min-height:42px;padding:0 16px}
+
+@media(max-width:700px){
+  /* 1 — kısa başlık */
+  #coachVideoPickerBackdrop .coach-video-picker-header span{display:none}
+  #coachVideoPickerBackdrop .coach-video-picker-header h2{margin:0}
+  #coachVideoPickerBackdrop .coach-video-picker-target{grid-template-columns:minmax(0,1fr)}
+  #coachVideoPickerBackdrop .coach-v46-week strong{min-width:88px}
+}

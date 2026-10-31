@@ -737,7 +737,7 @@ test('v13 teacher and video section is hidden by CSS without deleting any featur
   const js=read('program-videos-v1.js');
   const html=read('index.html');
   assert.match(html,/program-videos-v1\.css\?v=1\.4\.1/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.4/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.5/);
   assert.match(css,/#programsPage #programVideoLibrary\.coach-video-library\{display:none!important\}/);
   assert.match(js,/const ROOT_ID="programVideoLibrary"/);
   assert.match(js,/function boot\(\)\{\s*buildShell\(\)/);
@@ -1110,7 +1110,7 @@ test('new video workspace styles stay scoped to modal and preserve the hidden le
   const html=read('index.html'),css=read('coach-split-composer-v19.css'),old=read('program-videos-v1.css');
   assert.match(html,/coach-split-composer-v19\.css\?v=1\.0\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70/);
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.4/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.5/);
   assert.match(html,/id="coachV19Workbench"/);
   assert.match(html,/id="coachV19VideoPane"/);
   assert.match(css,/\.coach-v19-workbench/);
