@@ -1,0 +1,13 @@
+/* Koç Paneli · v51 Mesajlarda "okundu" — kendi mesajında ✓ (gönderildi) ve ✓✓ (okundu), son mesajın altında
+   "Okundu · saat" ya da "Gönderildi"; listede son mesaj senin ise durum. Renkler yalnız tema değişkenlerinden, yazılar en az 11px. */
+
+#messagesPage .coach-v51-tick{font-style:normal;font-weight:900;letter-spacing:-2px;opacity:.85}
+#messagesPage .coach-v51-tick.is-read{opacity:1;letter-spacing:-3px}
+#messagesPage .coach-v51-status{align-self:flex-end;margin:-2px 4px 4px auto;text-align:right;font-size:11px;font-weight:800;color:var(--k-muted)}
+#messagesPage .coach-v51-status.is-read{color:var(--k-accent)}
+#messagesPage .coach-v51-state{display:block;font-style:normal;font-size:11px;font-weight:800;color:var(--k-muted)}
+#messagesPage .coach-v51-state.is-read{color:var(--k-accent)}
+/* Durum yazısı varken öğrenci mesaj sayısı noktası gizlenir (7px noktaya sayı sığmıyordu; durum yerine geçer). */
+#messagesPage .coach-v51-state~.message-mini-badges i.applied{display:none}
+/* Öğrenciden gelen balonun yazısı açık temada beyaz üstüne beyazdı; temanın yazı rengine bağlanır. */
+#messagesPage .message-bubble-row.incoming .message-bubble{color:var(--k-ink)}

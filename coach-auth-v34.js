@@ -185,6 +185,9 @@ async function deleteCoachData(uid){
   const byCoach=name=>getDocs(query(collection(db,name),where("coachUid","==",uid)));
   step("Gönderdiğin görevler ve mesajlar siliniyor…");
   for(const name of [COLLECTIONS.actions,"coachingMessages"]){const snap=await byCoach(name);for(const item of snap.docs)await deleteDoc(item.ref)}
+  // v51: okundu kayıtları da silinir; kural yayında değilse izin hatası silmeyi durdurmaz.
+  try{const reads=await byCoach("coachingReads");for(const item of reads.docs)await deleteDoc(item.ref)}
+  catch(error){if(!String(error?.code||"").includes("permission-denied"))throw error}
   step("Öğrenci bağlantıları kapatılıyor…");
   const links=await byCoach(COLLECTIONS.links);
   for(const item of links.docs)if(item.data()?.active===true)await updateDoc(item.ref,{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});

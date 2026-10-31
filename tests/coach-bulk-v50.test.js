@@ -88,7 +88,7 @@ test("v50 4: Satır ekle alt kısımda; Yapıştır sekmesinde gizlenir",t=>{
 test("v50 stilleri: telefonda kapalı satır, açık satır düzeni, sabit alt kısım; tema değişkenleri ve en az 11px",()=>{
   const html=read("index.html");
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-bulk-v50\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-subj49-bulk50"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-subj49-bulk50[^"]*"/);
   assert.match(css,/#coachV10Bulk \.coach-v35-dialog\{max-height:calc\(100dvh - 8vh\);grid-template-rows:auto minmax\(0,1fr\) auto;overflow:hidden\}/);
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.coach-v35-row\.is-collapsed>:not\(\.coach-v50-sum,\.coach-v35-remove\)\{display:none\}/);
   assert.match(css,/#coachV10Bulk \.coach-v50-note\{display:none\}/);

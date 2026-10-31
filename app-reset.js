@@ -153,7 +153,7 @@ document.querySelectorAll("[data-coach-page]").forEach(button=>{
 onAuthStateChanged(auth,async user=>{
   // v34 e-posta/kayıt akışı sürerken bekle; akış bitince sayfa yenilenir.
   if(window.__YKS_COACH_AUTH_BUSY__)return;
-  if(!user){stopCoachShareRealtime();stopCoachAppointments();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}coachMessageActions=[];selectedMessageStudent="";showAuth();return}
+  if(!user){stopCoachShareRealtime();stopCoachAppointments();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}stopCoachReads();coachMessageActions=[];selectedMessageStudent="";showAuth();return}
   try{
     const profile=await loadCoachProfile(user);
     if(!profile){
@@ -1847,12 +1847,44 @@ let coachMessageStop=null;
 let coachMessageUid="";
 let selectedMessageStudent="";
 let messageStudentFilter="all";
+// v51 · Okundu: coachingReads/{koçUid_öğrenciUid} koçun ve öğrencinin son okuma zamanını tutar (mesajlar değiştirilemez).
+// Koç, Mesajlar sayfasında öğrencinin konuşması ekrandayken okumuş sayılır; kendi alanını sunucu zamanıyla yazar.
+let coachReads=new Map(),coachReadsStop=null,coachReadsUid="",coachReadsPending=new Map();
+function coachReadMillis(value){return value?.toMillis?.()||0}
+function coachReadClock(ms){try{return new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(ms))}catch{return""}}
+function startCoachReads(coachUid){
+  if(!coachUid||(coachReadsStop&&coachReadsUid===coachUid))return;
+  stopCoachReads();coachReadsUid=coachUid;
+  try{
+    coachReadsStop=onSnapshot(query(collection(db,"coachingReads"),where("coachUid","==",coachUid)),snap=>{
+      coachReads=new Map(snap.docs.map(item=>[item.data().studentUid,item.data()]));
+      renderMessageStudents();if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
+    },error=>{console.error("Okundu bilgisi",error);coachReadsStop=null;coachReadsUid=""});
+  }catch(error){console.error("Okundu dinleyicisi",error)}
+}
+function stopCoachReads(){try{coachReadsStop?.()}catch{}coachReadsStop=null;coachReadsUid="";coachReads=new Map();coachReadsPending=new Map()}
+function markCoachThreadRead(studentUid){
+  const user=auth.currentUser;
+  if(!user||!studentUid||document.visibilityState==="hidden"||$("messagesPage")?.classList.contains("hidden"))return;
+  const lastIncoming=messageActionsFor(studentUid).filter(item=>item.senderRole==="student").at(-1),at=coachReadMillis(lastIncoming?.createdAt);
+  if(!at||at<=coachReadMillis(coachReads.get(studentUid)?.coachReadAt)||coachReadsPending.get(studentUid)>=at)return;
+  coachReadsPending.set(studentUid,at);
+  setDoc(doc(db,"coachingReads",user.uid+"_"+studentUid),{coachUid:user.uid,studentUid,coachReadAt:serverTimestamp()},{merge:true})
+    .catch(error=>{console.error("Okundu yazılamadı",error);coachReadsPending.delete(studentUid)});
+}
+function coachStudentReadOwn(studentUid,message){
+  const readAt=coachReadMillis(coachReads.get(studentUid)?.studentReadAt),at=coachReadMillis(message?.createdAt);
+  return readAt>0&&at>0&&at<=readAt;
+}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&selectedMessageStudent)markCoachThreadRead(selectedMessageStudent)});
 
 function messageTimestamp(value){
+  if(!value)return"—";
   try{const d=value?.toDate?.()||new Date(value);if(!d||Number.isNaN(d.getTime()))return"—";return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d)}catch{return"—"}
 }
 function applyCoachMessageSnapshot(snap){
-  coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a?.createdAt?.toMillis?.()||0)-(b?.createdAt?.toMillis?.()||0));
+  // v51: sunucu saati henüz gelmemiş (yeni gönderilen) mesaj sona dizilir.
+  coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(coachReadMillis(a?.createdAt)||Infinity)-(coachReadMillis(b?.createdAt)||Infinity));
   renderMessageStudents();
   if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
   renderCoachMessageBadges();renderCoachTodo();
@@ -1862,6 +1894,7 @@ async function loadCoachMessages(coachUid){
   if(coachMessageStop&&coachMessageUid===coachUid)return;
   if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null}
   coachMessageUid=coachUid;
+  startCoachReads(coachUid);
   const q=query(collection(db,"coachingMessages"),where("coachUid","==",coachUid));
   try{
     coachMessageStop=onSnapshot(q,applyCoachMessageSnapshot,error=>{
@@ -1893,7 +1926,7 @@ function renderMessageStudents(){
   list.innerHTML=rows.map(row=>{
     const name=studentName(row),actions=messageActionsFor(row.studentUid),last=actions.at(-1),incoming=actions.filter(x=>x.senderRole==="student").length,pending=coachPendingReplies(row.studentUid).count;
     const hidden=rowMatchesMessageFilter(row)?"":" hidden";
-    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small><span class="message-mini-badges">'+(pending?'<i class="coach-v38-pending" title="Cevap bekleyen mesaj">'+pending+'</i>':incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
+    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small>'+(last?.senderRole==="coach"?(coachStudentReadOwn(row.studentUid,last)?'<em class="coach-v51-state is-read">Okundu</em>':'<em class="coach-v51-state">Gönderildi</em>'):'')+'<span class="message-mini-badges">'+(pending?'<i class="coach-v38-pending" title="Cevap bekleyen mesaj">'+pending+'</i>':incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
   }).join("");
   document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{selectedMessageStudent=btn.dataset.messageStudent;const input=$("messageInput");if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";renderMessageStudents();renderMessageConversation(selectedMessageStudent)}));
   if(!selectedMessageStudent&&rows.length){selectedMessageStudent=rows[0].studentUid;renderMessageStudents();renderMessageConversation(selectedMessageStudent)}
@@ -1908,9 +1941,16 @@ function renderMessageConversation(studentUid){
   $("messageSentCount").textContent=String(actions.filter(x=>x.senderRole==="coach").length);$("messageAppliedCount").textContent=String(actions.filter(x=>x.senderRole==="student").length);$("messagePendingCount").textContent=String(actions.length);$("messageFailedCount").textContent="0";
   const thread=$("messageThread");
   if(thread){
-    thread.innerHTML=actions.length?actions.map(message=>'<div class="message-bubble-row '+(message.senderRole==="coach"?"outgoing":"incoming")+'"><div class="message-bubble"><p>'+escHtml(message.text||"")+'</p><div class="message-bubble-meta"><span>'+escHtml(messageTimestamp(message.createdAt))+'</span><strong>'+(message.senderRole==="coach"?"Sen":"Öğrenci")+'</strong></div></div></div>').join(""):'<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>İlk mesajı aşağıdan gönderebilirsin.</p></div>';
+    const readAt=coachReadMillis(coachReads.get(studentUid)?.studentReadAt),lastOwn=actions.map(item=>item.senderRole).lastIndexOf("coach");
+    thread.innerHTML=actions.length?actions.map((message,index)=>{
+      const own=message.senderRole==="coach",read=own&&coachStudentReadOwn(studentUid,message);
+      return '<div class="message-bubble-row '+(own?"outgoing":"incoming")+'"><div class="message-bubble"><p>'+escHtml(message.text||"")+'</p><div class="message-bubble-meta"><span>'+escHtml(messageTimestamp(message.createdAt))+'</span><strong>'+(own?"Sen":"Öğrenci")+'</strong>'
+        +(own?'<i class="coach-v51-tick'+(read?' is-read':'')+'" aria-label="'+(read?"Okundu":"Gönderildi")+'">'+(read?"✓✓":"✓")+'</i>':'')+'</div></div></div>'
+        +(index===lastOwn?'<p class="coach-v51-status'+(read?' is-read':'')+'">'+(read?"Okundu · "+escHtml(coachReadClock(readAt)):"Gönderildi")+'</p>':'');
+    }).join(""):'<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>İlk mesajı aşağıdan gönderebilirsin.</p></div>';
     requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight});
   }
+  markCoachThreadRead(studentUid);
 }
 async function sendCoachMessage(){
   const studentUid=selectedMessageStudent,input=$("messageInput"),button=$("messageSendBtn"),user=auth.currentUser,value=String(input?.value||"").trim().slice(0,500);
