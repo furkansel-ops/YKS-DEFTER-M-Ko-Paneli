@@ -1,0 +1,36 @@
+/* Koç Paneli · v47 Ana Sayfa "Yaklaşan randevular" — en yakın 3 randevu, her birinde tek iş.
+   Renkler yalnız tema değişkenlerinden (--k-*), yazılar en az 11px. */
+
+#homePage .coach-v47-appts{margin-bottom:14px}
+#homePage .coach-v47-appts .panel-title{margin-bottom:4px}
+#homePage .coach-v47-appt{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--k-line);cursor:pointer}
+#homePage .coach-v47-appt:first-child{border-top:0}
+#homePage .coach-v47-when{display:grid;justify-items:center;gap:1px;padding:6px 0;border-radius:11px;background:var(--k-soft);line-height:1.1}
+#homePage .coach-v47-when small{font-size:11px;font-weight:850;color:var(--k-muted)}
+#homePage .coach-v47-when b{font-size:13px;color:var(--k-ink)}
+#homePage .coach-v47-when.is-today{background:color-mix(in srgb,var(--k-accent) 12%,var(--k-surface))}
+#homePage .coach-v47-when.is-today :is(small,b){color:color-mix(in srgb,var(--k-accent) 80%,var(--k-ink))}
+#homePage .coach-v47-who{min-width:0}
+#homePage .coach-v47-who b{display:block;font-size:13px;color:var(--k-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#homePage .coach-v47-who small{display:block;font-size:11.5px;color:var(--k-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#homePage .coach-v47-who em{font-style:normal;font-weight:800;color:color-mix(in srgb,var(--k-warn) 70%,var(--k-ink))}
+#homePage .coach-v47-appt>button,#homePage .coach-v47-foot>button,#homePage .coach-v47-empty>button{min-height:36px;padding:0 12px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:12px;font-weight:850;white-space:nowrap;cursor:pointer}
+#homePage .coach-v47-appt>button.primary{border-color:var(--k-accent);background:var(--k-accent);color:var(--k-on-accent)}
+#homePage .coach-v47-appt>button.is-request{border-color:var(--k-warn);background:var(--k-warn);color:var(--k-on-accent)}
+#homePage .coach-v47-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;padding-top:8px;border-top:1px solid var(--k-line);font-size:12px;color:var(--k-muted)}
+#homePage .coach-v47-foot>button,#homePage .coach-v47-empty>button{min-height:32px;padding:0 4px;border:0;background:transparent;color:var(--k-accent)}
+#homePage .coach-v47-empty{display:flex;align-items:center;gap:10px}
+#homePage .coach-v47-empty>span{width:32px;height:32px;flex:none;display:grid;place-items:center;border-radius:10px;background:var(--k-soft);color:var(--k-muted)}
+#homePage .coach-v47-empty>div{flex:1;min-width:0}
+#homePage .coach-v47-empty b{display:block;font-size:13px;color:var(--k-ink)}
+#homePage .coach-v47-empty small{display:block;font-size:11.5px;color:var(--k-muted)}
+#homePage .coach-v47-appts.is-empty .panel-title{display:none}
+#homePage .coach-v47-appts :is(.coach-v47-appt>button,.coach-v47-foot>button,.coach-v47-empty>button):focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+
+/* Masaüstünde "Bugün yapılacaklar"ın yanında sağ sütun */
+@media(min-width:1201px){
+  #homePage:has(#dashboardApptsPanel:not([hidden])){display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,360px);column-gap:18px;align-items:start}
+  #homePage:has(#dashboardApptsPanel:not([hidden]))>:is(.coach-v36-top,.dashboard-grid){grid-column:1 / -1}
+  #homePage:has(#dashboardApptsPanel:not([hidden]))>.coach-v38-todo{grid-column:1;grid-row:2}
+  #homePage:has(#dashboardApptsPanel:not([hidden]))>.coach-v47-appts{grid-column:2;grid-row:2}
+}

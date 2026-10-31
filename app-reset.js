@@ -352,6 +352,7 @@ function renderCoachDashboard(){
 
   document.querySelectorAll("[data-dashboard-student]").forEach(button=>button.addEventListener("click",()=>dashboardStudentOpen(button.dataset.dashboardStudent)));
   renderCoachTodo();
+  renderDashboardAppointments();
   renderCoachMessageBadges();
 }
 
@@ -392,14 +393,7 @@ function coachTodoItems(){
     const pending=coachPendingReplies(row.studentUid);
     if(pending.count)items.push({kind:"msg",row,title:studentName(row)+" · "+pending.count+" mesaj cevap bekliyor",sub:"“"+text(pending.last?.text,70)+"” · "+messageTimestamp(pending.last?.createdAt)});
   }
-  // v41 · Onay bekleyen randevu istekleri ve bugünkü görüşmeler.
-  const today=todayIsoLocal();
-  for(const appt of coachAppointments){
-    if(apptIsPast(appt.date,appt.time))continue;
-    const row={studentUid:appt.studentUid},name=apptStudentName(appt.studentUid);
-    if(appt.status==="requested")items.push({kind:"appt",row,appt,title:name+" · "+apptRelativeDay(appt.date)+" "+appt.time+" randevu istiyor",sub:appt.topic?"Konu: "+appt.topic:"Konu yazılmadı"});
-    else if(appt.date===today)items.push({kind:"apptToday",row,appt,title:name+" · bugün "+appt.time+" görüşme",sub:appt.link?"Görüşme linki hazır":"Görüşme linki eklenmedi"});
-  }
+  // v47: randevu istekleri ve bugünkü görüşme "Yaklaşan randevular" kartında; burada tekrar edilmez.
   for(const row of rows){
     const name=studentName(row),program=dashboardProgramStats(row),overdue=Math.max(0,Math.round(reportNum(row?.share?.progress?.overdueTopics)));
     if(dashboardNeedsReview(row)){
@@ -423,10 +417,8 @@ function coachTodoItems(){
   return items;
 }
 function coachTodoButtons(item){
-  const uid=escHtml(item.row.studentUid),b=(action,label,primary)=>'<button type="button" class="'+(primary?"primary":"")+'" data-todo-action="'+action+'" data-todo-student="'+uid+'"'+(item.week?' data-todo-week="'+escHtml(item.week)+'"':"")+(item.appt?' data-todo-appt="'+escHtml(item.appt.id)+'"':"")+'>'+label+'</button>';
+  const uid=escHtml(item.row.studentUid),b=(action,label,primary)=>'<button type="button" class="'+(primary?"primary":"")+'" data-todo-action="'+action+'" data-todo-student="'+uid+'"'+(item.week?' data-todo-week="'+escHtml(item.week)+'"':"")+'>'+label+'</button>';
   if(item.kind==="msg")return b("reply","Cevapla",true);
-  if(item.kind==="appt")return b("appt-approve","Onayla",true)+b("appt-open","Randevulara git");
-  if(item.kind==="apptToday")return item.appt.link?b("appt-join","Görüşmeye katıl",true)+b("appt-open","Randevu"):b("appt-link","Link ekle",true);
   if(item.kind==="bad")return b("write","Mesaj yaz",true)+b("report","Raporu aç");
   if(item.kind==="warn")return b("remind","Hatırlat",true)+b("program","Programı aç");
   return b("plan","Haftayı hazırla",true);
@@ -434,7 +426,7 @@ function coachTodoButtons(item){
 let coachTodoExpanded=false;
 function renderCoachTodo(){
   const root=$("dashboardTodo");if(!root)return;
-  const items=coachTodoItems(),icons={msg:"✉",appt:"◷",apptToday:"▶",bad:"!",warn:"◔",plan:"▦"};
+  const items=coachTodoItems(),icons={msg:"✉",bad:"!",warn:"◔",plan:"▦"};
   if($("dashboardTodoCount"))$("dashboardTodoCount").textContent=items.length?items.length+" iş":"";
   if(!coachReportRows.length){root.innerHTML='<p class="coach-v38-todo-empty">Öğrenci eklediğinde bugün yapman gerekenler burada sıralanır.</p>';return}
   if(!items.length){root.innerHTML='<p class="coach-v38-todo-empty">Bugün için bekleyen iş yok.</p>';return}
@@ -451,13 +443,6 @@ function renderCoachTodo(){
   const remind=new Map(items.filter(item=>item.kind==="warn").map(item=>[item.row.studentUid,item]));
   root.querySelectorAll("[data-todo-action]").forEach(button=>button.addEventListener("click",()=>{
     const action=button.dataset.todoAction;
-    if(action.startsWith("appt-")){
-      const appt=coachAppointments.find(item=>item.id===button.dataset.todoAppt);if(!appt)return;
-      if(action==="appt-approve")void approveCoachAppointment(appt.id);
-      else if(action==="appt-join")window.open(appt.link,"_blank","noopener,noreferrer");
-      else openCoachAppointmentDay(appt.date,action==="appt-link"?{mode:"link",id:appt.id}:null);
-      return;
-    }
     const uid=button.dataset.todoStudent,row=coachReportRows.find(item=>item.studentUid===uid);if(!row)return;
     const first=coachFirstName(studentName(row));
     if(action==="reply"||action==="write")openCoachMessageThread(uid,"");
@@ -516,7 +501,7 @@ function renderCoachApptBadge(){
 }
 function applyCoachAppointmentSnapshot(snap){
   coachAppointments=snap.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
-  renderCoachApptBadge();renderCoachTodo();
+  renderCoachApptBadge();renderCoachTodo();renderDashboardAppointments();
   if(!$("appointmentsPage")?.classList.contains("hidden"))renderCoachAppointments();
 }
 async function loadCoachAppointments(coachUid){
@@ -529,6 +514,49 @@ async function loadCoachAppointments(coachUid){
   }catch(error){console.error("Randevu dinleyicisi",error)}
 }
 function stopCoachAppointments(){try{coachApptStop?.()}catch{}coachApptStop=null;coachApptUid="";coachAppointments=[];coachAvailability=null}
+// v47 · Ana Sayfa "Yaklaşan randevular": en yakın 3 randevu (onaylı ve istek birlikte, zamana göre).
+// Onaylı ve linkliyse Katıl ↗, linksizse Link ekle, istekse Onayla; satır o günün randevularını açar.
+const COACH_V47_DAYS=["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+function dashboardApptWhen(date){
+  if(date===todayIsoLocal())return{label:"Bugün",today:true};
+  if(date===apptIso(new Date(Date.now()+864e5)))return{label:"Yarın",today:false};
+  const d=new Date(date+"T12:00:00");
+  return{label:COACH_V47_DAYS[d.getDay()]+" "+d.getDate(),today:false};
+}
+function renderDashboardAppointments(){
+  const panel=$("dashboardApptsPanel"),root=$("dashboardAppts"),count=$("dashboardApptsCount");if(!panel||!root)return;
+  const upcoming=coachAppointments.filter(appt=>!apptIsPast(appt.date,appt.time));
+  panel.hidden=false;panel.classList.toggle("is-empty",!upcoming.length);
+  if(count)count.textContent=upcoming.length?String(upcoming.length):"";
+  if(!upcoming.length){
+    root.innerHTML='<div class="coach-v47-empty"><span aria-hidden="true">◷</span><div><b>Yaklaşan randevu yok</b><small>Öğrenciler uygun saatlerinden istek gönderebilir</small></div><button type="button" data-appt-home="hours">Uygun saatler ›</button></div>';
+  }else{
+    root.innerHTML=upcoming.slice(0,3).map(appt=>{
+      const when=dashboardApptWhen(appt.date),requested=appt.status==="requested",id=escHtml(appt.id);
+      const action=requested?'<button type="button" class="is-request" data-appt-home="approve" data-appt-id="'+id+'">Onayla</button>'
+        :appt.link?'<button type="button" class="primary" data-appt-home="join" data-appt-id="'+id+'">Katıl ↗</button>'
+        :'<button type="button" data-appt-home="link" data-appt-id="'+id+'">Link ekle</button>';
+      return '<div class="coach-v47-appt'+(requested?' is-request':'')+'" data-appt-row="'+id+'">'
+        +'<span class="coach-v47-when'+(when.today?' is-today':'')+'"><small>'+escHtml(when.label)+'</small><b>'+escHtml(appt.time)+'</b></span>'
+        +'<span class="coach-v47-who"><b>'+escHtml(apptStudentName(appt.studentUid))+'</b><small>'+(requested?'<em>onay bekliyor</em>':'onaylı')+' · '+escHtml(appt.topic||"Konu yazılmadı")+'</small></span>'
+        +action+'</div>';
+    }).join("")
+      +'<div class="coach-v47-foot"><span>'+(upcoming.length>3?"+"+(upcoming.length-3)+" randevu daha":"")+'</span><button type="button" data-appt-home="all">Tüm randevular ›</button></div>';
+  }
+  root.querySelectorAll("[data-appt-home]").forEach(button=>button.addEventListener("click",event=>{
+    event.stopPropagation();
+    const action=button.dataset.apptHome,appt=coachAppointments.find(item=>item.id===button.dataset.apptId);
+    if(action==="all"){showCoachPage("appointments");return}
+    if(action==="hours"){showCoachPage("appointments");openCoachApptHours();return}
+    if(!appt)return;
+    if(action==="approve")void approveCoachAppointment(appt.id);
+    else if(action==="join")window.open(appt.link,"_blank","noopener,noreferrer");
+    else if(action==="link")openCoachAppointmentDay(appt.date,{mode:"link",id:appt.id});
+  }));
+  root.querySelectorAll("[data-appt-row]").forEach(row=>row.addEventListener("click",()=>{
+    const appt=coachAppointments.find(item=>item.id===row.dataset.apptRow);if(appt)openCoachAppointmentDay(appt.date);
+  }));
+}
 function openCoachAppointmentDay(date,form=null){
   apptView.day=date;apptView.month=date.slice(0,7);apptView.form=form;
   showCoachPage("appointments");

@@ -50,12 +50,13 @@
   <link rel="stylesheet" href="./coach-theme-tokens-v36.css?v=1.0.1">
   <link rel="stylesheet" href="./coach-themes-v36.css?v=1.1.0">
   <link rel="stylesheet" href="./coach-layout-v40.css?v=1.1.0">
-  <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.3.0">
+  <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.3.1">
   <link rel="stylesheet" href="./coach-home-v42.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-students-v43.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-programs-v44.css?v=1.0.1">
   <link rel="stylesheet" href="./coach-task-composer-v45.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-video-picker-v46.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-home-appts-v47.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -160,6 +161,10 @@
           <article class="stat-card" data-short="haftalık"><span class="stat-icon">↗</span><div><small>Haftalık İlerleme</small><strong id="statProgress">—</strong><em>Genel ortalama</em></div></article>
         </section>
         </div>
+        <section class="dash-panel coach-v47-appts" id="dashboardApptsPanel" aria-labelledby="dashboardApptsTitle" hidden>
+          <div class="panel-title"><div><h2 id="dashboardApptsTitle">Yaklaşan randevular</h2></div><span class="coach-v38-count" id="dashboardApptsCount"></span></div>
+          <div class="coach-v47-appt-list" id="dashboardAppts"></div>
+        </section>
         <section class="dash-panel coach-v38-todo" aria-labelledby="dashboardTodoTitle">
           <div class="panel-title"><div><h2 id="dashboardTodoTitle">Bugün yapılacaklar</h2><p>Cevap bekleyen mesajlar, takip edilecekler, gelecek haftası boş olanlar</p></div><span class="coach-v38-count" id="dashboardTodoCount"></span></div>
           <div class="coach-v38-todo-list" id="dashboardTodo"><p class="coach-v38-todo-empty">Öğrenci verileri yükleniyor.</p></div>
@@ -1473,7 +1478,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.5"></script>
 </body>

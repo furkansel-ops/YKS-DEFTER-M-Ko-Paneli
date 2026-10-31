@@ -176,12 +176,13 @@ test("v41.4 sade gün listesi: ✕ günü kapatır, + Saat ekle açar; saat ve s
   assert.equal(ops.sets.at(-1).data.duration,60);
 });
 
-test("v41 Bugün yapılacaklar: onay bekleyen istek ve bugünkü görüşme, Onayla düğmesi çalışır",async t=>{
+test("v47 Ana Sayfa: yaklaşan randevular kartta, yapılacaklarda tekrar edilmez; Onayla düğmesi çalışır",async t=>{
   const {w,doc,ops}=fixture(t,DEMO+"renderCoachDashboard();");
-  const rows=[...doc.querySelectorAll("#dashboardTodo .coach-v38-task")].map(node=>node.dataset.todoKind+"|"+node.querySelector("b").textContent);
-  assert.ok(rows.includes("appt|Ayşe Yılmaz · yarın 18:30 randevu istiyor"),rows.join("\n"));
-  assert.ok(rows.includes("apptToday|Mehmet Kaya · bugün 23:59 görüşme"));
-  doc.querySelector('#dashboardTodo [data-todo-action="appt-approve"]').click();await flush();
+  const kinds=[...doc.querySelectorAll("#dashboardTodo .coach-v38-task")].map(node=>node.dataset.todoKind);
+  assert.equal(kinds.some(kind=>/^appt/.test(kind)),false,"randevular yalnız kartta");
+  const rows=[...doc.querySelectorAll("#dashboardAppts .coach-v47-appt")].map(node=>node.querySelector(".coach-v47-when").textContent+"|"+node.querySelector(".coach-v47-who b").textContent+"|"+node.querySelector("button").textContent);
+  assert.deepEqual(rows,["Bugün23:59|Mehmet Kaya|Katıl ↗","Yarın18:30|Ayşe Yılmaz|Onayla"]);
+  doc.querySelector('#dashboardAppts [data-appt-home="approve"]').click();await flush();
   assert.equal(ops.updates.at(-1).data.status,"confirmed");
 });
 
@@ -215,4 +216,58 @@ test("v41.2 saat özeti ardışık aynı günleri birleştirir, kapalı günleri
   w.__days=days;
   assert.equal(w.eval("apptHoursSummary({duration:45,days:window.__days})"),"Pzt–Cum 18–21 · Cmt 11–14:30 · Paz kapalı · 45 dk");
   assert.equal(w.eval("apptHoursSummary(null)"),"Uygun saat açmadın; öğrenciler randevu alamaz.");
+});
+
+// v47: dört gelecek randevu (biri geçmiş): yalnız en yakın üçü görünür, kalan sayılır.
+const MANY=`
+  const iso=d=>apptIso(d),day=n=>iso(new Date(Date.now()+n*864e5));
+  const link={active:true};
+  coachReportRows=[{studentUid:"a",link,share:{profile:{name:"Ayşe Yılmaz"},program:{weeks:[]}}},{studentUid:"b",link,share:{profile:{name:"Mehmet Kaya"},program:{weeks:[]}}},{studentUid:"c",link,share:{profile:{name:"Zeynep Demir"},program:{weeks:[]}}}];
+  const appt=(n,time,uid,status,extra={})=>({id:"coach_"+day(n).replace(/-/g,"")+"_"+time.replace(":",""),data:()=>({coachUid:"coach",studentUid:uid,date:day(n),time,duration:30,status,createdBy:"coach",topic:"",link:"",note:"",...extra})});
+  applyCoachAppointmentSnapshot({docs:[appt(-1,"18:00","a","confirmed"),appt(2,"18:00","c","confirmed"),appt(3,"20:00","a","confirmed",{link:"https://meet.google.com/x"}),appt(5,"19:00","b","requested",{topic:"Deneme"}),appt(1,"18:30","b","requested",{topic:"Deneme sonrası"})]});
+  window.__day=day;window.__apptDay=()=>apptView.day;
+  renderCoachDashboard();
+`;
+test("v47 en yakın üç randevu, geçmiş olan yok; '+1 randevu daha'; linksiz onaylı 'Link ekle' ile o günü açar",t=>{
+  const {w,doc}=fixture(t,MANY);
+  const rows=[...doc.querySelectorAll("#dashboardAppts .coach-v47-appt")];
+  assert.deepEqual(rows.map(row=>row.querySelector(".coach-v47-who b").textContent),["Mehmet Kaya","Zeynep Demir","Ayşe Yılmaz"]);
+  assert.equal(rows[0].querySelector(".coach-v47-when small").textContent,"Yarın");
+  assert.match(rows[0].querySelector(".coach-v47-who small").textContent,/^onay bekliyor · Deneme sonrası$/);
+  assert.deepEqual(rows.map(row=>row.querySelector("button").textContent),["Onayla","Link ekle","Katıl ↗"]);
+  assert.equal(doc.querySelector("#dashboardApptsCount").textContent,"4");
+  assert.equal(doc.querySelector("#dashboardAppts .coach-v47-foot span").textContent,"+1 randevu daha");
+  rows[1].querySelector('[data-appt-home="link"]').click();
+  assert.equal(doc.querySelector("#appointmentsPage").classList.contains("hidden"),false);
+  assert.ok(doc.querySelector("#apptDayList [data-appt-link-form]"),"link formu açık gelir");
+});
+
+test("v47 satıra dokunmak o günü açar; Tüm randevular sayfaya götürür",t=>{
+  const {w,doc}=fixture(t,MANY);
+  doc.querySelector("#dashboardAppts .coach-v47-appt .coach-v47-who").click();
+  assert.equal(doc.querySelector("#appointmentsPage").classList.contains("hidden"),false);
+  assert.equal(w.__apptDay(),w.__day(1));
+  doc.querySelector('[data-coach-page="home"]').click();
+  doc.querySelector('#dashboardAppts [data-appt-home="all"]').click();
+  assert.equal(doc.querySelector("#appointmentsPage").classList.contains("hidden"),false);
+});
+
+test("v47 randevu yokken tek satır; 'Uygun saatler' saat panelini açar",t=>{
+  const {doc}=fixture(t,`coachReportRows=[];applyCoachAppointmentSnapshot({docs:[]});renderCoachDashboard();`);
+  const panel=doc.querySelector("#dashboardApptsPanel");
+  assert.equal(panel.hidden,false);assert.ok(panel.classList.contains("is-empty"));
+  assert.equal(doc.querySelector("#dashboardAppts .coach-v47-empty b").textContent,"Yaklaşan randevu yok");
+  doc.querySelector('#dashboardAppts [data-appt-home="hours"]').click();
+  assert.equal(doc.querySelector("#appointmentsPage").classList.contains("hidden"),false);
+  assert.equal(doc.querySelector("#apptHoursDrawer").hidden,false);
+});
+
+test("v47 stilleri yalnız tema değişkenleri ve en az 11px yazı kullanır",()=>{
+  const css=read("coach-home-appts-v47.css"),html=read("index.html");
+  assert.match(html,/<link rel="stylesheet" href="\.\/coach-home-appts-v47\.css\?v=1\.0\.0">/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-video46-appts47"/);
+  assert.doesNotMatch(read("coach-appointments-v41.css"),/data-todo-kind="appt/,"yapılacaklardaki randevu satırı stili kalktı");
+  assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);
+  assert.doesNotMatch(css,/rgba?\(|hsl\(/);
+  for(const [,size] of css.matchAll(/font-size:(\d+(?:\.\d+)?)px/g))assert.ok(Number(size)>=11,size);
 });

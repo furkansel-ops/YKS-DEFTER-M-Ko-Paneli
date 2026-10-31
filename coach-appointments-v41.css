@@ -51,9 +51,6 @@
   .coach-v41-item .coach-v41-pill,.coach-v41-item>button{grid-column:2;justify-self:start}
   .coach-v41-actions{margin-left:0}
 }
-/* Bugün yapılacaklar listesindeki randevu satırları */
-.coach-v38-task[data-todo-kind="appt"] .coach-v38-task-icon{background:color-mix(in srgb,var(--k-warn) 16%,var(--k-surface));color:var(--k-warn)}
-.coach-v38-task[data-todo-kind="apptToday"] .coach-v38-task-icon{background:color-mix(in srgb,var(--k-ok) 15%,var(--k-surface));color:var(--k-ok)}
 
 /* v41.4 · Uygun saatler, şablon B: sade gün listesi. Açık gün iki saat listesi ve ✕, kapalı gün "+ Saat ekle". */
 .coach-v41-days{display:grid;margin:6px 0 4px;border:1px solid var(--k-line);border-radius:14px;overflow:hidden}
