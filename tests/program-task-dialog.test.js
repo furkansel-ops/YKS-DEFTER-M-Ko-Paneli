@@ -368,10 +368,11 @@ test('v46 Video ekle: gün satırı haftayı değiştirir, seçilen video alt ş
 
 test('v46 Video ekle stilleri yalnız tema değişkenleri ve en az 11px yazı kullanır',()=>{
   const css=read('coach-video-picker-v46.css'),html=read('index.html');
-  assert.match(html,/<link rel="stylesheet" href="\.\/coach-video-picker-v46\.css\?v=1\.0\.0">/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/coach-video-picker-v46\.css\?v=1\.0\.\d+">/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-composer45-video46[^"]*"/);
   assert.match(css,/#coachVideoPickerBackdrop \.coach-video-controls\{position:sticky;top:0;/);
-  assert.match(css,/#coachVideoPickerBackdrop \.coach-video-card-actions>button:first-child\{display:none\}/,'resim zaten videoyu açar');
+  assert.match(css,/\.coach-video-card-actions>:is\(button\[data-video-open\],button\[data-playlist-video-open\]\)\{display:none\}/,'resim zaten videoyu açar');
+  assert.doesNotMatch(css,/button:first-child\{display:none\}|\[data-playlist-view\]\{display:none/,'listelerde "Videoları gör" kalır');
   assert.match(css,/#coachVideoPickerBackdrop #coachVideoPickerCancel\{display:none\}/);
   assert.match(css,/#coachVideoPickerStatus:not\(\[data-status="error"\]\):not\(\[data-status="success"\]\)\{display:none\}/);
   assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);

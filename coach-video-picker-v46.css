@@ -38,7 +38,9 @@
 #coachVideoPickerBackdrop .coach-video-card-body small{order:2;font-size:11px;color:var(--k-muted)}
 #coachVideoPickerBackdrop .coach-video-card-body em{display:none}
 #coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-card-actions{grid-column:3;grid-row:1;display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding:0;border:0;background:transparent}
-#coachVideoPickerBackdrop .coach-video-card-actions>button:first-child{display:none}
+/* Videoda resim zaten açar; listede "Videoları gör" görünür kalır (kamp listelerinin içine girilir) */
+#coachVideoPickerBackdrop .coach-video-card-actions>:is(button[data-video-open],button[data-playlist-video-open]){display:none}
+#coachVideoPickerBackdrop .coach-video-card-actions>button[data-playlist-view]{min-height:32px;height:32px;padding:0 10px;font-size:12px;white-space:nowrap}
 #coachVideoPickerBackdrop .coach-video-card-actions .primary{order:-1;min-height:32px;height:32px;padding:0 12px;font-size:12px;white-space:nowrap}
 #coachVideoPickerBackdrop .coach-video-card-actions .recommend{position:relative;width:34px;min-height:30px;height:30px;padding:0;overflow:hidden;text-indent:200%;white-space:nowrap}
 #coachVideoPickerBackdrop .coach-video-card-actions .recommend::after{content:"✉";position:absolute;inset:0;display:grid;place-items:center;text-indent:0;font-size:14px}
