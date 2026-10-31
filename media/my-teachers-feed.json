@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-31T14:16:59.633Z",
+  "generatedAt": "2026-10-31T18:39:54.492Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-31T14:11:15.189Z"
+      "refreshedAt": "2026-10-31T18:34:15.615Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-31T14:15:22.496Z"
+      "refreshedAt": "2026-10-31T18:38:22.449Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3560,7 +3560,7 @@
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
       "videoCount": 1183,
-      "playlistCount": 45,
+      "playlistCount": 44,
       "archiveComplete": true,
       "playlists": [
         {
@@ -4611,6 +4611,13 @@
       ],
       "videos": [
         {
+          "id": "yDYTQM2iJSc",
+          "title": "11. Sınıf Kimya 1. Dönem 1. Yazılı | OYSS Yazılı Provası ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=yDYTQM2iJSc",
+          "thumbnail": "https://i.ytimg.com/vi/yDYTQM2iJSc/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "67vB2jOFKDo",
           "title": "12. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | Kimya ve Elektrik | Yazılı Provası",
           "url": "https://www.youtube.com/watch?v=67vB2jOFKDo",
@@ -4686,16 +4693,9 @@
           "url": "https://www.youtube.com/watch?v=yBx727j2RDk",
           "thumbnail": "https://i.ytimg.com/vi/yBx727j2RDk/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "XbACJ9I4SjA",
-          "title": "11. Sınıf Kimya 10. Ders | Ortalama Tepkime Hızı Hesaplama | Tepkimelerde Hız | MAARİF",
-          "url": "https://www.youtube.com/watch?v=XbACJ9I4SjA",
-          "thumbnail": "https://i.ytimg.com/vi/XbACJ9I4SjA/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-31T14:15:49.696Z"
+      "refreshedAt": "2026-10-31T18:38:47.387Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5692,7 +5692,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-31T14:15:58.891Z"
+      "refreshedAt": "2026-10-31T18:38:56.108Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8211,7 +8211,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-31T14:16:10.052Z"
+      "refreshedAt": "2026-10-31T18:39:07.867Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8926,7 +8926,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-31T14:16:18.683Z"
+      "refreshedAt": "2026-10-31T18:39:15.928Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9755,7 +9755,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-31T14:16:21.429Z"
+      "refreshedAt": "2026-10-31T18:39:18.243Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10757,7 +10757,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-31T14:16:59.628Z"
+      "refreshedAt": "2026-10-31T18:39:54.487Z"
     }
   }
 }
