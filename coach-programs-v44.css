@@ -1,0 +1,224 @@
+/* Koç Paneli · v44 Programlar — telefonda kısa başlık, öğrenci ve hafta tek kartta, sayılar tek sırada,
+   işlemler tek sıra + ⋯, hafta yana kaymaz (gün şeridi + seçili gün); mor yerine panelin rengi.
+   Renkler yalnız tema değişkenlerinden (--k-*), yazılar en az 11px. */
+
+#programsPage .coach-v44-more,#programsPage .coach-v44-daystrip{display:none}
+
+@media(max-width:700px){
+  /* 1 — kısa başlık */
+  #programsPage :is(.coach-v15-breadcrumb,.coach-v15-title-icon,#coachV15Subtitle){display:none}
+  #programsPage .coach-v15-header h1{margin:0;font-size:22px}
+  #programsPage .coach-v15-header-main{gap:10px}
+
+  /* 2 — öğrenci ve hafta tek kartta */
+  #programsPage .coach-v15-header-tools{display:grid;gap:0;width:100%;padding:0;border:1px solid var(--k-line);border-radius:16px;background:var(--k-surface);overflow:hidden}
+  #programsPage .coach-v15-header-tools .program-student-picker{width:100%;min-height:48px;margin:0;border:0;border-bottom:1px solid var(--k-line);border-radius:0;background:transparent;box-shadow:none}
+  #programsPage .coach-v15-header-tools .program-student-picker>span{display:none}
+  #programsPage .coach-v15-header-tools .program-student-picker{height:48px;padding:0}
+  #programsPage .coach-v15-header-tools .program-student-picker::before{top:10px;left:12px;width:28px;height:28px}
+  .coach-shell-reset #programsPage .coach-v15-header-tools .program-student-picker #programStudentSelect{padding:0 34px 0 50px;font-size:13.5px;font-weight:800}
+  #programsPage .coach-v15-header-tools .coach-v15-week-nav{display:flex;align-items:center;gap:6px;width:100%;min-height:0;margin:0;padding:6px 8px;border:0;border-radius:0;background:transparent;box-shadow:none}
+  #programsPage .coach-v15-header-tools .coach-v15-week-nav>*{height:38px;min-height:38px}
+  #programsPage .coach-v15-week-nav #programPrevWeek{order:1}
+  #programsPage .coach-v15-week-nav #programWeekLabel{order:2;flex:1;min-width:0;text-align:center}
+  #programsPage .coach-v15-week-nav #programNextWeek{order:3}
+  #programsPage .coach-v15-week-nav #programCurrentWeek{order:4;flex:none;min-height:36px;padding:0 10px;border-radius:999px}
+
+  /* 3 — sayılar tek sırada: sayı ve kısa etiket */
+  #programsPage .coach-v15-overview{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  #programsPage .coach-v15-overview .coach-v15-stat{display:block;min-height:0;padding:8px 4px;border-radius:12px;text-align:center;box-shadow:none}
+  #programsPage .coach-v15-overview .coach-v15-stat :is(.coach-v15-stat-icon,.coach-v15-stat-label,small,.coach-v15-progress-ring){display:none}
+  #programsPage .coach-v15-overview .coach-v15-stat-body{display:block}
+  #programsPage .coach-v15-overview .coach-v15-stat strong{display:block;margin:0;font-size:17px;line-height:1.2}
+  #programsPage .coach-v15-overview .coach-v15-stat::after{content:attr(data-short);display:block;font-size:11px;font-weight:700;color:var(--k-muted)}
+
+  /* 4 — işlemler tek sıra; Şablonlar, Video ekle, Haftaya toplu ekle ⋯ menüsünde */
+  #programsPage .coach-v15-actions{display:block;padding:0;border:0;background:transparent;box-shadow:none}
+  #programsPage .coach-v15-action-heading{display:none}
+  #programsPage .coach-v15-action-buttons{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+  #programsPage .coach-v15-action-buttons>button{width:auto;min-width:0;min-height:40px;height:40px;margin:0;padding:0 12px;font-size:12.5px;white-space:nowrap}
+  #programsPage #programAddTaskBtn{order:1;flex:1 1 auto}
+  #programsPage #programBulkTasksBtn{order:2;flex:0 1 auto}
+  #programsPage .coach-v15-action-buttons>.coach-v44-more{display:grid;place-items:center;order:3;flex:none;width:40px;padding:0;font-size:16px;font-weight:900;color:var(--k-muted)}
+  #programsPage .coach-v15-actions.is-more-open .coach-v44-more{border-color:var(--k-accent);color:var(--k-accent)}
+  #programsPage :is(#programTemplatesBtn,#programAddVideoBtn,#programAddWeekBtn){display:none;order:4;flex:1 1 100%;justify-content:flex-start;text-align:left}
+  #programsPage .coach-v15-actions.is-more-open :is(#programTemplatesBtn,#programAddVideoBtn,#programAddWeekBtn){display:flex;align-items:center}
+
+  /* 5 — gün şeridi */
+  #programsPage .coach-v44-daystrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:0 0 8px}
+  #programsPage .coach-v6-sheet:has(.coach-v14-week[data-layout="list"]) .coach-v44-daystrip{display:none}
+  #programsPage .coach-v44-daystrip button{display:grid;justify-items:center;gap:1px;min-width:0;min-height:58px;padding:6px 0 5px;border:1px solid var(--k-line);border-radius:12px;background:var(--k-surface);color:var(--k-ink);font:inherit;cursor:pointer}
+  #programsPage .coach-v44-daystrip small{font-size:11px;font-weight:800;color:var(--k-muted)}
+  #programsPage .coach-v44-daystrip b{font-size:15px;line-height:1.1}
+  #programsPage .coach-v44-daystrip em{font-size:11px;font-style:normal;font-weight:850;color:var(--k-muted)}
+  #programsPage .coach-v44-daystrip em.is-done{color:color-mix(in srgb,var(--k-ok) 75%,var(--k-ink))}
+  #programsPage .coach-v44-daystrip button.is-today{border-color:var(--k-accent)}
+  #programsPage .coach-v44-daystrip button[aria-pressed="true"]{border-color:var(--k-accent);background:var(--k-accent);color:var(--k-on-accent)}
+  #programsPage .coach-v44-daystrip button[aria-pressed="true"] :is(small,em,em.is-done){color:var(--k-on-accent)}
+  #programsPage .coach-v44-daystrip button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+
+  /* 5 — seçili gün tam genişlikte; her görev tek satır */
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]){display:block;overflow:visible;padding:0;border:0;background:transparent;box-shadow:none}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"])>.coach-v14-day:not(.is-picked){display:none}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"])>.coach-v14-day{min-height:0;overflow:visible;border-radius:16px!important}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v6-day-head{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 8px;min-height:0;max-height:none;padding:12px 12px 8px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v6-day-head strong{font-size:14.5px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v6-day-head small{margin-left:auto}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v14-progress{flex:1 1 100%;height:5px;margin-top:6px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v12-card-stack{display:block;max-height:none!important;padding:0 12px;overflow:visible}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task{display:grid;grid-template-columns:30px minmax(0,1fr) auto 32px;align-items:center;gap:0 8px;padding:9px 0!important;border:0!important;border-top:1px solid var(--k-line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task:first-child{border-top:0!important}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-symbol{grid-column:1;grid-row:1;width:30px;height:30px;border-radius:9px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-symbol svg{width:16px;height:16px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy{grid-column:2;grid-row:1;min-width:0}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy strong{font-size:12.5px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v6-task-copy>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v27-task-status{grid-column:3;grid-row:1;justify-self:end;min-height:0;padding:3px 8px;font-size:11px;white-space:nowrap}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v11-task-menu{position:relative;grid-column:4;grid-row:1}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v11-task-menu summary{width:32px;min-height:32px;height:32px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v11-task-menu[open]{grid-column:4;grid-row:1}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v11-task-menu-items{position:absolute;top:calc(100% + 4px);right:0;z-index:6;display:grid;grid-template-columns:minmax(0,1fr);gap:2px;min-width:150px;padding:4px;border:1px solid var(--k-line);border-radius:12px;background:var(--k-surface);box-shadow:0 10px 24px color-mix(in srgb,var(--k-ink) 14%,transparent)}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-task .coach-v11-task-menu-items button{display:flex;align-items:center;justify-content:flex-start;width:100%;min-height:40px;padding:0 10px;text-align:left}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v6-day-empty{padding:16px 0 6px;text-align:center;font-size:12.5px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v11-day-footer{padding:8px 12px 12px}
+  #programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week.coach-v44-week:not([data-layout="list"]) .coach-v6-add-day{width:100%;min-height:40px}
+}
+
+/* 6 — Programlar tek mor sayfaydı: eski mor anahtarlar panelin rengine bağlanır (tema değişince o temanın rengi).
+   Ders renkleri (6658e4, 6754aa, 6957e8, 7456a5, 8253ee, 864aaa, 8e59d7, 9654e3, 9955dd, eeeaff, f0eeff, f1eeff, f2eaff, f2effa, f5edff, f5eeff, f6eff9) olduğu gibi kalır. */
+:is(#programsPage,#programTaskBackdrop,#coachVideoPickerBackdrop,#coachV10Bulk){
+  --kc-4a3cb8:color-mix(in srgb,var(--k-accent) 70%,var(--k-ink));
+  --kc-5045ee:var(--k-accent);
+  --kc-5241c9:color-mix(in srgb,var(--k-accent) 70%,var(--k-ink));
+  --kc-5447eb:var(--k-accent);
+  --kc-5541cb:color-mix(in srgb,var(--k-accent) 70%,var(--k-ink));
+  --kc-5548aa:color-mix(in srgb,var(--k-accent) 70%,var(--k-ink));
+  --kc-5548ac:color-mix(in srgb,var(--k-accent) 70%,var(--k-ink));
+  --kc-554df2-a231:color-mix(in srgb,var(--k-accent) 23.1%,transparent);
+  --kc-5846d8:var(--k-accent);
+  --kc-584ac5:var(--k-accent);
+  --kc-5947cc:var(--k-accent);
+  --kc-5947d7:var(--k-accent);
+  --kc-5949d6:var(--k-accent);
+  --kc-5b49cb:var(--k-accent);
+  --kc-5b4bd0:var(--k-accent);
+  --kc-5c4ad3:var(--k-accent);
+  --kc-5e4acb:var(--k-accent);
+  --kc-5e4de1:var(--k-accent);
+  --kc-5e50dc:var(--k-accent);
+  --kc-5f4fe4:var(--k-accent);
+  --kc-5f50d9:var(--k-accent);
+  --kc-5f51c7:var(--k-accent);
+  --kc-604aeb:var(--k-accent);
+  --kc-6153ed:var(--k-accent);
+  --kc-6250d6:var(--k-accent);
+  --kc-6250d6-a120:color-mix(in srgb,var(--k-accent) 12%,transparent);
+  --kc-6251d0:var(--k-accent);
+  --kc-6258f1:var(--k-accent);
+  --kc-6357ea-a141:color-mix(in srgb,var(--k-accent) 14.1%,transparent);
+  --kc-6450e7-a169:color-mix(in srgb,var(--k-accent) 16.9%,transparent);
+  --kc-6553bd:var(--k-accent);
+  --kc-6553eb:var(--k-accent);
+  --kc-6553ee:var(--k-accent);
+  --kc-6553ee-a169:color-mix(in srgb,var(--k-accent) 16.9%,transparent);
+  --kc-6554e9:var(--k-accent);
+  --kc-6554ed:var(--k-accent);
+  --kc-6554ee:var(--k-accent);
+  --kc-6554ef:var(--k-accent);
+  --kc-6554f3:var(--k-accent);
+  --kc-6555ea:var(--k-accent);
+  --kc-6654e6-a153:color-mix(in srgb,var(--k-accent) 15.3%,transparent);
+  --kc-6654e9:var(--k-accent);
+  --kc-6654ed:var(--k-accent);
+  --kc-6654ee:var(--k-accent);
+  --kc-6656eb:var(--k-accent);
+  --kc-6753ec:var(--k-accent);
+  --kc-6755ef-a180:color-mix(in srgb,var(--k-accent) 18%,transparent);
+  --kc-6756ea:var(--k-accent);
+  --kc-6756eb:var(--k-accent);
+  --kc-6854f2-a165:color-mix(in srgb,var(--k-accent) 16.5%,transparent);
+  --kc-6856ed:var(--k-accent);
+  --kc-6857bc:var(--k-accent);
+  --kc-6858e5-a043:color-mix(in srgb,var(--k-accent) 4.3%,transparent);
+  --kc-6859d7:var(--k-accent);
+  --kc-6954e7:var(--k-accent);
+  --kc-6956e6-a204:color-mix(in srgb,var(--k-accent) 20.4%,transparent);
+  --kc-6959e7:var(--k-accent);
+  --kc-6b5be6:var(--k-accent);
+  --kc-6c55cc:var(--k-accent);
+  --kc-6c58d8:var(--k-accent);
+  --kc-6c5cf0:var(--k-accent);
+  --kc-6d56e9:var(--k-accent);
+  --kc-6d57ee:var(--k-accent);
+  --kc-6d5bdd:var(--k-accent);
+  --kc-6e55d9:var(--k-accent);
+  --kc-6e60ec:var(--k-accent);
+  --kc-6f5aed:var(--k-accent);
+  --kc-7262ed:var(--k-accent);
+  --kc-7263ea:var(--k-accent);
+  --kc-7557d9:var(--k-accent);
+  --kc-756cff:var(--k-accent);
+  --kc-7663ec:var(--k-accent);
+  --kc-7c6cf2:var(--k-accent);
+  --kc-8a6cf2:var(--k-accent);
+  --kc-8a7df9:var(--k-accent);
+  --kc-9256d7:var(--k-accent);
+  --kc-9387ff:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-988cf2:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-9b8cea:var(--k-accent);
+  --kc-9d8ff0:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-9d91f0:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-9e91ec:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-9e92e7:var(--k-accent);
+  --kc-9f90f6:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-a59af3:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-a69bf0:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-a8a0f4:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-a9a0f4:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-aa9cf3:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-aba1f2:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-ae9ff7:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-b6adfa:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-c8c4fa:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-c9c1ff:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-c9c2f4:color-mix(in srgb,var(--k-accent) 50%,var(--k-surface));
+  --kc-cfc8fa:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-cfc8fb:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-d8d3f3:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-d9d4ed:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-d9d4ff:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-d9d5fa:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-dedbff:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-e2dcff:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-e6e2fb:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-e7e8f4:color-mix(in srgb,var(--k-accent) 22%,var(--k-surface));
+  --kc-e8e3ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-eae5ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-eae8fd:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-ebe5ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-ebe7ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-edeaff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-eeebff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-efecfd:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-efedff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f0edff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f1e7ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f1efff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f2efff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f3f0ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f3f1ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f4f1ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f4f2ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f5f2ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f5f3ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f5f4ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f6f4ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f6f5ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f7f5ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f8f7ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f9f8ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-f9f9ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-faf9ff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-fbfaff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+  --kc-fcfbff:color-mix(in srgb,var(--k-accent) 7%,var(--k-surface));
+}

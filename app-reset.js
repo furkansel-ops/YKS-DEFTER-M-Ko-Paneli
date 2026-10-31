@@ -3389,6 +3389,17 @@ function renderCoachVisualWeek(program,week,row){
       +'<span class="coach-v27-task-status '+(done?'is-complete':'is-pending')+'" aria-label="'+(done?'Öğrenci tarafından tamamlandı':'Öğrenci henüz tamamlamadı')+'"><span aria-hidden="true">'+(done?'✓':'○')+'</span> '+(done?'Tamamlandı':'Bekliyor')+'</span>'
       +'</article>';
   };
+  // v44: telefonda hafta yana kaymaz; gün şeridinden seçilen gün tam genişlikte görünür.
+  // Açılışta bugün; bu hafta değilse ilk dolu gün.
+  const todayIndex=stats.days.findIndex((_,day)=>programDayDate(week.week,day)===today);
+  const picked=coachV44PickedDay(row.studentUid+"|"+week.week,todayIndex>=0?todayIndex:Math.max(0,stats.days.findIndex(item=>item.tasks.length)));
+  const strip='<div class="coach-v44-daystrip" role="group" aria-label="Gün seç">'+stats.days.map((item,day)=>{
+    const date=programDayDate(week.week,day),count=item.tasks.length+drafts.filter(task=>task.day===day).length;
+    const allDone=Boolean(item.tasks.length)&&item.done===item.tasks.length&&count===item.tasks.length;
+    return '<button type="button" data-coach-v44-day="'+day+'"'+(date===today?' class="is-today"':'')+' aria-pressed="'+(day===picked)+'" aria-label="'+names[day]+' · '+(count?item.done+'/'+count+' tamamlandı':'boş')+'">'
+      +'<small>'+["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"][day]+'</small><b>'+Number(date.slice(8,10))+'</b>'
+      +'<em'+(allDone?' class="is-done"':'')+'>'+(!count?'—':allDone?'✓':item.done+'/'+count)+'</em></button>';
+  }).join("")+'</div>';
   const days=stats.days.map((item,day)=>{
     const date=programDayDate(week.week,day),isToday=date===today;
     const dateLabel=programDayLabel(week.week,day).split(" · ")[1]||date;
@@ -3398,7 +3409,7 @@ function renderCoachVisualWeek(program,week,row){
     },draftKey)).join("");
     const totalCards=item.tasks.length+drafts.filter(task=>task.day===day).length;
     const completion=item.tasks.length?Math.round(item.done/item.tasks.length*100):0;
-    return '<section class="coach-v6-day coach-v11-day coach-v14-day'+(isToday?' is-today':'')+'" data-day="'+day+'">'
+    return '<section class="coach-v6-day coach-v11-day coach-v14-day'+(isToday?' is-today':'')+(day===picked?' is-picked':'')+'" data-day="'+day+'">'
       +'<header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span>'
       +'<small class="coach-v27-day-status" data-all-done="'+Boolean(item.tasks.length&&item.done===item.tasks.length)+'">'+(item.tasks.length&&item.done===item.tasks.length?'✓ Gün tamamlandı':item.done+'/'+item.tasks.length+' tamamlandı')+'</small>'
       +'<div class="coach-v14-progress" role="progressbar" aria-label="'+names[day]+' tamamlanma oranı" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+completion+'"><span style="width:'+completion+'%"></span></div></header>'
@@ -3413,10 +3424,20 @@ function renderCoachVisualWeek(program,week,row){
     +metrics+coachV7DraftPanel(draftKey,week)+'<section class="coach-v6-sheet"><div class="coach-v6-sheet-head"><div><h3>Haftalık Plan <span class="coach-v6-week-label">'+escHtml(formatProgramWeek(week.week))+'</span></h3><p>Dersler ve tamamlanan görevler öğrencinin kayıtlarına göre gösterilir.</p>'
     +coachV28ProgressPulse(program,week,stats,today)+'</div>'
     +'<div class="coach-v6-sheet-tabs" role="group" aria-label="Hafta veya liste görünümü"><button type="button" data-coach-v6-layout="week" aria-pressed="'+(coachWeekVisualLayout==="week")+'">▦ Hafta</button><button type="button" data-coach-v6-layout="list" aria-pressed="'+(coachWeekVisualLayout==="list")+'">☷ Liste</button><button type="button" class="coach-v11-width-toggle" data-v11-width aria-pressed="'+coachV11WideColumns+'">⇥ Kolon Genişliği</button></div></div>'
-    +'<div class="coach-v6-days coach-v11-week-table coach-v12-week-table coach-v14-week" role="region" tabindex="0" aria-label="Haftalık program tablosu; yatay kaydırılabilir" data-density="'+(coachV11WideColumns?"wide":"normal")+'" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section></section>';
+    +strip+'<div class="coach-v6-days coach-v11-week-table coach-v12-week-table coach-v14-week coach-v44-week" role="region" tabindex="0" aria-label="Haftalık program tablosu; yatay kaydırılabilir" data-density="'+(coachV11WideColumns?"wide":"normal")+'" data-layout="'+coachWeekVisualLayout+'">'+days+'</div></section></section>';
+}
+let coachV44Pick={scope:"",day:0};
+function coachV44PickedDay(scope,fallback){
+  if(coachV44Pick.scope!==scope)coachV44Pick={scope,day:fallback};
+  return coachV44Pick.day;
 }
 function bindCoachVisualWeekActions(weekStart){
   const root=$("coachVisualWeekBoard");if(!root)return;
+  root.querySelectorAll("[data-coach-v44-day]").forEach(button=>button.addEventListener("click",()=>{
+    const day=Number(button.dataset.coachV44Day);coachV44Pick.day=day;
+    root.querySelectorAll("[data-coach-v44-day]").forEach(node=>node.setAttribute("aria-pressed",String(node===button)));
+    root.querySelectorAll(".coach-v14-week>.coach-v14-day").forEach(node=>node.classList.toggle("is-picked",Number(node.dataset.day)===day));
+  }));
   const studentUid=selectedProgramStudentUid,key=coachV7Key(studentUid,weekStart);
   root.querySelector("[data-v9-toggle]")?.addEventListener("click",()=>{
     coachV9ComposerOpen=!coachV9ComposerOpen;
@@ -3589,8 +3610,9 @@ function coachV15RenderTop(row,program,week){
   const difference=oldCount===null?"Bu haftanın planlanan çalışmaları":
     (stats.total===oldCount?"Geçen haftayla aynı":
     ((stats.total>oldCount?"+":"")+String(stats.total-oldCount)+" geçen haftaya göre"));
+  const SHORT={total:"görev",progress:"ilerleme",subjects:"ders",average:"günlük"};
   const metric=(key,icon,label,value,detail,extra="")=>
-    '<article class="coach-v15-stat" data-coach-summary="'+key+'"><span class="coach-v15-stat-icon '+key+'" aria-hidden="true">'+icon+'</span>'
+    '<article class="coach-v15-stat" data-coach-summary="'+key+'" data-short="'+SHORT[key]+'"><span class="coach-v15-stat-icon '+key+'" aria-hidden="true">'+icon+'</span>'
     +'<div class="coach-v15-stat-body"><span class="coach-v15-stat-label">'+label+'</span><strong>'+value+'</strong><small>'+detail+'</small></div>'+extra+'</article>';
   const icon=key=>coachV6Symbol(key);
   const ring='<span class="coach-v15-progress-ring" role="img" aria-label="'+stats.percent+'% tamamlandı" style="--coach-v15-percent:'+stats.percent+'%"></span>';
@@ -3984,7 +4006,19 @@ $("programTaskBackdrop")?.addEventListener("keydown",event=>{
   if(event.shiftKey&&(active===first||!controls.includes(active))){event.preventDefault();last.focus({preventScroll:true})}
   else if(!event.shiftKey&&(active===last||!controls.includes(active))){event.preventDefault();first.focus({preventScroll:true})}
 });
-$("programTemplatesBtn")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.toggle("hidden"));$("programTemplateClose")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.add("hidden"));
+$("programTemplatesBtn")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.toggle("hidden"));
+// v44 · Telefonda Şablonlar, Video ekle ve Haftaya toplu ekle ⋯ menüsünde; seçilince ya da dışarı dokununca kapanır.
+function coachV44SetMore(open){
+  const box=document.querySelector("#programsPage .coach-v15-actions"),button=$("programMoreBtn");if(!box||!button)return;
+  box.classList.toggle("is-more-open",open);button.setAttribute("aria-expanded",String(open));
+}
+$("programMoreBtn")?.addEventListener("click",()=>coachV44SetMore(!document.querySelector("#programsPage .coach-v15-actions")?.classList.contains("is-more-open")));
+["programTemplatesBtn","programAddVideoBtn","programAddWeekBtn"].forEach(id=>$(id)?.addEventListener("click",()=>coachV44SetMore(false)));
+document.addEventListener("click",event=>{if(!event.target.closest?.("#programsPage .coach-v15-action-buttons"))coachV44SetMore(false)});
+document.addEventListener("keydown",event=>{
+  if(event.key!=="Escape"||!document.querySelector("#programsPage .coach-v15-actions.is-more-open"))return;
+  coachV44SetMore(false);$("programMoreBtn")?.focus();
+});$("programTemplateClose")?.addEventListener("click",()=>$("programTemplatePopover")?.classList.add("hidden"));
 document.querySelectorAll("[data-program-template]").forEach(button=>button.addEventListener("click",()=>{coachProgramEditContext=null;$("programTemplatePopover")?.classList.add("hidden");openProgramTaskModal(button.dataset.programTemplate||"")}));
 $("programTaskDelete")?.addEventListener("click",async()=>{
   const edit=coachProgramEditContext,row=coachReportRows.find(x=>x.studentUid===coachProgramModalStudentUid),user=auth.currentUser,button=$("programTaskDelete"),send=$("programTaskSend");

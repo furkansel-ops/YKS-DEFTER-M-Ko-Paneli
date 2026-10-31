@@ -52,7 +52,7 @@ const visible=(doc,id)=>!doc.getElementById(id).classList.contains("hidden");
 test("v43 stil dosyası yüklenir; önbellek etiketi yenilendi; filtrelerde sayı, boş halde iki adım",()=>{
   const html=read("index.html");
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-students-v43\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-home42-students43"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-home42-students43[^"]*"/);
   for(const id of ["studentsCountAll","studentsCountActive","studentsCountAttention","studentsHeadMeta"])assert.ok(html.includes('id="'+id+'"'),id);
   assert.match(html,/<ol class="students-v43-steps">/);
   assert.match(html,/＋ <span class="students-v43-wide">Öğrenci <\/span>Ekle/);
