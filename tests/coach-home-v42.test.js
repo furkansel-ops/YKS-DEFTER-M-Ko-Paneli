@@ -46,7 +46,7 @@ function fixture(t,extra="",wide=false){
 test("v42 stil dosyası yüklenir; app-reset önbellek etiketi yenilendi",()=>{
   const html=read("index.html");
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-home-v42\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-appt41-r4-home42"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-appt41-r4-home42[^"]*"/);
   for(const short of ["öğrenci","tamamlanan","kontrol","haftalık"])assert.ok(html.includes('data-short="'+short+'"'),short);
 });
 

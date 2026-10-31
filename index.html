@@ -52,6 +52,7 @@
   <link rel="stylesheet" href="./coach-layout-v40.css?v=1.1.0">
   <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.3.0">
   <link rel="stylesheet" href="./coach-home-v42.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-students-v43.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -196,8 +197,8 @@
       </section>
       <section class="students-page hidden" id="studentsPage">
         <header class="students-head">
-          <div><span class="dashboard-eyebrow">ÖĞRENCİ YÖNETİMİ</span><h1>Öğrenciler</h1><p>Öğrencilerini, çalışma durumlarını ve koçluk sürecini tek yerden takip et.</p></div>
-          <button class="students-add" type="button" id="addStudentBtn">＋ Öğrenci Ekle</button>
+          <div><span class="dashboard-eyebrow">ÖĞRENCİ YÖNETİMİ</span><h1>Öğrenciler</h1><p>Öğrencilerini, çalışma durumlarını ve koçluk sürecini tek yerden takip et.</p><small class="students-v43-meta" id="studentsHeadMeta">Henüz öğrenci yok</small></div>
+          <button class="students-add" type="button" id="addStudentBtn" aria-label="Öğrenci ekle">＋ <span class="students-v43-wide">Öğrenci </span>Ekle</button>
         </header>
 
         <section class="students-summary">
@@ -210,9 +211,9 @@
           <div class="students-toolbar">
             <label class="student-search"><span>⌕</span><input id="studentSearch" type="search" placeholder="Öğrenci ara..."></label>
             <div class="student-filters">
-              <button class="active" type="button" data-student-filter="all">Tümü</button>
-              <button type="button" data-student-filter="active">Bugün aktif</button>
-              <button type="button" data-student-filter="attention">Takip gereken</button>
+              <button class="active" type="button" data-student-filter="all">Tümü <i class="students-v43-count" id="studentsCountAll">0</i></button>
+              <button type="button" data-student-filter="active">Bugün aktif <i class="students-v43-count" id="studentsCountActive">0</i></button>
+              <button type="button" data-student-filter="attention">Takip gereken <i class="students-v43-count" id="studentsCountAttention">0</i></button>
             </div>
           </div>
 
@@ -220,9 +221,10 @@
 
           <div class="students-empty" id="studentsEmpty">
             <span>♟</span>
-            <h2>Henüz bağlı öğrenci yok</h2>
-            <p>Öğrencinin YKS Defterim uygulamasındaki <b>Koç Kodum</b> kodunu kullanarak güvenli şekilde bağlantı kurabilirsin.</p>
-            <button type="button" data-add-student>＋ İlk öğrenciyi ekle</button>
+            <h2>İlk öğrencini ekle</h2>
+            <p>Bağlantı öğrencinin <b>Koç Kodum</b> koduyla güvenli şekilde kurulur.</p>
+            <ol class="students-v43-steps"><li><i>1</i>Öğrenci YKS Defterim'de Ayarlar → Koç Kodum'u açar</li><li><i>2</i>12 haneli kodu buraya girersin, bağlantı kurulur</li></ol>
+            <button type="button" data-add-student>＋ Öğrenci ekle</button>
           </div>
 
           <div class="students-list hidden" id="studentsList"></div>
@@ -1466,7 +1468,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
