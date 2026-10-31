@@ -55,7 +55,9 @@ function fixture(t,extra=""){
 const tasks=doc=>[...doc.querySelectorAll("#dashboardTodo .coach-v38-task")].map(node=>({kind:node.dataset.todoKind,title:node.querySelector("b").textContent,sub:node.querySelector("small").textContent,actions:[...node.querySelectorAll("button")].map(b=>b.textContent)}));
 
 test("v38 Bugün yapılacaklar: önce cevap bekleyen mesaj, sonra takip edilecekler, Perşembe'den itibaren boş gelecek hafta",t=>{
-  const {doc}=fixture(t,DEMO),list=tasks(doc),weekday=(new Date().getDay()+6)%7;
+  // v42: ilk 4 iş görünür; bütün listeyi okumak için önce açılır.
+  const {doc}=fixture(t,DEMO);doc.querySelector("[data-todo-more]")?.click();
+  const list=tasks(doc),weekday=(new Date().getDay()+6)%7;
   assert.deepEqual(list[0],{kind:"msg",title:"Ayşe Yılmaz · 2 mesaj cevap bekliyor",sub:list[0].sub,actions:["Cevapla"]});
   assert.match(list[0].sub,/^“Ne yapayım\?” · /);
   assert.ok(!list.some(item=>item.kind==="msg"&&/Mehmet/.test(item.title)),"koçun cevapladığı konuşma listede yok");
@@ -149,14 +151,14 @@ test("v39 kural yayında değilken not kaybolmaz: bu cihazda saklanır",async t=
   assert.equal(doc.querySelector("#coachNotesScope").textContent,"Bu cihazda saklanır");
 });
 
-test("v38 uzun listede ilk 6 iş görünür, gerisi düğmeyle açılır",t=>{
+test("v42 uzun listede ilk 4 iş görünür, gerisi düğmeyle açılır",t=>{
   const many=Array.from({length:8},(_,i)=>"{studentUid:'s"+i+"',link:{active:true},share:{profile:{name:'Öğrenci "+i+"'},updatedAt:new Date().toISOString(),progress:{overdueTopics:1},program:{weeks:[]}}}").join(",");
   const {doc}=fixture(t,"coachReportRows=["+many+"];renderCoachDashboard();");
   const visible=()=>doc.querySelectorAll("#dashboardTodo .coach-v38-task").length;
-  assert.equal(visible(),6);
+  assert.equal(visible(),4);
   const more=doc.querySelector("[data-todo-more]");
-  assert.match(more.textContent,/iş daha göster$/);
+  assert.match(more.textContent,/^\+\d+ iş daha$/);
   more.click();
-  assert.ok(visible()>6);
+  assert.ok(visible()>4);
   assert.equal(doc.querySelector("[data-todo-more]").textContent,"Daha az göster");
 });

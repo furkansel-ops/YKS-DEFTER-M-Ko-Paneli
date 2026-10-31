@@ -1,0 +1,60 @@
+/* Koç Paneli · v42 Ana Sayfa — telefonda kısa karşılama, tek sıra sayılar, tek satırlık işler;
+   tekrar eden paneller kalkar. Renkler yalnız tema değişkenlerinden (--k-*), yazılar en az 11px. */
+
+/* 4 · 5 — Bugünün Akışı Öğrenci Durumu'na katıldı; Hızlı İşlemler yan menüyü tekrar ediyordu */
+#homePage .dashboard-grid>.coach-v36-flow,#homePage .dashboard-grid>.coach-v36-quick{display:none}
+@media(min-width:1201px){#homePage .dashboard-grid>.coach-v36-note{grid-row:1 / span 2}}
+
+/* 6 — gün sonu notu yokken panel tek satır */
+#homePage .day-review-panel.is-empty{min-height:0}
+#homePage .day-review-panel.is-empty :is(.panel-title p,.panel-title button,#dashboardDayReviewSummary){display:none}
+#homePage .day-review-panel.is-empty .dashboard-day-review-empty{margin:0;padding:6px 0 0;min-height:0;border:0;background:transparent}
+#homePage .day-review-panel.is-empty .dashboard-day-review-empty p{display:none}
+
+/* 7 — koç notları katlanır; kapalıyken notun ilk satırı başlıkta */
+#homePage .coach-v36-note{min-height:0}
+#homePage .coach-v36-note .panel-title{cursor:pointer}
+#homePage .coach-v36-note.is-collapsed .panel-title{margin-bottom:0;padding-bottom:0;border-bottom:0}
+#homePage #coachNotesPreview{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+#homePage .coach-v42-note-toggle{flex:none;min-height:40px;padding:0 14px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-accent);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+#homePage .coach-v42-note-toggle:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+
+/* 3 — satır tıklanabilir (ikinci iş) */
+#homePage .coach-v38-task{cursor:pointer}
+
+@media(max-width:600px){
+  /* 1 — kısa karşılama */
+  #homePage .dashboard-head.coach-v36-hero{padding:14px 16px}
+  #homePage .coach-v36-hero .dashboard-eyebrow{font-size:11px}
+  #homePage .coach-v36-hero h1{margin:4px 0 2px;font-size:20px;line-height:1.2}
+  #homePage .coach-v36-hero p{font-size:12px}
+  #homePage .coach-v36-hero-actions{flex-wrap:nowrap;margin-top:10px}
+  #homePage .coach-v36-hero-actions button{flex:1 1 0;min-height:40px;padding:0 10px;font-size:12.5px;white-space:nowrap}
+
+  /* 2 — sayılar tek sırada: sayı ve kısa etiket */
+  #homePage .coach-v36-top .dashboard-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  #homePage .coach-v36-top .stat-card{display:block;min-height:0;padding:8px 4px;border-radius:12px;text-align:center;box-shadow:none}
+  #homePage .coach-v36-top .stat-card :is(.stat-icon,small,em){display:none}
+  #homePage .coach-v36-top .stat-card>div{display:block}
+  #homePage .coach-v36-top .stat-card strong{display:block;margin:0;font-size:17px;line-height:1.2}
+  #homePage .coach-v36-top .stat-card::after{content:attr(data-short);display:block;font-size:11px;font-weight:700;color:var(--k-muted)}
+
+  /* 3 — "Bugün yapılacaklar" tek satırlık işler; ikinci iş "›" düğmesi ve satır dokunuşu */
+  #homePage .coach-v38-todo .panel-title p{display:none}
+  #homePage .coach-v38-todo-list{gap:6px;padding-top:10px}
+  #homePage .coach-v38-task{grid-template-columns:32px minmax(0,1fr) auto;gap:8px;padding:8px 10px}
+  #homePage .coach-v38-task-icon{width:32px;height:32px;font-size:14px}
+  #homePage .coach-v38-task-copy b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12.5px;line-height:1.3}
+  #homePage .coach-v38-task-copy small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px}
+  #homePage .coach-v38-task-actions{grid-column:auto;flex-wrap:nowrap;justify-content:flex-end;gap:4px}
+  #homePage .coach-v38-task-actions button{min-height:38px;padding:0 10px;font-size:12px;white-space:nowrap}
+  #homePage .coach-v38-task-actions button:not(.primary){position:relative;width:38px;padding:0;overflow:hidden;text-indent:200%;color:var(--k-muted)}
+  #homePage .coach-v38-task-actions button:not(.primary)::after{content:"›";position:absolute;inset:0;display:grid;place-items:center;text-indent:0;font-size:18px;color:var(--k-muted)}
+  #homePage .coach-v38-more{min-height:36px}
+
+  /* 4 — öğrenci listesi: tek satır; yüzde çubukta ve etikette zaten görünüyor */
+  #homePage .coach-v36-status .panel-title p{display:none}
+  #homePage .dashboard-student-row{grid-template-columns:32px minmax(0,1fr) auto;gap:8px;padding:8px 10px}
+  #homePage .dashboard-student-row>strong{display:none}
+  #homePage .dashboard-student-avatar{width:32px;height:32px}
+}

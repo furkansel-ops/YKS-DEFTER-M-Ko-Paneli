@@ -51,6 +51,7 @@
   <link rel="stylesheet" href="./coach-themes-v36.css?v=1.1.0">
   <link rel="stylesheet" href="./coach-layout-v40.css?v=1.1.0">
   <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.3.0">
+  <link rel="stylesheet" href="./coach-home-v42.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -149,10 +150,10 @@
           <div class="coach-v36-hero-actions"><button type="button" id="dashboardBulkBtn" aria-haspopup="dialog">▤ Toplu görev yaz</button><button type="button" data-go-page="messages">✉ Mesajlar <span class="coach-v38-badge" id="dashboardMessageBadge" hidden></span></button></div></div>
         </header>
         <section class="dashboard-stats">
-          <article class="stat-card"><span class="stat-icon">♟</span><div><small>Aktif Öğrenci</small><strong id="statStudents">—</strong><em>Toplam öğrenci</em></div></article>
-          <article class="stat-card"><span class="stat-icon">✓</span><div><small>Bugün Tamamlanan</small><strong id="statCompleted">—</strong><em>Görev</em></div></article>
-          <article class="stat-card"><span class="stat-icon">◷</span><div><small>Bekleyen Kontrol</small><strong id="statPending">—</strong><em>İncelenecek</em></div></article>
-          <article class="stat-card"><span class="stat-icon">↗</span><div><small>Haftalık İlerleme</small><strong id="statProgress">—</strong><em>Genel ortalama</em></div></article>
+          <article class="stat-card" data-short="öğrenci"><span class="stat-icon">♟</span><div><small>Aktif Öğrenci</small><strong id="statStudents">—</strong><em>Toplam öğrenci</em></div></article>
+          <article class="stat-card" data-short="tamamlanan"><span class="stat-icon">✓</span><div><small>Bugün Tamamlanan</small><strong id="statCompleted">—</strong><em>Görev</em></div></article>
+          <article class="stat-card" data-short="kontrol"><span class="stat-icon">◷</span><div><small>Bekleyen Kontrol</small><strong id="statPending">—</strong><em>İncelenecek</em></div></article>
+          <article class="stat-card" data-short="haftalık"><span class="stat-icon">↗</span><div><small>Haftalık İlerleme</small><strong id="statProgress">—</strong><em>Genel ortalama</em></div></article>
         </section>
         </div>
         <section class="dash-panel coach-v38-todo" aria-labelledby="dashboardTodoTitle">
@@ -185,9 +186,11 @@
             </div>
           </article>
           <article class="dash-panel coach-v36-note">
-            <div class="panel-title"><div><h2>Koç notların</h2><p>Bu haftanın aklında kalsın</p></div></div>
+            <div class="panel-title"><div><h2>Koç notların</h2><p id="coachNotesPreview">Bu haftanın aklında kalsın</p></div><button type="button" class="coach-v42-note-toggle" id="coachNotesToggle" aria-expanded="true" aria-controls="coachNotesBody">Kapat</button></div>
+            <div class="coach-v42-note-body" id="coachNotesBody">
             <textarea class="coach-v38-notes" id="coachNotesInput" aria-label="Koç notların" maxlength="2000" rows="5" placeholder="Örn. Mehmet: Cuma deneme sonrası konuş."></textarea>
             <div class="coach-v38-notes-foot"><span id="coachNotesState" role="status">Yazdıkça kaydedilir</span><span id="coachNotesScope">Bu cihazda saklanır</span></div>
+            </div>
           </article>
         </section>
       </section>
@@ -1463,7 +1466,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>

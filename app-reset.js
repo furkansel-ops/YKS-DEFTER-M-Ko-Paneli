@@ -343,7 +343,8 @@ function renderCoachDashboard(){
         const planned=program.todayPlanned>0,reached=planned&&program.todayDone>=program.todayPlanned;
         const label=overdue?overdue+" geciken konu":needs?"Takip et":reached?"Hedefte":planned?(active?"Geride":"Bugün girmedi"):active?"Bugün aktif":"Takipte";
         const tone=needs?"attention":reached||(active&&!planned)?"active":planned?"behind":"idle";
-        const progressText=program.planned?program.done+" / "+program.planned+" görev":"Bu hafta program yok";
+        const minutes=reportMinutes(row?.share?.progress?.minutes7);
+        const progressText=(program.planned?program.done+" / "+program.planned+" görev":"Bu hafta program yok")+" · 7 günde "+minutes;
         return '<button type="button" class="dashboard-student-row" data-dashboard-student="'+escHtml(row.studentUid)+'"><span class="dashboard-student-avatar">'+escHtml(reportInitial(name))+'</span><span class="dashboard-student-main"><b>'+escHtml(name)+'</b><small>'+escHtml(progressText)+'</small><span class="dashboard-progress"><i style="width:'+Math.max(0,Math.min(100,program.ratio))+'%"></i></span></span><span class="dashboard-student-pill '+tone+'">'+escHtml(label)+'</span><strong>'+program.ratio+'%</strong></button>';
       }).join("")+'</div>';
     }
@@ -437,11 +438,16 @@ function renderCoachTodo(){
   if($("dashboardTodoCount"))$("dashboardTodoCount").textContent=items.length?items.length+" iş":"";
   if(!coachReportRows.length){root.innerHTML='<p class="coach-v38-todo-empty">Öğrenci eklediğinde bugün yapman gerekenler burada sıralanır.</p>';return}
   if(!items.length){root.innerHTML='<p class="coach-v38-todo-empty">Bugün için bekleyen iş yok.</p>';return}
-  // Kalabalık sınıflarda liste uzamasın: ilk 6 iş görünür, gerisi tek dokunuşla açılır.
-  const LIMIT=6,shown=coachTodoExpanded?items:items.slice(0,LIMIT);
+  // v42: telefonda kısa kalsın diye ilk 4 iş görünür, gerisi tek dokunuşla açılır.
+  const LIMIT=4,shown=coachTodoExpanded?items:items.slice(0,LIMIT);
   root.innerHTML=shown.map(item=>'<div class="coach-v38-task" data-todo-kind="'+item.kind+'"><span class="coach-v38-task-icon" aria-hidden="true">'+icons[item.kind]+'</span><div class="coach-v38-task-copy"><b>'+escHtml(item.title)+'</b><small>'+escHtml(item.sub)+'</small></div><div class="coach-v38-task-actions">'+coachTodoButtons(item)+'</div></div>').join("")
-    +(items.length>LIMIT?'<button type="button" class="coach-v38-more" data-todo-more>'+(coachTodoExpanded?"Daha az göster":(items.length-LIMIT)+" iş daha göster")+'</button>':"");
+    +(items.length>LIMIT?'<button type="button" class="coach-v38-more" data-todo-more>'+(coachTodoExpanded?"Daha az göster":"+"+(items.length-LIMIT)+" iş daha")+'</button>':"");
   root.querySelector("[data-todo-more]")?.addEventListener("click",()=>{coachTodoExpanded=!coachTodoExpanded;renderCoachTodo()});
+  // Satırın düğme dışı yerine dokunmak ikinci işi açar (Programı aç, Raporu aç…); tek düğmeli işte ana işi.
+  root.querySelectorAll(".coach-v38-task").forEach(task=>task.addEventListener("click",event=>{
+    if(event.target.closest?.("button"))return;
+    const buttons=task.querySelectorAll("[data-todo-action]");(buttons[1]||buttons[0])?.click();
+  }));
   const remind=new Map(items.filter(item=>item.kind==="warn").map(item=>[item.row.studentUid,item]));
   root.querySelectorAll("[data-todo-action]").forEach(button=>button.addEventListener("click",()=>{
     const action=button.dataset.todoAction;
@@ -785,6 +791,7 @@ function renderDashboardDayReviews(){
       '<span class="mid">😐 <b>'+counts.mid+'</b> orta</span>'+
       '<span class="hard">😮‍💨 <b>'+counts.hard+'</b> zor</span>';
   }
+  root.closest(".day-review-panel")?.classList.toggle("is-empty",!items.length);
   if(!items.length){
     root.innerHTML='<div class="dashboard-day-review-empty"><span>☾</span><div><b>Bugün henüz not yok</b><p>Öğrenciler gün sonu değerlendirmesini kaydettiğinde burada canlı görünecek.</p></div></div>';return;
   }
@@ -1936,7 +1943,7 @@ async function loadCoachNotes(){
   }catch(error){
     console.error("Koç notları",error);
     coachNotesState("Yazdıkça kaydedilir","Bu cihazda saklanır");
-  }
+  }finally{updateCoachNotesPreview()}
 }
 async function saveCoachNotes(value){
   const local=writeLocalCoachNotes(value),uid=auth.currentUser?.uid;
@@ -1949,10 +1956,30 @@ async function saveCoachNotes(value){
     coachNotesState(local?"Bu cihazda kaydedildi":"Kaydedilemedi","Bu cihazda saklanır");
   }
 }
+// v42 · Koç notları katlanır: telefonda kapalı, geniş ekranda açık başlar; kapalıyken ilk satır görünür.
+function coachNotesPreviewText(value){
+  const line=String(value||"").split("\n").map(part=>part.trim()).find(Boolean);
+  return line?(line.length>60?line.slice(0,59)+"…":line):"Bu haftanın aklında kalsın";
+}
+function updateCoachNotesPreview(){
+  if($("coachNotesPreview"))$("coachNotesPreview").textContent=coachNotesPreviewText($("coachNotesInput")?.value);
+}
+function setCoachNotesOpen(open,focus){
+  const body=$("coachNotesBody"),toggle=$("coachNotesToggle");if(!body||!toggle)return;
+  body.hidden=!open;toggle.setAttribute("aria-expanded",open?"true":"false");toggle.textContent=open?"Kapat":"Aç";
+  body.closest(".coach-v36-note")?.classList.toggle("is-collapsed",!open);
+  if(open&&focus)$("coachNotesInput")?.focus();
+}
+$("coachNotesToggle")?.addEventListener("click",()=>setCoachNotesOpen(Boolean($("coachNotesBody")?.hidden),true));
+document.querySelector(".coach-v36-note .panel-title")?.addEventListener("click",event=>{
+  if(event.target.closest?.("button"))return;
+  setCoachNotesOpen(Boolean($("coachNotesBody")?.hidden),true);
+});
+setCoachNotesOpen(typeof matchMedia==="function"&&matchMedia("(min-width:1201px)").matches);
 let coachNotesTimer=0;
 $("coachNotesInput")?.addEventListener("input",event=>{
   const value=String(event.currentTarget.value||"").slice(0,2000);
-  coachNotesEdited=true;
+  coachNotesEdited=true;updateCoachNotesPreview();
   clearTimeout(coachNotesTimer);
   coachNotesState("Kaydediliyor…");
   coachNotesTimer=setTimeout(()=>void saveCoachNotes(value),800);
