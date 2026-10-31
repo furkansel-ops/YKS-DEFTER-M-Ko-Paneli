@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-31T18:39:54.492Z",
+  "generatedAt": "2026-10-31T18:53:43.552Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-31T18:34:15.615Z"
+      "refreshedAt": "2026-10-31T18:48:04.518Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-31T18:38:22.449Z"
+      "refreshedAt": "2026-10-31T18:52:10.333Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3559,8 +3559,8 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1183,
-      "playlistCount": 44,
+      "videoCount": 1184,
+      "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
         {
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-31T18:38:47.387Z"
+      "refreshedAt": "2026-10-31T18:52:35.676Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5692,7 +5692,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-31T18:38:56.108Z"
+      "refreshedAt": "2026-10-31T18:52:44.777Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8211,7 +8211,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-31T18:39:07.867Z"
+      "refreshedAt": "2026-10-31T18:52:55.911Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8926,7 +8926,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-31T18:39:15.928Z"
+      "refreshedAt": "2026-10-31T18:53:04.147Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9672,14 +9672,14 @@
       "videos": [
         {
           "id": "JiIDhhHGRJo",
-          "title": "2027 ~ Introduction to Turkish / Aker KARTAL",
+          "title": "2027 ~ Türkçe Derse Giriş / Aker KARTAL",
           "url": "https://www.youtube.com/watch?v=JiIDhhHGRJo",
           "thumbnail": "https://i.ytimg.com/vi/JiIDhhHGRJo/hqdefault.jpg",
           "channel": "Aker Kartal"
         },
         {
           "id": "juJFHVk7ieE",
-          "title": "1) Phonology - 1 | Aker KARTAL - 2027",
+          "title": "1) Ses Bilgisi - 1 | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=juJFHVk7ieE",
           "thumbnail": "https://i.ytimg.com/vi/juJFHVk7ieE/hqdefault.jpg",
           "channel": "Aker Kartal"
@@ -9700,35 +9700,35 @@
         },
         {
           "id": "Ym4ZBYlY6Q8",
-          "title": "4) Phonology - 4 | Aker KARTAL - 2027",
+          "title": "4) Ses Bilgisi - 4 | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=Ym4ZBYlY6Q8",
           "thumbnail": "https://i.ytimg.com/vi/Ym4ZBYlY6Q8/hqdefault.jpg",
           "channel": "Aker Kartal"
         },
         {
           "id": "pDJsRjdzzlc",
-          "title": "5) Phonology | ÖSYM Analysis | Aker KARTAL - 2027",
+          "title": "5) Ses Bilgisi | ÖSYM Analizi | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=pDJsRjdzzlc",
           "thumbnail": "https://i.ytimg.com/vi/pDJsRjdzzlc/hqdefault.jpg",
           "channel": "Aker Kartal"
         },
         {
           "id": "HNLnHGWoa5U",
-          "title": "6) Phonetics | Question Solving | Aker KARTAL - 2027",
+          "title": "6) Ses Bilgisi | Soru Çözüm | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=HNLnHGWoa5U",
           "thumbnail": "https://i.ytimg.com/vi/HNLnHGWoa5U/hqdefault.jpg",
           "channel": "Aker Kartal"
         },
         {
           "id": "1EHh06Rm6j0",
-          "title": "7) Phonology | The Essence of the Matter | Aker KARTAL - 2027",
+          "title": "7) Ses Bilgisi | Sözün Özü | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=1EHh06Rm6j0",
           "thumbnail": "https://i.ytimg.com/vi/1EHh06Rm6j0/hqdefault.jpg",
           "channel": "Aker Kartal"
         },
         {
           "id": "X--d21iqVcc",
-          "title": "8) Spelling Rules - 1 | Aker KARTAL - 2027",
+          "title": "8) Yazım Kuralları - 1 | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=X--d21iqVcc",
           "thumbnail": "https://i.ytimg.com/vi/X--d21iqVcc/hqdefault.jpg",
           "channel": "Aker Kartal"
@@ -9742,7 +9742,7 @@
         },
         {
           "id": "U3rtA9J_9Po",
-          "title": "10) Spelling Rules - 3 | Aker KARTAL - 2027",
+          "title": "10) Yazım Kuralları - 3 | Aker KARTAL - 2027",
           "url": "https://www.youtube.com/watch?v=U3rtA9J_9Po",
           "thumbnail": "https://i.ytimg.com/vi/U3rtA9J_9Po/hqdefault.jpg",
           "channel": "Aker Kartal"
@@ -9755,7 +9755,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-31T18:39:18.243Z"
+      "refreshedAt": "2026-10-31T18:53:07.027Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10757,7 +10757,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-31T18:39:54.487Z"
+      "refreshedAt": "2026-10-31T18:53:43.547Z"
     }
   }
 }
