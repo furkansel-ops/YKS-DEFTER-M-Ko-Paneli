@@ -107,7 +107,7 @@ test("all screen routing has exactly one authoritative JavaScript handler, and m
   const html=read("index.html"),js=read("app-reset.js"),css=read("coach-mobile-compat-v33.css");
   assert.doesNotMatch(html,/document\.addEventListener\("click",function\(e\).*?\[data-coach-page\]/);
   assert.match(js,/button\.addEventListener\("click",\(\)=>showCoachPage\(button\.dataset\.coachPage\)\)/);
-  assert.match(html,/data-coach-app src="\.\/app-reset\.js\?v=1\.0\.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r2"/);
+  assert.match(html,/data-coach-app src="\.\/app-reset\.js\?v=1\.0\.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r3"/);
   assert.match(html,/coach-startup-v33\.js\?v=1\.0\.0/);
   assert.match(html,/coach-mobile-compat-v33\.css\?v=1\.0\.0/);
   assert.match(css,/@media\(max-width:1024px\),\(hover:none\) and \(pointer:coarse\)/);

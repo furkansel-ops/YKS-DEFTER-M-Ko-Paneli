@@ -174,3 +174,35 @@ test("v41 Bugün yapılacaklar: onay bekleyen istek ve bugünkü görüşme, Ona
   doc.querySelector('#dashboardTodo [data-todo-action="appt-approve"]').click();await flush();
   assert.equal(ops.updates.at(-1).data.status,"confirmed");
 });
+
+test("v41.2 şablon B: turuncu istek şeridi açılıp kapanır; saat özeti tek satır; Düzenle yan paneli açar",async t=>{
+  const {w,doc}=fixture(t);
+  doc.querySelector('[data-coach-page="appointments"]').click();
+  const banner=doc.querySelector("#apptPendingBanner");
+  assert.equal(banner.hidden,false);
+  assert.equal(doc.querySelector("#apptPendingTitle").textContent,"1 randevu isteği onayını bekliyor");
+  assert.equal(doc.querySelector("#apptPending").hidden,true);
+  doc.querySelector("#apptPendingToggle").click();
+  assert.equal(doc.querySelector("#apptPending").hidden,false);
+  assert.equal(doc.querySelector("#apptPendingToggle").getAttribute("aria-expanded"),"true");
+  assert.ok(doc.querySelector("#apptPending [data-appt-approve]"));
+  assert.equal(doc.querySelector("#apptHoursSummary").textContent,"Pzt–Paz 18–20 · 30 dk");
+  assert.equal(doc.querySelector("#apptHoursDrawer").hidden,true);
+  doc.querySelector("#apptHoursOpen").click();
+  assert.equal(doc.querySelector("#apptHoursDrawer").hidden,false);
+  doc.querySelector("#apptHoursDrawer").dispatchEvent(new w.KeyboardEvent("keydown",{key:"Escape",bubbles:true}));
+  assert.equal(doc.querySelector("#apptHoursDrawer").hidden,true);
+  // Sayfa giriş animasyonu transform bırakır; sabit çekmece sayfa bölümünün içinde olursa ekran dışına taşar.
+  assert.equal(doc.querySelector("#appointmentsPage").contains(doc.querySelector("#apptHoursDrawer")),false);
+  doc.querySelector("#apptHoursOpen").click();
+  doc.querySelector('[data-coach-page="messages"]').click();
+  assert.equal(doc.querySelector("#apptHoursDrawer").hidden,true,"başka sayfaya geçince çekmece kapanır");
+});
+
+test("v41.2 saat özeti ardışık aynı günleri birleştirir, kapalı günleri yazar",t=>{
+  const {w}=fixture(t,"");
+  const days={"1":{on:true,start:"18:00",end:"21:00"},"2":{on:true,start:"18:00",end:"21:00"},"3":{on:true,start:"18:00",end:"21:00"},"4":{on:true,start:"18:00",end:"21:00"},"5":{on:true,start:"18:00",end:"21:00"},"6":{on:true,start:"11:00",end:"14:30"},"0":{on:false,start:"11:00",end:"14:00"}};
+  w.__days=days;
+  assert.equal(w.eval("apptHoursSummary({duration:45,days:window.__days})"),"Pzt–Cum 18–21 · Cmt 11–14:30 · Paz kapalı · 45 dk");
+  assert.equal(w.eval("apptHoursSummary(null)"),"Uygun saat açmadın; öğrenciler randevu alamaz.");
+});

@@ -88,3 +88,25 @@
   .coach-v41-hour{grid-template-columns:minmax(0,1fr) 52px}
   .coach-v41-hour-main{grid-column:1/-1}
 }
+
+/* v41.2 · Şablon B: turuncu istek şeridi, takvim altında saat özeti, saatler yan panelde */
+@media(min-width:1180px){.coach-v41-grid{grid-template-columns:300px minmax(0,1fr)}}
+.coach-v41-banner{margin-bottom:14px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--k-warn) 35%,var(--k-line));border-radius:14px;background:color-mix(in srgb,var(--k-warn) 12%,var(--k-surface))}
+.coach-v41-banner-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.coach-v41-banner-head b{color:var(--k-warn);font-size:14px}
+.coach-v41-banner-head button{min-height:40px;padding:0 14px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.coach-v41-banner .coach-v41-list{margin-top:10px}
+.coach-v41-banner .coach-v41-item{background:var(--k-surface)}
+.coach-v41-hours-summary{margin:4px 0 0;font-size:12.5px;color:var(--k-muted)}
+.coach-v41-hours-summary .coach-v41-textbtn{min-height:32px}
+.coach-v41-day h2{font-size:15px}
+.coach-v41-day h2 .coach-v41-muted{font-weight:600;text-transform:none}
+.coach-v41-drawer{position:fixed;inset:0;z-index:60;display:flex;justify-content:flex-end;background:color-mix(in srgb,var(--k-ink) 35%,transparent)}
+.coach-v41-drawer[hidden]{display:none}
+.coach-v41-drawer-panel{width:min(640px,100%);height:100%;overflow:auto;padding:20px;background:var(--k-surface);color:var(--k-ink);border-left:1px solid var(--k-line);box-sizing:border-box}
+.coach-v41-close{width:40px;height:40px;flex:none;border:1px solid var(--k-line);border-radius:10px;background:var(--k-soft);color:var(--k-ink);font:inherit;font-size:15px;cursor:pointer}
+.coach-v41-close:focus-visible,.coach-v41-banner-head button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+@media(max-width:600px){.coach-v41-drawer-panel{padding:14px}.coach-v41-drawer{align-items:flex-end}.coach-v41-drawer-panel{height:auto;max-height:92vh;border-radius:18px 18px 0 0;border-left:0}}
+/* v41.3 · kaydet şeridi panelin dibinde sabit; gün satırları kaydırılırken düğme görünür kalır. */
+.coach-v41-drawer-panel .coach-v41-hours-foot{position:sticky;bottom:-20px;z-index:1;margin:14px -20px -20px;padding:12px 20px;border-top:1px solid var(--k-line);background:var(--k-surface)}
+@media(max-width:600px){.coach-v41-drawer-panel .coach-v41-hours-foot{bottom:-14px;margin:12px -14px -14px;padding:10px 14px calc(10px + env(safe-area-inset-bottom))}}

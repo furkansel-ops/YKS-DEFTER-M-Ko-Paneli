@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="./coach-theme-tokens-v36.css?v=1.0.1">
   <link rel="stylesheet" href="./coach-themes-v36.css?v=1.1.0">
   <link rel="stylesheet" href="./coach-layout-v40.css?v=1.1.0">
-  <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.1.0">
+  <link rel="stylesheet" href="./coach-appointments-v41.css?v=1.2.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -925,30 +925,32 @@
       </section>
       <section class="students-page coach-v41-appointments hidden" id="appointmentsPage">
         <header class="students-head">
-          <div><span class="dashboard-eyebrow">GÖRÜŞMELER</span><h1>Randevular</h1><p>Öğrencilerinle görüşme saatlerini tek takvimden yönet. Dolu saatler herkes için kapanır.</p></div>
+          <div><span class="dashboard-eyebrow">GÖRÜŞMELER</span><h1>Randevular</h1><p>Solda gün seç, sağda o günün görüşmeleri.</p></div>
         </header>
+        <section class="coach-v41-banner" id="apptPendingBanner" hidden aria-live="polite">
+          <div class="coach-v41-banner-head"><b id="apptPendingTitle">—</b><button type="button" id="apptPendingToggle" aria-expanded="false" aria-controls="apptPending">İstekleri gör</button></div>
+          <div id="apptPending" class="coach-v41-list" hidden></div>
+        </section>
         <div class="coach-v41-grid">
           <section class="coach-v41-card coach-v41-calendar" aria-label="Takvim">
             <div class="coach-v41-month-head"><button type="button" data-appt-month="-1" aria-label="Önceki ay">‹</button><b id="apptMonthTitle">—</b><button type="button" data-appt-month="1" aria-label="Sonraki ay">›</button></div>
             <div class="coach-v41-month" id="apptMonth" role="grid"></div>
-            <p class="coach-v41-muted">Noktalı günlerde randevu var.</p>
+            <p class="coach-v41-hours-summary"><span id="apptHoursSummary">—</span> <button type="button" class="coach-v41-textbtn" id="apptHoursOpen" aria-haspopup="dialog">Düzenle</button></p>
           </section>
           <section class="coach-v41-card coach-v41-day" aria-labelledby="apptDayTitle">
-            <div class="coach-v41-day-head"><div><h2 id="apptDayTitle">—</h2><p class="coach-v41-muted" id="apptDaySub"></p></div></div>
+            <div class="coach-v41-day-head"><div><h2><span id="apptDayTitle">—</span> <span class="coach-v41-muted" id="apptDaySub"></span></h2></div></div>
             <div id="apptDayList" class="coach-v41-list"></div>
           </section>
         </div>
-        <section class="coach-v41-card" aria-labelledby="apptPendingTitle">
-          <h2 id="apptPendingTitle">Onay bekleyen istekler</h2>
-          <div id="apptPending" class="coach-v41-list"></div>
-        </section>
-        <section class="coach-v41-card" aria-labelledby="apptHoursTitle">
-          <div class="coach-v41-day-head"><div><h2 id="apptHoursTitle">Uygun saatlerin</h2><p class="coach-v41-muted">Öğrenciler yalnız bu saatlerdeki boşlukları görür.</p></div><span class="coach-v41-muted" id="apptHoursState"></span></div>
+      </section>
+      <div class="coach-v41-drawer" id="apptHoursDrawer" hidden>
+        <section class="coach-v41-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="apptHoursTitle">
+          <div class="coach-v41-day-head"><div><h2 id="apptHoursTitle">Uygun saatlerin</h2><p class="coach-v41-muted">Öğrenciler yalnız bu saatlerdeki boşlukları görür. <span id="apptHoursState"></span></p></div><button type="button" class="coach-v41-close" id="apptHoursClose" aria-label="Kapat">✕</button></div>
           <div class="coach-v41-presets" id="apptPresets" role="group" aria-label="Hazır seçenekler"></div>
           <div id="apptHours" class="coach-v41-hours"></div>
           <div class="coach-v41-hours-foot"><div class="coach-v41-total"><b id="apptWeekTotal">—</b><span class="coach-v41-muted">Görüşme süresi</span><span class="coach-v41-durations" id="apptDurations" role="group" aria-label="Görüşme süresi"></span></div><button type="button" class="coach-v41-primary" id="apptHoursSave">Saatleri kaydet</button></div>
         </section>
-      </section>
+      </div>
       <section class="messages-page hidden" id="messagesPage">
         <header class="messages-head">
           <div>
@@ -1460,7 +1462,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r2"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r3"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.4"></script>
 </body>
