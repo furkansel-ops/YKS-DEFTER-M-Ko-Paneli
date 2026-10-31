@@ -43,10 +43,8 @@
 .coach-v41-actions button:focus-visible,.coach-v41-form button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
 .coach-v41-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end;margin:-2px 0 6px;padding:12px;border:1px solid color-mix(in srgb,var(--k-accent) 35%,var(--k-line));border-radius:12px;background:color-mix(in srgb,var(--k-accent) 6%,var(--k-surface))}
 .coach-v41-form label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--k-muted)}
-.coach-v41-form :is(input,select),.coach-v41-hours-foot select{min-height:42px;padding:0 10px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:13px}
+.coach-v41-form :is(input,select){min-height:42px;padding:0 10px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:13px}
 .coach-v41-form small{grid-column:1/-1;font-size:12px;color:var(--k-muted)}
-.coach-v41-hours{display:grid;gap:6px;margin:4px 0 12px}
-.coach-v41-hours-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 @media(max-width:600px){
   .coach-v41-card{padding:14px}
   .coach-v41-item{grid-template-columns:46px minmax(0,1fr)}
@@ -57,36 +55,35 @@
 .coach-v38-task[data-todo-kind="appt"] .coach-v38-task-icon{background:color-mix(in srgb,var(--k-warn) 16%,var(--k-surface));color:var(--k-warn)}
 .coach-v38-task[data-todo-kind="apptToday"] .coach-v38-task-icon{background:color-mix(in srgb,var(--k-ok) 15%,var(--k-surface));color:var(--k-ok)}
 
-/* v41.1 · Uygun saatler: hazır seçenekler, anahtar, saat listeleri, gün çubuğu */
-.coach-v41-presets{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
-.coach-v41-presets button,.coach-v41-durations button{min-height:40px;padding:0 14px;border:1px solid var(--k-line);border-radius:999px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
-.coach-v41-presets button:hover{background:var(--k-soft)}
-.coach-v41-durations{display:inline-flex;flex-wrap:wrap;gap:6px}
+/* v41.4 · Uygun saatler, şablon B: sade gün listesi. Açık gün iki saat listesi ve ✕, kapalı gün "+ Saat ekle". */
+.coach-v41-days{display:grid;margin:6px 0 4px;border:1px solid var(--k-line);border-radius:14px;overflow:hidden}
+.coach-v41-hour{display:grid;grid-template-columns:100px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:58px;padding:8px 12px;border-top:1px solid var(--k-line);background:var(--k-surface)}
+.coach-v41-hour:first-child{border-top:0}
+.coach-v41-hour>b{font-size:14px}
+.coach-v41-hour.off>span{color:var(--k-muted);font-size:13px;font-weight:650}
+.coach-v41-hour-time{display:flex;gap:6px;align-items:center;color:var(--k-muted)}
+.coach-v41-hour-time select{min-height:40px;padding:0 8px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:14px;font-weight:700}
+.coach-v41-mini{min-width:40px;min-height:40px;padding:0 10px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-muted);font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+.coach-v41-mini.add{border-color:color-mix(in srgb,var(--k-accent) 35%,var(--k-line));background:color-mix(in srgb,var(--k-accent) 10%,var(--k-surface));color:var(--k-accent)}
+.coach-v41-q{margin:16px 0 8px;font-size:13.5px;font-weight:800;color:var(--k-ink)}
+.coach-v41-durations{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.coach-v41-durations button{min-height:44px;border:1px solid var(--k-line);border-radius:12px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:13.5px;font-weight:800;cursor:pointer}
 .coach-v41-durations button[aria-pressed="true"]{background:color-mix(in srgb,var(--k-accent) 14%,var(--k-surface));border-color:var(--k-accent);color:var(--k-accent)}
-.coach-v41-scale{display:flex;justify-content:space-between;margin:0 0 4px 178px;font-size:11px;color:var(--k-muted)}
-.coach-v41-hour{display:grid;grid-template-columns:110px 52px minmax(0,1fr);gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--k-soft)}
-.coach-v41-hour.off{opacity:.7}
-.coach-v41-hour>b{font-size:13.5px}
-.coach-v41-switch{position:relative;width:46px;height:26px;padding:0;border:0;border-radius:999px;background:var(--k-line);cursor:pointer}
-.coach-v41-switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--k-surface);box-shadow:0 1px 2px color-mix(in srgb,var(--k-ink) 25%,transparent);transition:left .15s}
-.coach-v41-switch::before{content:"";position:absolute;inset:-8px -4px}
-.coach-v41-switch[aria-checked="true"]{background:var(--k-accent)}
-.coach-v41-switch[aria-checked="true"]::after{left:23px}
-.coach-v41-switch:focus-visible,.coach-v41-presets button:focus-visible,.coach-v41-durations button:focus-visible,.coach-v41-textbtn:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
-.coach-v41-hour-main{min-width:0;display:grid;gap:6px}
-.coach-v41-bar{position:relative;height:32px;border-radius:9px;border:1px solid var(--k-line);background:repeating-linear-gradient(90deg,transparent 0 calc(33.333% - 1px),var(--k-line) calc(33.333% - 1px) 33.333%),var(--k-surface);overflow:hidden}
-.coach-v41-bar i{position:absolute;top:3px;bottom:3px;border-radius:7px;background:color-mix(in srgb,var(--k-accent) 24%,var(--k-surface));border:1px solid color-mix(in srgb,var(--k-accent) 50%,transparent)}
-.coach-v41-bar span{position:relative;display:flex;align-items:center;justify-content:center;height:100%;font-size:12px;font-weight:800;color:var(--k-ink)}
-.coach-v41-hour-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.coach-v41-hour-tools label{display:flex;gap:6px;align-items:center;font-size:12.5px;font-weight:700;color:var(--k-muted)}
-.coach-v41-hour-tools select{min-height:40px;padding:0 8px;border:1px solid var(--k-line);border-radius:9px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:13px}
+.coach-v41-sentence{margin:0;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--k-ok) 13%,var(--k-surface));color:var(--k-ok);font-size:13.5px;font-weight:700}
+.coach-v41-sentence small{display:block;font-size:12.5px;font-weight:600}
+.coach-v41-sentence.bad{background:color-mix(in srgb,var(--k-bad) 10%,var(--k-surface));color:var(--k-bad)}
+.coach-v41-hours-foot{display:grid;gap:10px}
+.coach-v41-hours-foot #apptHoursSave{width:100%;min-height:48px;font-size:14px}
 .coach-v41-textbtn{min-height:40px;padding:0 4px;border:0;background:none;color:var(--k-accent);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
-.coach-v41-total{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
-.coach-v41-total b{font-size:14px}
-@media(max-width:600px){
-  .coach-v41-scale{display:none}
-  .coach-v41-hour{grid-template-columns:minmax(0,1fr) 52px}
-  .coach-v41-hour-main{grid-column:1/-1}
+.coach-v41-mini:focus-visible,.coach-v41-hour-time select:focus-visible,.coach-v41-durations button:focus-visible,.coach-v41-textbtn:focus-visible,#apptHoursSave:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+@media(max-width:480px){
+  .coach-v41-hour{grid-template-columns:minmax(0,1fr) auto auto;gap:6px;padding:8px 10px}
+  .coach-v41-hour-time{gap:4px}
+  .coach-v41-hour-time select{padding:0 4px;font-size:13.5px}
+}
+@media(max-width:350px){
+  .coach-v41-hour{grid-template-columns:minmax(0,1fr) auto}
+  .coach-v41-hour-time{grid-column:1/-1;grid-row:2}
 }
 
 /* v41.2 · Şablon B: turuncu istek şeridi, takvim altında saat özeti, saatler yan panelde */

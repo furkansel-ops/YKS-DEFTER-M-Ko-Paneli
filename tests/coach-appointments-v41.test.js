@@ -143,27 +143,37 @@ test("v41 uygun saatler kaydedilir; bitiş başlangıçtan önceyse uyarır",asy
   assert.match(ops.alerts.at(-1),/Pazartesi: bitiş saati/);
 });
 
-test("v41.1 hazır seçenek, gün anahtarı ve 'Tüm açık günlere uygula' taslağı değiştirir; çubuk ve toplam güncellenir",async t=>{
+test("v41.4 sade gün listesi: ✕ günü kapatır, + Saat ekle açar; saat ve süre cümleyi günceller",async t=>{
   const {w,doc,ops}=fixture(t,"coachAvailability=null;");
   doc.querySelector('[data-coach-page="appointments"]').click();
-  const row=key=>doc.querySelector('[data-appt-hour="'+key+'"]');
+  const row=key=>doc.querySelector('[data-appt-hour="'+key+'"]'),sentence=doc.querySelector("#apptWeekTotal");
+  const change=(key,field,value)=>{const select=row(key).querySelector("[data-appt-"+field+"]");select.value=value;select.dispatchEvent(new w.Event("change",{bubbles:true}))};
   // Varsayılan: hafta içi 18–21 (5×6), cumartesi 11–14 (6), pazar kapalı → 36.
-  assert.equal(doc.querySelector("#apptWeekTotal").textContent,"Haftada 36 görüşme saati");
-  assert.match(row("1").querySelector(".coach-v41-bar span").textContent,/18:00–21:00 · 6 görüşme/);
-  doc.querySelector('[data-appt-preset="every"]').click();
-  assert.equal(doc.querySelector("#apptWeekTotal").textContent,"Haftada 70 görüşme saati");
-  assert.equal(row("0").querySelector("[data-appt-on]").getAttribute("aria-checked"),"true");
-  row("0").querySelector("[data-appt-on]").click();
-  assert.equal(row("0").querySelector("[data-appt-on]").getAttribute("aria-checked"),"false");
+  assert.equal(doc.querySelectorAll("#apptHours [data-appt-hour]").length,7);
+  assert.equal(sentence.textContent,"Pzt–Cum 18–21 · Cmt 11–14 · Paz kapalı · 30 dkHaftada 36 görüşmelik yer açılır.");
+  assert.equal(doc.querySelector("#apptPresets"),null,"hazır düğmeler yok");
+  assert.equal(doc.querySelector('#apptHoursDrawer [role="switch"]'),null,"anahtar yok");
   assert.match(row("0").textContent,/Kapalı/);
-  const start=row("3").querySelector("[data-appt-start]");start.value="19:00";start.dispatchEvent(new w.Event("change",{bubbles:true}));
-  row("3").querySelector("[data-appt-apply]").click();
-  assert.equal(row("1").querySelector("[data-appt-start]").value,"19:00");
-  assert.equal(row("0").querySelector("[data-appt-start]").value,"17:00","kapalı gün değişmez");
-  doc.querySelector('[data-appt-preset="off"]').click();
-  assert.equal(doc.querySelector("#apptWeekTotal").textContent,"Hiç açık saat yok");
+  row("0").querySelector("[data-appt-add]").click();
+  assert.equal(row("0").querySelector("[data-appt-start]").value,"11:00","kapalı günün son saati geri gelir");
+  row("6").querySelector("[data-appt-off]").click();
+  assert.match(row("6").textContent,/Kapalı/);
+  change("3","start","19:00");
+  assert.equal(row("3").querySelector("[data-appt-start]").value,"19:00");
+  assert.equal(sentence.textContent,"Pzt–Sal 18–21 · Çar 19–21 · Per–Cum 18–21 · Cmt kapalı · Paz 11–14 · 30 dkHaftada 34 görüşmelik yer açılır.");
+  assert.equal(doc.querySelector("#apptHoursState").textContent,"Kaydedilmedi");
+  change("1","end","17:00");
+  assert.equal(sentence.textContent,"Pazartesi: bitiş saati başlangıçtan sonra olmalı.");
+  assert.equal(sentence.classList.contains("bad"),true);
+  change("1","end","21:00");
+  doc.querySelector('[data-appt-duration="60"]').click();
+  assert.match(sentence.textContent,/· 60 dkHaftada 17 görüşmelik/);
+  for(const key of ["1","2","3","4","5","0"])row(key).querySelector("[data-appt-off]").click();
+  assert.match(sentence.textContent,/^Hiç açık gün yok/);
   doc.querySelector("#apptHoursSave").click();await flush();
+  assert.equal(ops.sets.at(-1).path,"coachAvailability/coach");
   assert.equal(plain(ops.sets.at(-1).data.days["1"]).on,false);
+  assert.equal(ops.sets.at(-1).data.duration,60);
 });
 
 test("v41 Bugün yapılacaklar: onay bekleyen istek ve bugünkü görüşme, Onayla düğmesi çalışır",async t=>{

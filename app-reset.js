@@ -654,15 +654,8 @@ function renderCoachApptPending(){
   root.querySelectorAll("[data-appt-approve]").forEach(button=>button.addEventListener("click",()=>void approveCoachAppointment(button.dataset.apptApprove)));
   root.querySelectorAll("[data-appt-goto]").forEach(button=>button.addEventListener("click",()=>openCoachAppointmentDay(button.dataset.apptGoto)));
 }
-// Uygun saatler: hazır seçenekler, gün anahtarı, 30 dakikalık saat listeleri ve günün çubuğu.
-// Taslak ekranda tutulur; "Saatleri kaydet" basılınca coachAvailability'ye yazılır.
-const APPT_PRESETS=[
-  {id:"weekday",label:"Hafta içi akşam 18–21",days:["1","2","3","4","5"],start:"18:00",end:"21:00"},
-  {id:"weekend",label:"Hafta sonu öğlen 11–14",days:["6","0"],start:"11:00",end:"14:00"},
-  {id:"every",label:"Her gün 17–22",days:["1","2","3","4","5","6","0"],start:"17:00",end:"22:00"},
-  {id:"off",label:"Hepsini kapat",days:["1","2","3","4","5","6","0"],off:true}
-];
-const APPT_SCALE=[360,1440];// 06:00–24:00
+// Uygun saatler · şablon B: sade gün listesi. Açık günde iki saat listesi ve ✕, kapalı günde "+ Saat ekle".
+// Taslak ekranda tutulur; "Kaydet" basılınca coachAvailability'ye yazılır.
 let apptDraft=null;
 function apptDraftFromSaved(){
   return{days:JSON.parse(JSON.stringify(coachAvailability?.days||APPT_DEFAULT_DAYS)),duration:Number(coachAvailability?.duration)||30};
@@ -676,28 +669,29 @@ function renderCoachApptHours(){
   const root=$("apptHours");if(!root)return;
   if(!apptDraft||root.dataset.dirty!=="1")apptDraft=apptDraftFromSaved();
   if($("apptHoursState"))$("apptHoursState").textContent=root.dataset.dirty==="1"?"Kaydedilmedi":coachAvailability?"":"Henüz kaydedilmedi; öğrenciler boş saat göremez.";
-  const presets=$("apptPresets");
-  if(presets)presets.innerHTML=APPT_PRESETS.map(preset=>'<button type="button" data-appt-preset="'+preset.id+'">'+escHtml(preset.label)+'</button>').join("");
-  const [lo,hi]=APPT_SCALE,span=hi-lo,duration=apptDraft.duration;
-  root.innerHTML='<div class="coach-v41-scale" aria-hidden="true"><span>06</span><span>12</span><span>18</span><span>24</span></div>'+APPT_DAYS.map(([key,name])=>{
-    const day=apptDraft.days[key]||{on:false,start:"18:00",end:"21:00"},count=apptDayCount(day,duration);
-    const left=Math.max(0,(apptMinutes(day.start)-lo)/span*100),width=Math.max(0,(Math.min(hi,apptMinutes(day.end))-Math.max(lo,apptMinutes(day.start)))/span*100);
-    return'<div class="coach-v41-hour'+(day.on?"":" off")+'" data-appt-hour="'+key+'"><b>'+name+'</b>'
-      +'<button type="button" role="switch" class="coach-v41-switch" aria-checked="'+(day.on?"true":"false")+'" aria-label="'+name+' '+(day.on?"açık":"kapalı")+'" data-appt-on></button>'
-      +'<div class="coach-v41-hour-main">'+(day.on
-        ?'<div class="coach-v41-bar"><i style="left:'+left.toFixed(2)+'%;width:'+width.toFixed(2)+'%"></i><span>'+escHtml(day.start)+'–'+escHtml(day.end)+' · '+count+' görüşme</span></div>'
-          +'<div class="coach-v41-hour-tools"><label>Başla <select data-appt-start aria-label="'+name+' başlangıç">'+apptTimeOptions(360,1410,day.start)+'</select></label><label>Bitir <select data-appt-end aria-label="'+name+' bitiş">'+apptTimeOptions(390,1440,day.end)+'</select></label><button type="button" class="coach-v41-textbtn" data-appt-apply>Tüm açık günlere uygula</button></div>'
-        :'<span class="coach-v41-muted">Kapalı</span><input type="hidden" data-appt-start value="'+escHtml(day.start)+'"><input type="hidden" data-appt-end value="'+escHtml(day.end)+'">')+'</div></div>';
+  const duration=apptDraft.duration;
+  root.innerHTML=APPT_DAYS.map(([key,name])=>{
+    const day=apptDraft.days[key]||{on:false,start:"18:00",end:"21:00"};
+    return day.on
+      ?'<div class="coach-v41-hour" data-appt-hour="'+key+'"><b>'+name+'</b><div class="coach-v41-hour-time"><select data-appt-start aria-label="'+name+' başlangıç">'+apptTimeOptions(360,1410,day.start)+'</select><span aria-hidden="true">–</span><select data-appt-end aria-label="'+name+' bitiş">'+apptTimeOptions(390,1440,day.end)+'</select></div><button type="button" class="coach-v41-mini" data-appt-off aria-label="'+name+' kapat">✕</button></div>'
+      :'<div class="coach-v41-hour off" data-appt-hour="'+key+'"><b>'+name+'</b><span>Kapalı</span><button type="button" class="coach-v41-mini add" data-appt-add aria-label="'+name+' için saat ekle">+ Saat ekle</button></div>';
   }).join("");
-  const total=APPT_DAYS.reduce((sum,[key])=>sum+apptDayCount(apptDraft.days[key],duration),0);
-  if($("apptWeekTotal"))$("apptWeekTotal").textContent=total?"Haftada "+total+" görüşme saati":"Hiç açık saat yok";
   const durations=$("apptDurations");
   if(durations)durations.innerHTML=[20,30,45,60].map(value=>'<button type="button" data-appt-duration="'+value+'" aria-pressed="'+(value===duration)+'">'+value+' dk</button>').join("");
+  const sentence=$("apptWeekTotal");if(!sentence)return;
+  const wrong=APPT_DAYS.find(([key])=>{const day=apptDraft.days[key];return day?.on&&apptMinutes(day.end)<=apptMinutes(day.start)});
+  const total=APPT_DAYS.reduce((sum,[key])=>sum+apptDayCount(apptDraft.days[key],duration),0);
+  sentence.classList.toggle("bad",Boolean(wrong)||!total);
+  sentence.innerHTML=wrong?escHtml(wrong[1])+": bitiş saati başlangıçtan sonra olmalı."
+    :total?escHtml(apptHoursSummary(apptDraft))+"<small>Haftada "+total+" görüşmelik yer açılır.</small>"
+    :'Hiç açık gün yok; öğrenciler randevu alamaz.<small>Bir güne "+ Saat ekle" de.</small>';
 }
+// Açık günlerin saat listeleri taslağa okunur (kapalı günün son saati saklı kalır).
 function collectApptDraft(){
   const root=$("apptHours");if(!root||!apptDraft)return;
   for(const row of root.querySelectorAll("[data-appt-hour]")){
-    apptDraft.days[row.dataset.apptHour]={on:row.querySelector("[data-appt-on]").getAttribute("aria-checked")==="true",start:row.querySelector("[data-appt-start]").value,end:row.querySelector("[data-appt-end]").value};
+    const start=row.querySelector("[data-appt-start]"),end=row.querySelector("[data-appt-end]");
+    if(start&&end)apptDraft.days[row.dataset.apptHour]={on:true,start:start.value,end:end.value};
   }
 }
 function changeApptDraft(mutate){
@@ -706,16 +700,18 @@ function changeApptDraft(mutate){
   renderCoachApptHours();
 }
 function bindCoachApptHours(){
-  const root=$("apptHours"),presets=$("apptPresets"),durations=$("apptDurations");
+  const root=$("apptHours"),durations=$("apptDurations");
   root?.addEventListener("click",event=>{
-    const toggle=event.target.closest?.("[data-appt-on]"),apply=event.target.closest?.("[data-appt-apply]");
-    if(toggle){const key=toggle.closest("[data-appt-hour]").dataset.apptHour;changeApptDraft(()=>{apptDraft.days[key].on=!apptDraft.days[key].on});root.querySelector('[data-appt-hour="'+key+'"] [data-appt-on]')?.focus()}
-    if(apply){const key=apply.closest("[data-appt-hour]").dataset.apptHour;changeApptDraft(()=>{const source=apptDraft.days[key];for(const [other] of APPT_DAYS)if(apptDraft.days[other]?.on)apptDraft.days[other]={...apptDraft.days[other],start:source.start,end:source.end}})}
+    const off=event.target.closest?.("[data-appt-off]"),add=event.target.closest?.("[data-appt-add]");
+    const key=(off||add)?.closest("[data-appt-hour]")?.dataset.apptHour;if(!key)return;
+    changeApptDraft(()=>{apptDraft.days[key]={...(apptDraft.days[key]||{start:"18:00",end:"21:00"}),on:Boolean(add)}});
+    root.querySelector('[data-appt-hour="'+key+'"] '+(add?"[data-appt-start]":"[data-appt-add]"))?.focus();
   });
-  root?.addEventListener("change",event=>{if(event.target.matches?.("[data-appt-start],[data-appt-end]"))changeApptDraft(()=>{})});
-  presets?.addEventListener("click",event=>{
-    const preset=APPT_PRESETS.find(item=>item.id===event.target.closest?.("[data-appt-preset]")?.dataset.apptPreset);if(!preset)return;
-    changeApptDraft(()=>{for(const key of preset.days)apptDraft.days[key]=preset.off?{...(apptDraft.days[key]||{start:"18:00",end:"21:00"}),on:false}:{on:true,start:preset.start,end:preset.end}});
+  root?.addEventListener("change",event=>{
+    const select=event.target.closest?.("[data-appt-start],[data-appt-end]");if(!select)return;
+    const key=select.closest("[data-appt-hour]").dataset.apptHour,field=select.matches("[data-appt-start]")?"start":"end";
+    changeApptDraft(()=>{});
+    root.querySelector('[data-appt-hour="'+key+'"] [data-appt-'+field+']')?.focus();
   });
   durations?.addEventListener("click",event=>{
     const value=Number(event.target.closest?.("[data-appt-duration]")?.dataset.apptDuration);if(!value)return;
