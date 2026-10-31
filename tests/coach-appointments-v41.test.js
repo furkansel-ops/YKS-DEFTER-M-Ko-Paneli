@@ -265,7 +265,7 @@ test("v47 randevu yokken tek satır; 'Uygun saatler' saat panelini açar",t=>{
 test("v47 stilleri yalnız tema değişkenleri ve en az 11px yazı kullanır",()=>{
   const css=read("coach-home-appts-v47.css"),html=read("index.html");
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-home-appts-v47\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-video46-appts47"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-video46-appts47[^"]*"/);
   assert.doesNotMatch(read("coach-appointments-v41.css"),/data-todo-kind="appt/,"yapılacaklardaki randevu satırı stili kalktı");
   assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);
   assert.doesNotMatch(css,/rgba?\(|hsl\(/);

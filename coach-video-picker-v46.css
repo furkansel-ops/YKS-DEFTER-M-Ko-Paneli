@@ -45,17 +45,26 @@
 #coachVideoPickerBackdrop .coach-video-card-actions .recommend{position:relative;width:34px;min-height:30px;height:30px;padding:0;overflow:hidden;text-indent:200%;white-space:nowrap}
 #coachVideoPickerBackdrop .coach-video-card-actions .recommend::after{content:"✉";position:absolute;inset:0;display:grid;place-items:center;text-indent:0;font-size:14px}
 #coachVideoPickerBackdrop .coach-video-card.is-picked{border-color:var(--k-ok);box-shadow:inset 3px 0 0 var(--k-ok)}
-#coachVideoPickerBackdrop .coach-video-card-actions .is-picked-button{border-color:var(--k-ok);background:var(--k-ok);color:var(--k-on-accent)}
+#coachVideoPickerBackdrop .coach-video-card-actions .is-picked-button,#coachVideoPickerBackdrop .coach-playlist-detail-actions .is-picked-button{border-color:var(--k-ok);background:var(--k-ok);color:var(--k-on-accent)}
+/* v48 — çoklu seçimde resmin köşesinde ✓ */
+#coachVideoPickerBackdrop .coach-video-card.is-picked .coach-video-thumb{position:relative}
+#coachVideoPickerBackdrop .coach-video-card.is-picked .coach-video-thumb::after{content:"✓";position:absolute;left:5px;top:5px;width:20px;height:20px;display:grid;place-items:center;border-radius:6px;background:var(--k-ok);color:var(--k-on-accent);font-size:12px;font-weight:900}
 
 /* 6 — seçilen video alt şeritte; × zaten var; durum yazısı yalnız hata ve başarıda */
 #coachVideoPickerBackdrop #coachVideoPickerCancel{display:none}
 #coachVideoPickerBackdrop .coach-video-picker-footer{flex-wrap:wrap;gap:8px 10px}
 #coachVideoPickerBackdrop .coach-video-picker-footer .coach-video-picker-selection{flex:1 1 0;display:block;min-width:0;min-height:0;padding:0;border:0;background:transparent;color:var(--k-muted);font-size:12px}
 #coachVideoPickerBackdrop .coach-video-picker-selection b{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px;color:var(--k-ink)}
-#coachVideoPickerBackdrop .coach-video-picker-selection small{display:block;font-size:11px;color:var(--k-muted)}
+#coachVideoPickerBackdrop .coach-video-picker-selection small{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:11px;color:var(--k-muted)}
 #coachVideoPickerBackdrop #coachVideoPickerStatus{order:-1;flex:1 1 100%;font-size:12px}
 #coachVideoPickerBackdrop #coachVideoPickerStatus:not([data-status="error"]):not([data-status="success"]){display:none}
-#coachVideoPickerBackdrop #coachVideoPickerSave{flex:none;min-height:42px;padding:0 16px}
+#coachVideoPickerBackdrop #coachVideoPickerSave{flex:1 0 auto;order:5;min-height:42px;padding:0 16px}
+/* v48 — alt şerit: seçim ve Temizle üstte; "açık kalsın" ve ekle düğmesi altta */
+#coachVideoPickerBackdrop .coach-video-picker-footer .coach-video-picker-selection{order:1;flex:1 1 calc(100% - 96px)}
+#coachVideoPickerBackdrop .coach-v48-clear{order:2;flex:none;min-height:32px;padding:0 6px;border:0;background:transparent;color:var(--k-accent);font:inherit;font-size:12px;font-weight:850;cursor:pointer}
+#coachVideoPickerBackdrop .coach-v48-clear[hidden]{display:none}
+#coachVideoPickerBackdrop .coach-v48-keep{order:4;flex:1 1 auto;display:flex;align-items:center;gap:8px;min-width:0;font-size:12px;font-weight:700;color:var(--k-ink);cursor:pointer}
+#coachVideoPickerBackdrop .coach-v48-keep input{width:18px;height:18px;margin:0;flex:none;accent-color:var(--k-accent)}
 
 @media(max-width:700px){
   /* 1 — kısa başlık */

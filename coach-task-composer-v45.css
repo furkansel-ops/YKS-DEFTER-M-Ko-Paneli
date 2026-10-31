@@ -23,7 +23,11 @@
 
 /* 5 — hafta tek satır; düzenlemede görevin günü tarih kutusunda görünmeye devam eder */
 #programTaskBackdrop:not([data-editing]) .coach-v18-date{display:none}
-#programTaskBackdrop:not([data-editing]) .coach-v19-left>.program-task-body{grid-template-areas:"builder days" "builder task" "keep task" "info info" "status status"}
+#programTaskBackdrop:not([data-editing]) .coach-v19-left>.program-task-body{grid-template-areas:"builder days" "builder task" "keep link" "info info" "status status"}
+/* v48 — görev metninin altında link alanı (video, PDF, Drive); öğrencide görevin linki olur */
+#programTaskBackdrop:not([data-editing]) .coach-v22-legacy-video-link{display:grid!important;grid-area:link;gap:5px;align-content:start;min-width:0}
+#programTaskBackdrop .coach-v22-legacy-video-link>span{font-size:12px;font-weight:800;color:var(--k-ink)}
+#programTaskBackdrop .coach-v22-legacy-video-link input{min-height:40px}
 #programTaskBackdrop #programTaskDayHint{display:none}
 #programTaskBackdrop .coach-fast-days-heading{align-items:center;gap:8px}
 #programTaskBackdrop .coach-v45-week{display:flex;align-items:center;gap:4px;margin-left:auto}
@@ -37,7 +41,7 @@
 #programTaskBackdrop .program-task-info{padding:8px 12px;font-size:11.5px;color:var(--k-muted)}
 
 @media(max-width:730px){
-  #programTaskBackdrop:not([data-editing]) .coach-v19-left>.program-task-body{grid-template-areas:"builder" "days" "task" "keep" "info" "status"}
+  #programTaskBackdrop:not([data-editing]) .coach-v19-left>.program-task-body{grid-template-areas:"builder" "days" "task" "link" "keep" "info" "status"}
 }
 @media(max-width:700px){
   /* 1 — kısa başlık */

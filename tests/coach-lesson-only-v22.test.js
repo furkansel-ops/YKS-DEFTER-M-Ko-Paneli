@@ -50,12 +50,11 @@ test('video URL is hidden for new lessons, available for editing older linked ta
 
 test('media runtime is retained but blocks fetch while the video panel is hidden',()=>{
   const html=read('index.html'),video=read('program-videos-v1.js');
-  assert.match(html,/program-videos-v1\.js\?v=1\.9\.5/);
+  assert.match(html,/program-videos-v1\.js\?v=1\.9\.6/);
   assert.match(video,/const ROOT_ID="programVideoLibrary"/);
   assert.match(video,/function buildShell\(\)/);
   assert.match(video,/function recommendResource\(item\)/);
-  // v46: Video ekle'de seçilen kartı işaretlemek için düğme de geçer.
-  assert.match(video,/function addToProgram\(item,button\)/);
+  assert.match(video,/function addToProgram\(item\)/);
   assert.match(video,/yks:coach-program-editor-open"[\s\S]*?if\(\$\("coachV19VideoPane"\)\?\.hidden\)return/);
   assert.match(video,/yks:coach-video-filters"[\s\S]*?if\(\$\("coachV19VideoPane"\)\?\.hidden\)return/);
   assert.match(read('index.html'),/id="programTaskDelete"/);

@@ -16,7 +16,7 @@ test('personal video library includes the five original channels and three Turki
   }
   assert.match(js,/USER_TEACHERS_FEED="media\/my-teachers-feed.json"/);
   assert.match(js,/teachers-v2-feed.json/,'keep legacy media as a fallback');
-  assert.match(read('index.html'),/program-videos-v1\.js\?v=1\.9\.5/);
+  assert.match(read('index.html'),/program-videos-v1\.js\?v=1\.9\.6/);
 });
 
 test('all public videos are indexed in pages, not silently clipped to 240 or 500',()=>{

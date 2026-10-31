@@ -54,8 +54,8 @@
   <link rel="stylesheet" href="./coach-home-v42.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-students-v43.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-programs-v44.css?v=1.0.1">
-  <link rel="stylesheet" href="./coach-task-composer-v45.css?v=1.0.0">
-  <link rel="stylesheet" href="./coach-video-picker-v46.css?v=1.0.1">
+  <link rel="stylesheet" href="./coach-task-composer-v45.css?v=1.0.1">
+  <link rel="stylesheet" href="./coach-video-picker-v46.css?v=1.0.2">
   <link rel="stylesheet" href="./coach-home-appts-v47.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
@@ -1356,8 +1356,10 @@
       </div>
       <div class="coach-v19-video-pane coach-video-picker-host" id="coachVideoLibraryHost" aria-label="Hoca ve video kütüphanesi"></div>
       <footer class="coach-video-picker-footer">
-        <div class="coach-video-picker-selection" id="coachVideoPickerSelection" role="status" aria-live="polite">Bir video seç</div>
+        <div class="coach-video-picker-selection" id="coachVideoPickerSelection" role="status" aria-live="polite">Bir ya da birkaç video seç</div>
+        <button type="button" class="coach-v48-clear" id="coachVideoPickerClear" hidden>Temizle</button>
         <span id="coachVideoPickerStatus" role="status" aria-live="polite">Video seçildiğinde seçili güne ekleyebilirsin.</span>
+        <label class="coach-v48-keep" id="coachVideoPickerKeepArea"><input id="coachVideoPickerKeepOpen" type="checkbox"><span>Ekleyince pencere açık kalsın</span></label>
         <button type="button" id="coachVideoPickerCancel">Vazgeç</button>
         <button type="button" id="coachVideoPickerSave" disabled>Programa Ekle</button>
       </footer>
@@ -1434,7 +1436,7 @@
         </section>
         <details class="coach-v18-quick"><summary>Hazır çalışma örnekleri <span>İsteğe bağlı</span></summary><div id="coachV8ModalPicker" class="coach-v8-modal-host"></div></details>
         <label class="coach-v18-task-text"><span>Görev metni <em>Düzenlenebilir</em></span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
-        <label class="coach-v22-legacy-video-link"><span>Video bağlantısı · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://youtu.be/..."></label>
+        <label class="coach-v22-legacy-video-link"><span>Link · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://… (video, PDF, Drive)"></label>
         <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderince pencere açık kalsın <small>Sıradaki çalışmayı hemen yazabilirsin.</small></span></label>
         <div class="program-task-info">Öğrencinin programına <b>Koç ·</b> etiketiyle gider.</div>
         <div class="program-task-status hidden" id="programTaskStatus"></div>
@@ -1478,8 +1480,8 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.2"></script>
-  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.5"></script>
+  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script>
 </body>
 </html>

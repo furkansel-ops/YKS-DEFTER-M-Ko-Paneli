@@ -199,13 +199,13 @@
       const playlistVideoRecommend=event.target.closest("[data-playlist-video-recommend]");
       if(playlistVideoRecommend){const item=state.selectedPlaylist?.videos?.[Number(playlistVideoRecommend.dataset.playlistVideoRecommend)];if(item)recommendResource(item);return;}
       const playlistAdd=event.target.closest("[data-playlist-video-add]");
-      if(playlistAdd){const item=state.selectedPlaylist?.videos?.[Number(playlistAdd.dataset.playlistVideoAdd)];if(item)addToProgram(item,playlistAdd);return;}
+      if(playlistAdd){const item=state.selectedPlaylist?.videos?.[Number(playlistAdd.dataset.playlistVideoAdd)];if(item)addToProgram(item);return;}
       const playlistOpen=event.target.closest("[data-playlist-video-open]");
       if(playlistOpen){const item=state.selectedPlaylist?.videos?.[Number(playlistOpen.dataset.playlistVideoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");return;}
       const recommend=event.target.closest("[data-video-recommend]");
       if(recommend){const item=state.items[Number(recommend.dataset.videoRecommend)];if(item)recommendResource(item);return;}
       const add=event.target.closest("[data-video-add]"),open=event.target.closest("[data-video-open]");
-      if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item,add);}
+      if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item);}
       if(open){const item=state.items[Number(open.dataset.videoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");}
     });
     $("coachVideoResults")?.addEventListener("input",event=>{
@@ -514,6 +514,7 @@
       search+(cards||empty);
     if(keepSearchFocus){const next=$("coachPlaylistVideoSearch");if(next){next.focus({preventScroll:true});next.setSelectionRange(next.value.length,next.value.length);}}
     setStatus(state.teacher+" · "+item.title+" · "+(query?rows.length+" / "+videos.length+" video eşleşti":note));
+    syncPickedMarks();
   }
 
   function render(){
@@ -538,6 +539,7 @@
     const progress=state.mode==="playlists"?"":(state.hasMore?" · Arşivde "+total+" video; devamını aşağıdan getir":"");
     setStatus(state.teacher+" · "+state.scope+" "+state.subject+" · "+state.items.length+" "+(state.mode==="playlists"?"liste":"video")+" gösteriliyor"+progress);
     more?.classList.toggle("hidden",!state.hasMore);
+    syncPickedMarks();
   }
 
   function recommendResource(item){
@@ -558,28 +560,28 @@
     window.dispatchEvent(new CustomEvent("yks:coach-resource-recommend",{detail}));
   }
 
-  // v46: Video ekle penceresinde seçilen kart yeşil olur, düğmesi "✓ Seçildi" yazar.
-  function markPicked(button){
-    document.querySelectorAll("#coachVideoResults .coach-video-card.is-picked").forEach(card=>{
-      card.classList.remove("is-picked");
-      card.querySelectorAll(".is-picked-button").forEach(b=>{b.classList.remove("is-picked-button");b.textContent=coachVideoPickLabel();});
+  // v48: Video ekle'de seçilenler (birden çok olabilir) yeşil, düğmeleri "✓ Seçildi"; yeniden çizimde de korunur.
+  let pickedUrls=new Set();
+  function syncPickedMarks(){
+    const sources=[["data-video-add",i=>state.items[i]],["data-playlist-video-add",i=>state.selectedPlaylist?.videos?.[i]],["data-playlist-attach",()=>state.selectedPlaylist]];
+    for(const [attr,find] of sources)document.querySelectorAll("#coachVideoResults ["+attr+"]").forEach(button=>{
+      const item=find(Number(button.getAttribute(attr))),on=Boolean(item&&pickedUrls.has(String(item.url||"")));
+      button.classList.toggle("is-picked-button",on);button.textContent=on?"✓ Seçildi":coachVideoPickLabel();
+      button.closest(".coach-video-card")?.classList.toggle("is-picked",on);
     });
-    const card=button?.closest(".coach-video-card");if(!card)return;
-    card.classList.add("is-picked");button.classList.add("is-picked-button");button.textContent="✓ Seçildi";
   }
-  function addToProgram(item,button){
+  function addToProgram(item){
     const standalone=$("coachVideoPickerBackdrop");
     if(standalone&&!standalone.classList.contains("hidden")){
       if(!$("programStudentSelect")?.value){setStatus("Önce programın öğrencisini seç.");return;}
       const url=String(item?.url||"");
       if(!/^https?:\/\//i.test(url)||!url)return;
-      markPicked(button);
       window.dispatchEvent(new CustomEvent("yks:coach-video-picked",{detail:{
         kind:item.kind==="playlist"?"playlist":"video",
         title:String(item.title||"").slice(0,300),
         url,teacher:state.teacher,subject:state.subject,topic:state.topic,scope:state.scope
       }}));
-      setStatus("Kaynak seçildi. Günü kontrol edip alttaki ekle düğmesine bas.");
+      setStatus("Seçimin altta; günü kontrol edip ekle düğmesine bas.");
       return;
     }
     const modal=$("programTaskBackdrop");
@@ -627,7 +629,11 @@
       if(state.busy){pendingReload=true;return;}
       void load(true);
     });
+    window.addEventListener("yks:coach-video-selection",event=>{
+      pickedUrls=new Set((event.detail?.urls||[]).map(String));syncPickedMarks();
+    });
     window.addEventListener("yks:coach-video-picker-close",()=>{
+      pickedUrls=new Set();
       const library=$(ROOT_ID),target=$("coachV19VideoPane");
       if(library&&target&&library.parentElement!==target)target.appendChild(library);
     });

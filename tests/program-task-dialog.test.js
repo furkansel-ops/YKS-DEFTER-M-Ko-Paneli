@@ -330,7 +330,7 @@ test('video picker cancel, student switch and invalid dates never create program
   h.$('coachVideoPickerClose').click();
 });
 
-test('v46 Video ekle: gün satırı haftayı değiştirir, seçilen video alt şeritte ve kart işaretli',async t=>{
+test('v46 · v48 Video ekle: gün satırı haftayı değiştirir; birden çok video seçilir, alt şeritte sayılır',async t=>{
   const h=harness(t),w=h.w;
   const feed={teachers:{'Eyüp B.':{channelName:'Eyüp B.',videos:[
     {id:'abc123XYZ99',title:'TYT Matematik Problemler Konu anlatımı',url:'https://www.youtube.com/watch?v=abc123XYZ99'},
@@ -344,7 +344,8 @@ test('v46 Video ekle: gün satırı haftayı değiştirir, seçilen video alt ş
   assert.equal(h.$('coachVideoPickerTitle').textContent,'Video ekle');
   assert.equal(h.$('coachVideoPickerWeekLabel').textContent,'5 Eki – 11 Eki');
   assert.equal(h.$('coachVideoPickerSave').textContent,"Pazartesi'ye ekle");
-  assert.equal(h.$('coachVideoPickerSelection').textContent,'Bir video seç');
+  assert.equal(h.$('coachVideoPickerSelection').textContent,'Bir ya da birkaç video seç');
+  assert.equal(h.$('coachVideoPickerClear').hidden,true);
   assert.ok(h.$('programVideoLibrary').querySelector('.coach-video-controls .coach-video-filters'),'filtreler sabit üst kutuda');
   const add=i=>h.$('coachVideoResults').querySelector('[data-video-add="'+i+'"]');
   add(0).click();
@@ -352,14 +353,20 @@ test('v46 Video ekle: gün satırı haftayı değiştirir, seçilen video alt ş
   assert.equal(h.$('coachVideoPickerSelection').querySelector('b').textContent,'TYT Matematik Problemler Konu anlatımı');
   assert.equal(h.$('coachVideoPickerSelection').querySelector('small').textContent,'Eyüp B.');
   add(1).click();
-  assert.equal(add(0).textContent,'Seç','önceki seçim kalkar');assert.equal(add(0).closest('.coach-video-card').classList.contains('is-picked'),false);
-  assert.equal(add(1).textContent,'✓ Seçildi');
+  assert.equal(add(0).textContent,'✓ Seçildi','v48: önceki seçim kalır');assert.equal(add(1).textContent,'✓ Seçildi');
+  assert.equal(h.$('coachVideoPickerSelection').querySelector('b').textContent,'2 video seçildi');
+  assert.equal(h.$('coachVideoPickerSelection').querySelector('small').textContent,'TYT Matematik Problemler Konu anlatımı · Fonksiyon Soru Çözümü');
+  assert.equal(h.$('coachVideoPickerClear').hidden,false);
+  add(0).click();
+  assert.equal(add(0).textContent,'Seç','ikinci dokunuş seçimi kaldırır');
+  assert.equal(h.$('coachVideoPickerSelection').querySelector('b').textContent,'Fonksiyon Soru Çözümü');
+  add(0).click();
   h.$('coachVideoPickerDays').querySelector('[data-video-date="2026-10-07"]').click();
-  assert.equal(h.$('coachVideoPickerSave').textContent,"Çarşamba'ya ekle");
+  assert.equal(h.$('coachVideoPickerSave').textContent,"Çarşamba'ya 2 video ekle");
   h.$('coachVideoPickerNextWeek').click();
   assert.equal(h.$('coachVideoPickerDate').value,'2026-10-14');
   assert.equal(h.$('coachVideoPickerWeekLabel').textContent,'12 Eki – 18 Eki');
-  assert.equal(h.$('coachVideoPickerSave').textContent,"Çarşamba'ya ekle",'aynı gün yeni haftada');
+  assert.equal(h.$('coachVideoPickerSave').textContent,"Çarşamba'ya 2 video ekle",'aynı gün yeni haftada');
   h.$('coachVideoPickerPrevWeek').click();
   assert.equal(h.$('coachVideoPickerDate').value,'2026-10-07');
   assert.equal(h.writes.length,0,'gün ve hafta değiştirmek hiçbir şey göndermez');
@@ -378,4 +385,48 @@ test('v46 Video ekle stilleri yalnız tema değişkenleri ve en az 11px yazı ku
   assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);
   assert.doesNotMatch(css,/rgba?\(|hsl\(/);
   for(const [,size] of css.matchAll(/font-size:(\d+(?:\.\d+)?)px/g))assert.ok(Number(size)>=11,size);
+});
+
+test('v48 seçilen videolar sırayla aynı güne ayrı görev gider; açık kalsın işaretliyse pencere kapanmaz',async t=>{
+  const h=harness(t),w=h.w;
+  const videos=['aaa111AAA11','bbb222BBB22','ccc333CCC33'].map((id,i)=>({id,title:'Video '+(i+1),url:'https://www.youtube.com/watch?v='+id}));
+  w.fetch=async()=>({ok:true,json:async()=>({teachers:{'Eyüp B.':{channelName:'Eyüp B.',videos}}})});
+  w.eval(read('program-videos-v1.js'));
+  h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  h.click('programAddVideoBtn');
+  for(let i=0;i<40;i++)await Promise.resolve();
+  const add=i=>h.$('coachVideoResults').querySelector('[data-video-add="'+i+'"]');
+  add(2).click();add(0).click();add(1).click();
+  h.$('coachVideoPickerClear').click();
+  assert.equal(add(0).textContent,'Seç','Temizle hepsini kaldırır');assert.equal(h.$('coachVideoPickerSave').disabled,true);
+  add(2).click();add(0).click();
+  h.$('coachVideoPickerKeepOpen').checked=true;
+  h.$('coachVideoPickerSave').click();
+  for(let i=0;i<30;i++)await Promise.resolve();
+  assert.deepEqual(h.writes.map(x=>x.payload.text.match(/v=(\w+)/)[1]),['ccc333CCC33','aaa111AAA11'],'seçilen sırayla');
+  assert.deepEqual([...new Set(h.writes.map(x=>x.payload.date))],['2026-10-05']);
+  h.runTimers();
+  assert.equal(h.$('coachVideoPickerBackdrop').classList.contains('hidden'),false,'pencere açık kalır');
+  assert.match(h.$('coachVideoPickerStatus').textContent,/^2 video görev olarak gönderildi ✓/);
+  assert.equal(h.$('coachVideoPickerSelection').textContent,'Bir ya da birkaç video seç');
+  assert.equal(add(2).textContent,'Seç','gönderilenlerin işareti kalkar');
+  h.$('coachVideoPickerClose').click();
+  h.click('programAddVideoBtn');
+  assert.equal(h.$('coachVideoPickerKeepOpen').checked,false,'yeniden açılınca kutu boş');
+});
+
+test('v48 en çok 10 video seçilir; Çalışma ekle linki göreve eklenir',async t=>{
+  const h=harness(t),w=h.w;
+  const videos=Array.from({length:11},(_,i)=>({id:'vid'+String(i).padStart(8,'0'),title:'Video '+i,url:'https://www.youtube.com/watch?v=vid'+String(i).padStart(8,'0')}));
+  w.fetch=async()=>({ok:true,json:async()=>({teachers:{'Eyüp B.':{channelName:'Eyüp B.',videos}}})});
+  w.eval(read('program-videos-v1.js'));
+  h.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  h.click('programAddVideoBtn');
+  for(let i=0;i<40;i++)await Promise.resolve();
+  for(let i=0;i<11;i++)h.$('coachVideoResults').querySelector('[data-video-add="'+i+'"]').click();
+  assert.equal(h.$('coachVideoPickerSelection').querySelector('b').textContent,'10 video seçildi');
+  assert.match(h.$('coachVideoPickerStatus').textContent,/En çok 10 video/);
+  assert.equal(h.$('coachVideoResults').querySelector('[data-video-add="10"]').textContent,'Seç');
+  h.$('coachVideoPickerClose').click();
+  assert.match(read('index.html'),/<label class="coach-v22-legacy-video-link"><span>Link · isteğe bağlı<\/span><input id="programTaskVideo" type="url"/);
 });

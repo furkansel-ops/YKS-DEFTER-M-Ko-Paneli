@@ -45,7 +45,7 @@ function fixture(t){
 
 test("v45 stil dosyası yüklenir; Haftaya Toplu Ekle kalktı; hafta satırı ve kısa etiketler",()=>{
   const html=read("index.html");
-  assert.match(html,/<link rel="stylesheet" href="\.\/coach-task-composer-v45\.css\?v=1\.0\.0">/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/coach-task-composer-v45\.css\?v=1\.0\.\d+">/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-programs44-composer45[^"]*"/);
   assert.doesNotMatch(html,/programAddWeekBtn/);
   assert.match(html,/<button type="button" id="programTaskPrevWeek" aria-label="Önceki hafta">‹<\/button><strong id="programTaskWeekLabel">—<\/strong><button type="button" id="programTaskNextWeek" aria-label="Sonraki hafta">›<\/button>/);
@@ -119,7 +119,9 @@ test("v45 5: hafta tek satırda değişir; seçili günler yeni haftada da aynı
 test("v45 stilleri: gizli seçim kutuları, kalkan tarih kutusu, Vazgeç ve hazır örnekler",()=>{
   assert.match(css,/label:is\(:has\(#programBuilderSubject\),:has\(#programBuilderActivity\)\) select\{display:none\}/);
   assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v18-date\{display:none\}/,"düzenlemede görevin günü görünür kalır");
-  assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v19-left>\.program-task-body\{grid-template-areas:"builder days" "builder task" "keep task" "info info" "status status"\}/);
+  assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v19-left>\.program-task-body\{grid-template-areas:"builder days" "builder task" "keep link" "info info" "status status"\}/);
+  // v48: görev metninin altında link alanı (yeni görevde de görünür)
+  assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v22-legacy-video-link\{display:grid!important;grid-area:link;/);
   assert.match(css,/#programTaskBackdrop #programTaskCancel\{display:none\}/);
   assert.match(css,/#programTaskBackdrop \.coach-v18-quick\{display:none\}/);
   assert.match(css,/@media\(max-width:700px\)\{[\s\S]*\.program-task-modal>header>div>span\{display:none\}/);
