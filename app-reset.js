@@ -1392,6 +1392,26 @@ function examList(row,type="all"){
   const filtered=type==="all"?exams:exams.filter(x=>String(x?.type||"").toLocaleUpperCase("tr-TR")===type);
   return [...filtered].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||"")));
 }
+/* v52 · Deneme Analizi: dönem süzgeci, hedef, gelişim eğrisi, ders farkı, konu eksikleri, karşılaştırma ve dikkat listesi.
+   Yalnız öğrencinin paylaştığı kayıtlar okunur; hiçbir veri yazılmaz. */
+const EXAM_V52_STALE_DAYS=14,EXAM_V52_DROP=2;
+const EXAM_V52_KIND={bilmiyordum:"bilgi eksiği",bilgi:"bilgi eksiği",dikkat:"dikkat",sure:"süre",islem:"işlem hatası"};
+const EXAM_V52_MONTHS=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+let examCompareFor="",examCompareIds=[];
+function examPeriodValue(){return $("examPeriodSelect")?.value||"90"}
+function examDayKey(offset=0){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+offset);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function examInPeriod(date,period=examPeriodValue()){return period==="all"||String(date||"")>=examDayKey(-(Number(period)||90))}
+function examListIn(row,type){return examList(row,type).filter(exam=>examInPeriod(exam.date))}
+function examFmt(value){return String(Math.round(reportNum(value)*100)/100).replace(".",",")}
+function examSigned(value){const n=Math.round(reportNum(value)*100)/100;return n>0?"▲ "+examFmt(n):n<0?"▼ "+examFmt(-n):"="}
+function examTone(value){return value>0?"up":value<0?"down":""}
+function examDateLabel(date){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(date||""));return m?Number(m[3])+" "+EXAM_V52_MONTHS[Number(m[2])-1]:"—"}
+function examDaysSince(date){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(date||""));if(!m)return null;return Math.round((new Date(examDayKey()+"T12:00:00")-new Date(m[0]+"T12:00:00"))/86400000)}
+function examTarget(profile,type){const n=reportNum(type==="AYT"?profile?.targetNetAYT:profile?.targetNetTYT);return n>0?n:0}
+/* Aynı türdeki bir önceki deneme: TYT ile AYT netleri karşılaştırılmaz. */
+function examTypeOf(exam){return String(exam?.type||"").toLocaleUpperCase("tr-TR")}
+function examPrevSame(list,exam){const index=list.indexOf(exam);for(let i=index-1;i>=0;i--)if(examTypeOf(list[i])===examTypeOf(exam))return list[i];return null}
+function examSubjectNet(exam,name){const hit=(Array.isArray(exam?.subjectResults)?exam.subjectResults:[]).find(x=>String(x?.name||"")===name);return hit?reportNum(hit.net):null}
 function hydrateExamStudentSelect(){
   const select=$("examStudentSelect");if(!select)return;
   const current=select.value||"all";
@@ -1402,80 +1422,167 @@ function setExamState(name){
   ["examLoading","examEmpty","examOverview","examStudentDetail"].forEach(id=>$(id)?.classList.add("hidden"));
   $(name)?.classList.remove("hidden");
 }
+function setExamEmpty(title,text){
+  const box=$("examEmpty");if(box){const b=box.querySelector("b"),p=box.querySelector("p");if(b)b.textContent=title;if(p)p.textContent=text;}
+  setExamState("examEmpty");
+}
 function examKpi(label,value,note,tone=""){
   return '<article class="exam-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
 }
 function examTypeValue(){return $("examTypeSelect")?.value||"all"}
 function renderExamAnalysis(scope){
-  if(!coachReportRows.length){setExamState("examEmpty");return}
+  if(!coachReportRows.length){setExamEmpty("Henüz bağlı öğrenci yok","Öğrenci bağlandığında ve deneme eklediğinde sonuçlar burada görünür.");return}
   const type=examTypeValue();
-  const totalExams=coachReportRows.reduce((sum,row)=>sum+examList(row,type).length,0);
-  if(!totalExams){setExamState("examEmpty");return}
   if(scope==="all"){renderExamOverview(type);return}
   const row=coachReportRows.find(x=>x.studentUid===scope);
   if(!row){renderExamOverview(type);return}
   renderExamStudent(row,type);
 }
+/* Dikkat: son iki denemede belirgin düşüş ya da 14 günden uzun süredir deneme yok (dönemden bağımsız). */
+function examAttention(type){
+  return coachReportRows.map(row=>{
+    const all=examList(row,type),last=all.at(-1),prev=last?examPrevSame(all,last):null,days=last?examDaysSince(last.date):null,drop=last&&prev?reportNum(prev.totalNet)-reportNum(last.totalNet):0;
+    if(!last)return{row,rank:1,flag:"Henüz deneme yok",tone:"warn",detail:"Deneme girdiğinde burada görünür"};
+    if(drop>=EXAM_V52_DROP)return{row,rank:3+drop,flag:"▼ "+examFmt(drop)+" net",tone:"bad",detail:"Son: "+examFmt(last.totalNet)+" net · "+examDateLabel(last.date)};
+    if(days!==null&&days>=EXAM_V52_STALE_DAYS)return{row,rank:2+days/100,flag:days+" gündür deneme yok",tone:"warn",detail:"Son: "+examFmt(last.totalNet)+" net · "+examDateLabel(last.date)};
+    return null;
+  }).filter(Boolean).sort((a,b)=>b.rank-a.rank);
+}
 function renderExamOverview(type){
   $("examScopeTitle").textContent="Tüm öğrenciler";
-  $("examScopeMeta").textContent=type==="all"?"Tüm deneme türleri":type+" denemeleri";
-  const all=coachReportRows.flatMap(row=>examList(row,type).map(exam=>({row,exam})));
+  $("examScopeMeta").textContent=(type==="all"?"Tüm deneme türleri":type+" denemeleri")+" · "+(examPeriodValue()==="all"?"tüm zamanlar":"son 3 ay");
+  const all=coachReportRows.flatMap(row=>examListIn(row,type).map(exam=>({row,exam})));
+  const attention=examAttention(type);
+  $("examAttentionList").innerHTML=attention.length?attention.map(item=>'<button type="button" class="exam-v52-attention-row" data-exam-student="'+escHtml(item.row.studentUid)+'"><span><b>'+escHtml(studentName(item.row))+'</b><small>'+escHtml(item.detail)+'</small></span><em class="exam-v52-flag '+item.tone+'">'+escHtml(item.flag)+'</em><i aria-hidden="true">›</i></button>').join(""):'<div class="exam-mini-empty">Şu an dikkat gerektiren öğrenci yok ✓</div>';
+  if(!all.length){
+    $("examOverviewKpis").innerHTML="";$("examRecentList").innerHTML='<div class="exam-mini-empty">Bu dönemde deneme yok.</div>';$("examComparisonList").innerHTML="";
+    bindExamStudentButtons();setExamState("examOverview");return;
+  }
   const nets=all.map(x=>reportNum(x.exam.totalNet));
-  const avg=nets.length?nets.reduce((a,b)=>a+b,0)/nets.length:0;
-  const best=nets.length?Math.max(...nets):0;
-  const studentsWithExams=coachReportRows.filter(row=>examList(row,type).length).length;
+  const avg=nets.reduce((a,b)=>a+b,0)/nets.length,best=Math.max(...nets);
+  const studentsWithExams=coachReportRows.filter(row=>examListIn(row,type).length).length;
   $("examOverviewKpis").innerHTML=
     examKpi("TOPLAM DENEME",String(all.length),type==="all"?"Tüm türler":type)+
-    examKpi("ORTALAMA NET",avg.toFixed(1),"Tüm sonuçlar")+
-    examKpi("EN YÜKSEK NET",best.toFixed(1),"Kayıtlı sonuç")+
+    examKpi("ORTALAMA NET",examFmt(avg),"Dönemdeki tüm sonuçlar")+
+    examKpi("EN YÜKSEK NET",examFmt(best),"Kayıtlı sonuç")+
     examKpi("DENEME GİREN",String(studentsWithExams),coachReportRows.length+" bağlı öğrenci");
   const recent=[...all].sort((a,b)=>String(b.exam?.date||"").localeCompare(String(a.exam?.date||""))).slice(0,10);
-  $("examRecentList").innerHTML=recent.map(({row,exam})=>'<button type="button" class="exam-recent-row" data-exam-student="'+escHtml(row.studentUid)+'"><span><i>'+escHtml(reportInitial(studentName(row)))+'</i><b>'+escHtml(studentName(row))+'</b></span><strong>'+escHtml(exam.name||"Deneme")+'</strong><em>'+escHtml(exam.type||"—")+'</em><small>'+escHtml(exam.date||"—")+'</small><b>'+reportNum(exam.totalNet).toFixed(1)+'</b></button>').join("");
-  const compare=coachReportRows.map(row=>({row,list:examList(row,type)})).filter(x=>x.list.length).map(x=>({row:x.row,exam:x.list.at(-1)})).sort((a,b)=>reportNum(b.exam.totalNet)-reportNum(a.exam.totalNet));
-  const max=Math.max(1,...compare.map(x=>Math.max(0,reportNum(x.exam.totalNet))));
-  $("examComparisonList").innerHTML=compare.length?compare.map(({row,exam})=>'<button type="button" class="exam-compare-row" data-exam-student="'+escHtml(row.studentUid)+'"><div><span>'+escHtml(studentName(row))+'</span><strong>'+reportNum(exam.totalNet).toFixed(1)+' net</strong></div><i><b style="width:'+Math.max(3,Math.min(100,reportNum(exam.totalNet)/max*100))+'%"></b></i></button>').join(""):'<div class="exam-mini-empty">Karşılaştırılacak deneme yok.</div>';
-  document.querySelectorAll("[data-exam-student]").forEach(btn=>btn.addEventListener("click",()=>{if($("examStudentSelect"))$("examStudentSelect").value=btn.dataset.examStudent;renderExamAnalysis(btn.dataset.examStudent)}));
+  $("examRecentList").innerHTML=recent.map(({row,exam})=>'<button type="button" class="exam-recent-row" data-exam-student="'+escHtml(row.studentUid)+'"><span><i>'+escHtml(reportInitial(studentName(row)))+'</i><b>'+escHtml(studentName(row))+'</b></span><strong>'+escHtml(exam.name||"Deneme")+'</strong><em>'+escHtml(exam.type||"—")+'</em><small>'+escHtml(examDateLabel(exam.date))+'</small><b>'+examFmt(exam.totalNet)+'</b></button>').join("");
+  const latest=coachReportRows.map(row=>({row,list:examListIn(row,type)})).filter(x=>x.list.length).map(x=>({row:x.row,exam:x.list.at(-1),prev:examPrevSame(x.list,x.list.at(-1)),count:x.list.length})).sort((a,b)=>reportNum(b.exam.totalNet)-reportNum(a.exam.totalNet));
+  $("examComparisonList").innerHTML=latest.map(({row,exam,prev,count})=>{const change=prev?reportNum(exam.totalNet)-reportNum(prev.totalNet):null;return'<button type="button" class="exam-v52-student-row" data-exam-student="'+escHtml(row.studentUid)+'"><span><b>'+escHtml(studentName(row))+'</b><small>'+escHtml((exam.type||"—")+" · "+examDateLabel(exam.date)+" · "+count+" deneme")+'</small></span><strong>'+examFmt(exam.totalNet)+'</strong><em class="'+(change===null?"":examTone(change))+'">'+(change===null?"—":examSigned(change))+'</em></button>'}).join("");
+  bindExamStudentButtons();
   setExamState("examOverview");
 }
+function bindExamStudentButtons(){
+  document.querySelectorAll("#examOverview [data-exam-student]").forEach(btn=>btn.addEventListener("click",()=>{if($("examStudentSelect"))$("examStudentSelect").value=btn.dataset.examStudent;renderExamAnalysis(btn.dataset.examStudent)}));
+}
+/* Gelişim eğrisi: türe göre ayrı çizgi; tek tür seçiliyse hedef net kesikli çizgi. */
+function examTrendSvg(list,target){
+  const rows=list.slice(-12),types=[...new Set(rows.map(x=>String(x.type||"").toLocaleUpperCase("tr-TR")||"—"))],W=Math.max(300,Math.min(720,Math.round($("examTrendChart")?.clientWidth||640))),H=W<480?200:230,L=36,R=16,T=18,B=40;
+  const top=Math.max(10,target||0,...rows.map(x=>reportNum(x.totalNet)))*1.08,anchor=i=>rows.length>1&&i===0?"start":rows.length>1&&i===rows.length-1?"end":"middle",x=i=>rows.length===1?(L+W-R)/2:L+i*(W-L-R)/(rows.length-1),y=v=>T+(H-T-B)*(1-Math.max(0,reportNum(v))/top);
+  const grid=[0,.5,1].map(f=>{const v=Math.round(top*f);return'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'" class="grid"/><text x="'+(L-6)+'" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end">'+v+'</text>'}).join("");
+  const goal=target&&types.length===1?'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(target).toFixed(1)+'" y2="'+y(target).toFixed(1)+'" class="goal"/><text x="'+(W-R)+'" y="'+(y(target)-6).toFixed(1)+'" text-anchor="end" class="goal-label">hedef '+examFmt(target)+'</text>':"";
+  const series=types.map((type,index)=>{const points=rows.map((exam,i)=>({exam,i})).filter(p=>(String(p.exam.type||"").toLocaleUpperCase("tr-TR")||"—")===type);const cls="s"+(index%2);return(points.length>1?'<polyline class="line '+cls+'" points="'+points.map(p=>x(p.i).toFixed(1)+","+y(p.exam.totalNet).toFixed(1)).join(" ")+'"/>':"")+points.map(p=>'<circle class="dot '+cls+'" cx="'+x(p.i).toFixed(1)+'" cy="'+y(p.exam.totalNet).toFixed(1)+'" r="'+(p.i===rows.length-1?5.5:4)+'"><title>'+escHtml((p.exam.name||"Deneme")+" · "+examFmt(p.exam.totalNet)+" net")+'</title></circle><text class="val" x="'+x(p.i).toFixed(1)+'" y="'+(y(p.exam.totalNet)-10).toFixed(1)+'" text-anchor="'+anchor(p.i)+'">'+examFmt(p.exam.totalNet)+'</text>').join("")}).join("");
+  const labels=rows.map((exam,i)=>'<text x="'+x(i).toFixed(1)+'" y="'+(H-14)+'" text-anchor="'+anchor(i)+'">'+escHtml(examDateLabel(exam.date))+'</text>').join("");
+  const legend=types.length>1?'<div class="exam-v52-legend">'+types.map((type,index)=>'<span class="s'+(index%2)+'">'+escHtml(type)+'</span>').join("")+'</div>':"";
+  return legend+'<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Deneme netlerinin gelişim grafiği">'+grid+goal+series+labels+'</svg>';
+}
+/* Ders bazında: son denemedeki her ders, aynı türdeki önceki 3 denemenin ortalaması ve fark; düşen ders üstte. */
+function examSubjectRows(list,latest){
+  const type=String(latest?.type||"").toLocaleUpperCase("tr-TR"),previous=list.filter(x=>x!==latest&&String(x.type||"").toLocaleUpperCase("tr-TR")===type).slice(-3);
+  return(Array.isArray(latest?.subjectResults)?latest.subjectResults:[]).map(item=>{
+    const name=String(item?.name||"Ders"),nets=previous.map(exam=>examSubjectNet(exam,name)).filter(v=>v!==null),avg=nets.length?nets.reduce((a,b)=>a+b,0)/nets.length:null;
+    return{name,net:reportNum(item?.net),avg,diff:avg===null?null:reportNum(item?.net)-avg,d:Math.floor(reportNum(item?.d)),y:Math.floor(reportNum(item?.y)),b:Math.floor(reportNum(item?.b)),hasDyb:["d","y","b"].some(k=>item&&item[k]!==undefined)};
+  }).sort((a,b)=>(a.diff===null?1e9:a.diff)-(b.diff===null?1e9:b.diff));
+}
+/* Konu eksikleri: dönemdeki hata kayıtları konu konu toplanır; birden çok denemede ya da günde tekrar edenler üstte. */
+function examTopicGaps(row){
+  const map=new Map();
+  errorItems(row).filter(item=>examInPeriod(item?.date)).forEach(item=>{
+    const subject=String(item?.subject||"Ders"),topic=String(item?.topic||"Konu"),key=subject+"|"+topic,entry=map.get(key)||{subject,topic,total:0,exams:new Set(),days:new Set(),kinds:new Map(),last:""};
+    entry.total+=Math.max(1,reportNum(item?.n)||1);if(item?.exam)entry.exams.add(String(item.exam));if(item?.date)entry.days.add(String(item.date));
+    const kind=EXAM_V52_KIND[String(item?.kind||"")]||String(item?.kind||"");if(kind)entry.kinds.set(kind,(entry.kinds.get(kind)||0)+1);
+    if(String(item?.date||"")>entry.last)entry.last=String(item?.date||"");map.set(key,entry);
+  });
+  return[...map.values()].map(entry=>({...entry,repeat:entry.exams.size>=2?entry.exams.size+" denemede":entry.days.size>=2?entry.days.size+" farklı günde":"",kind:[...entry.kinds.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||""}))
+    .sort((a,b)=>Number(!!b.repeat)-Number(!!a.repeat)||b.total-a.total||b.last.localeCompare(a.last)).slice(0,6);
+}
+function renderExamCompare(list){
+  const picked=list.filter(exam=>examCompareIds.includes(String(exam.id||exam.date))).slice(-3),box=$("examCompare");if(!box)return;
+  if(picked.length<2){box.innerHTML='<div class="exam-mini-empty">Karşılaştırmak için en az iki deneme seç.</div>';return}
+  const names=[...new Set(picked.flatMap(exam=>(Array.isArray(exam.subjectResults)?exam.subjectResults:[]).map(x=>String(x?.name||"Ders"))))],first=picked[0],last=picked.at(-1),mixed=new Set(picked.map(examTypeOf)).size>1;
+  box.innerHTML='<table class="exam-v52-table"><thead><tr><th>Ders</th>'+picked.map(exam=>'<th>'+escHtml(examDateLabel(exam.date))+'<small>'+escHtml(exam.type||"")+'</small></th>').join("")+'<th>Fark</th></tr></thead><tbody>'+names.map(name=>{const a=examSubjectNet(first,name),b=examSubjectNet(last,name),diff=mixed||a===null||b===null?null:b-a;return'<tr><td><b>'+escHtml(name)+'</b></td>'+picked.map(exam=>{const v=examSubjectNet(exam,name);return'<td>'+(v===null?"—":examFmt(v))+'</td>'}).join("")+'<td class="'+(diff===null?"":examTone(diff))+'">'+(diff===null?"—":examSigned(diff))+'</td></tr>'}).join("")+'<tr class="total"><td><b>Toplam</b></td>'+picked.map(exam=>'<td><b>'+examFmt(exam.totalNet)+'</b></td>').join("")+(mixed?'<td>—</td>':'<td class="'+examTone(reportNum(last.totalNet)-reportNum(first.totalNet))+'">'+examSigned(reportNum(last.totalNet)-reportNum(first.totalNet))+'</td>')+'</tr></tbody></table>'+(mixed?'<p class="exam-v52-note">Farklı türdeki denemeler seçildi; fark yalnız aynı türde hesaplanır.</p>':"");
+}
+function examOpenTopic(uid,subject,topic){
+  showCoachPage("topics");try{hydrateTopicControls()}catch{}
+  if($("topicStudentSelect"))$("topicStudentSelect").value=uid;
+  const subjectSelect=$("topicSubjectSelect");if(subjectSelect)subjectSelect.value=[...subjectSelect.options].some(o=>o.value===subject)?subject:"all";
+  if($("topicExamSelect"))$("topicExamSelect").value="all";if($("topicStatusSelect"))$("topicStatusSelect").value="all";
+  if($("topicSearchInput"))$("topicSearchInput").value=topic;
+  renderTopicAnalysis(uid);
+}
+function examOpenErrors(uid,subject){
+  showCoachPage("errors");try{hydrateErrorControls()}catch{}
+  if($("errorStudentSelect"))$("errorStudentSelect").value=uid;
+  const subjectSelect=$("errorSubjectSelect");if(subjectSelect)subjectSelect.value=[...subjectSelect.options].some(o=>o.value===subject)?subject:"all";
+  safeRenderErrors(uid);
+}
 function renderExamStudent(row,type){
-  const list=examList(row,type),name=studentName(row),profile=row.share?.profile||{};
-  if(!list.length){setExamState("examEmpty");return}
-  const latest=list.at(-1),previous=list.length>1?list.at(-2):null;
-  const latestNet=reportNum(latest.totalNet),previousNet=previous?reportNum(previous.totalNet):null;
-  const delta=previousNet===null?null:latestNet-previousNet;
-  const best=Math.max(...list.map(x=>reportNum(x.totalNet)));
-  const avg=list.reduce((s,x)=>s+reportNum(x.totalNet),0)/list.length;
+  const list=examListIn(row,type),name=studentName(row),profile=row.share?.profile||{},period=examPeriodValue();
+  if(!list.length){setExamEmpty(name+" için deneme yok",period==="all"?"Öğrenci deneme eklediğinde sonuçlar burada görünür.":"Son 3 ayda deneme yok. Dönemi \"Tümü\" yaparak eski denemelere bakabilirsin.");return}
+  setExamState("examStudentDetail");// grafik genişliği görünür kutudan ölçülür
+  const latest=list.at(-1),previous=examPrevSame(list,latest),same=list.filter(exam=>examTypeOf(exam)===examTypeOf(latest));
+  const latestNet=reportNum(latest.totalNet),delta=previous?latestNet-reportNum(previous.totalNet):null;
+  const best=Math.max(...same.map(x=>reportNum(x.totalNet))),avg=same.reduce((s,x)=>s+reportNum(x.totalNet),0)/same.length;
+  const latestType=String(latest.type||"").toLocaleUpperCase("tr-TR"),target=examTarget(profile,type==="all"?latestType:type);
   $("examScopeTitle").textContent=name;
-  $("examScopeMeta").textContent=(type==="all"?"Tüm türler":type)+" · "+list.length+" deneme";
+  $("examScopeMeta").textContent=(type==="all"?"Tüm türler":type)+" · "+list.length+" deneme · "+(period==="all"?"tüm zamanlar":"son 3 ay");
   $("examStudentAvatar").textContent=reportInitial(name);
   $("examStudentName").textContent=name;
-  const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
-  $("examStudentTarget").textContent=[profile.track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
-  $("examLatestPill").textContent="Son deneme · "+(latest.date||"Tarih yok");
+  const goalText=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
+  $("examStudentTarget").textContent=[profile.track,goalText].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
+  const career=profile.career&&typeof profile.career==="object"?profile.career:null,tags=[];
+  if(career?.tyt?.name)tags.push((career.tyt.label||"TYT")+" "+career.tyt.name);
+  if(career?.ayt?.name)tags.push((career.ayt.label||"AYT")+" "+career.ayt.name);
+  if(career?.ydt?.name)tags.push("YDT "+career.ydt.name);
+  if(reportNum(career?.level)>0)tags.push("Seviye "+Math.floor(reportNum(career.level)));
+  $("examStudentTags").innerHTML=tags.map(tag=>'<span>'+escHtml(tag)+'</span>').join("");
+  $("examLatestPill").textContent="Son deneme · "+examDateLabel(latest.date);
+  const goal=$("examStudentGoal");
+  if(goal){
+    goal.hidden=!target;
+    if(target){const left=target-latestNet,pct=Math.max(0,Math.min(100,latestNet/target*100));goal.innerHTML='<span>'+escHtml(latestType||"Deneme")+' hedefi '+examFmt(target)+' net · <b>'+(left>0?examFmt(left)+" net kaldı":"Hedefe ulaştı ✓")+'</b></span><i><b style="width:'+pct.toFixed(1)+'%"></b></i>';}
+  }
   $("examStudentKpis").innerHTML=
-    examKpi("SON NET",latestNet.toFixed(1),latest.name||latest.type||"Son deneme")+
-    examKpi("EN İYİ NET",best.toFixed(1),list.length+" deneme")+
-    examKpi("ORTALAMA NET",avg.toFixed(1),type==="all"?"Tüm türler":type)+
-    examKpi("SON DEĞİŞİM",delta===null?"—":(delta>0?"+":"")+delta.toFixed(1),previous?"Önceki denemeye göre":"Karşılaştırma yok",delta!==null&&delta<0?"down":delta!==null&&delta>0?"up":"");
-  const trend=list.slice(-10),max=Math.max(1,...trend.map(x=>Math.max(0,reportNum(x.totalNet))));
-  $("examTrendChart").innerHTML='<div class="exam-chart-y"><span>'+Math.ceil(max)+'</span><span>'+Math.ceil(max/2)+'</span><span>0</span></div><div class="exam-chart-main"><div class="exam-chart-grid"><i></i><i></i><i></i></div><div class="exam-bars">'+trend.map((exam,index)=>'<div class="exam-bar-wrap" title="'+escHtml(exam.name||"Deneme")+' · '+reportNum(exam.totalNet).toFixed(1)+' net"><b style="height:'+Math.max(4,reportNum(exam.totalNet)/max*100)+'%"></b><span>'+escHtml(exam.date?exam.date.slice(5):String(index+1))+'</span></div>').join("")+'</div></div>';
-  const subjects=Array.isArray(latest.subjectResults)?latest.subjectResults:[];
-  const subjectMax=Math.max(1,...subjects.map(x=>Math.max(0,reportNum(x.net))));
-  $("examSubjectList").innerHTML=subjects.length?subjects.map(item=>'<div class="exam-subject-row"><div><b>'+escHtml(item.name||"Ders")+'</b><span>'+reportNum(item.net).toFixed(1)+' net</span></div><i><b style="width:'+Math.max(3,Math.min(100,reportNum(item.net)/subjectMax*100))+'%"></b></i></div>').join(""):'<div class="exam-mini-empty">Bu denemede ders bazlı veri yok.</div>';
+    examKpi("SON NET",examFmt(latestNet),delta===null?(latest.name||"Son deneme"):examSigned(delta)+" önceki denemeye göre",delta!==null&&delta<0?"down":delta!==null&&delta>0?"up":"")+
+    examKpi("ORTALAMA NET",examFmt(avg),same.length+" "+(examTypeOf(latest)||"")+" denemesi")+
+    examKpi("EN İYİ NET",examFmt(best),(examTypeOf(latest)||"Seçili")+" · seçili dönem")+
+    (target?examKpi("HEDEFE KALAN",target-latestNet>0?examFmt(target-latestNet):"0",latestType+" hedefi "+examFmt(target)):examKpi("DENEME",String(list.length),type==="all"?"Tüm türler":type));
+  $("examTrendChart").innerHTML=examTrendSvg(list,type==="all"&&new Set(list.map(x=>String(x.type||"").toLocaleUpperCase("tr-TR"))).size>1?0:target);
+  const subjects=examSubjectRows(list,latest);
+  $("examSubjectList").innerHTML=subjects.length?'<table class="exam-v52-table"><thead><tr><th>Ders</th><th>Son</th><th>Önceki 3</th><th>Fark</th><th>D/Y/B</th></tr></thead><tbody>'+subjects.map(item=>'<tr><td><b>'+escHtml(item.name)+'</b></td><td>'+examFmt(item.net)+'</td><td>'+(item.avg===null?"—":examFmt(item.avg))+'</td><td class="'+(item.diff===null?"":examTone(item.diff))+'">'+(item.diff===null?"—":examSigned(item.diff))+'</td><td class="dyb">'+(item.hasDyb?item.d+"/"+item.y+"/"+item.b:"—")+'</td></tr>').join("")+'</tbody></table><p class="exam-v52-note">'+escHtml((latest.name||"Son deneme")+" · "+examDateLabel(latest.date))+'</p>':'<div class="exam-mini-empty">Bu denemede ders bazlı veri yok.</div>';
+  const gaps=examTopicGaps(row);
+  $("examTopicGaps").innerHTML=gaps.length?gaps.map(item=>'<div class="exam-v52-gap"><div><b>'+escHtml(item.subject+" · "+item.topic)+(item.repeat?' <em>'+escHtml(item.repeat)+'</em>':"")+'</b><small>'+escHtml([item.total+" yanlış","en son "+examDateLabel(item.last),item.kind].filter(Boolean).join(" · "))+'</small></div><span><button type="button" data-exam-topic="'+escHtml(item.subject)+'" data-exam-topic-name="'+escHtml(item.topic)+'">Konu</button><button type="button" data-exam-errors="'+escHtml(item.subject)+'">Hatalar</button></span></div>').join(""):'<div class="exam-mini-empty">Bu dönemde hata kaydı yok. Öğrenci denemedeki yanlışlarını işledikçe burada görünür.</div>';
+  $("examTopicGaps").querySelectorAll("[data-exam-topic]").forEach(btn=>btn.addEventListener("click",()=>examOpenTopic(row.studentUid,btn.dataset.examTopic,btn.dataset.examTopicName)));
+  $("examTopicGaps").querySelectorAll("[data-exam-errors]").forEach(btn=>btn.addEventListener("click",()=>examOpenErrors(row.studentUid,btn.dataset.examErrors)));
+  const key=row.studentUid+"|"+type+"|"+period,ids=list.map(exam=>String(exam.id||exam.date));
+  if(examCompareFor!==key||!examCompareIds.some(id=>ids.includes(id))){examCompareFor=key;const pairType=[...list].reverse().map(examTypeOf).find(kind=>list.filter(exam=>examTypeOf(exam)===kind).length>=2);examCompareIds=(pairType?list.filter(exam=>examTypeOf(exam)===pairType):list).map(exam=>String(exam.id||exam.date)).slice(-2);}
   const reversed=[...list].reverse();
   $("examHistoryList").innerHTML=reversed.map((exam,index)=>{
-    const prev=reversed[index+1],change=prev?reportNum(exam.totalNet)-reportNum(prev.totalNet):null;
-    const changeText=change===null?"—":(change>0?"+":"")+change.toFixed(1);
-    const cls=change===null?"":change>0?"up":change<0?"down":"";
-    return '<div class="exam-history-row"><span><b>'+escHtml(exam.name||"Deneme")+'</b><small>'+escHtml((exam.subjectResults||[]).length+" ders")+'</small></span><em>'+escHtml(exam.type||"—")+'</em><small>'+escHtml(exam.date||"—")+'</small><strong>'+reportNum(exam.totalNet).toFixed(1)+'</strong><i class="'+cls+'">'+changeText+'</i></div>';
+    const prev=examPrevSame(list,exam),change=prev?reportNum(exam.totalNet)-reportNum(prev.totalNet):null,id=String(exam.id||exam.date);
+    return'<label class="exam-v52-history-row"><input type="checkbox" value="'+escHtml(id)+'"'+(examCompareIds.includes(id)?" checked":"")+'><span><b>'+escHtml(exam.name||"Deneme")+'</b><small>'+escHtml(examDateLabel(exam.date)+" · "+(exam.type||"—"))+'</small></span><strong>'+examFmt(exam.totalNet)+'</strong><em class="'+(change===null?"":examTone(change))+'">'+(change===null?"—":examSigned(change))+'</em></label>';
   }).join("");
-  let insight='<div><span>Toplam deneme</span><strong>'+list.length+'</strong></div><div><span>Son net</span><strong>'+latestNet.toFixed(1)+'</strong></div><div><span>En iyi net</span><strong>'+best.toFixed(1)+'</strong></div>';
-  if(delta!==null)insight+='<div><span>Son değişim</span><strong class="'+(delta>0?"up":delta<0?"down":"")+'">'+(delta>0?"+":"")+delta.toFixed(1)+'</strong></div>';
-  $("examInsight").innerHTML=insight;
+  $("examHistoryList").querySelectorAll("input[type=checkbox]").forEach(box=>box.addEventListener("change",()=>{
+    examCompareIds=box.checked?[...examCompareIds.filter(id=>id!==box.value),box.value]:examCompareIds.filter(id=>id!==box.value);
+    if(examCompareIds.length>3){const drop=examCompareIds.shift(),old=[...$("examHistoryList").querySelectorAll("input[type=checkbox]")].find(input=>input.value===drop);if(old)old.checked=false;}
+    renderExamCompare(list);
+  }));
+  renderExamCompare(list);
   setExamState("examStudentDetail");
 }
 $("examStudentSelect")?.addEventListener("change",event=>renderExamAnalysis(event.currentTarget.value));
 $("examTypeSelect")?.addEventListener("change",()=>renderExamAnalysis($("examStudentSelect")?.value||"all"));
+$("examPeriodSelect")?.addEventListener("change",()=>renderExamAnalysis($("examStudentSelect")?.value||"all"));
 $("examRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setExamState("examLoading");void loadCoachReports(user.uid)}});
 
 

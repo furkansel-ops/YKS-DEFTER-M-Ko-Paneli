@@ -59,6 +59,7 @@
   <link rel="stylesheet" href="./coach-bulk-v50.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-messages-read-v51.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-home-appts-v47.css?v=1.0.0">
+  <link rel="stylesheet" href="./exams-v52.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -633,6 +634,10 @@
               <span>Deneme türü</span>
               <select id="examTypeSelect"><option value="all">Tümü</option><option value="TYT">TYT</option><option value="AYT">AYT</option></select>
             </label>
+            <label>
+              <span>Dönem</span>
+              <select id="examPeriodSelect"><option value="90">Son 3 ay</option><option value="all">Tümü</option></select>
+            </label>
           </div>
         </section>
 
@@ -645,6 +650,12 @@
 
         <div id="examOverview" class="hidden">
           <section class="exam-kpis" id="examOverviewKpis"></section>
+          <article class="exam-card exam-v52-attention" id="examAttentionCard">
+            <div class="exam-card-head compact">
+              <div><span>DİKKAT</span><h2>İlgilenmen gerekenler</h2><p>Neti belirgin düşen ya da 14 günden uzun süredir deneme girmeyen öğrenciler.</p></div>
+            </div>
+            <div id="examAttentionList" class="exam-v52-attention-list"></div>
+          </article>
           <section class="exam-overview-grid">
             <article class="exam-card exam-recent-card">
               <div class="exam-card-head">
@@ -655,7 +666,7 @@
             </article>
             <article class="exam-card exam-comparison-card">
               <div class="exam-card-head compact">
-                <div><span>ÖĞRENCİ KARŞILAŞTIRMA</span><h2>Son netler</h2><p>Her öğrencinin son deneme sonucu.</p></div>
+                <div><span>ÖĞRENCİLER</span><h2>Son netler</h2><p>Her öğrencinin son denemesi ve bir öncekine göre farkı.</p></div>
               </div>
               <div id="examComparisonList" class="exam-comparison-list"></div>
             </article>
@@ -669,8 +680,10 @@
               <span>ÖĞRENCİ DENEME RAPORU</span>
               <h2 id="examStudentName">Öğrenci</h2>
               <p id="examStudentTarget">Hedef bilgisi yok</p>
+              <div class="exam-v52-tags" id="examStudentTags"></div>
             </div>
             <div class="exam-latest-pill" id="examLatestPill">—</div>
+            <div class="exam-v52-goal" id="examStudentGoal" hidden></div>
           </section>
 
           <section class="exam-kpis" id="examStudentKpis"></section>
@@ -678,31 +691,31 @@
           <section class="exam-detail-grid">
             <article class="exam-card exam-trend-card">
               <div class="exam-card-head">
-                <div><span>NET GELİŞİMİ</span><h2>Deneme trendi</h2><p>Seçili türdeki son denemelerin toplam net gelişimi.</p></div>
+                <div><span>NET GELİŞİMİ</span><h2>Gelişim eğrisi</h2><p>Seçili dönemdeki denemelerin toplam neti; kesikli çizgi hedef net.</p></div>
               </div>
-              <div class="exam-trend-chart" id="examTrendChart"></div>
+              <div class="exam-v52-chart" id="examTrendChart"></div>
             </article>
 
             <article class="exam-card exam-subject-card">
               <div class="exam-card-head compact">
-                <div><span>DERS DAĞILIMI</span><h2>Son deneme</h2><p>Ders bazında net görünümü.</p></div>
+                <div><span>DERS BAZINDA</span><h2>Son deneme ve fark</h2><p>Son net, önceki 3 denemenin ortalaması, fark ve doğru/yanlış/boş. Düşen ders üstte.</p></div>
               </div>
-              <div class="exam-subject-list" id="examSubjectList"></div>
+              <div class="exam-v52-subjects" id="examSubjectList"></div>
             </article>
 
             <article class="exam-card exam-history-card">
               <div class="exam-card-head">
-                <div><span>DENEME GEÇMİŞİ</span><h2>Tüm sonuçlar</h2><p>En yeniden eskiye öğrenci denemeleri.</p></div>
+                <div><span>DENEME GEÇMİŞİ</span><h2>Karşılaştırmak için seç</h2><p>2 ya da 3 deneme işaretle; ders ders netler yan yana çıkar.</p></div>
               </div>
-              <div class="exam-history-head"><span>Deneme</span><span>Tür</span><span>Tarih</span><span>Toplam net</span><span>Değişim</span></div>
-              <div id="examHistoryList" class="exam-history-list"></div>
+              <div id="examHistoryList" class="exam-v52-history"></div>
+              <div id="examCompare" class="exam-v52-compare"></div>
             </article>
 
-            <article class="exam-card exam-insight-card">
+            <article class="exam-card exam-v52-gaps-card">
               <div class="exam-card-head compact">
-                <div><span>HIZLI OKUMA</span><h2>Koç için özet</h2></div>
+                <div><span>KONU EKSİKLERİ</span><h2>Tekrar eden hatalar</h2><p>Öğrencinin hata kayıtlarından en çok yanlış yapılan konular.</p></div>
               </div>
-              <div id="examInsight" class="exam-insight"></div>
+              <div id="examTopicGaps" class="exam-v52-gaps"></div>
             </article>
           </section>
         </div>
@@ -1482,7 +1495,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.3"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script>
 </body>

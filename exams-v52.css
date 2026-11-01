@@ -1,0 +1,75 @@
+/* YKS Defterim Koç Paneli · Deneme Analizi v52: dikkat listesi, hedef çubuğu, gelişim eğrisi,
+   ders bazında fark, konu eksikleri ve deneme karşılaştırma. Renkler tema betiğiyle --kc-* olur. */
+.exam-control-fields{flex-wrap:wrap}
+.exam-v52-attention{margin-bottom:12px}
+.exam-v52-attention-list{display:grid;gap:6px}
+.exam-v52-attention-row,.exam-v52-student-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;width:100%;min-height:52px;padding:9px 12px;border:1px solid var(--kc-e3e9f1,#e3e9f1);border-radius:12px;background:var(--kc-fbfcfe,#fbfcfe);color:var(--kc-253750,#253750);font:inherit;text-align:left;cursor:pointer}
+.exam-v52-attention-row:hover,.exam-v52-student-row:hover{border-color:var(--kc-2873f0,#2873f0);background:var(--kc-f3f8ff,#f3f8ff)}
+.exam-v52-attention-row b,.exam-v52-student-row b{display:block;font-size:13px}
+.exam-v52-attention-row small,.exam-v52-student-row small{display:block;font-size:11.5px;color:var(--kc-71809a,#71809a)}
+.exam-v52-attention-row i{font-style:normal;color:var(--kc-8b98aa,#8b98aa);font-size:16px}
+.exam-v52-flag{padding:4px 9px;border-radius:999px;font-style:normal;font-size:11px;font-weight:850;white-space:nowrap}
+.exam-v52-flag.bad{background:var(--kc-fbe7e9,#fbe7e9);color:var(--kc-b02a33,#b02a33)}.exam-v52-flag.warn{background:var(--kc-fdf0dc,#fdf0dc);color:var(--kc-9a5806,#9a5806)}
+.exam-comparison-list{display:grid;gap:6px}
+.exam-v52-student-row strong{font-size:15px;color:var(--kc-253750,#253750)}
+.exam-v52-student-row em,.exam-v52-history-row em{font-style:normal;font-size:12px;font-weight:850;color:var(--kc-71809a,#71809a);white-space:nowrap}
+.exam-v52-student-row em.up,.exam-v52-history-row em.up,.exam-v52-table td.up{color:var(--kc-0d7556,#0d7556)}
+.exam-v52-student-row em.down,.exam-v52-history-row em.down,.exam-v52-table td.down{color:var(--kc-b02a33,#b02a33)}
+.exam-student-hero{flex-wrap:wrap}
+.exam-v52-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.exam-v52-tags:empty{display:none}
+.exam-v52-tags span{padding:4px 10px;border-radius:999px;background:var(--kc-edf5ff,#edf5ff);color:var(--kc-1f5fd0,#1f5fd0);font-size:11.5px;font-weight:850}
+.exam-v52-goal{flex:1 0 100%;margin-top:6px;font-size:12.5px;color:var(--kc-41556e,#41556e)}
+.exam-v52-goal[hidden]{display:none}
+.exam-v52-goal b{color:var(--kc-253750,#253750)}
+.exam-v52-goal i{display:block;height:8px;margin-top:6px;border-radius:999px;background:var(--kc-e8eef6,#e8eef6);overflow:hidden}
+.exam-v52-goal i b{display:block;height:100%;border-radius:999px;background:var(--kc-2873f0,#2873f0)}
+.exam-v52-chart svg{display:block;width:100%;height:auto}
+.exam-v52-chart text{font-size:11px;fill:var(--kc-8b98aa,#8b98aa)}
+.exam-v52-chart .grid{stroke:var(--kc-edf1f6,#edf1f6);stroke-width:1}
+.exam-v52-chart .goal{stroke:var(--kc-7ea6ec,#7ea6ec);stroke-width:1.5;stroke-dasharray:6 5}
+.exam-v52-chart .goal-label{fill:var(--kc-5b7fc4,#5b7fc4);font-weight:800}
+.exam-v52-chart .line{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.exam-v52-chart .line.s0{stroke:var(--kc-2873f0,#2873f0)}.exam-v52-chart .line.s1{stroke:var(--kc-7c4ddb,#7c4ddb)}
+.exam-v52-chart .dot.s0{fill:var(--kc-2873f0,#2873f0)}.exam-v52-chart .dot.s1{fill:var(--kc-7c4ddb,#7c4ddb)}
+.exam-v52-chart .val{fill:var(--kc-253750,#253750);font-weight:800}
+.exam-v52-legend{display:flex;gap:14px;margin:0 0 6px;font-size:12px;font-weight:800;color:var(--kc-71809a,#71809a)}
+.exam-v52-legend span:before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:3px;vertical-align:-1px;background:var(--kc-2873f0,#2873f0)}
+.exam-v52-legend span.s1:before{background:var(--kc-7c4ddb,#7c4ddb)}
+.exam-v52-table{width:100%;border-collapse:collapse;font-size:12.5px;color:var(--kc-41556e,#41556e)}
+.exam-v52-table th{padding:6px 6px;border-bottom:1px solid var(--kc-e3e9f1,#e3e9f1);text-align:left;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.04em;color:var(--kc-8b98aa,#8b98aa)}
+.exam-v52-table th small{display:block;font-size:11px;text-transform:none;letter-spacing:0;font-weight:700}
+.exam-v52-table td{padding:8px 6px;border-bottom:1px solid var(--kc-eef2f7,#eef2f7)}
+.exam-v52-table tr:last-child td{border-bottom:0}
+.exam-v52-table td b{color:var(--kc-253750,#253750)}
+.exam-v52-table td.dyb{color:var(--kc-8b98aa,#8b98aa);font-size:12px;white-space:nowrap}
+.exam-v52-table tr.total td{border-top:1px solid var(--kc-e3e9f1,#e3e9f1);background:var(--kc-f9fbfd,#f9fbfd)}
+.exam-v52-note{margin:8px 0 0;font-size:11.5px;color:var(--kc-8b98aa,#8b98aa)}
+.exam-v52-gaps-card{grid-column:2/3}
+.exam-v52-gaps{display:grid;gap:0}
+.exam-v52-gap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--kc-eef2f7,#eef2f7)}
+.exam-v52-gap:first-child{border-top:0}
+.exam-v52-gap b{display:block;font-size:13px;color:var(--kc-253750,#253750)}
+.exam-v52-gap b em{display:inline-block;margin-left:4px;padding:1px 8px;border-radius:999px;background:var(--kc-fbe7e9,#fbe7e9);color:var(--kc-b02a33,#b02a33);font-style:normal;font-size:11px;font-weight:850;vertical-align:1px}
+.exam-v52-gap small{display:block;margin-top:2px;font-size:11.5px;color:var(--kc-71809a,#71809a)}
+.exam-v52-gap span{display:flex;gap:5px}
+.exam-v52-gap button{min-height:32px;padding:0 10px;border:0;border-radius:9px;background:var(--kc-edf5ff,#edf5ff);color:var(--kc-1f5fd0,#1f5fd0);font:inherit;font-size:11.5px;font-weight:850;cursor:pointer;white-space:nowrap}
+.exam-v52-gap button:hover{background:var(--kc-dce9ff,#dce9ff)}
+.exam-v52-history{display:grid}
+.exam-v52-history-row{display:grid;grid-template-columns:20px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:9px 2px;border-top:1px solid var(--kc-eef2f7,#eef2f7);cursor:pointer}
+.exam-v52-history-row:first-child{border-top:0}
+.exam-v52-history-row input{width:17px;height:17px;margin:0;accent-color:var(--kc-2873f0,#2873f0)}
+.exam-v52-history-row b{display:block;font-size:13px;color:var(--kc-253750,#253750)}
+.exam-v52-history-row small{display:block;font-size:11.5px;color:var(--kc-8b98aa,#8b98aa)}
+.exam-v52-history-row strong{font-size:14px;color:var(--kc-253750,#253750)}
+.exam-v52-compare{margin-top:10px;padding-top:10px;border-top:1px dashed var(--kc-dfe7f0,#dfe7f0);overflow-x:auto}
+@media(max-width:1150px){.exam-v52-gaps-card{grid-column:auto}}
+@media(max-width:720px){
+  .exam-v52-attention-row,.exam-v52-student-row{grid-template-columns:minmax(0,1fr) auto}
+  .exam-v52-attention-row i{display:none}
+  .exam-v52-student-row em{grid-column:2}
+  .exam-v52-gap{grid-template-columns:1fr}
+  .exam-v52-table{font-size:12px}
+  .exam-v52-table th,.exam-v52-table td{padding:7px 4px}
+}
+.exam-v52-table td.up,.exam-v52-table td.down{white-space:nowrap}
