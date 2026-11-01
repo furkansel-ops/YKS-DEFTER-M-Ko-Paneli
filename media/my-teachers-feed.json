@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-10-31T18:53:43.552Z",
+  "generatedAt": "2026-11-01T09:47:03.431Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-10-31T18:48:04.518Z"
+      "refreshedAt": "2026-11-01T09:41:22.232Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-10-31T18:52:10.333Z"
+      "refreshedAt": "2026-11-01T09:45:28.517Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-10-31T18:52:35.676Z"
+      "refreshedAt": "2026-11-01T09:45:54.431Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5692,7 +5692,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-10-31T18:52:44.777Z"
+      "refreshedAt": "2026-11-01T09:46:03.382Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8211,7 +8211,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-10-31T18:52:55.911Z"
+      "refreshedAt": "2026-11-01T09:46:14.430Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8224,8 +8224,8 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/kadir-gumus/index.json",
-      "videoCount": 235,
-      "playlistCount": 22,
+      "videoCount": 246,
+      "playlistCount": 23,
       "archiveComplete": true,
       "playlists": [
         {
@@ -8681,6 +8681,22 @@
           "contentComplete": true
         },
         {
+          "id": "PLWx1W4sgXiFE",
+          "title": "1. DÖNEM 1. YAZILI - FULL TEKRAR (9-10-11)",
+          "url": "https://www.youtube.com/playlist?list=PLWx1W4sgXiFE",
+          "videoCount": 1,
+          "videos": [
+            {
+              "id": "YJr47c_81PA",
+              "title": "9. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=YJr47c_81PA",
+              "thumbnail": "https://i.ytimg.com/vi/YJr47c_81PA/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLSDZelLtC7Mg",
           "title": "11. SINIF - MAARİF (ÖZET KONU ANLATIM) (TÜRK DİLİ VE EDEBİYATI)",
           "url": "https://www.youtube.com/playlist?list=PLSDZelLtC7Mg",
@@ -8716,8 +8732,78 @@
           "id": "PLbJSnKeFOIks",
           "title": "9. SINIF - MAARİF (ÖZET KONU ANLATIM) (TÜRK DİLİ VE EDEBİYATI)",
           "url": "https://www.youtube.com/playlist?list=PLbJSnKeFOIks",
-          "videoCount": 1,
+          "videoCount": 11,
           "videos": [
+            {
+              "id": "gzJ_NGmYpyM",
+              "title": "3. Edebi Metinler Öğretici Metinler (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=gzJ_NGmYpyM",
+              "thumbnail": "https://i.ytimg.com/vi/gzJ_NGmYpyM/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "4C-7BhWJVh4",
+              "title": "2 . Sanat - Zanaat (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=4C-7BhWJVh4",
+              "thumbnail": "https://i.ytimg.com/vi/4C-7BhWJVh4/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "cg2gWnZugvc",
+              "title": "11. Ses Bilgisi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=cg2gWnZugvc",
+              "thumbnail": "https://i.ytimg.com/vi/cg2gWnZugvc/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "x29RpYlr2QY",
+              "title": "10. Söz Sanatları (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=x29RpYlr2QY",
+              "thumbnail": "https://i.ytimg.com/vi/x29RpYlr2QY/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "ujBwrSc8hzQ",
+              "title": "9. Kafiye - Redif (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=ujBwrSc8hzQ",
+              "thumbnail": "https://i.ytimg.com/vi/ujBwrSc8hzQ/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "0yO3aFO6xbk",
+              "title": "8. Şiirde Ölçü (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=0yO3aFO6xbk",
+              "thumbnail": "https://i.ytimg.com/vi/0yO3aFO6xbk/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "P28MKCBzGx8",
+              "title": "7. Nazım Birimi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
+              "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "EuNOV7yuyoM",
+              "title": "6. Tema (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=EuNOV7yuyoM",
+              "thumbnail": "https://i.ytimg.com/vi/EuNOV7yuyoM/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "OLn0z7Se9D8",
+              "title": "5. Açık İleti - Örtük İleti (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=OLn0z7Se9D8",
+              "thumbnail": "https://i.ytimg.com/vi/OLn0z7Se9D8/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "esiXgWYXcYY",
+              "title": "4. İmge (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=esiXgWYXcYY",
+              "thumbnail": "https://i.ytimg.com/vi/esiXgWYXcYY/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
             {
               "id": "kxXTe0hXV2o",
               "title": "1.Güzel Sanatlar ve Edebiyat (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
@@ -8801,132 +8887,95 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLwy7o4Q68j6SngIBRaSgLq3aHJUFXraRv",
-          "title": "2026 TAHMİN-GENEL TEKRAR",
-          "url": "https://www.youtube.com/playlist?list=PLwy7o4Q68j6SngIBRaSgLq3aHJUFXraRv",
-          "videoCount": 4,
-          "videos": [
-            {
-              "id": "IWQ7jUvmYzA",
-              "title": "2026 AYT TÜRK DİLİ VE EDEBİYATI SORULARI VE ÇÖZÜMLERİ - DEĞERLENDİRME (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=IWQ7jUvmYzA",
-              "thumbnail": "https://i.ytimg.com/vi/IWQ7jUvmYzA/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "FOmn-2fS-U4",
-              "title": "2026 TYT TÜRKÇE SORULARI - DEĞERLENDİRME - Kadir GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=FOmn-2fS-U4",
-              "thumbnail": "https://i.ytimg.com/vi/FOmn-2fS-U4/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "UkzyPfWIkcs",
-              "title": "2026- AYT EDEBİYAT - TAHMİN - GENEL TEKRAR (Kadir GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=UkzyPfWIkcs",
-              "thumbnail": "https://i.ytimg.com/vi/UkzyPfWIkcs/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "HlD_I76QkQc",
-              "title": "2026- TYT TÜRKÇE - TAHMİN- GENEL TEKRAR (KADİR GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=HlD_I76QkQc",
-              "thumbnail": "https://i.ytimg.com/vi/HlD_I76QkQc/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "gzJ_NGmYpyM",
+          "title": "3. Edebi Metinler Öğretici Metinler (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=gzJ_NGmYpyM",
+          "thumbnail": "https://i.ytimg.com/vi/gzJ_NGmYpyM/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "4C-7BhWJVh4",
+          "title": "2 . Sanat - Zanaat (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=4C-7BhWJVh4",
+          "thumbnail": "https://i.ytimg.com/vi/4C-7BhWJVh4/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "YJr47c_81PA",
+          "title": "9. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=YJr47c_81PA",
+          "thumbnail": "https://i.ytimg.com/vi/YJr47c_81PA/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "cg2gWnZugvc",
+          "title": "11. Ses Bilgisi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=cg2gWnZugvc",
+          "thumbnail": "https://i.ytimg.com/vi/cg2gWnZugvc/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "x29RpYlr2QY",
+          "title": "10. Söz Sanatları (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=x29RpYlr2QY",
+          "thumbnail": "https://i.ytimg.com/vi/x29RpYlr2QY/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "ujBwrSc8hzQ",
+          "title": "9. Kafiye - Redif (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=ujBwrSc8hzQ",
+          "thumbnail": "https://i.ytimg.com/vi/ujBwrSc8hzQ/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "0yO3aFO6xbk",
+          "title": "8. Şiirde Ölçü (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=0yO3aFO6xbk",
+          "thumbnail": "https://i.ytimg.com/vi/0yO3aFO6xbk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "P28MKCBzGx8",
+          "title": "7. Nazım Birimi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
+          "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "EuNOV7yuyoM",
+          "title": "6. Tema (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=EuNOV7yuyoM",
+          "thumbnail": "https://i.ytimg.com/vi/EuNOV7yuyoM/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "OLn0z7Se9D8",
+          "title": "5. Açık İleti - Örtük İleti (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=OLn0z7Se9D8",
+          "thumbnail": "https://i.ytimg.com/vi/OLn0z7Se9D8/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "esiXgWYXcYY",
+          "title": "4. İmge (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=esiXgWYXcYY",
+          "thumbnail": "https://i.ytimg.com/vi/esiXgWYXcYY/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
         {
           "id": "pnvekAoGApE",
           "title": "1. Orta Oyunu (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
           "url": "https://www.youtube.com/watch?v=pnvekAoGApE",
           "thumbnail": "https://i.ytimg.com/vi/pnvekAoGApE/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "r859PLlkI2A",
-          "title": "1.Sav - Sagu - Koşuk - Destan (İslamiyet Öncesi Türk Şiiri) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=r859PLlkI2A",
-          "thumbnail": "https://i.ytimg.com/vi/r859PLlkI2A/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "kxXTe0hXV2o",
-          "title": "1.Güzel Sanatlar ve Edebiyat (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=kxXTe0hXV2o",
-          "thumbnail": "https://i.ytimg.com/vi/kxXTe0hXV2o/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "Zc65IjkVCxg",
-          "title": "10. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ) - TÜRKİYE GENELİ",
-          "url": "https://www.youtube.com/watch?v=Zc65IjkVCxg",
-          "thumbnail": "https://i.ytimg.com/vi/Zc65IjkVCxg/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "1ZOln3nhcuU",
-          "title": "11. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=1ZOln3nhcuU",
-          "thumbnail": "https://i.ytimg.com/vi/1ZOln3nhcuU/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "kUiynIoV5Ow",
-          "title": "8. SINIF - TÜRKÇE- 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=kUiynIoV5Ow",
-          "thumbnail": "https://i.ytimg.com/vi/kUiynIoV5Ow/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "lYBH78z-Fi8",
-          "title": "7. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=lYBH78z-Fi8",
-          "thumbnail": "https://i.ytimg.com/vi/lYBH78z-Fi8/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "nKzxHl_wUAk",
-          "title": "6. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=nKzxHl_wUAk",
-          "thumbnail": "https://i.ytimg.com/vi/nKzxHl_wUAk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "_ZzpAtuH6nk",
-          "title": "9. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=_ZzpAtuH6nk",
-          "thumbnail": "https://i.ytimg.com/vi/_ZzpAtuH6nk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "ZSsorj9Rw9Y",
-          "title": "5. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=ZSsorj9Rw9Y",
-          "thumbnail": "https://i.ytimg.com/vi/ZSsorj9Rw9Y/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "hkoxYBf7oyc",
-          "title": "5. SINIF - TÜRKÇE- MAARİF 1. DÖNEM 1. YAZILI - OYSS (Kadir GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=hkoxYBf7oyc",
-          "thumbnail": "https://i.ytimg.com/vi/hkoxYBf7oyc/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "N6THHBvda6A",
-          "title": "10 ) 2024 KPSS ORTAÖĞRETİM SORU İKİZİ (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=N6THHBvda6A",
-          "thumbnail": "https://i.ytimg.com/vi/N6THHBvda6A/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-10-31T18:53:04.147Z"
+      "refreshedAt": "2026-11-01T09:46:23.065Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9755,7 +9804,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-10-31T18:53:07.027Z"
+      "refreshedAt": "2026-11-01T09:46:26.032Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -9768,7 +9817,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2306,
+      "videoCount": 2307,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10757,7 +10806,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-10-31T18:53:43.547Z"
+      "refreshedAt": "2026-11-01T09:47:03.427Z"
     }
   }
 }
