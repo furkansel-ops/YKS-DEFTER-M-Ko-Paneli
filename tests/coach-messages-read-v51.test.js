@@ -88,9 +88,9 @@ test("v51 Mesajlar sayfası kapalıyken gelen mesaj okundu sayılmaz",t=>{
 test("v51 koç hesabı silinince okundu kayıtları da silinir; stiller tema değişkenleriyle",()=>{
   assert.match(read("coach-auth-v34.js"),/try\{const reads=await byCoach\("coachingReads"\);for\(const item of reads\.docs\)await deleteDoc\(item\.ref\)\}\s*catch\(error\)\{if\(!String\(error\?\.code\|\|""\)\.includes\("permission-denied"\)\)throw error\}/);
   const html=read("index.html"),css=read("coach-messages-read-v51.css");
-  assert.match(html,/coach-auth-v34\.js\?v=1\.1\.3/);
+  assert.match(html,/coach-auth-v34\.js\?v=1\.1\.4/);
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-messages-read-v51\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-bulk50-read51-exams52"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-bulk50-read51-exams52-photos52"/);
   assert.match(css,/#messagesPage \.coach-v51-state~\.message-mini-badges i\.applied\{display:none\}/);
   assert.match(css,/#messagesPage \.message-bubble-row\.incoming \.message-bubble\{color:var\(--k-ink\)\}/,"gelen mesaj yazısı açık temada görünür");
   assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);

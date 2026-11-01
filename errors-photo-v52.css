@@ -1,0 +1,55 @@
+/* YKS Defterim Koç Paneli · Hata Defteri fotoğraf arşivi v52: durum süzgeci, tekrar eden konular,
+   önizleme ızgarası ve ayrıntı penceresi (yorum + durum). Renkler tema betiğiyle --kc-* olur. */
+.error-photo-card{margin-bottom:12px}
+.error-photo-card[hidden]{display:none}
+.error-photo-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.error-photo-chips button{min-height:34px;padding:0 12px;border:1px solid var(--kc-dfe7f0,#dfe7f0);border-radius:999px;background:var(--kc-ffffff,#ffffff);color:var(--kc-41556e,#41556e);font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.error-photo-chips button b{margin-left:3px;color:var(--kc-8b98aa,#8b98aa)}
+.error-photo-chips button[aria-pressed="true"]{border-color:var(--kc-253750,#253750);background:var(--kc-253750,#253750);color:var(--kc-ffffff,#ffffff)}
+.error-photo-chips button[aria-pressed="true"] b{color:var(--kc-c9d6ea,#c9d6ea)}
+.error-photo-label{display:block;margin:2px 0 6px;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--kc-8b98aa,#8b98aa)}
+.error-photo-repeat:empty{display:none}
+.error-photo-repeat{margin-bottom:12px}
+.error-photo-repeat-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;margin-bottom:6px;border:1px solid var(--kc-f3d4d8,#f3d4d8);border-radius:12px;background:var(--kc-fdf5f6,#fdf5f6)}
+.error-photo-repeat-row b{display:block;font-size:13px;color:var(--kc-253750,#253750)}
+.error-photo-repeat-row small{display:block;font-size:11.5px;color:var(--kc-71809a,#71809a)}
+.error-photo-repeat-row em{flex:none;padding:3px 9px;border-radius:999px;background:var(--kc-fbe7e9,#fbe7e9);color:var(--kc-b02a33,#b02a33);font-style:normal;font-size:11px;font-weight:850}
+.error-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.error-photo-item{display:flex;flex-direction:column;gap:2px;padding:0 0 10px;border:1px solid var(--kc-e3e9f1,#e3e9f1);border-radius:14px;background:var(--kc-ffffff,#ffffff);color:var(--kc-253750,#253750);font:inherit;text-align:left;overflow:hidden;cursor:pointer}
+.error-photo-item:hover{border-color:var(--kc-2873f0,#2873f0)}
+.error-photo-item b{padding:6px 10px 0;font-size:12.5px}
+.error-photo-item small{padding:0 10px;font-size:11.5px;color:var(--kc-71809a,#71809a)}
+.error-photo-thumb{position:relative;display:block;height:120px;background:var(--kc-eef3f9,#eef3f9)}
+.error-photo-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.error-photo-thumb em{position:absolute;top:7px;right:7px;padding:2px 8px;border-radius:999px;font-style:normal;font-size:11px;font-weight:850;background:var(--kc-ffffff,#ffffff);color:var(--kc-41556e,#41556e);box-shadow:0 2px 6px var(--kc-14243a-a140,rgba(20,36,58,.14))}
+.error-photo-thumb em.is-review{background:var(--kc-fdf0dc,#fdf0dc);color:var(--kc-9a5806,#9a5806)}
+.error-photo-thumb em.is-solved{background:var(--kc-e3f4ec,#e3f4ec);color:var(--kc-0d7556,#0d7556)}
+.error-photo-modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:18px;background:var(--kc-0a1424-a550,rgba(10,20,36,.55))}
+.error-photo-modal[hidden]{display:none}
+.error-photo-sheet{width:min(560px,100%);max-height:calc(100dvh - 36px);overflow:auto;padding:14px 16px 16px;border-radius:18px;background:var(--kc-ffffff,#ffffff);box-shadow:0 24px 60px var(--kc-0a1424-a300,rgba(10,20,36,.3))}
+.error-photo-sheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.error-photo-sheet-head b{font-size:15px;color:var(--kc-253750,#253750)}
+.error-photo-sheet-head button{width:36px;height:36px;border:0;border-radius:10px;background:var(--kc-eef3f9,#eef3f9);color:var(--kc-41556e,#41556e);font-size:15px;cursor:pointer}
+#errorPhotoImage{display:block;width:100%;max-height:52vh;object-fit:contain;border-radius:12px;background:var(--kc-eef3f9,#eef3f9)}
+#errorPhotoImage.is-loading{opacity:.6}
+.error-photo-kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px}
+.error-photo-kv span{padding:7px 10px;border:1px solid var(--kc-e3e9f1,#e3e9f1);border-radius:10px;font-size:11.5px;color:var(--kc-71809a,#71809a)}
+.error-photo-kv b{display:block;font-size:12.5px;color:var(--kc-253750,#253750)}
+.error-photo-note{margin-top:8px;padding:9px 11px;border-radius:11px;background:var(--kc-f6f8fb,#f6f8fb);color:var(--kc-41556e,#41556e);font-size:13px}
+.error-photo-note[hidden]{display:none}
+.error-photo-note small{display:block;margin-bottom:2px;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:var(--kc-8b98aa,#8b98aa)}
+.error-photo-comment{display:block;margin-top:10px;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:var(--kc-8b98aa,#8b98aa)}
+.error-photo-comment textarea{display:block;width:100%;margin-top:4px;padding:9px 10px;border:1px solid var(--kc-dfe7f0,#dfe7f0);border-radius:11px;background:var(--kc-ffffff,#ffffff);color:var(--kc-253750,#253750);font:inherit;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;resize:vertical}
+.error-photo-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px}
+.error-photo-actions button{min-height:40px;border:1px solid var(--kc-dfe7f0,#dfe7f0);border-radius:11px;background:var(--kc-ffffff,#ffffff);color:var(--kc-41556e,#41556e);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.error-photo-actions [data-photo-status="review"][aria-pressed="true"]{border-color:var(--kc-e9b75f,#e9b75f);background:var(--kc-fdf0dc,#fdf0dc);color:var(--kc-9a5806,#9a5806)}
+.error-photo-actions [data-photo-status="solved"][aria-pressed="true"]{border-color:var(--kc-93d2b5,#93d2b5);background:var(--kc-e3f4ec,#e3f4ec);color:var(--kc-0d7556,#0d7556)}
+.error-photo-actions .is-primary{border-color:var(--kc-2873f0,#2873f0);background:var(--kc-2873f0,#2873f0);color:var(--kc-ffffff,#ffffff)}
+.error-photo-status{min-height:18px;margin:8px 0 0;font-size:12px;color:var(--kc-71809a,#71809a)}
+@media(max-width:720px){
+  .error-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .error-photo-thumb{height:100px}
+  .error-photo-modal{align-items:flex-end;padding:0}
+  .error-photo-sheet{width:100%;max-height:92dvh;border-radius:18px 18px 0 0}
+  .error-photo-actions{grid-template-columns:1fr 1fr}.error-photo-actions .is-primary{grid-column:1/-1}
+}

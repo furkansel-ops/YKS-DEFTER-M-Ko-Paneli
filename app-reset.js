@@ -213,6 +213,7 @@ function startCoachShareRealtime(){
     },error=>console.error("Öğrenci canlı paylaşımı",row.studentUid,error));
     coachShareStops.push(stop);
   });
+  watchCoachErrorPhotos();
 }
 
 const escHtml=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
@@ -1828,6 +1829,85 @@ document.querySelectorAll("[data-topic-quick]").forEach(btn=>btn.addEventListene
 $("topicRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setTopicState("topicLoading");void loadCoachReports(user.uid)}});
 
 
+/* v52 · Hata Defteri fotoğraf arşivi: öğrencinin koçla paylaştığı çözülmemiş yanlışların fotoğrafları
+   (bilgi + küçük önizleme) tek dinleyiciyle gelir; büyük fotoğraf yalnız açınca okunur.
+   Koç yalnız yorum ve durum (tekrar gerekli / çözüldü) yazar; öğrenci bunu kendi Hata Defteri'nde görür. */
+let coachErrorPhotos=[],errorPhotoFilter="open",errorPhotoOpenId="",errorPhotoStatusDraft="";
+const ERROR_PHOTO_KIND={bilmiyordum:"bilgi eksiği",bilgi:"bilgi eksiği",dikkat:"dikkat",sure:"süre",islem:"işlem hatası"};
+const ERROR_PHOTO_LABEL={open:"açık",review:"tekrar gerekli",solved:"çözüldü"};
+function errorPhotoState(item){return item?.coachStatus==="review"?"review":item?.coachStatus==="solved"?"solved":"open"}
+function errorPhotoSrc(value){const src=String(value||"");return /^data:image\/(jpeg|png|webp);base64,[a-z0-9+/=]+$/i.test(src)?src:""}
+function errorPhotoRows(){
+  const student=$("errorStudentSelect")?.value||"all",subject=$("errorSubjectSelect")?.value||"all",linked=new Set(coachReportRows.map(row=>row.studentUid));
+  return coachErrorPhotos.filter(item=>linked.has(item.studentUid)&&(student==="all"||item.studentUid===student)&&(subject==="all"||String(item.subject||"Ders")===subject))
+    .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))||String(b.photoKey||"").localeCompare(String(a.photoKey||"")));
+}
+function errorPhotoStudent(uid){const row=coachReportRows.find(item=>item.studentUid===uid);return row?studentName(row):"Öğrenci"}
+/* Aynı öğrencide aynı konuya birden çok denemeden (ya da yanlış kaydından) fotoğraf geldiyse konu eksiği sayılır. */
+function errorPhotoRepeats(rows){
+  const map=new Map();
+  rows.forEach(item=>{const key=item.studentUid+"|"+item.subject+"|"+item.topic,entry=map.get(key)||{studentUid:item.studentUid,subject:String(item.subject||"Ders"),topic:String(item.topic||"Konu"),sources:new Set(),photos:0};entry.sources.add(String(item.exam||"w"+item.wrongId));entry.photos++;map.set(key,entry)});
+  return[...map.values()].filter(entry=>entry.sources.size>=2).sort((a,b)=>b.sources.size-a.sources.size||b.photos-a.photos).slice(0,5);
+}
+function renderErrorPhotos(){
+  const box=$("errorPhotoSection");if(!box)return;
+  const rows=errorPhotoRows();box.hidden=!rows.length;if(!rows.length)return;
+  const counts={open:0,review:0,solved:0};rows.forEach(item=>counts[errorPhotoState(item)]++);
+  const chip=(key,label,count)=>'<button type="button" data-photo-filter="'+key+'" aria-pressed="'+(errorPhotoFilter===key)+'">'+escHtml(label)+(count===undefined?"":" <b>"+count+"</b>")+'</button>';
+  $("errorPhotoChips").innerHTML=chip("open","Açık",counts.open)+chip("review","Tekrar gerekli",counts.review)+chip("solved","Çözüldü",counts.solved)+chip("all","Tümü");
+  const repeats=errorPhotoRepeats(rows),many=($("errorStudentSelect")?.value||"all")==="all";
+  $("errorPhotoRepeat").innerHTML=repeats.length?'<b class="error-photo-label">Tekrar eden konular</b>'+repeats.map(entry=>'<div class="error-photo-repeat-row"><span><b>'+escHtml(entry.subject+" · "+entry.topic)+'</b><small>'+escHtml((many?errorPhotoStudent(entry.studentUid)+" · ":"")+entry.sources.size+" denemede · "+entry.photos+" fotoğraf")+'</small></span><em>konu eksiği</em></div>').join(""):"";
+  const shown=rows.filter(item=>errorPhotoFilter==="all"||errorPhotoState(item)===errorPhotoFilter);
+  $("errorPhotoGrid").innerHTML=shown.length?shown.map(item=>{
+    const state=errorPhotoState(item),src=errorPhotoSrc(item.thumb),meta=[item.examName||"Hata Defteri",item.question?"S."+item.question:"",examDateLabel(item.date)].filter(Boolean).join(" · ");
+    return'<button type="button" class="error-photo-item" data-photo-id="'+escHtml(item.id)+'"><span class="error-photo-thumb">'+(src?'<img src="'+src+'" alt="" loading="lazy">':"")+'<em class="is-'+state+'">'+ERROR_PHOTO_LABEL[state]+'</em></span><b>'+escHtml(String(item.subject||"Ders")+" · "+String(item.topic||"Konu"))+'</b><small>'+escHtml(meta)+'</small>'+(many?'<small>'+escHtml(errorPhotoStudent(item.studentUid))+'</small>':"")+'</button>';
+  }).join(""):'<div class="exam-mini-empty">Bu süzgeçte fotoğraf yok.</div>';
+}
+function errorPhotoMetaHtml(item){
+  const cell=(label,value)=>value?'<span>'+escHtml(label)+'<b>'+escHtml(value)+'</b></span>':"";
+  return cell("Öğrenci",errorPhotoStudent(item.studentUid))+cell("Deneme",item.examName||"Hata Defteri")+cell("Soru",item.question||"")+cell("Ders · konu",String(item.subject||"Ders")+" · "+String(item.topic||"Konu"))+cell("Tarih",examDateLabel(item.date))+cell("Hata türü",ERROR_PHOTO_KIND[String(item.kind||"")]||String(item.kind||""));
+}
+function openErrorPhoto(id){
+  const item=coachErrorPhotos.find(x=>x.id===id),modal=$("errorPhotoModal");if(!item||!modal)return;
+  errorPhotoOpenId=id;errorPhotoStatusDraft=String(item.coachStatus||"");
+  $("errorPhotoTitle").textContent=String(item.subject||"Ders")+" · "+String(item.topic||"Konu");
+  const img=$("errorPhotoImage");img.src=errorPhotoSrc(item.thumb);img.classList.add("is-loading");
+  $("errorPhotoMeta").innerHTML=errorPhotoMetaHtml(item);
+  $("errorPhotoNote").innerHTML=item.note?'<small>Öğrencinin notu</small>'+escHtml(item.note):"";$("errorPhotoNote").hidden=!item.note;
+  $("errorPhotoComment").value=String(item.coachComment||"");$("errorPhotoStatus").textContent="";
+  syncErrorPhotoButtons();modal.hidden=false;
+  getDoc(doc(db,"coachingErrorPhotoImages",id)).then(snap=>{
+    if(errorPhotoOpenId!==id)return;const src=snap.exists()?errorPhotoSrc(snap.data()?.image):"";if(src)img.src=src;img.classList.remove("is-loading");
+  }).catch(error=>{console.warn("Hata Defteri büyük fotoğraf",error);img.classList.remove("is-loading")});
+}
+function syncErrorPhotoButtons(){document.querySelectorAll("#errorPhotoModal [data-photo-status]").forEach(btn=>btn.setAttribute("aria-pressed",String(btn.dataset.photoStatus===errorPhotoStatusDraft)))}
+function closeErrorPhoto(){const modal=$("errorPhotoModal");if(modal)modal.hidden=true;errorPhotoOpenId=""}
+async function saveErrorPhoto(status){
+  const id=errorPhotoOpenId;if(!id)return;
+  if(status!==undefined)errorPhotoStatusDraft=errorPhotoStatusDraft===status?"":status;syncErrorPhotoButtons();
+  const comment=String($("errorPhotoComment")?.value||"").trim().slice(0,1000),out=$("errorPhotoStatus");if(out)out.textContent="Kaydediliyor…";
+  try{
+    await updateDoc(doc(db,"coachingErrorPhotos",id),{coachComment:comment,coachStatus:errorPhotoStatusDraft,coachAt:serverTimestamp()});
+    const item=coachErrorPhotos.find(x=>x.id===id);if(item){item.coachComment=comment;item.coachStatus=errorPhotoStatusDraft;}
+    if(out)out.textContent="Kaydedildi ✓ Öğrenci kendi Hata Defteri'nde görür.";renderErrorPhotos();
+  }catch(error){console.error("Hata Defteri yorumu",error);if(out)out.textContent="Kaydedilemedi. Bağlantını kontrol edip tekrar dene."}
+}
+function watchCoachErrorPhotos(){
+  const coachUid=auth.currentUser?.uid;if(!coachUid)return;
+  coachShareStops.push(onSnapshot(query(collection(db,"coachingErrorPhotos"),where("coachUid","==",coachUid)),snap=>{
+    coachErrorPhotos=snap.docs.map(item=>({id:item.id,...item.data()}));
+    try{renderErrorPhotos()}catch(error){console.error("Hata Defteri fotoğrafları",error)}
+  },error=>console.warn("Hata Defteri fotoğrafları",error)));
+}
+$("errorPhotoChips")?.addEventListener("click",event=>{const btn=event.target.closest("[data-photo-filter]");if(!btn)return;errorPhotoFilter=btn.dataset.photoFilter||"open";renderErrorPhotos()});
+$("errorPhotoGrid")?.addEventListener("click",event=>{const btn=event.target.closest("[data-photo-id]");if(btn)openErrorPhoto(btn.dataset.photoId)});
+$("errorPhotoModal")?.addEventListener("click",event=>{
+  if(event.target===event.currentTarget||event.target.closest("[data-photo-close]")){closeErrorPhoto();return}
+  const status=event.target.closest("[data-photo-status]");if(status){void saveErrorPhoto(status.dataset.photoStatus);return}
+  if(event.target.closest("[data-photo-save]"))void saveErrorPhoto();
+});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&errorPhotoOpenId)closeErrorPhoto()});
+
 function errorItems(row){
   const items=row?.share?.errorJournal;
   return Array.isArray(items)?items:[];
@@ -1878,6 +1958,7 @@ function errorKpi(label,value,note,tone=""){
   return '<article class="error-kpi '+tone+'"><span>'+escHtml(label)+'</span><strong>'+escHtml(value)+'</strong><small>'+escHtml(note)+'</small></article>';
 }
 function renderErrorAnalysis(scope){
+  try{renderErrorPhotos()}catch(error){console.error("Hata Defteri fotoğrafları",error)}
   const all=coachReportRows.flatMap(row=>errorItems(row));
   if(!coachReportRows.length||!all.length){setErrorState("errorEmpty");return}
   if(scope==="all"){renderErrorOverview();return}

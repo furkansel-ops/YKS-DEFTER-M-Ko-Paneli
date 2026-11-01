@@ -188,6 +188,9 @@ async function deleteCoachData(uid){
   // v51: okundu kayıtları da silinir; kural yayında değilse izin hatası silmeyi durdurmaz.
   try{const reads=await byCoach("coachingReads");for(const item of reads.docs)await deleteDoc(item.ref)}
   catch(error){if(!String(error?.code||"").includes("permission-denied"))throw error}
+  // v52: öğrencilerin bu koçla paylaştığı Hata Defteri fotoğrafları da silinir.
+  try{for(const name of ["coachingErrorPhotos","coachingErrorPhotoImages"]){const photos=await byCoach(name);for(const item of photos.docs)await deleteDoc(item.ref)}}
+  catch(error){if(!String(error?.code||"").includes("permission-denied"))throw error}
   step("Öğrenci bağlantıları kapatılıyor…");
   const links=await byCoach(COLLECTIONS.links);
   for(const item of links.docs)if(item.data()?.active===true)await updateDoc(item.ref,{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});

@@ -54,8 +54,9 @@ test("coachingShares snapshot refreshes exams, topics and wrong log immediately 
   choose(h.w.document,"errorStudentSelect","student-a");
   h.w.syncV31.setRows([entry]);
   h.w.syncV31.start();
-  assert.equal(h.listeners.length,1);
+  assert.equal(h.listeners.length,2,"öğrenci paylaşımı + v52 Hata Defteri fotoğrafları");
   assert.deepEqual([...h.listeners[0].ref.parts],["coachingShares","student-a"]);
+  assert.equal(h.listeners[1].ref[0].name,"coachingErrorPhotos");assert.deepEqual([...h.listeners[1].ref[1]],["coachUid","==","coach-test"]);
   const changed={profile:{name:"Öğrenci"},exams:[{type:"TYT",date:"2026-10-13"}],
     topics:{items:[{subject:"Matematik",topic:"Problemler",st:1}]},
     errorJournal:[{subject:"Matematik",topic:"Problemler",n:3}],

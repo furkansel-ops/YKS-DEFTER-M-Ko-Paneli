@@ -125,7 +125,7 @@ test("v52 deneme karşılaştırma: varsayılan son iki, en fazla üç; ders der
 test("v52 stil dosyası bağlı ve tema renkleri sarılı",()=>{
   const html=read("index.html"),css=read("exams-v52.css");
   assert.match(html,/<link rel="stylesheet" href="\.\/exams-v52\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-exams52"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-exams52(-[a-z0-9]+)*"/);
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i,"ham renk kalmadı");
 });
 
