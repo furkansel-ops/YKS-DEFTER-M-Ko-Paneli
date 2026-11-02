@@ -72,7 +72,7 @@ test("v51 kendi mesajında ✓ ya da ✓✓; son mesajın altında Okundu ya da 
   const bubbles=[...doc.querySelectorAll("#messageThread .message-bubble p")].map(node=>node.textContent);
   assert.deepEqual(bubbles,["m4","m5"],"sunucu saati gelmemiş mesaj sonda");
   assert.equal(doc.querySelector("#messageThread .coach-v51-status").textContent,"Gönderildi");
-  assert.equal([...doc.querySelectorAll("#messageThread .message-bubble-meta span")].at(-1).textContent,"—");
+  assert.equal([...doc.querySelectorAll("#messageThread .message-bubble-meta span")].at(-1).textContent,"Gönderiliyor…");
 });
 
 test("v51 Mesajlar sayfası kapalıyken gelen mesaj okundu sayılmaz",t=>{
@@ -90,7 +90,7 @@ test("v51 koç hesabı silinince okundu kayıtları da silinir; stiller tema de�
   const html=read("index.html"),css=read("coach-messages-read-v51.css");
   assert.match(html,/coach-auth-v34\.js\?v=1\.1\.4/);
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-messages-read-v51\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-bulk50-read51-exams52-photos52-reports53-students54-topics55"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-bulk50-read51-exams52-photos52-reports53-students54-topics55-messages56"/);
   assert.match(css,/#messagesPage \.coach-v51-state~\.message-mini-badges i\.applied\{display:none\}/);
   assert.match(css,/#messagesPage \.message-bubble-row\.incoming \.message-bubble\{color:var\(--k-ink\)\}/,"gelen mesaj yazısı açık temada görünür");
   assert.deepEqual(css.match(/[:,(\s]#[0-9a-fA-F]{3,8}\b/g)||[],[]);

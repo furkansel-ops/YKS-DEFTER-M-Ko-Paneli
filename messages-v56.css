@@ -1,0 +1,47 @@
+/* YKS Defterim Koç Paneli · Mesajlar v56: gerçek bağlantı durumu, cevap bekleyen satırı, gün ayırıcıları,
+   gönderiliyor / gönderilemedi balonları ve telefonda liste → tam ekran sohbet. Renkler tema betiğiyle --kc-* olur. */
+#messagesPage [data-v56-tone="on"]{color:var(--kc-0f7a59,#0f7a59)}
+#messagesPage [data-v56-tone="off"]{color:var(--kc-b42d22,#b42d22)}
+#messagesPage [data-v56-tone="wait"]{color:var(--kc-94570a,#94570a)}
+#messagesPage .message-system-pill[data-v56-tone]{display:inline-flex;align-items:center;gap:6px}
+#messagesPage .message-system-pill[data-v56-tone]::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+#messagesPage .message-online-dot[data-v56-tone="on"]{background:var(--kc-13906b,#13906b)}
+#messagesPage .message-online-dot[data-v56-tone="off"]{background:var(--kc-d6453b,#d6453b)}
+#messagesPage .message-online-dot[data-v56-tone="wait"]{background:var(--kc-d99a1c,#d99a1c)}
+#messagesPage .coach-v56-wait{display:inline-block;margin-top:3px;padding:1px 7px;border-radius:99px;background:var(--kc-fff4de,#fff4de);color:var(--kc-94570a,#94570a);font-size:11px;font-weight:850;font-style:normal}
+#messagesPage [data-message-filter] b:empty{display:none}
+#messagesPage [data-message-filter] b{margin-left:3px}
+#messagesPage .coach-v56-notify{width:calc(100% - 20px);margin:8px 10px 10px;min-height:38px;padding:0 12px;border:1px dashed var(--kc-c9d5e8,#c9d5e8);border-radius:12px;background:var(--kc-f9fbfd,#f9fbfd);color:var(--kc-2453b8,#2453b8);font:inherit;font-size:12.5px;font-weight:800;text-align:left;cursor:pointer}
+#messagesPage .coach-v56-notify[aria-pressed="true"]{border-style:solid;background:var(--kc-e9f0fe,#e9f0fe)}
+#messagesPage .coach-v56-notify:disabled{color:var(--kc-6b7a90,#6b7a90);cursor:default}
+#messagesPage .coach-v56-day{display:flex;justify-content:center;margin:6px 0 2px}
+#messagesPage .coach-v56-day span{padding:3px 11px;border-radius:99px;background:var(--kc-e6ebf3,#e6ebf3);color:var(--kc-5f6b80,#5f6b80);font-size:11px;font-weight:850}
+#messagesPage .coach-v56-older{align-self:center;min-height:32px;padding:0 14px;border:1px solid var(--kc-d7e1ed,#d7e1ed);border-radius:99px;background:var(--kc-ffffff,#ffffff);color:var(--kc-2453b8,#2453b8);font:inherit;font-size:12px;font-weight:850;cursor:pointer}
+#messagesPage .coach-v56-pending .message-bubble{opacity:.72}
+#messagesPage .coach-v56-failed{flex-direction:column;align-items:flex-end;gap:4px}
+#messagesPage .coach-v56-failed .message-bubble{background:var(--kc-fdecea,#fdecea);border-color:var(--kc-f3c6c1,#f3c6c1);color:var(--kc-b42d22,#b42d22)}
+#messagesPage .coach-v56-failed .message-bubble-meta span{color:var(--kc-b42d22,#b42d22)}
+#messagesPage .coach-v56-retry{min-height:30px;padding:0 12px;border:1px solid var(--kc-f3c6c1,#f3c6c1);border-radius:99px;background:var(--kc-ffffff,#ffffff);color:var(--kc-b42d22,#b42d22);font:inherit;font-size:12px;font-weight:850;cursor:pointer}
+#messagesPage .coach-v56-banner{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-radius:12px;background:var(--kc-fdecea,#fdecea);color:var(--kc-8f2a20,#8f2a20);font-size:12.5px;font-weight:700}
+#messagesPage .coach-v56-banner button{min-height:30px;padding:0 12px;border:0;border-radius:9px;background:var(--kc-b42d22,#b42d22);color:var(--kc-ffffff,#ffffff);font:inherit;font-size:12px;font-weight:850;cursor:pointer}
+#messagesPage .coach-v56-notice{margin:6px 0 0;padding:8px 10px;border-radius:10px;background:var(--kc-fff4de,#fff4de);color:var(--kc-6b4a00,#6b4a00);font-size:12.5px}
+#messagesPage .coach-v56-notice[hidden]{display:none}
+#messagesPage .coach-v56-draft{color:var(--kc-0f7a59,#0f7a59);font-weight:750}
+#messagesPage .coach-v56-draft:empty{display:none}
+#messagesPage #messageInput:disabled{cursor:not-allowed;opacity:.6}
+#messagesPage .coach-v56-back{display:none}
+#messagesPage .message-quickbar>div{display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:760px){
+  #messagesPage[data-v56-view="list"] .message-chat{display:none}
+  #messagesPage[data-v56-view="chat"] :is(.messages-head,.message-students){display:none}
+  #messagesPage[data-v56-view="chat"] .messages-shell{border:0;background:transparent}
+  #messagesPage[data-v56-view="chat"] .message-chat{min-height:0;height:calc(100dvh - var(--coach-v56-top,64px) - 12px);border-radius:16px;overflow:hidden}
+  #messagesPage[data-v56-view="chat"] #messageConversation{display:flex;flex-direction:column;height:100%;min-height:0}
+  #messagesPage[data-v56-view="chat"] #messageThread{flex:1;min-height:0;padding:12px}
+  #messagesPage[data-v56-view="chat"] .message-compose>p:last-child{display:none}
+  #messagesPage .coach-v56-back{display:grid;place-items:center;flex:none;width:36px;height:36px;margin-right:2px;border:0;border-radius:10px;background:var(--kc-eef3fb,#eef3fb);color:var(--kc-2453b8,#2453b8);font:inherit;font-size:22px;font-weight:900;cursor:pointer}
+  #messagesPage[data-v56-view="list"] .message-students{max-height:none}
+  #messagesPage .message-quickbar{padding:8px 12px}
+  #messagesPage .message-quickbar>div{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  #messagesPage .message-quickbar>div button{flex:none}
+}

@@ -369,6 +369,7 @@ function coachPendingReplyTotal(){
 }
 function renderCoachMessageBadges(){
   const total=coachPendingReplyTotal(),label=total?String(total>99?"99+":total):"";
+  document.title=(total?"("+label+") ":"")+document.title.replace(/^\(\d+\+?\)\s*/,"");
   for(const id of ["coachNavMessageBadge","dashboardMessageBadge"]){
     const node=$(id);if(!node)continue;
     node.textContent=label;node.hidden=!total;
@@ -457,11 +458,11 @@ function renderCoachTodo(){
 }
 function openCoachMessageThread(studentUid,draft){
   showCoachPage("messages");
-  selectedMessageStudent=studentUid;
+  coachV56SaveDraft();selectedMessageStudent=studentUid;coachV56SetView("chat");
   renderMessageStudents();renderMessageConversation(studentUid);
   const input=$("messageInput");if(!input)return;
-  input.value=draft;
-  if($("messageCharCount"))$("messageCharCount").textContent=String(draft.length);
+  input.value=draft||coachV56DraftFor(studentUid);
+  if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);
   input.focus({preventScroll:true});
 }
 function openCoachProgramWeek(studentUid,weekStart,bulk){
@@ -2293,6 +2294,8 @@ let coachMessageStop=null;
 let coachMessageUid="";
 let selectedMessageStudent="";
 let messageStudentFilter="all";
+let coachV56Live="connecting",coachV56DraftKey="",coachV56Primed=false,coachV56KeepTop=false;
+const coachV56Drafts=new Map(),coachV56Fails=new Map(),coachV56Limit=new Map(),coachV56Seen=new Set();
 // v51 · Okundu: coachingReads/{koçUid_öğrenciUid} koçun ve öğrencinin son okuma zamanını tutar (mesajlar değiştirilemez).
 // Koç, Mesajlar sayfasında öğrencinin konuşması ekrandayken okumuş sayılır; kendi alanını sunucu zamanıyla yazar.
 let coachReads=new Map(),coachReadsStop=null,coachReadsUid="",coachReadsPending=new Map();
@@ -2329,6 +2332,7 @@ function messageTimestamp(value){
   try{const d=value?.toDate?.()||new Date(value);if(!d||Number.isNaN(d.getTime()))return"—";return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d)}catch{return"—"}
 }
 function applyCoachMessageSnapshot(snap){
+  coachV56Notify(snap);coachV56Live="live";
   // v51: sunucu saati henüz gelmemiş (yeni gönderilen) mesaj sona dizilir.
   coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(coachReadMillis(a?.createdAt)||Infinity)-(coachReadMillis(b?.createdAt)||Infinity));
   renderMessageStudents();
@@ -2339,17 +2343,18 @@ async function loadCoachMessages(coachUid){
   if(!coachUid)return;
   if(coachMessageStop&&coachMessageUid===coachUid)return;
   if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null}
-  coachMessageUid=coachUid;
+  coachMessageUid=coachUid;if(coachV56Live!=="live")coachV56Live="connecting";
   startCoachReads(coachUid);
   const q=query(collection(db,"coachingMessages"),where("coachUid","==",coachUid));
   try{
     coachMessageStop=onSnapshot(q,applyCoachMessageSnapshot,error=>{
       console.error("Canlı mesajlar",error);
       coachMessageStop=null;coachMessageUid="";
+      coachV56Live="error";coachV56RenderStatus();if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent);
     });
   }catch(error){
     console.error("Mesaj dinleyicisi",error);
-    try{applyCoachMessageSnapshot(await getDocs(q))}catch(fetchError){console.error("Mesajlar",fetchError);coachMessageActions=[];renderMessageStudents()}
+    try{applyCoachMessageSnapshot(await getDocs(q))}catch(fetchError){console.error("Mesajlar",fetchError);coachMessageActions=[];coachV56Live="error";renderMessageStudents();coachV56RenderStatus()}
   }
 }
 function messageRows(){return coachReportRows.filter(row=>row?.link?.active===true)}
@@ -2357,7 +2362,7 @@ function messageActionsFor(studentUid){return coachMessageActions.filter(x=>x.st
 function rowMatchesMessageFilter(row){
   if(messageStudentFilter==="all")return true;
   const actions=messageActionsFor(row.studentUid);
-  if(messageStudentFilter==="student")return actions.some(x=>x.senderRole==="student");
+  if(messageStudentFilter==="student")return coachPendingReplies(row.studentUid).count>0;
   if(messageStudentFilter==="coach")return actions.some(x=>x.senderRole==="coach");
   return true;
 }
@@ -2369,44 +2374,50 @@ function renderMessageStudents(){
     list.innerHTML='<div class="message-side-empty"><b>Henüz bağlı öğrenci yok</b><span>Öğrenciler bağlandığında konuşmalar burada açılacak.</span></div>';
     $("messageNoStudent")?.classList.remove("hidden");$("messageConversation")?.classList.add("hidden");$("messageInfoEmpty")?.classList.remove("hidden");$("messageInfoPanel")?.classList.add("hidden");return;
   }
-  list.innerHTML=rows.map(row=>{
+  if($("messageWaitingCount"))$("messageWaitingCount").textContent=String(rows.filter(row=>coachPendingReplies(row.studentUid).count>0).length||"");
+  list.innerHTML=coachV56SortRows(rows).map(row=>{
     const name=studentName(row),actions=messageActionsFor(row.studentUid),last=actions.at(-1),incoming=actions.filter(x=>x.senderRole==="student").length,pending=coachPendingReplies(row.studentUid).count;
     const hidden=rowMatchesMessageFilter(row)?"":" hidden";
-    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?.text||"Henüz mesaj yok")+'</small></span><span class="message-student-meta"><small>'+escHtml(last?messageTimestamp(last.createdAt):"")+'</small>'+(last?.senderRole==="coach"?(coachStudentReadOwn(row.studentUid,last)?'<em class="coach-v51-state is-read">Okundu</em>':'<em class="coach-v51-state">Gönderildi</em>'):'')+'<span class="message-mini-badges">'+(pending?'<i class="coach-v38-pending" title="Cevap bekleyen mesaj">'+pending+'</i>':incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
+    return '<button type="button" class="message-student-item '+(selectedMessageStudent===row.studentUid?"active":"")+hidden+'" data-message-student="'+escHtml(row.studentUid)+'" data-message-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="message-avatar">'+escHtml(reportInitial(name))+'</span><span class="message-student-copy"><b>'+escHtml(name)+'</b><small>'+escHtml(last?(last.senderRole==="coach"?"Sen: ":"")+String(last.text||""):"Henüz mesaj yok")+'</small>'+(pending?'<span class="coach-v56-wait">cevap bekliyor · '+escHtml(coachV56Ago(coachPendingReplies(row.studentUid).last?.createdAt))+'</span>':'')+'</span><span class="message-student-meta"><small>'+escHtml(last?(last.createdAt?messageTimestamp(last.createdAt):"Gönderiliyor…"):"")+'</small>'+(last?.senderRole==="coach"?(coachStudentReadOwn(row.studentUid,last)?'<em class="coach-v51-state is-read">Okundu</em>':'<em class="coach-v51-state">Gönderildi</em>'):'')+'<span class="message-mini-badges">'+(pending?'<i class="coach-v38-pending" title="Cevap bekleyen mesaj">'+pending+'</i>':incoming?'<i class="applied">'+incoming+'</i>':'')+'</span></span></button>';
   }).join("");
-  document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{selectedMessageStudent=btn.dataset.messageStudent;const input=$("messageInput");if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";renderMessageStudents();renderMessageConversation(selectedMessageStudent)}));
+  document.querySelectorAll("[data-message-student]").forEach(btn=>btn.addEventListener("click",()=>{coachV56SaveDraft();selectedMessageStudent=btn.dataset.messageStudent;coachV56SetView("chat");renderMessageStudents();renderMessageConversation(selectedMessageStudent);coachV56LoadDraft()}));
   if(!selectedMessageStudent&&rows.length){selectedMessageStudent=rows[0].studentUid;renderMessageStudents();renderMessageConversation(selectedMessageStudent)}
 }
 function renderMessageConversation(studentUid){
   const row=coachReportRows.find(x=>x.studentUid===studentUid);if(!row)return;
   const name=studentName(row),profile=row.share?.profile||{},progress=row.share?.progress||{},actions=messageActionsFor(studentUid);
   $("messageNoStudent")?.classList.add("hidden");$("messageConversation")?.classList.remove("hidden");$("messageInfoEmpty")?.classList.add("hidden");$("messageInfoPanel")?.classList.remove("hidden");
-  $("messageChatAvatar").textContent=reportInitial(name);$("messageChatName").textContent=name;$("messageChatMeta").textContent=[profile.track,profile.targetDepartment].filter(Boolean).join(" · ")||"Bağlı öğrenci";
+  $("messageChatAvatar").textContent=reportInitial(name);$("messageChatName").textContent=name;$("messageChatMeta").textContent=[profile.track,studentSyncLabel(row).text].filter(Boolean).join(" · ");
   $("messageInfoAvatar").textContent=reportInitial(name);$("messageInfoName").textContent=name;$("messageInfoTarget").textContent=[profile.track,profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ")||"YKS öğrencisi";
   $("messageStudyMinutes").textContent=reportMinutes(progress.minutes7);$("messageStudyQuestions").textContent=String(Math.round(reportNum(progress.questions7)));$("messageOverdueTopics").textContent=String(Math.round(reportNum(progress.overdueTopics)));
   $("messageSentCount").textContent=String(actions.filter(x=>x.senderRole==="coach").length);$("messageAppliedCount").textContent=String(actions.filter(x=>x.senderRole==="student").length);$("messagePendingCount").textContent=String(actions.length);$("messageFailedCount").textContent="0";
   const thread=$("messageThread");
   if(thread){
     const readAt=coachReadMillis(coachReads.get(studentUid)?.studentReadAt),lastOwn=actions.map(item=>item.senderRole).lastIndexOf("coach");
-    thread.innerHTML=actions.length?actions.map((message,index)=>{
+    const start=coachV56Start(studentUid,actions);
+    thread.innerHTML=actions.length?coachV56Older(studentUid,actions)+actions.map((message,index)=>{
+      if(index<start)return"";
       const own=message.senderRole==="coach",read=own&&coachStudentReadOwn(studentUid,message);
-      return '<div class="message-bubble-row '+(own?"outgoing":"incoming")+'"><div class="message-bubble"><p>'+escHtml(message.text||"")+'</p><div class="message-bubble-meta"><span>'+escHtml(messageTimestamp(message.createdAt))+'</span><strong>'+(own?"Sen":"Öğrenci")+'</strong>'
+      return coachV56Day(actions,index,start)+'<div class="message-bubble-row '+(own?"outgoing":"incoming")+(message.createdAt?'':' coach-v56-pending')+'"><div class="message-bubble"><p>'+escHtml(message.text||"")+'</p><div class="message-bubble-meta"><span>'+escHtml(message.createdAt?coachV56Clock(message.createdAt):coachV56PendingText())+'</span><strong>'+(own?"Sen":"Öğrenci")+'</strong>'
         +(own?'<i class="coach-v51-tick'+(read?' is-read':'')+'" aria-label="'+(read?"Okundu":"Gönderildi")+'">'+(read?"✓✓":"✓")+'</i>':'')+'</div></div></div>'
         +(index===lastOwn?'<p class="coach-v51-status'+(read?' is-read':'')+'">'+(read?"Okundu · "+escHtml(coachReadClock(readAt)):"Gönderildi")+'</p>':'');
-    }).join(""):'<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>İlk mesajı aşağıdan gönderebilirsin.</p></div>';
-    requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight});
+    }).join("")+coachV56FailedHtml(studentUid):coachV56FailedHtml(studentUid)||'<div class="message-thread-empty"><span>✉</span><b>Henüz mesaj yok</b><p>İlk mesajı aşağıdan gönderebilirsin.</p></div>';
+    const keepTop=coachV56KeepTop;coachV56KeepTop=false;
+    requestAnimationFrame(()=>{thread.scrollTop=keepTop?0:thread.scrollHeight});
   }
+  coachV56AfterConversation(row);
   markCoachThreadRead(studentUid);
 }
-async function sendCoachMessage(){
-  const studentUid=selectedMessageStudent,input=$("messageInput"),button=$("messageSendBtn"),user=auth.currentUser,value=String(input?.value||"").trim().slice(0,500);
+async function sendCoachMessage(retryText){
+  const studentUid=selectedMessageStudent,input=$("messageInput"),user=auth.currentUser,value=String(retryText??input?.value??"").trim().slice(0,500);
   if(!user||!studentUid||!value)return;
-  const row=coachReportRows.find(x=>x.studentUid===studentUid);if(!row?.link?.active){alert("Bu öğrenciyle aktif koç bağlantısı bulunamadı.");return}
-  if(button)button.disabled=true;
+  const row=coachReportRows.find(x=>x.studentUid===studentUid);if(!row?.link?.active){coachV56Notice("Bu öğrenciyle bağlantı kapalı. Mesaj göndermek için Öğrenciler'den yeniden bağlan.");return}
+  // v56: yazı alanı hemen boşalır; mesaj sunucuya ulaşana kadar "Gönderiliyor…", reddedilirse "Gönderilemedi".
+  if(retryText===undefined&&input){input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";coachV56SaveDraft()}
+  coachV56Notice("");
   try{
     await addDoc(collection(db,"coachingMessages"),{studentUid,coachUid:user.uid,senderUid:user.uid,senderRole:"coach",text:value,createdAt:serverTimestamp()});
-    if(input)input.value="";if($("messageCharCount"))$("messageCharCount").textContent="0";
-  }catch(error){console.error("Mesaj gönderilemedi",error);alert("Mesaj gönderilemedi: "+String(error?.message||"Bilinmeyen hata"))}finally{if(button)button.disabled=false}
+  }catch(error){console.error("Mesaj gönderilemedi",error);coachV56Failed(studentUid,value,error)}
 }
 $("messageComposeForm")?.addEventListener("submit",event=>{event.preventDefault();void sendCoachMessage()});
 $("messageInput")?.addEventListener("input",event=>{if($("messageCharCount"))$("messageCharCount").textContent=String(event.currentTarget.value.length)});
@@ -2416,6 +2427,153 @@ $("messageStudentSearch")?.addEventListener("input",event=>{const q=String(event
 document.querySelectorAll("[data-message-filter]").forEach(button=>button.addEventListener("click",()=>{messageStudentFilter=button.dataset.messageFilter||"all";document.querySelectorAll("[data-message-filter]").forEach(x=>x.classList.toggle("active",x===button));renderMessageStudents();$("messageStudentSearch")?.dispatchEvent(new Event("input"))}));
 document.querySelectorAll("[data-message-template]").forEach(button=>button.addEventListener("click",()=>{const input=$("messageInput");if(!input)return;input.value=button.dataset.messageTemplate||"";if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);input.focus()}));
 document.querySelector('[data-coach-page="messages"]')?.addEventListener("click",()=>{const user=auth.currentUser;if(user){renderMessageStudents();void loadCoachMessages(user.uid)}});
+
+/* v56 · Mesajlar: telefonda liste → tam ekran sohbet, en son yazışan üstte; sunucuya ulaşmamış mesaj
+   "Gönderiliyor…", reddedilen mesaj "Gönderilemedi" + Tekrar gönder; öğrenci başına kalıcı taslak;
+   gerçek bağlantı durumu; gün ayırıcıları ve son 50 mesaj; sekme başlığında sayı ve isteğe bağlı bildirim;
+   öğrencinin verisinden hızlı mesajlar. Kayıt biçimi ve okundu bilgisi (v51) değişmez. */
+const COACH_V56_DRAFTS="yks_coach_message_drafts_v1:";
+function coachV56DraftStore(){
+  const key=COACH_V56_DRAFTS+(auth.currentUser?.uid||"guest");
+  if(coachV56DraftKey!==key){coachV56DraftKey=key;coachV56Drafts.clear();try{Object.entries(JSON.parse(localStorage.getItem(key)||"{}")||{}).forEach(([uid,text])=>{if(typeof text==="string"&&text)coachV56Drafts.set(uid,text.slice(0,500))})}catch{}}
+  return coachV56Drafts;
+}
+function coachV56WriteDrafts(){try{const data=Object.fromEntries(coachV56DraftStore());if(Object.keys(data).length)localStorage.setItem(coachV56DraftKey,JSON.stringify(data));else localStorage.removeItem(coachV56DraftKey)}catch{}}
+function coachV56DraftFor(uid){return coachV56DraftStore().get(uid)||""}
+function coachV56SaveDraft(){
+  const uid=selectedMessageStudent,input=$("messageInput");if(!uid||!input)return;
+  const text=String(input.value||"").slice(0,500);if(text.trim())coachV56DraftStore().set(uid,text);else coachV56DraftStore().delete(uid);
+  coachV56WriteDrafts();if($("messageDraftState"))$("messageDraftState").textContent=text.trim()?"Taslak kaydedildi":"";
+}
+function coachV56LoadDraft(){
+  const input=$("messageInput");if(!input)return;input.value=coachV56DraftFor(selectedMessageStudent);
+  if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);
+  if($("messageDraftState"))$("messageDraftState").textContent=input.value.trim()?"Taslak kaydedildi":"";
+}
+function coachV56SetView(view){$("messagesPage")?.setAttribute("data-v56-view",view==="chat"?"chat":"list")}
+function coachV56Millis(value){return coachReadMillis(value)||0}
+function coachV56SortRows(rows){
+  const last=row=>{const list=messageActionsFor(row.studentUid),item=list.at(-1);return item?(coachV56Millis(item.createdAt)||Date.now()):0};
+  return[...rows].sort((a,b)=>(coachPendingReplies(b.studentUid).count>0)-(coachPendingReplies(a.studentUid).count>0)||last(b)-last(a)||studentName(a).localeCompare(studentName(b),"tr"));
+}
+function coachV56Ago(value){
+  const ms=coachV56Millis(value);if(!ms)return"az önce";const min=Math.max(0,Math.round((Date.now()-ms)/60000));
+  if(min<1)return"az önce";if(min<60)return min+" dk";if(min<1440)return Math.floor(min/60)+" sa";return Math.floor(min/1440)+" gün";
+}
+function coachV56DayKey(value){const ms=typeof value==="number"?value:coachV56Millis(value),d=ms?new Date(ms):new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function coachV56DayLabel(key){
+  const today=coachV56DayKey(null),y=new Date();y.setDate(y.getDate()-1);
+  if(key===today)return"Bugün";if(key===coachV56DayKey(y.getTime()))return"Dün";
+  return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",weekday:"long"}).format(new Date(key+"T12:00:00"));
+}
+function coachV56Start(uid,actions){return Math.max(0,actions.length-(coachV56Limit.get(uid)||50))}
+function coachV56Older(uid,actions){const start=coachV56Start(uid,actions);return start?'<button type="button" class="coach-v56-older" data-v56-older>↑ Daha eski mesajlar ('+start+')</button>':""}
+function coachV56Day(actions,index,start){
+  if(index<start)return"";const key=coachV56DayKey(actions[index]?.createdAt);
+  return index===start||coachV56DayKey(actions[index-1]?.createdAt)!==key?'<p class="coach-v56-day"><span>'+escHtml(coachV56DayLabel(key))+'</span></p>':"";
+}
+function coachV56Clock(value){const ms=coachV56Millis(value);return ms?new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date(ms)):"—"}
+function coachV56PendingText(){return navigator.onLine===false?"Gönderiliyor… internet bekleniyor":"Gönderiliyor…"}
+function coachV56Reason(error){
+  const code=String(error?.code||"");
+  if(code.includes("permission-denied"))return"izin yok ya da bağlantı kapalı";
+  if(code.includes("unavailable")||navigator.onLine===false)return"internet yok";
+  return"tekrar dene";
+}
+function coachV56Failed(uid,text,error){
+  const list=coachV56Fails.get(uid)||[];list.push({id:"f"+Date.now()+Math.random().toString(36).slice(2,6),text,reason:coachV56Reason(error)});coachV56Fails.set(uid,list);
+  if(selectedMessageStudent===uid)renderMessageConversation(uid);
+}
+function coachV56FailedHtml(uid){
+  return(coachV56Fails.get(uid)||[]).map(item=>'<div class="message-bubble-row outgoing coach-v56-failed"><div class="message-bubble"><p>'+escHtml(item.text)+'</p><div class="message-bubble-meta"><span>Gönderilemedi · '+escHtml(item.reason)+'</span></div></div><button type="button" class="coach-v56-retry" data-v56-retry="'+escHtml(item.id)+'">↻ Tekrar gönder</button></div>').join("");
+}
+function coachV56StatusText(){
+  if(navigator.onLine===false)return["off","Bağlantı yok"];
+  if(coachV56Live==="error")return["off","Mesajlar alınamadı"];
+  if(coachV56Live==="live")return["on","Canlı"];
+  return["wait","Bağlanıyor…"];
+}
+function coachV56RenderStatus(){
+  const [tone,text]=coachV56StatusText();
+  for(const id of ["messageChatStatus","messageLiveStatus"]){const node=$(id);if(node){node.textContent=text;node.dataset.v56Tone=tone}}
+  document.querySelector("#messagesPage .message-online-dot")?.setAttribute("data-v56-tone",tone);
+}
+function coachV56Notice(text){const node=$("messageComposeStatus");if(node){node.textContent=text;node.hidden=!text}}
+function coachV56Number(value){return reportNum(value).toLocaleString("tr-TR",{maximumFractionDigits:2})}
+/* Hızlı mesajlar öğrencinin bugünkü programından, gecikmiş tekrarından ve son denemesinden üretilir. */
+function coachV56Quick(row){
+  const first=String(studentName(row)).split(/\s+/)[0]||"Merhaba",out=[];
+  const week=programWeeks(row).find(item=>item?.week===programCurrentWeekStart()),day=(new Date().getDay()+6)%7;
+  const total=week?collectProgramDayTasks(row?.share?.program||{},week,day).length:0,left=coachTodayRemainingTasks(row);
+  if(total){
+    const done=total-left.length;
+    out.push(left.length?["Bugün "+done+"/"+total+" görev",first+", bugün "+done+"/"+total+" görev tamam. Kalan: "+String(left[0].text||"").slice(0,60)+(left.length>1?" ve "+(left.length-1)+" görev daha":"")+". Akşam bitirebilir misin?"]
+      :["Bugün tüm görevler tamam 👏",first+", bugünkü programın tamam, eline sağlık! Yarın da aynı tempoyla devam 💪"]);
+  }
+  const late=topicV55Exams(row).flatMap(exam=>topicV55Scope(row,exam)).map(item=>({item,review:topicV55Review(item)})).filter(x=>x.review&&!x.review.done&&x.review.days<0).sort((a,b)=>a.review.days-b.review.days)[0];
+  if(late)out.push([late.item.topic+" tekrarı gecikti",first+", "+late.item.topic+" ("+late.item.subject+") tekrarın "+(-late.review.days)+" gün gecikti. Bugün 20 dakika ayırıp tekrar edelim mi?"]);
+  const exams=(Array.isArray(row?.share?.exams)?row.share.exams:[]).filter(x=>x&&x.date).sort((a,b)=>String(a.date).localeCompare(String(b.date))),exam=exams.at(-1);
+  if(exam){
+    const type=String(exam.type||"Deneme"),prev=exams.slice(0,-1).reverse().find(x=>String(x.type||"")===type),delta=prev?reportNum(exam.totalNet)-reportNum(prev.totalNet):null;
+    const diff=delta===null||!delta?"":" ("+(delta>0?"▲ ":"▼ ")+coachV56Number(Math.abs(delta))+")";
+    out.push(["Son "+type+" "+coachV56Number(exam.totalNet)+diff,first+", son "+type+" denemen "+coachV56Number(exam.totalNet)+" net"+diff+". Yanlışlarını Hata Defteri'ne ekleyip birlikte bakalım."]);
+  }
+  out.push(["Gün sonu kontrol","Bugünkü çalışma nasıl geçti? Zorlandığın kısmı bana yazabilirsin."]);
+  return out.slice(0,4);
+}
+function coachV56AfterConversation(row){
+  const quick=document.querySelector("#messagesPage .message-quickbar>div");
+  if(quick)quick.innerHTML=coachV56Quick(row).map(([label,text])=>'<button type="button" data-message-template="'+escHtml(text)+'">'+escHtml(label)+'</button>').join("");
+  const thread=$("messageThread");
+  if(thread&&coachV56Live==="error")thread.insertAdjacentHTML("afterbegin",'<div class="coach-v56-banner">Mesajlar alınamadı. <button type="button" data-v56-reload>Yenile</button></div>');
+  const locked=row?.link?.active!==true,input=$("messageInput"),button=$("messageSendBtn");
+  if(input)input.disabled=locked;if(button)button.disabled=locked;
+  coachV56Notice(locked?"Bu öğrenciyle bağlantı kapalı. Mesaj göndermek için Öğrenciler'den yeniden bağlan.":"");
+  coachV56RenderStatus();
+}
+/* Panel açık ama sekme arkadayken gelen öğrenci mesajı için tarayıcı bildirimi (isteğe bağlı). */
+function coachV56NotifyOn(){return readCoachUiPrefs().messageNotify===true&&typeof Notification!=="undefined"&&Notification.permission==="granted"}
+function coachV56Notify(snap){
+  const docs=Array.isArray(snap?.docs)?snap.docs:[],fresh=docs.filter(d=>!coachV56Seen.has(d.id));
+  docs.forEach(d=>coachV56Seen.add(d.id));
+  if(!coachV56Primed){coachV56Primed=true;return}
+  if(!coachV56NotifyOn()||!document.hidden)return;
+  fresh.map(d=>({id:d.id,...d.data()})).filter(item=>item.senderRole==="student").slice(-3).forEach(item=>{
+    const row=coachReportRows.find(x=>x.studentUid===item.studentUid);if(!row)return;
+    try{const note=new Notification(studentName(row),{body:String(item.text||"").slice(0,140),tag:"yks-coach-message-"+item.id});note.onclick=()=>{window.focus();openCoachMessageThread(item.studentUid,"");note.close()}}catch{}
+  });
+}
+function coachV56RenderNotifyButton(){
+  const button=$("messageNotifyBtn");if(!button)return;
+  const supported=typeof Notification!=="undefined",on=coachV56NotifyOn();
+  button.textContent=!supported?"🔕 Bu tarayıcı bildirim desteklemiyor":Notification.permission==="denied"?"🔕 Bildirim tarayıcıda engelli":on?"🔔 Yeni mesajda bildirim: Açık":"🔔 Yeni mesajda bildirim: Kapalı";
+  button.setAttribute("aria-pressed",String(on));button.disabled=!supported||Notification.permission==="denied";
+}
+$("messageNotifyBtn")?.addEventListener("click",async()=>{
+  if(typeof Notification==="undefined")return;
+  const prefs=readCoachUiPrefs();
+  if(coachV56NotifyOn()){writeCoachUiPrefs({...prefs,messageNotify:false});coachV56RenderNotifyButton();return}
+  let permission=Notification.permission;
+  if(permission==="default"){try{permission=await Notification.requestPermission()}catch{permission="denied"}}
+  if(permission==="granted")writeCoachUiPrefs({...readCoachUiPrefs(),messageNotify:true});
+  coachV56RenderNotifyButton();
+});
+$("messageInput")?.addEventListener("input",coachV56SaveDraft);
+$("messageBackBtn")?.addEventListener("click",()=>{coachV56SaveDraft();coachV56SetView("list")});
+$("messageThread")?.addEventListener("click",event=>{
+  if(event.target.closest("[data-v56-older]")){const uid=selectedMessageStudent;coachV56Limit.set(uid,(coachV56Limit.get(uid)||50)+50);coachV56KeepTop=true;renderMessageConversation(uid);return}
+  const retry=event.target.closest("[data-v56-retry]");
+  if(retry){const uid=selectedMessageStudent,list=coachV56Fails.get(uid)||[],item=list.find(x=>x.id===retry.dataset.v56Retry);if(!item)return;coachV56Fails.set(uid,list.filter(x=>x!==item));renderMessageConversation(uid);void sendCoachMessage(item.text);return}
+  if(event.target.closest("[data-v56-reload]")){const user=auth.currentUser;if(user){coachV56Live="connecting";coachV56RenderStatus();void loadCoachMessages(user.uid)}}
+});
+document.querySelector("#messagesPage .message-quickbar")?.addEventListener("click",event=>{
+  const button=event.target.closest("[data-message-template]");if(!button||!button.isConnected)return;
+  const input=$("messageInput");if(!input||input.disabled)return;
+  input.value=button.dataset.messageTemplate||"";if($("messageCharCount"))$("messageCharCount").textContent=String(input.value.length);coachV56SaveDraft();input.focus({preventScroll:true});
+});
+window.addEventListener("online",()=>{coachV56RenderStatus();const user=auth.currentUser;if(user&&coachV56Live==="error")void loadCoachMessages(user.uid);if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent)});
+window.addEventListener("offline",()=>{coachV56RenderStatus();if(selectedMessageStudent)renderMessageConversation(selectedMessageStudent)});
+coachV56SetView("list");coachV56RenderStatus();coachV56RenderNotifyButton();
 
 const COACH_UI_PREFS="yks_coach_ui_preferences_v2";
 let currentCoachProfile=null;
