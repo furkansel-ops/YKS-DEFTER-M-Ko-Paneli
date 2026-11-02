@@ -1,0 +1,36 @@
+/* YKS Defterim Koç Paneli · Takip & Rapor v53: dönem ve ders seçimi, kısa bağlantı kartı, katlı ayrıntılar,
+   30 günlük sık grafik ve yazdırma görünümü. Renkler tema betiğiyle --kc-* olur. */
+.report-selector-card{flex-wrap:wrap}
+.report-v53-period{display:inline-grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;padding:3px;border:1px solid var(--kc-dfe7f0,#dfe7f0);border-radius:12px;background:var(--kc-f3f6fa,#f3f6fa)}
+.report-v53-period button{min-height:36px;padding:0 14px;border:0;border-radius:9px;background:transparent;color:var(--kc-5d6e86,#5d6e86);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
+.report-v53-period button[aria-pressed="true"]{background:var(--kc-ffffff,#ffffff);color:var(--kc-1f5fd0,#1f5fd0);box-shadow:0 1px 3px var(--kc-14243a-a100,rgba(20,36,58,.1))}
+.report-v53-subject select:disabled{opacity:.55;cursor:not-allowed}
+.report-v53-print{min-height:38px;padding:0 14px;border:1px solid var(--kc-dfe7f0,#dfe7f0);border-radius:11px;background:var(--kc-ffffff,#ffffff);color:var(--kc-253750,#253750);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.report-v53-print[hidden]{display:none}
+.report-v53-hidden{display:none!important}
+.report-v53-link-list{display:grid}
+.report-v53-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--kc-eef2f7,#eef2f7);font-size:13px;color:var(--kc-41556e,#41556e)}
+.report-v53-link:first-child{border-top:0}
+.report-v53-link button{flex:none;min-height:32px;padding:0 10px;border:0;border-radius:9px;background:var(--kc-edf5ff,#edf5ff);color:var(--kc-1f5fd0,#1f5fd0);font:inherit;font-size:12px;font-weight:850;cursor:pointer;white-space:nowrap}
+.report-v53-more{grid-column:1/-1;padding:0}
+.report-v53-more>summary{min-height:50px;display:flex;align-items:center;padding:0 16px;font-size:13.5px;font-weight:850;color:var(--kc-253750,#253750);cursor:pointer;list-style:none}
+.report-v53-more>summary::-webkit-details-marker{display:none}
+.report-v53-more>summary:after{content:"›";margin-left:auto;color:var(--kc-8b98aa,#8b98aa);font-size:18px;transition:transform .15s}
+.report-v53-more[open]>summary:after{transform:rotate(90deg)}
+.report-v53-more>article{margin:0 12px 12px;box-shadow:none}
+.report-activity-bars.report-v53-dense{gap:2px}
+.report-v53-dense .report-activity-day{min-width:0}
+.report-v53-dense .report-activity-columns{gap:1px}
+.report-v53-dense .report-activity-day span{font-size:11px;min-height:14px}
+.report-v53-day{display:grid;gap:4px}
+@media(max-width:720px){
+  .report-v53-period{width:100%}
+  .report-v53-print{width:100%}
+}
+@media print{
+  .coach-sidebar-v20,.sidebar,.overlay,.reports-head .report-refresh,.report-selector-card .report-select-wrap,.report-v53-period,.report-v53-print,.report-v53-link button,#reportOverview{display:none!important}
+  .reports-page{padding:0!important;max-width:none!important}
+  .report-card,.report-kpi{break-inside:avoid;box-shadow:none!important}
+  .report-v53-more>summary:after{display:none}
+  body{background:var(--kc-ffffff,#ffffff)!important}
+}

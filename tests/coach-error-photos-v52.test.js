@@ -80,7 +80,7 @@ test("v52 fotoğraf ayrıntısı: büyük fotoğraf açınca okunur; koç yorumu
 test("v52 stil, sürüm ve koç hesabı silinince paylaşılan fotoğraflar da silinir",()=>{
   const html=read("index.html"),css=read("errors-photo-v52.css"),authJs=read("coach-auth-v34.js");
   assert.match(html,/<link rel="stylesheet" href="\.\/errors-photo-v52\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-exams52-photos52"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-exams52-photos52(-[a-z0-9]+)*"/);
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i,"ham renk kalmadı");
   assert.match(authJs,/for\(const name of \["coachingErrorPhotos","coachingErrorPhotoImages"\]\)\{const photos=await byCoach\(name\)/);
 });

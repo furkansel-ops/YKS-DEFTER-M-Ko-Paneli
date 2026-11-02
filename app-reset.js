@@ -1143,29 +1143,136 @@ function renderReportEvidence(row){
     +'</div><p class="report-v30-disclaimer">'+escHtml(freshness)
     +' Denemelerde konu bazlı yanlış sayısı şu anda koçla paylaşılmıyor. Tamamlanmayan program görevleri bilgi eksiği sayılmaz; bu tespitler tanı değil, kayıtların özetidir.</p>';
 }
+/* v53 · Takip & Rapor: dönem (bugün / 7 gün / 30 gün) ve ders süzgeci, hepsi bir arada özet şerit, dönem grafiği,
+   tek ders kartı; deneme, konu, hata ve P+P tekrarları ilgili sayfaya kısa satır; sinyaller ve eksik analizi katlı;
+   yazdırma. Veri: öğrencinin paylaştığı daily31 (gün gün ders kırılımıyla); eski paylaşımda daily14 kullanılır. */
+const REPORT_PERIODS={day:{days:1,label:"Bugün",meta:"bugün"},week:{days:7,label:"Son 7 gün",meta:"son 7 gün"},month:{days:30,label:"Son 30 gün",meta:"son 30 gün"}};
+let reportPeriodKey="week";
+function reportPeriodInfo(){return REPORT_PERIODS[reportPeriodKey]||REPORT_PERIODS.week}
+function reportSubjectValue(){return $("reportSubjectSelect")?.value||"all"}
+function reportDailyFull(row){
+  const list=row?.share?.progress?.daily31;
+  if(!Array.isArray(list)||!list.length)return reportDailyRows(row).map(item=>({...item,subjects:null}));
+  return list.filter(item=>item&&/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||""))).map(item=>({date:String(item.date),minutes:Math.max(0,reportNum(item.minutes)),questions:Math.max(0,reportNum(item.questions)),
+    subjects:(Array.isArray(item.subjects)?item.subjects:[]).map(x=>({name:String(x?.name||"").trim(),minutes:Math.max(0,reportNum(x?.minutes)),questions:Math.max(0,reportNum(x?.questions))})).filter(x=>x.name)})).sort((a,b)=>a.date.localeCompare(b.date));
+}
+function reportDayValue(day,subject){
+  if(subject==="all")return{minutes:day.minutes,questions:day.questions};
+  const hit=(day.subjects||[]).find(item=>item.name===subject);return{minutes:hit?.minutes||0,questions:hit?.questions||0};
+}
+/* offset 0: içinde bulunulan dönem; 1: bir önceki eş dönem. Kapsanmayan gün varsa önceki dönem "yok" sayılır. */
+function reportWindow(row,offset=0,subject=reportSubjectValue()){
+  const days=reportPeriodInfo().days,daily=reportDailyFull(row),end=reportDateOffset(-days*offset),start=reportDateOffset(-(days*(offset+1)-1));
+  const covered=!!daily.length&&daily[0].date<=start,rows=[];
+  for(let i=days-1;i>=0;i--){const date=reportDateOffset(-days*offset-i),day=daily.find(item=>item.date===date);rows.push({date,...(day?reportDayValue(day,subject):{minutes:0,questions:0})})}
+  const minutes=rows.reduce((s,x)=>s+x.minutes,0),questions=rows.reduce((s,x)=>s+x.questions,0);
+  return{rows,minutes,questions,activeDays:rows.filter(x=>x.minutes>0||x.questions>0).length,covered,hasData:!!daily.length,start,end};
+}
+function reportPeriodTotals(row){
+  const cur=reportWindow(row,0,"all");
+  if(cur.hasData)return{minutes:cur.minutes,questions:cur.questions};
+  return reportPeriodKey==="week"?{minutes:reportNum(row?.share?.progress?.minutes7),questions:reportNum(row?.share?.progress?.questions7)}:{minutes:0,questions:0};
+}
+function reportDelta(cur,prev,unit){
+  if(!prev.covered)return{text:"önceki dönem verisi yok",tone:""};
+  const diff=cur-prev.value;if(!prev.value&&!cur)return{text:"değişim yok",tone:""};
+  if(unit==="%"){const pct=prev.value?Math.round(diff/prev.value*100):100;return{text:(pct>0?"▲ %":pct<0?"▼ %":"= %")+Math.abs(pct)+" önceki döneme göre",tone:pct>0?"good":pct<0?"warn":""}}
+  return{text:(diff>0?"▲ ":diff<0?"▼ ":"= ")+Math.abs(Math.round(diff))+" önceki döneme göre",tone:diff>0?"good":diff<0?"warn":""};
+}
+function reportSubjectOptions(rows){
+  const select=$("reportSubjectSelect");if(!select)return;
+  const current=select.value||"all",names=[...new Set(rows.flatMap(row=>reportDailyFull(row).flatMap(day=>(day.subjects||[]).map(x=>x.name))))].sort((a,b)=>a.localeCompare(b,"tr"));
+  select.innerHTML='<option value="all">Tüm dersler</option>'+names.map(name=>'<option value="'+escHtml(name)+'">'+escHtml(name)+'</option>').join("");
+  select.value=names.includes(current)?current:"all";select.disabled=!names.length;select.title=names.length?"":"Ders süzgeci öğrencinin yeni verisiyle açılır";
+}
+function reportStripHtml(row,w){
+  const share=row.share||{},profile=share.profile||{},progress=share.progress||{},subject=reportSubjectValue(),cur=reportWindow(row,0),prev=reportWindow(row,1);
+  const minuteDelta=reportDelta(cur.minutes,{value:prev.minutes,covered:prev.covered},"%"),questionDelta=reportDelta(cur.questions,{value:prev.questions,covered:prev.covered});
+  const exams=examList(row,"all"),latest=exams.at(-1),before=latest?examPrevSame(exams,latest):null,examDiff=latest&&before?reportNum(latest.totalNet)-reportNum(before.totalNet):null;
+  const reading=profile.reading&&typeof profile.reading==="object"?profile.reading:null,label=reportPeriodInfo().meta+(subject==="all"?"":" · "+subject);
+  return kpi("ÇALIŞMA",cur.hasData||reportPeriodKey==="week"?reportMinutes(cur.hasData?cur.minutes:progress.minutes7):"—",cur.hasData?label+" · "+minuteDelta.text:"Günlük veri bekleniyor",minuteDelta.tone)+
+    kpi("SORU",cur.hasData||reportPeriodKey==="week"?String(Math.round(cur.hasData?cur.questions:reportNum(progress.questions7))):"—",cur.hasData?label+" · "+questionDelta.text:"Günlük veri bekleniyor",questionDelta.tone)+
+    kpi("GÖREV UYUMU",w.total?w.ratio+"%":"—",w.total?w.completed+" / "+w.total+" görev · bu hafta":"Program verisi yok",w.total&&w.ratio<60?"warn":"")+
+    kpi("KONU",Math.round(reportNum(progress.completedTopics))+" bitti",Math.round(reportNum(progress.overdueTopics))+" geciken · "+Math.round(reportNum(progress.activeTopics))+" sürüyor",reportNum(progress.overdueTopics)?"warn":"")+
+    kpi("SON DENEME",latest?examFmt(latest.totalNet)+" "+String(latest.type||""):"—",latest?(examDiff===null?examDateLabel(latest.date):examSigned(examDiff)+" önceki "+String(latest.type||"")+" denemesine göre"):"Deneme yok",examDiff===null?"":examDiff>0?"good":examDiff<0?"warn":"")+
+    kpi("HIZLI OKUMA",reading&&reading.tests30?Math.round(reportNum(reading.wpm30))+" k/dk":"—",reading&&reading.tests30?"%"+Math.round(reportNum(reading.comprehension30))+" anlama · 30 günde "+reading.tests30+" test":"Son 30 günde test yok");
+}
+function reportPeriodChartHtml(row){
+  const subject=reportSubjectValue(),cur=reportWindow(row,0);
+  if(!cur.hasData)return'<div class="report-data-wait"><b>Günlük dağılım yeni senkronla açılacak.</b><span>Öğrenci uygulaması güncellenince gün gün veri gelir.</span></div>';
+  if(reportPeriodKey==="day"){
+    const today=reportDailyFull(row).find(day=>day.date===reportDateOffset(0)),parts=(today?.subjects||[]).filter(x=>subject==="all"||x.name===subject).filter(x=>x.minutes||x.questions),max=Math.max(1,...parts.map(x=>x.minutes));
+    return parts.length?'<div class="report-v53-day">'+parts.map(x=>'<div class="report-subject-focus-row"><span><b>'+escHtml(x.name)+'</b><small>'+Math.round(x.questions)+' soru</small></span><i><em style="width:'+Math.round(x.minutes/max*100)+'%"></em></i><strong>'+escHtml(reportMinutes(x.minutes))+'</strong></div>').join("")+'</div>':'<div class="report-mini-empty">Bugün henüz çalışma kaydı yok.</div>';
+  }
+  const rows=cur.rows,maxMinutes=Math.max(1,...rows.map(x=>x.minutes)),maxQuestions=Math.max(1,...rows.map(x=>x.questions)),dense=rows.length>10;
+  const label=date=>{const d=new Date(date+"T12:00:00");return dense?String(d.getDate()):new Intl.DateTimeFormat("tr-TR",{weekday:"short"}).format(d)};
+  return'<div class="report-activity-bars'+(dense?" report-v53-dense":"")+'" style="grid-template-columns:repeat('+rows.length+',minmax(0,1fr))">'+rows.map((item,index)=>'<div class="report-activity-day" title="'+escHtml(item.date+" · "+Math.round(item.minutes)+" dk · "+Math.round(item.questions)+" soru")+'"><div class="report-activity-columns"><i style="height:'+Math.max(item.minutes?8:2,item.minutes/maxMinutes*100)+'%"></i><b style="height:'+Math.max(item.questions?8:2,item.questions/maxQuestions*100)+'%"></b></div><span>'+(!dense||index%5===0||index===rows.length-1?escHtml(label(item.date)):"")+'</span>'+(dense?"":'<small>'+Math.round(item.minutes)+'dk · '+Math.round(item.questions)+'s</small>')+'</div>').join("")+'</div><div class="report-activity-legend"><span><i></i>Odak süresi</span><span><b></b>Soru</span><em>'+escHtml(reportMinutes(cur.minutes))+' · '+Math.round(cur.questions)+' soru</em></div>';
+}
+function reportSubjectFocusHtml(row){
+  const cur=reportWindow(row,0,"all"),daily=reportDailyFull(row),subject=reportSubjectValue();
+  let items=[];
+  if(daily.some(day=>day.subjects)){const map=new Map();daily.filter(day=>cur.rows.some(x=>x.date===day.date)).forEach(day=>(day.subjects||[]).forEach(x=>{const entry=map.get(x.name)||{name:x.name,minutes:0,questions:0};entry.minutes+=x.minutes;entry.questions+=x.questions;map.set(x.name,entry)}));items=[...map.values()];}
+  else if(reportPeriodKey==="week")items=reportSubjectRows(row);
+  items=items.filter(x=>(x.minutes>0||x.questions>0)&&(subject==="all"||x.name===subject)).sort((a,b)=>b.minutes-a.minutes||b.questions-a.questions).slice(0,8);
+  const max=Math.max(1,...items.map(x=>x.minutes));
+  return items.length?items.map((item,index)=>'<div class="report-subject-focus-row"><span><b>'+escHtml(item.name)+'</b><small>'+(index===0?"En çok çalışılan · ":"")+Math.round(item.questions)+' soru</small></span><i><em style="width:'+Math.round(item.minutes/max*100)+'%"></em></i><strong>'+escHtml(reportMinutes(item.minutes))+'</strong></div>').join(""):'<div class="report-mini-empty">'+(daily.some(day=>day.subjects)||reportPeriodKey==="week"?"Bu dönemde ders bazlı kayıt yok.":"Ders kırılımı öğrencinin yeni verisiyle açılır.")+'</div>';
+}
+function reportOpenPage(page,uid){
+  showCoachPage(page);
+  if(page==="exams"){hydrateExamStudentSelect();if($("examStudentSelect"))$("examStudentSelect").value=uid;renderExamAnalysis(uid)}
+  else if(page==="topics"){hydrateTopicControls();if($("topicStudentSelect"))$("topicStudentSelect").value=uid;renderTopicAnalysis(uid)}
+  else if(page==="errors"){hydrateErrorControls();if($("errorStudentSelect"))$("errorStudentSelect").value=uid;safeRenderErrors(uid)}
+  else if(page==="paragraphProblem"){hydrateParagraphProblemControls();if($("ppCoachStudentSelect"))$("ppCoachStudentSelect").value=uid;renderParagraphProblem(uid)}
+}
+function reportV53Layout(row){
+  // Tekrar eden kartlar gizlenir (silinmez); sinyaller ve eksik analizi katlı kutuya alınır.
+  ["reportSubjectBreakdown","reportExamTrend","reportTopicStats","reportErrorList","reportPpSummary"].forEach(id=>$(id)?.closest("article")?.classList.add("report-v53-hidden"));
+  const more=$("reportMoreDetails");["reportStudentSignals","reportEvidenceAnalysis"].forEach(id=>{const card=$(id)?.closest("article");if(more&&card&&card.parentElement!==more)more.append(card)});
+  const share=row.share||{},progress=share.progress||{},exams=examList(row,"all"),latest=exams.at(-1),before=latest?examPrevSame(exams,latest):null;
+  const gaps=errorItems(row).length?examTopicGaps(row):[],pp=reportPpSummaryMetrics(row);
+  const line=(text,page,label)=>'<div class="report-v53-link"><span>'+escHtml(text)+'</span><button type="button" data-report-open="'+page+'">'+escHtml(label)+' ›</button></div>';
+  $("reportLinks").innerHTML=
+    line(latest?"Deneme · son "+String(latest.type||"")+" "+examFmt(latest.totalNet)+(before?" ("+examSigned(reportNum(latest.totalNet)-reportNum(before.totalNet))+")":""):"Deneme · henüz yok","exams","Deneme Analizi")+
+    line("Konu · "+Math.round(reportNum(progress.completedTopics))+" bitti · "+Math.round(reportNum(progress.overdueTopics))+" geciken","topics","Konular")+
+    line(gaps.length?"Tekrar eden hata · "+gaps[0].subject+" "+gaps[0].topic:"Hata Defteri · "+errorItems(row).length+" kayıt","errors","Hata Defteri")+
+    line("Paragraf + Problem · "+Math.round(pp.total)+" soru","paragraphProblem","P+P");
+  $("reportLinks").querySelectorAll("[data-report-open]").forEach(btn=>btn.addEventListener("click",()=>reportOpenPage(btn.dataset.reportOpen,row.studentUid)));
+  if($("reportPrintBtn"))$("reportPrintBtn").hidden=false;
+}
+function reportSetPeriod(key){
+  if(!REPORT_PERIODS[key])return;reportPeriodKey=key;
+  document.querySelectorAll("[data-report-period]").forEach(btn=>btn.setAttribute("aria-pressed",String(btn.dataset.reportPeriod===key)));
+  renderReport($("reportStudentSelect")?.value||"all");
+}
+$("reportPeriodSeg")?.addEventListener("click",event=>{const btn=event.target.closest("[data-report-period]");if(btn)reportSetPeriod(btn.dataset.reportPeriod)});
+$("reportSubjectSelect")?.addEventListener("change",()=>renderReport($("reportStudentSelect")?.value||"all"));
+$("reportPrintBtn")?.addEventListener("click",()=>{const more=$("reportMoreDetails");const was=more?.open;if(more)more.open=true;window.print();if(more)more.open=!!was});
+
 function renderReport(scope){
   if(!coachReportRows.length){setReportState("reportEmpty");return}
+  reportSubjectOptions(coachReportRows);
   if(scope==="all"){renderReportOverview();return}
   const row=coachReportRows.find(x=>x.studentUid===scope);
   if(!row){renderReportOverview();return}
   renderStudentReport(row);
 }
 function renderReportOverview(){
-  const rows=coachReportRows,withShare=rows.filter(r=>r.share),minutes=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.minutes7),0),questions=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.questions7),0);
+  const rows=coachReportRows,withShare=rows.filter(r=>r.share),period=reportPeriodInfo(),minutes=withShare.reduce((s,r)=>s+reportPeriodTotals(r).minutes,0),questions=withShare.reduce((s,r)=>s+reportPeriodTotals(r).questions,0);
+  if($("reportPrintBtn"))$("reportPrintBtn").hidden=true;
   const programRows=withShare.map(row=>weekStats(row.share?.program)).filter(w=>w.total),avgProgram=programRows.length?Math.round(programRows.reduce((sum,w)=>sum+w.ratio,0)/programRows.length):0;
   const activeToday=withShare.filter(row=>reportDailyRows(row).some(item=>item.date===reportDateOffset(0)&&(item.minutes>0||item.questions>0))).length;
   const attention=rows.map(row=>({row,score:reportRiskScore(row)})).sort((a,b)=>b.score-a.score||studentName(a.row).localeCompare(studentName(b.row),"tr"));
   $("reportScopeTitle").textContent="Tüm öğrenciler";
-  $("reportScopeMeta").textContent="Son 7 gün · çalışma, program, P&P ve risk özeti";
+  $("reportScopeMeta").textContent=period.label+" · çalışma, program, P&P ve risk özeti";
   $("reportOverviewKpis").innerHTML=
     kpi("BAĞLI ÖĞRENCİ",String(rows.length),withShare.length+" öğrenciden veri var")+
     kpi("BUGÜN AKTİF",String(activeToday),rows.length?activeToday+" / "+rows.length+" öğrenci":"Günlük veri bekleniyor",activeToday?"good":"")+
-    kpi("TOPLAM ÇALIŞMA",reportMinutes(minutes),"Son 7 gün")+
-    kpi("ÇÖZÜLEN SORU",String(Math.round(questions)),"Son 7 gün")+
+    kpi("TOPLAM ÇALIŞMA",reportMinutes(minutes),period.label)+
+    kpi("ÇÖZÜLEN SORU",String(Math.round(questions)),period.label)+
     kpi("ORT. PROGRAM UYUMU",programRows.length?avgProgram+"%":"—",programRows.length+" programlı öğrenci",avgProgram&&avgProgram<60?"warn":"");
   const studentRows=[...rows].sort((a,b)=>reportRiskScore(b)-reportRiskScore(a)).map(row=>{
     const p=row.share?.progress||{},w=weekStats(row.share?.program),name=studentName(row),pp=reportPpSummaryMetrics(row),risk=reportRiskMeta(reportRiskScore(row));
-    return '<button class="report-student-row" type="button" data-report-student="'+escHtml(row.studentUid)+'" data-report-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="report-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+escHtml(reportMinutes(p.minutes7))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.questions7))))+'</strong><strong>'+(w.total?escHtml(w.ratio+"%"):"—")+'</strong><strong>'+escHtml(String(Math.round(pp.total)))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.overdueTopics))))+'</strong><em class="report-risk-inline '+risk.tone+'">'+escHtml(risk.label)+' ›</em></button>';
+    return '<button class="report-student-row" type="button" data-report-student="'+escHtml(row.studentUid)+'" data-report-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="report-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+escHtml(reportMinutes(reportPeriodTotals(row).minutes))+'</strong><strong>'+escHtml(String(Math.round(reportPeriodTotals(row).questions)))+'</strong><strong>'+(w.total?escHtml(w.ratio+"%"):"—")+'</strong><strong>'+escHtml(String(Math.round(pp.total)))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.overdueTopics))))+'</strong><em class="report-risk-inline '+risk.tone+'">'+escHtml(risk.label)+' ›</em></button>';
   }).join("");
   $("reportStudentList").innerHTML=studentRows||'<div class="report-list-empty">Öğrenci verisi yok.</div>';
   const attentionRows=attention.slice(0,4);
@@ -1190,19 +1297,15 @@ function renderReportOverview(){
 function renderStudentReport(row){
   const share=row.share||{},profile=share.profile||{},progress=share.progress||{},programDetails=reportProgramDetails(row),w=programDetails.stats,name=studentName(row),daily=reportDailyRows(row),currentWeek=reportCalendarWeek(daily),priorWeek=reportCalendarWeek(daily,-7),current7=reportPeriod(currentWeek),previous7=reportPeriod(priorWeek),riskScore=reportRiskScore(row),risk=reportRiskMeta(riskScore);
   $("reportScopeTitle").textContent=name;
-  $("reportScopeMeta").textContent="Detaylı takip · son 7 gün";
+  $("reportScopeMeta").textContent="Detaylı takip · "+reportPeriodInfo().meta+(reportSubjectValue()==="all"?"":" · "+reportSubjectValue());
   $("reportStudentAvatar").textContent=reportInitial(name);
   $("reportStudentName").textContent=name;
   const target=[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ");
-  $("reportStudentTarget").textContent=[profile.track,target].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
+  const career=profile.career&&typeof profile.career==="object"?profile.career:null,rank=[career?.tyt?.name?"TYT "+career.tyt.name:"",career?.ayt?.name?(career.ayt.label||"AYT")+" "+career.ayt.name:"",reportNum(career?.level)>0?"Seviye "+Math.floor(reportNum(career.level)):""].filter(Boolean).join(" · ");
+  $("reportStudentTarget").textContent=[profile.track,target,rank].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
   $("reportStudentSync").textContent="Son veri: "+reportTimestamp(share.updatedAt);
   $("reportStudentRisk").textContent=risk.label;$("reportStudentRisk").className="report-risk-pill "+risk.tone;
-  $("reportStudentKpis").innerHTML=
-    kpi("ÇALIŞMA",reportMinutes(progress.minutes7),"Son 7 gün")+
-    kpi("SORU",String(Math.round(reportNum(progress.questions7))),"Son 7 gün")+
-    kpi("AKTİF GÜN",daily.length?current7.activeDays+" / 7":"—",daily.length?"Çalışma veya soru kaydı":"Yeni senkron bekleniyor")+
-    kpi("PROGRAM UYUMU",w.total?w.ratio+"%":"—",w.total?w.completed+" / "+w.total+" görev":"Program verisi yok",w.total&&w.ratio<60?"warn":"")+
-    kpi("GECİKEN KONU",String(Math.round(reportNum(progress.overdueTopics))),"Takip bekleyen",reportNum(progress.overdueTopics)?"warn":"");
+  $("reportStudentKpis").innerHTML=reportStripHtml(row,w);
 
   const pulse=reportStudyPulse(row),bestDay=pulse.best?new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric"}).format(new Date(pulse.best.date+"T12:00:00")):"—";
   $("reportStudyPulse").innerHTML=
@@ -1210,16 +1313,14 @@ function renderStudentReport(row){
     '<div><span>Günlük ort.</span><strong>'+escHtml(reportMinutes(pulse.avgMinutes))+'</strong><small>'+Math.round(pulse.avgQuestions)+' soru/gün</small></div>'+
     '<div><span>En yoğun gün</span><strong>'+escHtml(bestDay)+'</strong><small>'+(pulse.best?escHtml(reportMinutes(pulse.best.minutes))+' · '+Math.round(pulse.best.questions)+' soru':"Veri yok")+'</small></div>'+
     '<div><span>Aktif seri</span><strong>'+pulse.streak+' gün</strong><small>'+(pulse.streak?"Kesintisiz çalışma":"Bugün kayıt yok")+'</small></div>';
-  const focusSubjects=reportSubjectRows(row).filter(item=>item.minutes>0).slice(0,6),focusMax=Math.max(1,...focusSubjects.map(item=>item.minutes));
-  $("reportSubjectFocusBars").innerHTML=focusSubjects.length?focusSubjects.map((item,index)=>'<div class="report-subject-focus-row"><span><b>'+escHtml(item.name)+'</b><small>'+(index===0?"En çok çalışılan · ":"")+Math.round(item.questions)+' soru</small></span><i><em style="width:'+Math.round(item.minutes/focusMax*100)+'%"></em></i><strong>'+escHtml(reportMinutes(item.minutes))+'</strong></div>').join(""):'<div class="report-mini-empty">Ders bazlı odak süresi yeni senkronla burada görünecek.</div>';
+  $("reportSubjectFocusBars").innerHTML=reportSubjectFocusHtml(row);
+  {const head=$("reportSubjectFocusBars")?.closest("article")?.querySelector("h2");if(head)head.textContent="Ders dağılımı · "+reportPeriodInfo().meta;}
 
-  const trend=$("reportActivityTrend");
-  if(previous7.minutes>0){const pct=Math.round((current7.minutes-previous7.minutes)/previous7.minutes*100);trend.textContent=(pct>=0?"+":"")+pct+"% süre";trend.className="report-trend-pill "+(pct>=0?"good":"warn");}
-  else{trend.textContent=daily.length?"7 günlük görünüm":"Günlük veri bekleniyor";trend.className="report-trend-pill";}
-  if(daily.length){
-    const rows=currentWeek,maxMinutes=Math.max(1,...rows.map(item=>item.minutes)),maxQuestions=Math.max(1,...rows.map(item=>item.questions));
-    $("reportActivityChart").innerHTML='<div class="report-activity-bars">'+rows.map(item=>{const d=new Date(item.date+"T12:00:00"),label=new Intl.DateTimeFormat("tr-TR",{weekday:"short"}).format(d);return '<div class="report-activity-day" title="'+escHtml(item.date+" · "+Math.round(item.minutes)+" dk · "+Math.round(item.questions)+" soru")+'"><div class="report-activity-columns"><i style="height:'+Math.max(item.minutes?8:2,item.minutes/maxMinutes*100)+'%"></i><b style="height:'+Math.max(item.questions?8:2,item.questions/maxQuestions*100)+'%"></b></div><span>'+escHtml(label)+'</span><small>'+Math.round(item.minutes)+'dk · '+Math.round(item.questions)+'s</small></div>';}).join("")+'</div><div class="report-activity-legend"><span><i></i>Odak süresi</span><span><b></b>Soru</span><em>'+reportMinutes(current7.minutes)+' · '+Math.round(current7.questions)+' soru</em></div>';
-  }else $("reportActivityChart").innerHTML='<div class="report-data-wait"><b>Günlük dağılım yeni senkronla açılacak.</b><span>Toplam çalışma: '+escHtml(reportMinutes(progress.minutes7))+' · '+Math.round(reportNum(progress.questions7))+' soru</span></div>';
+  const trend=$("reportActivityTrend"),curWindow=reportWindow(row,0),prevWindow=reportWindow(row,1);
+  if(curWindow.hasData&&prevWindow.covered&&prevWindow.minutes>0){const pct=Math.round((curWindow.minutes-prevWindow.minutes)/prevWindow.minutes*100);trend.textContent=(pct>=0?"+":"")+pct+"% süre";trend.className="report-trend-pill "+(pct>=0?"good":"warn");}
+  else{trend.textContent=curWindow.hasData?reportPeriodInfo().label:"Günlük veri bekleniyor";trend.className="report-trend-pill";}
+  {const head=$("reportActivityChart")?.closest("article")?.querySelector("h2");if(head)head.textContent=reportPeriodInfo().label;}
+  $("reportActivityChart").innerHTML=reportPeriodChartHtml(row);
 
   $("reportStudentSignals").innerHTML=reportStudentSignals(row).map(item=>'<div class="report-signal '+item.tone+'"><i></i><span><b>'+escHtml(item.title)+'</b><small>'+escHtml(item.text)+'</small></span></div>').join("");
   renderReportEvidence(row);
@@ -1266,6 +1367,7 @@ function renderStudentReport(row){
   const errorMap=new Map();(Array.isArray(share.errorJournal)?share.errorJournal:[]).forEach(item=>{const key=(item?.subject||"Ders")+"|"+(item?.topic||"Konu"),current=errorMap.get(key)||{subject:item?.subject||"Ders",topic:item?.topic||"Konu",n:0,date:""};current.n+=Math.max(1,reportNum(item?.n));if(String(item?.date||"")>current.date)current.date=String(item.date);errorMap.set(key,current);});
   const errors=[...errorMap.values()].sort((a,b)=>b.n-a.n||b.date.localeCompare(a.date)).slice(0,7);
   $("reportErrorList").innerHTML=errors.length?errors.map(item=>'<div class="report-error-row"><div><b>'+escHtml(item.subject)+'</b><span>'+escHtml(item.topic)+' · '+escHtml(item.date||"tarih yok")+'</span></div><strong>'+Math.round(item.n)+' yanlış</strong></div>').join(""):'<div class="report-mini-empty">Henüz hata defteri kaydı yok.</div>';
+  try{reportV53Layout(row)}catch(error){console.error("Takip & Rapor v53",error)}
   setReportState("reportStudentDetail");
 }
 $("reportStudentSelect")?.addEventListener("change",event=>renderReport(event.currentTarget.value));

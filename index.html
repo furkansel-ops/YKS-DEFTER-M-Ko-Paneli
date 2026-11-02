@@ -61,6 +61,7 @@
   <link rel="stylesheet" href="./coach-home-appts-v47.css?v=1.0.0">
   <link rel="stylesheet" href="./exams-v52.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-photo-v52.css?v=1.0.0">
+  <link rel="stylesheet" href="./reports-v53.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -387,6 +388,16 @@
             <span>Öğrenci seç</span>
             <select id="reportStudentSelect"><option value="all">Tüm öğrenciler</option></select>
           </label>
+          <div class="report-v53-period" id="reportPeriodSeg" role="group" aria-label="Rapor dönemi">
+            <button type="button" data-report-period="day" aria-pressed="false">Bugün</button>
+            <button type="button" data-report-period="week" aria-pressed="true">7 gün</button>
+            <button type="button" data-report-period="month" aria-pressed="false">30 gün</button>
+          </div>
+          <label class="report-select-wrap report-v53-subject">
+            <span>Ders</span>
+            <select id="reportSubjectSelect"><option value="all">Tüm dersler</option></select>
+          </label>
+          <button class="report-v53-print" id="reportPrintBtn" type="button" hidden>⎙ Raporu yazdır / PDF</button>
         </section>
 
         <div id="reportLoading" class="report-state">
@@ -545,6 +556,14 @@
               </div>
               <div class="report-error-list" id="reportErrorList"></div>
             </article>
+
+            <article class="report-card report-v53-links" id="reportLinksCard">
+              <div class="report-card-head compact"><div><span>AYRINTI</span><h2>Diğer sayfalarda</h2><p>Deneme, konu, hata ve paragraf ayrıntıları kendi sayfalarında.</p></div></div>
+              <div class="report-v53-link-list" id="reportLinks"></div>
+            </article>
+            <details class="report-card report-v53-more" id="reportMoreDetails">
+              <summary>Koç sinyalleri ve eksik analizi</summary>
+            </details>
           </section>
         </div>
       </section>
@@ -1515,7 +1534,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52-photos52"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52-photos52-reports53"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.4"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script>
 </body>
