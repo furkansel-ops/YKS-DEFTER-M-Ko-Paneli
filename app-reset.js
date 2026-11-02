@@ -2513,7 +2513,6 @@ function studentActiveToday(row){
   const now=new Date();
   return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()&&d.getDate()===now.getDate();
 }
-function studentNeedsAttention(row){return reportNum(row?.share?.progress?.overdueTopics)>0}
 function studentLastActivity(row){
   const d=studentUpdatedDate(row);if(!d)return"Veri bekleniyor";
   const now=new Date(),diff=Math.max(0,now-d);
@@ -2525,62 +2524,129 @@ function studentLastActivity(row){
   if(days>1&&days<7)return days+" gün önce";
   return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short"}).format(d);
 }
+/* v54 · Öğrenciler: "son çalışma" gün gün çalışma kaydından, "son eşitleme" ayrı (uygulamayı açmak çalışmak sayılmaz);
+   süzgeç, alan ve sıralama; satırda rank, 7 gün, son deneme; öğrenci kartı; kaldırırken sonuçları anlatan pencere. */
+const STUDENT_STALE_DAYS=2,STUDENT_IDLE_DAYS=3;
+let studentCardUid="";
+function studentStudy(row){
+  const today=reportDateOffset(0),days=reportDailyFull(row).filter(day=>day.minutes>0||day.questions>0),last=days.at(-1);
+  if(!last)return{has:false,days:null,minutes:0,questions:0,date:""};
+  const ago=Math.round((new Date(today+"T12:00:00")-new Date(last.date+"T12:00:00"))/86400000);
+  return{has:true,days:ago,minutes:last.minutes,questions:last.questions,date:last.date};
+}
+function studentSyncDays(row){const d=studentUpdatedDate(row);return d?Math.floor((Date.now()-d.getTime())/86400000):null}
+function studentStudiedToday(row){const s=studentStudy(row);return s.has&&s.days===0}
+function studentIdle(row){const s=studentStudy(row);return!s.has||s.days>=STUDENT_IDLE_DAYS}
+function studentExamDrop(row){const list=examList(row,"all"),last=list.at(-1),prev=last?examPrevSame(list,last):null;return last&&prev?reportNum(prev.totalNet)-reportNum(last.totalNet):0}
+function studentNeedsAttention(row){return reportNum(row?.share?.progress?.overdueTopics)>0||studentExamDrop(row)>=EXAM_V52_DROP||(!!row?.share&&studentIdle(row))}
+function studentStudyLabel(row){
+  const s=studentStudy(row);
+  if(!row?.share)return"Veri bekleniyor";if(!s.has)return"Çalışma kaydı yok";
+  if(s.days===0)return"Bugün "+reportMinutes(s.minutes)+(s.questions?" · "+Math.round(s.questions)+" soru":"");
+  return s.days===1?"Dün çalıştı":s.days+" gündür çalışmadı";
+}
+function studentStatus(row){
+  const s=studentStudy(row),overdue=Math.round(reportNum(row?.share?.progress?.overdueTopics)),drop=studentExamDrop(row);
+  if(!row?.share)return{tone:"idle",text:"Veri bekleniyor"};
+  if(s.has&&s.days===0)return{tone:"active",text:studentStudyLabel(row)};
+  if(studentIdle(row))return{tone:"attention",text:s.has?s.days+" gündür çalışmadı":"Çalışma kaydı yok"};
+  if(drop>=EXAM_V52_DROP)return{tone:"attention",text:"Net ▼ "+examFmt(drop)};
+  if(overdue)return{tone:"attention",text:overdue+" geciken konu"};
+  return{tone:"idle",text:studentStudyLabel(row)};
+}
+function studentSyncLabel(row){
+  const days=studentSyncDays(row);
+  if(days===null)return{stale:true,text:"Henüz eşitleme yok"};
+  return{stale:days>=STUDENT_STALE_DAYS,text:days>=STUDENT_STALE_DAYS?"Veri eski · son eşitleme "+days+" gün önce":"Son eşitleme "+studentLastActivity(row).toLocaleLowerCase("tr-TR")};
+}
+function studentTrack(row){return String(row?.share?.profile?.track||"").toLocaleUpperCase("tr-TR").replace("Ö","O").replace("İ","I")}
+function studentRankText(row){const c=row?.share?.profile?.career;return[c?.tyt?.name?"TYT "+c.tyt.name:"",reportNum(c?.level)>0?"Seviye "+Math.floor(reportNum(c.level)):""].filter(Boolean).join(" · ")}
+function studentLastExamText(row){const list=examList(row,"all"),last=list.at(-1),prev=last?examPrevSame(list,last):null;return last?"Son "+String(last.type||"")+" "+examFmt(last.totalNet)+(prev?" "+examSigned(reportNum(last.totalNet)-reportNum(prev.totalNet)):""):"Deneme yok"}
 function renderStudentsPage(){
   const total=$("studentsTotal"),active=$("studentsActive"),attention=$("studentsAttention"),list=$("studentsList"),empty=$("studentsEmpty");
-  const counts={all:coachReportRows.length,active:coachReportRows.filter(studentActiveToday).length,attention:coachReportRows.filter(studentNeedsAttention).length};
-  if(total)total.textContent=String(counts.all);
-  if(active)active.textContent=String(counts.active);
-  if(attention)attention.textContent=String(counts.attention);
-  // v43: sayılar filtre düğmelerinde; başlıkta kısa özet; öğrenci yokken sayfa tek karta iner.
-  if($("studentsCountAll"))$("studentsCountAll").textContent=String(counts.all);
-  if($("studentsCountActive"))$("studentsCountActive").textContent=String(counts.active);
-  if($("studentsCountAttention"))$("studentsCountAttention").textContent=String(counts.attention);
-  if($("studentsHeadMeta"))$("studentsHeadMeta").textContent=counts.all?counts.all+" öğrenci · bugün aktif "+counts.active:"Henüz öğrenci yok";
+  const counts={all:coachReportRows.length,active:coachReportRows.filter(studentStudiedToday).length,idle:coachReportRows.filter(row=>row.share&&studentIdle(row)).length,attention:coachReportRows.filter(studentNeedsAttention).length};
+  if(total)total.textContent=String(counts.all);if(active)active.textContent=String(counts.active);if(attention)attention.textContent=String(counts.attention);
+  [["studentsCountAll","all"],["studentsCountActive","active"],["studentsCountIdle","idle"],["studentsCountAttention","attention"]].forEach(([id,key])=>{if($(id))$(id).textContent=String(counts[key])});
+  if($("studentsHeadMeta"))$("studentsHeadMeta").textContent=counts.all?counts.all+" öğrenci · bugün çalışan "+counts.active:"Henüz öğrenci yok";
   $("studentsPage")?.classList.toggle("is-empty",!counts.all);
   if(!list||!empty)return;
-  if(!coachReportRows.length){
-    empty.classList.remove("hidden");list.classList.add("hidden");list.innerHTML="";return;
-  }
+  if(!coachReportRows.length){empty.classList.remove("hidden");list.classList.add("hidden");list.innerHTML="";return}
   empty.classList.add("hidden");list.classList.remove("hidden");
-  const search=String($("studentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR");
+  const search=String($("studentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR"),track=$("studentTrackSelect")?.value||"all",sort=$("studentSortSelect")?.value||"attention";
+  const studyRank=row=>{const s=studentStudy(row);return s.has?s.days:999};
   const rows=coachReportRows.filter(row=>{
-    const name=studentName(row).toLocaleLowerCase("tr-TR");
-    if(search&&!name.includes(search))return false;
-    if(studentListFilter==="active"&&!studentActiveToday(row))return false;
+    if(search&&!studentName(row).toLocaleLowerCase("tr-TR").includes(search))return false;
+    if(track!=="all"&&studentTrack(row)!==track)return false;
+    if(studentListFilter==="active"&&!studentStudiedToday(row))return false;
+    if(studentListFilter==="idle"&&!(row.share&&studentIdle(row)))return false;
     if(studentListFilter==="attention"&&!studentNeedsAttention(row))return false;
     return true;
-  }).map(row=>({row,program:weekStats(row.share?.program)}))
-    // v43: ilgilenilmesi gereken üstte: geciken konusu olan → bugün girmeyen → ilerlemesi düşük olan.
-    .sort((a,b)=>Number(studentNeedsAttention(b.row))-Number(studentNeedsAttention(a.row))||Number(studentActiveToday(a.row))-Number(studentActiveToday(b.row))||a.program.ratio-b.program.ratio||studentName(a.row).localeCompare(studentName(b.row),"tr"));
+  }).map(row=>({row,program:weekStats(row.share?.program)})).sort((a,b)=>
+    sort==="name"?studentName(a.row).localeCompare(studentName(b.row),"tr"):
+    sort==="study"?studyRank(a.row)-studyRank(b.row)||studentName(a.row).localeCompare(studentName(b.row),"tr"):
+    sort==="program"?b.program.ratio-a.program.ratio||studentName(a.row).localeCompare(studentName(b.row),"tr"):
+    Number(studentNeedsAttention(b.row))-Number(studentNeedsAttention(a.row))||studyRank(b.row)-studyRank(a.row)||a.program.ratio-b.program.ratio||studentName(a.row).localeCompare(studentName(b.row),"tr"));
   list.innerHTML=rows.length?rows.map(({row,program})=>{
-    const name=studentName(row),overdue=Math.round(reportNum(row?.share?.progress?.overdueTopics)),uid=escHtml(row.studentUid);
-    const today=studentActiveToday(row);
-    const statusClass=overdue?"attention":today?"active":"idle";
-    const statusText=overdue?overdue+" geciken konu":today?"Bugün aktif":"Aktivite bekleniyor";
-    const last=studentLastActivity(row),ratio=Math.max(0,Math.min(100,program.ratio));
-    const line=(program.total?"Bu hafta %"+ratio:"Bu hafta program yok")+" · 7 günde "+reportMinutes(row?.share?.progress?.minutes7)+" · "+last.charAt(0).toLocaleLowerCase("tr-TR")+last.slice(1);
-    return '<div class="student-row" data-student-row="'+uid+'"><span class="student-cell-main"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span></span><span class="student-status '+statusClass+'"><i></i>'+escHtml(statusText)+'</span><span class="student-program"><b>'+(program.plannedDays?program.ratio+"%":"—")+'</b><small>'+(program.plannedDays?program.doneDays+" / "+program.plannedDays+" gün":"Program verisi yok")+'</small></span><span class="student-last">'+escHtml(last)+'</span><span class="students-v43-line"><span>'+escHtml(line)+'</span><span class="students-v43-bar"><i style="width:'+ratio+'%"></i></span></span><span class="student-actions"><button type="button" class="student-open" data-open-student="'+uid+'">İncele</button><button type="button" class="students-v43-more" data-student-menu="'+uid+'" aria-haspopup="menu" aria-expanded="false" aria-label="'+escHtml(name)+' için diğer işler">⋯</button></span><div class="students-v43-menu" role="menu" hidden><button type="button" role="menuitem" data-student-act="report" data-student-uid="'+uid+'">▥ Raporu aç</button><button type="button" role="menuitem" data-student-act="program" data-student-uid="'+uid+'">▣ Programı aç</button><button type="button" role="menuitem" data-student-act="message" data-student-uid="'+uid+'">✉ Mesaj yaz</button><button type="button" role="menuitem" class="student-remove" data-remove-student="'+uid+'" aria-label="'+escHtml(name)+' öğrencisini panelden kaldır">Panelden kaldır…</button></div></div>';
-  }).join(""):'<div class="students-filter-empty">Bu filtrede öğrenci bulunamadı.</div>';
-  list.querySelectorAll("[data-open-student]").forEach(button=>button.addEventListener("click",()=>dashboardStudentOpen(button.dataset.openStudent)));
-  // v43: kırmızı "Sil" her satırda durmaz; ⋯ menüsünde "Panelden kaldır…" (yine onay sorar).
+    const name=studentName(row),uid=escHtml(row.studentUid),status=studentStatus(row),sync=studentSyncLabel(row),ratio=Math.max(0,Math.min(100,program.ratio));
+    const line=[studentRankText(row),"7 günde "+reportMinutes(reportNum(row?.share?.progress?.minutes7)),studentLastExamText(row),program.total?"Bu hafta %"+ratio:"Program yok"].filter(Boolean).join(" · ");
+    return '<div class="student-row" data-student-row="'+uid+'"><span class="student-cell-main"><i>'+escHtml(reportInitial(name))+'</i><span><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS öğrencisi")+'</small></span></span><span class="student-status '+status.tone+'"><i></i>'+escHtml(status.text)+'</span><span class="student-program"><b>'+(program.plannedDays?program.ratio+"%":"—")+'</b><small>'+(program.plannedDays?program.doneDays+" / "+program.plannedDays+" gün":"Program verisi yok")+'</small></span><span class="student-last"><b>'+escHtml(studentStudyLabel(row))+'</b><small class="student-v54-sync'+(sync.stale?" is-stale":"")+'">'+escHtml(sync.text)+'</small></span><span class="students-v43-line"><span>'+escHtml(line)+'</span><span class="students-v43-bar"><i style="width:'+ratio+'%"></i></span></span><span class="student-actions"><button type="button" class="student-open" data-open-student="'+uid+'">İncele</button><button type="button" class="students-v43-more" data-student-menu="'+uid+'" aria-haspopup="menu" aria-expanded="false" aria-label="'+escHtml(name)+' için diğer işler">⋯</button></span><div class="students-v43-menu" role="menu" hidden><button type="button" role="menuitem" data-student-act="report" data-student-uid="'+uid+'">▥ Raporu aç</button><button type="button" role="menuitem" data-student-act="program" data-student-uid="'+uid+'">▣ Programı aç</button><button type="button" role="menuitem" data-student-act="message" data-student-uid="'+uid+'">✉ Mesaj yaz</button><button type="button" role="menuitem" class="student-remove" data-remove-student="'+uid+'" aria-label="'+escHtml(name)+' öğrencisini panelden kaldır">Panelden kaldır…</button></div></div>';
+  }).join(""):'<div class="students-filter-empty">Bu süzgeçte öğrenci bulunamadı.</div>';
+  list.querySelectorAll("[data-open-student]").forEach(button=>button.addEventListener("click",()=>openStudentCard(button.dataset.openStudent)));
   list.querySelectorAll("[data-student-menu]").forEach(button=>button.addEventListener("click",()=>{
     const menu=button.closest(".student-row")?.querySelector(".students-v43-menu"),open=Boolean(menu?.hidden);
     closeStudentMenus();
     if(menu&&open){menu.hidden=false;button.setAttribute("aria-expanded","true");button.closest(".student-row").classList.add("menu-open");menu.querySelector("button")?.focus()}
   }));
-  list.querySelectorAll("[data-student-act]").forEach(button=>button.addEventListener("click",()=>{
-    const uid=button.dataset.studentUid,act=button.dataset.studentAct;closeStudentMenus();
-    if(act==="report")dashboardStudentOpen(uid);
-    else if(act==="program")openCoachProgramWeek(uid,programCurrentWeekStart(),false);
-    else if(act==="message")openCoachMessageThread(uid,"");
-  }));
+  list.querySelectorAll("[data-student-act]").forEach(button=>button.addEventListener("click",()=>{const uid=button.dataset.studentUid;closeStudentMenus();studentCardAction(button.dataset.studentAct,uid)}));
   list.querySelectorAll("[data-remove-student]").forEach(button=>button.addEventListener("click",()=>void removeCoachStudent(button.dataset.removeStudent,button)));
-  // Satırın düğme dışı yerine dokunmak raporu açar.
-  list.querySelectorAll("[data-student-row]").forEach(node=>node.addEventListener("click",event=>{
-    if(event.target.closest?.("button,.students-v43-menu"))return;
-    dashboardStudentOpen(node.dataset.studentRow);
-  }));
+  // Satırın düğme dışı yerine dokunmak öğrenci kartını açar.
+  list.querySelectorAll("[data-student-row]").forEach(node=>node.addEventListener("click",event=>{if(event.target.closest?.("button,.students-v43-menu"))return;openStudentCard(node.dataset.studentRow)}));
 }
+function studentCardAction(act,uid){
+  closeStudentCard();
+  if(act==="report")dashboardStudentOpen(uid);
+  else if(act==="program")openCoachProgramWeek(uid,programCurrentWeekStart(),false);
+  else if(act==="message")openCoachMessageThread(uid,"");
+  else if(["exams","errors","topics"].includes(act))reportOpenPage(act,uid);
+}
+function openStudentCard(uid){
+  const row=coachReportRows.find(item=>item.studentUid===uid),modal=$("studentCardModal");if(!row||!modal)return;
+  studentCardUid=uid;const share=row.share||{},profile=share.profile||{},name=studentName(row),sync=studentSyncLabel(row),reading=profile.reading;
+  $("studentCardAvatar").textContent=reportInitial(name);$("studentCardName").textContent=name;
+  $("studentCardMeta").textContent=[profile.track,[profile.targetUniversity,profile.targetDepartment].filter(Boolean).join(" · ")].filter(Boolean).join(" · ")||"Hedef bilgisi yok";
+  const linked=row.link?.createdAt?.toDate?.()||null,targets=[reportNum(profile.targetNetTYT)?"TYT "+examFmt(profile.targetNetTYT):"",reportNum(profile.targetNetAYT)?"AYT "+examFmt(profile.targetNetAYT):""].filter(Boolean).join(" · ");
+  const fact=(label,value,cls="")=>'<span class="'+cls+'">'+escHtml(label)+'<b>'+escHtml(value)+'</b></span>';
+  $("studentCardFacts").innerHTML=fact("Rank · seviye",studentRankText(row)||"—")+fact("Hedef net",targets||"—")+fact("Son çalışma",studentStudyLabel(row))+fact("Eşitleme",sync.text,sync.stale?"is-stale":"")+fact("Bağlantı",linked?new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long"}).format(linked)+"'den beri":"—")+fact("Hızlı okuma",reading?.tests30?Math.round(reportNum(reading.wpm30))+" k/dk · %"+Math.round(reportNum(reading.comprehension30)):"—");
+  $("studentCardActions").innerHTML=[["report","▥ Rapor"],["program","▣ Program"],["message","✉ Mesaj"],["exams","▤ Deneme"],["errors","✎ Hata Defteri"],["topics","◫ Konular"]].map(([act,label])=>'<button type="button" data-student-card-act="'+act+'">'+label+'</button>').join("");
+  modal.hidden=false;$("studentCardModal").querySelector("[data-student-card-close]")?.focus();
+}
+function closeStudentCard(){const modal=$("studentCardModal");if(modal)modal.hidden=true;studentCardUid=""}
+/* Kaldırma onayı: sonuçları madde madde söyleyen pencere; true/false döner. */
+function studentRemoveConfirm(name){
+  const modal=$("studentRemoveModal");if(!modal)return Promise.resolve(confirm(name+" panelden kaldırılsın mı?"));
+  $("studentRemoveTitle").textContent=name+" panelden kaldırılsın mı?";modal.hidden=false;
+  return new Promise(resolve=>{
+    const done=answer=>{modal.hidden=true;modal.removeEventListener("click",onClick);resolve(answer)};
+    const onClick=event=>{const btn=event.target.closest("[data-student-remove-answer]");if(btn)done(btn.dataset.studentRemoveAnswer==="yes");else if(event.target===modal)done(false)};
+    modal.addEventListener("click",onClick);modal.querySelector('[data-student-remove-answer="no"]')?.focus();
+  });
+}
+/* Öğrencinin bu koçla paylaştığı Hata Defteri fotoğrafları kaldırılır (kural koçun silmesine izin verir). */
+async function removeStudentPhotos(coachUid,studentUid){
+  for(const name of ["coachingErrorPhotos","coachingErrorPhotoImages"]){
+    const snap=await getDocs(query(collection(db,name),where("coachUid","==",coachUid)));
+    const refs=snap.docs.filter(item=>item.data()?.studentUid===studentUid).map(item=>item.ref);
+    for(let i=0;i<refs.length;i+=400){const batch=writeBatch(db);refs.slice(i,i+400).forEach(ref=>batch.delete(ref));await batch.commit()}
+  }
+}
+$("studentCardModal")?.addEventListener("click",event=>{
+  if(event.target===event.currentTarget||event.target.closest("[data-student-card-close]")){closeStudentCard();return}
+  const act=event.target.closest("[data-student-card-act]");if(act&&studentCardUid){studentCardAction(act.dataset.studentCardAct,studentCardUid);return}
+});
+$("studentCardRemove")?.addEventListener("click",event=>{const uid=studentCardUid;if(uid){closeStudentCard();void removeCoachStudent(uid,event.currentTarget)}});
+$("studentTrackSelect")?.addEventListener("change",()=>renderStudentsPage());
+$("studentSortSelect")?.addEventListener("change",()=>renderStudentsPage());
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&studentCardUid)closeStudentCard()});
 function closeStudentMenus(){
   document.querySelectorAll("#studentsList .students-v43-menu").forEach(menu=>{menu.hidden=true;menu.closest(".student-row")?.classList.remove("menu-open")});
   document.querySelectorAll("#studentsList [data-student-menu]").forEach(button=>button.setAttribute("aria-expanded","false"));
@@ -2595,11 +2661,12 @@ async function removeCoachStudent(studentUid,button){
   const row=coachReportRows.find(item=>item.studentUid===studentUid),user=auth.currentUser;if(!row||!user)return;
   const name=studentName(row),linkId=String(row.link?.id||"");
   if(!linkId||row.link?.coachUid!==user.uid){alert("Bu öğrenci bağlantısı doğrulanamadı.");return}
-  const approved=confirm(name+" öğrencisini koç panelinden silmek istediğine emin misin?\n\nÖğrencinin YKS Defterim hesabı ve verileri silinmez; sadece koç bağlantısı kaldırılır.");
+  const approved=await studentRemoveConfirm(name);
   if(!approved)return;
   const previous=button?.textContent;if(button){button.disabled=true;button.textContent="Siliniyor…"}
   try{
     await updateDoc(doc(db,"coachingLinks",linkId),{active:false,endedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    try{await removeStudentPhotos(user.uid,studentUid)}catch(error){console.warn("Hata Defteri fotoğrafları kaldırılamadı",error)}
     if(selectedProgramStudentUid===studentUid){selectedProgramStudentUid="";selectedProgramWeekStart=""}
     if(selectedMessageStudent===studentUid)selectedMessageStudent="";
     await loadCoachReports(user.uid);

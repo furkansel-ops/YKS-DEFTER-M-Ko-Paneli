@@ -139,7 +139,7 @@ test('öğrenciler bölümünde bağlantıyı güvenli şekilde silme aksiyonu v
   assert.match(js,/data-remove-student/);
   assert.match(js,/function removeCoachStudent/);
   assert.match(js,/active:false,endedAt:serverTimestamp\(\),updatedAt:serverTimestamp\(\)/);
-  assert.match(js,/Öğrencinin YKS Defterim hesabı ve verileri silinmez/);
+  assert.match(html,/Öğrencinin hesabı, kayıtları ve programı silinmez/);assert.match(js,/const approved=await studentRemoveConfirm\(name\);/);
   assert.doesNotMatch(js,/deleteDoc\(/);
   assert.match(css,/student-remove/);
   assert.match(html,/students-v21\.css\?v=2\.3\.0/);

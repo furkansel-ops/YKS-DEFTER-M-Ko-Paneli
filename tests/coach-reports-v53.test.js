@@ -95,7 +95,7 @@ test("v53 eski paylaşımda (daily31 yok) 7 gün mevcut sayıları gösterir, de
 test("v53 stil dosyası bağlı, renkler sarılı, yazdırma kuralı var",()=>{
   const html=read("index.html"),css=read("reports-v53.css");
   assert.match(html,/<link rel="stylesheet" href="\.\/reports-v53\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-reports53"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-reports53(-[a-z0-9]+)*"/);
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i);
   assert.match(css,/@media print\{/);
 });

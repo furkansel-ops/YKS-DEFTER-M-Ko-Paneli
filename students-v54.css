@@ -1,0 +1,36 @@
+/* YKS Defterim Koç Paneli · Öğrenciler v54: alan/sıralama seçimi, son çalışma + eşitleme satırı, öğrenci kartı
+   ve kaldırma onayı. Renkler tema betiğiyle --kc-* olur. */
+.students-v54-selects{display:flex;gap:8px;flex-wrap:wrap}
+.students-v54-selects label{display:grid;gap:2px;min-width:140px;padding:5px 10px;border:1px solid var(--kc-e0e7f0,#e0e7f0);border-radius:10px;background:var(--kc-f9fbfd,#f9fbfd)}
+.students-v54-selects span{font-size:11px;font-weight:850;text-transform:uppercase;color:var(--kc-8b98aa,#8b98aa)}
+.students-v54-selects select{border:0;outline:0;background:transparent;color:var(--kc-374c66,#374c66);font:inherit;font-size:12.5px;font-weight:750}
+.student-last b{display:block;font-size:12.5px;color:var(--kc-253750,#253750)}
+.student-v54-sync{display:block;font-size:11.5px;color:var(--kc-8b98aa,#8b98aa)}
+.student-v54-sync.is-stale{color:var(--kc-9a5806,#9a5806);font-weight:800}
+.student-v54-modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:18px;background:var(--kc-0a1424-a500,rgba(10,20,36,.5))}
+.student-v54-modal[hidden]{display:none}
+.student-v54-sheet{width:min(520px,100%);max-height:calc(100dvh - 36px);overflow:auto;padding:16px;border-radius:18px;background:var(--kc-ffffff,#ffffff);box-shadow:0 24px 60px var(--kc-0a1424-a300,rgba(10,20,36,.3))}
+.student-v54-head{display:flex;gap:10px;align-items:center}
+.student-v54-head b{display:block;font-size:16px;color:var(--kc-253750,#253750)}.student-v54-head small{display:block;font-size:12px;color:var(--kc-71809a,#71809a)}
+.student-v54-head button{margin-left:auto;width:36px;height:36px;border:0;border-radius:10px;background:var(--kc-eef3f9,#eef3f9);color:var(--kc-41556e,#41556e);cursor:pointer}
+.student-v54-avatar{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--kc-edf5ff,#edf5ff);color:var(--kc-1f5fd0,#1f5fd0);font-weight:900}
+.student-v54-kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:12px}
+.student-v54-kv span{padding:8px 10px;border:1px solid var(--kc-e3e9f1,#e3e9f1);border-radius:10px;font-size:11.5px;color:var(--kc-71809a,#71809a)}
+.student-v54-kv b{display:block;font-size:12.5px;color:var(--kc-253750,#253750)}
+.student-v54-kv .is-stale b{color:var(--kc-9a5806,#9a5806)}
+.student-v54-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px}
+.student-v54-actions button{min-height:40px;border:0;border-radius:11px;background:var(--kc-edf5ff,#edf5ff);color:var(--kc-1f5fd0,#1f5fd0);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.student-v54-remove{width:100%;min-height:40px;margin-top:12px;border:1px solid var(--kc-efc1c6,#efc1c6);border-radius:11px;background:var(--kc-ffffff,#ffffff);color:var(--kc-b02a33,#b02a33);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.student-v54-confirm b{font-size:15px;color:var(--kc-253750,#253750)}
+.student-v54-confirm ul{margin:10px 0;padding-left:18px;color:var(--kc-41556e,#41556e);font-size:13px;line-height:1.55}
+.student-v54-confirm-actions{display:flex;gap:8px}
+.student-v54-confirm-actions button{flex:1;min-height:40px;border:1px solid var(--kc-dfe7f0,#dfe7f0);border-radius:11px;background:var(--kc-ffffff,#ffffff);color:var(--kc-253750,#253750);font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+.student-v54-confirm-actions .is-danger{border-color:var(--kc-b02a33,#b02a33);background:var(--kc-b02a33,#b02a33);color:var(--kc-ffffff,#ffffff)}
+.student-v54-sees{margin-top:10px;padding:9px 11px;border-radius:11px;background:var(--kc-f6f8fb,#f6f8fb);font-size:12px;color:var(--kc-41556e,#41556e)}
+.student-v54-sees b{display:block;margin-bottom:2px;font-size:12px;color:var(--kc-253750,#253750)}
+@media(max-width:720px){
+  .students-v54-selects label{flex:1;min-width:0}
+  .student-v54-modal{align-items:flex-end;padding:0}
+  .student-v54-sheet{width:100%;max-height:92dvh;border-radius:18px 18px 0 0}
+  .student-v54-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

@@ -11,13 +11,13 @@ const css=read("coach-students-v43.css");
 const DEMO=`
   const wk=programCurrentWeekStart(),day=(new Date().getDay()+6)%7,ago=n=>new Date(Date.now()-n*864e5).toISOString();
   const rows=()=>[0,1,2].map(i=>Array.from({length:7},(_,d)=>d===day?["Problemler 40 soru","Mol kavramı","20 paragraf"][i]:""));
-  const share=(name,dn,opts={})=>({profile:{name,track:"Sayısal"},updatedAt:opts.updated||ago(0),progress:{overdueTopics:opts.overdue||0,minutes7:opts.min||0},program:{weeks:[{week:wk,data:{r:rows(),dn}}]}});
+  const share=(name,dn,opts={})=>({profile:{name,track:"Sayısal"},updatedAt:opts.updated||ago(0),progress:{overdueTopics:opts.overdue||0,minutes7:opts.min||0,daily14:opts.study===undefined?[]:[{date:reportDateOffset(-opts.study),minutes:60,questions:20}]},program:{weeks:[{week:wk,data:{r:rows(),dn}}]}});
   const link=id=>({id,active:true,coachUid:"coach-1"});
   coachReportRows=[
-    {studentUid:"a",link:link("l-a"),share:share("Ayşe Yılmaz",{["r-0-"+day]:1,["r-1-"+day]:1,["r-2-"+day]:1},{min:540})},
-    {studentUid:"b",link:link("l-b"),share:share("Mehmet Kaya",{["r-0-"+day]:1},{min:240})},
-    {studentUid:"c",link:link("l-c"),share:share("Zeynep Demir",{},{updated:ago(2),min:60,overdue:3})},
-    {studentUid:"d",link:link("l-d"),share:share("Ali Can",{},{updated:ago(4)})}
+    {studentUid:"a",link:link("l-a"),share:share("Ayşe Yılmaz",{["r-0-"+day]:1,["r-1-"+day]:1,["r-2-"+day]:1},{min:540,study:0})},
+    {studentUid:"b",link:link("l-b"),share:share("Mehmet Kaya",{["r-0-"+day]:1},{min:240,study:0})},
+    {studentUid:"c",link:link("l-c"),share:share("Zeynep Demir",{},{updated:ago(2),min:60,overdue:3,study:2})},
+    {studentUid:"d",link:link("l-d"),share:share("Ali Can",{},{updated:ago(4),study:4})}
   ];
   // loadCoachReports gibi rapor seçicisini doldur.
   $("reportStudentSelect").innerHTML='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+row.studentUid+'">'+studentName(row)+'</option>').join("");
@@ -60,9 +60,9 @@ test("v43 stil dosyası yüklenir; önbellek etiketi yenilendi; filtrelerde say�
 
 test("v43 2 · 6: sayılar filtrelerde ve başlıkta; ilgilenilmesi gereken öğrenci üstte",t=>{
   const {doc}=fixture(t,DEMO);
-  assert.deepEqual(["studentsCountAll","studentsCountActive","studentsCountAttention"].map(id=>doc.getElementById(id).textContent),["4","2","1"]);
-  assert.equal(doc.getElementById("studentsHeadMeta").textContent,"4 öğrenci · bugün aktif 2");
-  assert.deepEqual(names(doc),["Zeynep Demir","Ali Can","Mehmet Kaya","Ayşe Yılmaz"]);
+  assert.deepEqual(["studentsCountAll","studentsCountActive","studentsCountIdle","studentsCountAttention"].map(id=>doc.getElementById(id).textContent),["4","2","1","2"],"v54: bugün çalışan (uygulamayı açan değil), 3+ gün, takip gereken");
+  assert.equal(doc.getElementById("studentsHeadMeta").textContent,"4 öğrenci · bugün çalışan 2");
+  assert.deepEqual(names(doc),["Ali Can","Zeynep Demir","Mehmet Kaya","Ayşe Yılmaz"]);
   doc.querySelector('[data-student-filter="active"]').click();
   assert.deepEqual(names(doc),["Mehmet Kaya","Ayşe Yılmaz"],"filtre sırayı bozmaz");
 });
@@ -74,10 +74,10 @@ test("v43 4: telefon satırı hafta, 7 gün ve son hareketi tek satırda taşır
   `);
   const lines=[...doc.querySelectorAll("#studentsList .students-v43-line>span:first-child")].map(node=>node.textContent);
   assert.deepEqual(lines,[
-    "Bu hafta %0 · 7 günde 1 sa · 2 gün önce",
-    "Bu hafta %0 · 7 günde 0 dk · 4 gün önce",
-    "Bu hafta %33 · 7 günde 4 sa · az önce",
-    "Bu hafta %100 · 7 günde 9 sa · az önce"
+    "7 günde 0 dk · Deneme yok · Bu hafta %0",
+    "7 günde 1 sa · Deneme yok · Bu hafta %0",
+    "7 günde 4 sa · Deneme yok · Bu hafta %33",
+    "7 günde 9 sa · Deneme yok · Bu hafta %100"
   ]);
   assert.equal(doc.querySelector('[data-student-row="b"] .students-v43-bar>i').getAttribute("style"),"width:33%");
   assert.equal(w.__dun,"Dün");
@@ -110,23 +110,27 @@ test("v43 5: ⋯ menüsü açılır, dışarı dokunmak ve Esc kapatır; işler 
   assert.ok(visible(doc,"reportsPage"));assert.equal(doc.getElementById("reportStudentSelect").value,"c");
 });
 
-test("v43 5: satıra dokunmak raporu açar; ⋯ düğmesi açmaz",t=>{
+test("v43 5 → v54: satıra dokunmak öğrenci kartını açar; karttan rapor; ⋯ düğmesi açmaz",t=>{
   const {doc}=fixture(t,DEMO);
   doc.querySelector('[data-coach-page="students"]').click();
   doc.querySelector('[data-student-row="d"] [data-student-menu]').click();
   assert.ok(visible(doc,"studentsPage"),"⋯ yalnız menüyü açar");
   doc.querySelector('[data-student-row="d"] .students-v43-line').click();
-  assert.ok(visible(doc,"reportsPage"));assert.equal(doc.getElementById("reportStudentSelect").value,"d");
+  assert.equal(doc.getElementById("studentCardModal").hidden,false);assert.equal(doc.getElementById("studentCardName").textContent,"Ali Can");
+  doc.querySelector('[data-student-card-act="report"]').click();
+  assert.ok(visible(doc,"reportsPage"));assert.equal(doc.getElementById("studentCardModal").hidden,true);assert.equal(doc.getElementById("reportStudentSelect").value,"d");
 });
 
-test("v43 5: \"Sil\" satırda durmaz; menüdeki \"Panelden kaldır…\" onay sorar, vazgeçilince dokunmaz",t=>{
+test("v43 5 → v54: \"Sil\" satırda durmaz; \"Panelden kaldır…\" sonuçları anlatan pencere açar, vazgeçilince dokunmaz",async t=>{
   const {w,doc}=fixture(t,DEMO);
   assert.equal(doc.querySelector("#studentsList .student-actions [data-remove-student]"),null);
   const remove=doc.querySelector('[data-student-row="c"] .students-v43-menu [data-remove-student]');
   assert.equal(remove.textContent,"Panelden kaldır…");
-  w.__confirm=false;remove.click();
-  assert.equal(w.__updates.length,0);
-  w.__confirm=true;remove.click();
+  const tick=()=>new Promise(resolve=>setImmediate(resolve)),dialog=doc.getElementById("studentRemoveModal");
+  remove.click();assert.equal(dialog.hidden,false);assert.match(dialog.textContent,/Öğrencinin hesabı, kayıtları ve programı silinmez/);
+  dialog.querySelector('[data-student-remove-answer="no"]').click();await tick();
+  assert.equal(w.__updates.length,0);assert.equal(dialog.hidden,true);
+  remove.click();dialog.querySelector('[data-student-remove-answer="yes"]').click();await tick();await tick();
   assert.deepEqual(w.__updates[0].ref.parts,["coachingLinks","l-c"]);
   assert.equal(w.__updates[0].data.active,false);
 });

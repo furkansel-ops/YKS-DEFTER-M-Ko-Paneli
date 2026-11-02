@@ -62,6 +62,7 @@
   <link rel="stylesheet" href="./exams-v52.css?v=1.0.0">
   <link rel="stylesheet" href="./errors-photo-v52.css?v=1.0.0">
   <link rel="stylesheet" href="./reports-v53.css?v=1.0.0">
+  <link rel="stylesheet" href="./students-v54.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -225,13 +226,33 @@
             <label class="student-search"><span>⌕</span><input id="studentSearch" type="search" placeholder="Öğrenci ara..."></label>
             <div class="student-filters">
               <button class="active" type="button" data-student-filter="all">Tümü <i class="students-v43-count" id="studentsCountAll">0</i></button>
-              <button type="button" data-student-filter="active">Bugün aktif <i class="students-v43-count" id="studentsCountActive">0</i></button>
+              <button type="button" data-student-filter="active">Bugün çalıştı <i class="students-v43-count" id="studentsCountActive">0</i></button>
+              <button type="button" data-student-filter="idle">3+ gündür çalışmadı <i class="students-v43-count" id="studentsCountIdle">0</i></button>
               <button type="button" data-student-filter="attention">Takip gereken <i class="students-v43-count" id="studentsCountAttention">0</i></button>
+            </div>
+            <div class="students-v54-selects">
+              <label><span>Alan</span><select id="studentTrackSelect"><option value="all">Tümü</option><option value="SAY">SAY</option><option value="EA">EA</option><option value="SOZ">SÖZ</option><option value="DIL">DİL</option></select></label>
+              <label><span>Sırala</span><select id="studentSortSelect"><option value="attention">Dikkat önce</option><option value="study">Son çalışma</option><option value="program">Program uyumu</option><option value="name">Ada göre</option></select></label>
             </div>
           </div>
 
-          <div class="students-table-head"><span>Öğrenci</span><span>Bugünkü durum</span><span>Program</span><span>Son aktivite</span><span></span></div>
+          <div class="students-table-head"><span>Öğrenci</span><span>Çalışma durumu</span><span>Program</span><span>Son çalışma · eşitleme</span><span></span></div>
 
+          <div class="student-v54-modal" id="studentCardModal" hidden role="dialog" aria-modal="true" aria-labelledby="studentCardName">
+            <div class="student-v54-sheet">
+              <div class="student-v54-head"><span class="student-v54-avatar" id="studentCardAvatar">Ö</span><span><b id="studentCardName">Öğrenci</b><small id="studentCardMeta"></small></span><button type="button" data-student-card-close aria-label="Kapat">✕</button></div>
+              <div class="student-v54-kv" id="studentCardFacts"></div>
+              <div class="student-v54-actions" id="studentCardActions"></div>
+              <button type="button" class="student-v54-remove" id="studentCardRemove">Panelden kaldır…</button>
+            </div>
+          </div>
+          <div class="student-v54-modal" id="studentRemoveModal" hidden role="alertdialog" aria-modal="true" aria-labelledby="studentRemoveTitle">
+            <div class="student-v54-sheet student-v54-confirm">
+              <b id="studentRemoveTitle">Öğrenci panelden kaldırılsın mı?</b>
+              <ul><li>Koç bağlantısı kapanır; bu öğrencinin verisini artık göremezsin.</li><li>Öğrencinin hesabı, kayıtları ve programı silinmez.</li><li>Seninle paylaştığı Hata Defteri fotoğrafları senden kaldırılır.</li><li>Mesaj geçmişi kalır; öğrenci yeni kodla tekrar bağlanabilir.</li></ul>
+              <div class="student-v54-confirm-actions"><button type="button" data-student-remove-answer="no">Vazgeç</button><button type="button" class="is-danger" data-student-remove-answer="yes">Kaldır</button></div>
+            </div>
+          </div>
           <div class="students-empty" id="studentsEmpty">
             <span>♟</span>
             <h2>İlk öğrencini ekle</h2>
@@ -271,6 +292,7 @@
             </label>
 
             <div class="student-code-status hidden" id="studentCodeStatus"></div>
+            <div class="student-v54-sees"><b>Bağlanınca neleri görürsün?</b><span>Çalışma süresi ve soru sayısı, program ve görevler, denemeler, konu durumu, Hata Defteri kayıtları ve paylaştığı fotoğraflar, paragraf/problem, rank ve seviye, gün sonu notları. Öğrencinin şifresi ve e-postası görünmez.</span></div>
 
             <div class="student-connect-preview hidden" id="studentConnectPreview">
               <div class="student-preview-avatar" id="studentPreviewAvatar">Ö</div>
@@ -1534,7 +1556,7 @@
       </div>
     </section>
   </div>
-  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52-photos52-reports53"></script>
+  <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52-photos52-reports53-students54"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.4"></script>
   <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script>
 </body>
