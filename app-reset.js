@@ -1930,6 +1930,162 @@ $("topicSearchInput")?.addEventListener("input",()=>renderTopicAnalysis($("topic
 document.querySelectorAll("[data-topic-quick]").forEach(btn=>btn.addEventListener("click",()=>{const value=btn.dataset.topicQuick||"all";if($("topicStatusSelect"))$("topicStatusSelect").value=value;document.querySelectorAll("[data-topic-quick]").forEach(item=>item.classList.toggle("on",item===btn));renderTopicAnalysis($("topicStudentSelect")?.value||"all")}));
 $("topicRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setTopicState("topicLoading");void loadCoachReports(user.uid)}});
 
+/* v55 · Konular: müfredatın tamamı (öğrenci 1.2.29+ topics.full), öğrencinin 4 aşaması, aralıklı tekrar
+   (pekiştirmeden 3/7/21 gün sonra), nedenli öncelik ve konudan program görevi. Eski görünüm ve kimlikleri
+   (seçimler, arama) yerinde kalır; yeni katman onları durum olarak kullanır, eski kartlar gizlenir. */
+const TOPIC_V55_GAPS=[3,7,21],TOPIC_V55_STAGE=["Başlanmadı","İşledim","Soru çözdüm","Pekiştirdim"],TOPIC_V55_DAYS=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+const TOPIC_V55_TRACK={SAY:["Matematik (AYT)","Geometri (AYT)","Fizik (AYT)","Kimya (AYT)","Biyoloji (AYT)"],EA:["Matematik (AYT)","Geometri (AYT)","Edebiyat","Tarih (AYT)","Coğrafya (AYT)"],SOZ:["Edebiyat","Tarih (AYT)","Coğrafya (AYT)","Tarih-2","Coğrafya-2","Felsefe Grubu","Din Kültürü (AYT)"]};
+const TOPIC_V55_TRACK_NAME={SAY:"Sayısal",EA:"Eşit Ağırlık",SOZ:"Sözel",DIL:"Dil"};
+let topicV55Exam="TYT",topicV55Uid="";const topicV55Open=new Set();
+function topicV55Track(row){const t=String(row?.share?.profile?.track||"").toLocaleUpperCase("tr-TR").replace(/Ö/g,"O").replace(/İ/g,"I");return["SAY","EA","SOZ","DIL"].includes(t)?t:""}
+function topicV55ItemExam(item){const exam=String(item?.exam||String(item?.key||"").split("|")[0]||"").toUpperCase();return exam==="YDT"?"YDT":topicExam(item)}
+function topicV55Exams(row){return topicV55Track(row)==="DIL"?["TYT","YDT"]:["TYT","AYT"]}
+function topicV55Scope(row,exam){
+  const items=topicItems(row).filter(item=>topicV55ItemExam(item)===exam),subjects=exam==="AYT"?TOPIC_V55_TRACK[topicV55Track(row)]:null;
+  return subjects?items.filter(item=>subjects.includes(String(item.subject||""))):items;
+}
+function topicV55ExamLabel(row,exam){const track=topicV55Track(row);return exam==="AYT"&&TOPIC_V55_TRACK[track]?"AYT "+TOPIC_V55_TRACK_NAME[track]:exam}
+function topicV55Stage(item){return Math.max(0,Math.min(3,Math.floor(reportNum(item?.st))))}
+function topicV55Counts(items){const c=[0,0,0,0];items.forEach(item=>c[topicV55Stage(item)]++);return{c,total:items.length,done:c[3],ratio:items.length?Math.round(c[3]/items.length*100):0}}
+function topicV55AddDays(iso,days){const d=new Date(iso+"T00:00:00Z");d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10)}
+/* Sıradaki yapılmamış tekrar; öğrencinin tekrar kuyruğuyla aynı kural (ts + 3/7/21 gün, rev = yapılanlar). */
+function topicV55Review(item){
+  if(topicV55Stage(item)<3||!/^\d{4}-\d{2}-\d{2}$/.test(String(item?.ts||"")))return null;
+  const done=new Set((Array.isArray(item.rev)?item.rev:[]).map(Number));
+  for(let i=0;i<TOPIC_V55_GAPS.length;i++){if(done.has(i))continue;const due=topicV55AddDays(item.ts,TOPIC_V55_GAPS[i]);return{index:i,gap:TOPIC_V55_GAPS[i],due,days:topicDaysUntil(due),done:false}}
+  return{index:3,done:true};
+}
+function topicV55When(review){
+  if(review.days<0)return-review.days+" gün gecikti";if(review.days===0)return"bugün";if(review.days===1)return"yarın";
+  if(review.days<7)return TOPIC_V55_DAYS[(new Date(review.due+"T12:00:00").getDay()+6)%7];
+  return new Date(review.due+"T12:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"short"});
+}
+function topicV55ReviewText(review){return(review.index+1)+". tekrar ("+review.gap+". gün) · "+topicV55When(review)}
+function topicV55Base(subject){return String(subject||"").replace(/\s*\(AYT\)$/,"").replace(/-2$/,"").replace(/^Felsefe Grubu$/,"Felsefe").trim()}
+/* Yanlış kayıtları dersin AYT/2 ekinden bağımsız eşleşir ("Matematik (AYT)" ↔ "Matematik"). */
+function topicV55Errors(row,item){
+  const subject=topicV55Base(item?.subject).toLocaleLowerCase("tr-TR"),topic=String(item?.topic||"").toLocaleLowerCase("tr-TR");if(!subject||!topic)return 0;
+  return(Array.isArray(row?.share?.errorJournal)?row.share.errorJournal:[]).reduce((sum,error)=>{
+    const s=topicV55Base(error?.subject).toLocaleLowerCase("tr-TR"),t=String(error?.topic||"").toLocaleLowerCase("tr-TR");
+    return sum+(s===subject&&t&&(t.includes(topic)||topic.includes(t))?Math.max(1,reportNum(error?.n)):0);
+  },0);
+}
+function topicV55Priority(row,item){
+  const reasons=[];let score=0;const errors=topicV55Errors(row,item),conf=Math.floor(reportNum(item?.conf)),review=topicV55Review(item);
+  if(errors){score+=Math.min(60,errors*10);reasons.push(["bad",errors+" yanlış"])}
+  if(conf>=1&&conf<=2){score+=(3-conf)*15;reasons.push(["warn","güven "+conf+"/5"])}
+  if(review&&!review.done&&review.days<0){score+=Math.min(40,10-review.days*3);reasons.push(["bad","tekrar "+(-review.days)+" gün gecikti"])}
+  if(topicState(item)==="overdue"){score+=25;reasons.push(["bad","hedef tarihi geçti"])}
+  return{score,reasons};
+}
+/* Bu haftanın programında konu adı geçen gün (öğrencinin paylaştığı program). */
+function topicV55Plan(row){
+  const week=programWeeks(row).find(item=>item?.week===programCurrentWeekStart()),days=[];
+  if(week)for(let day=0;day<7;day++)days.push(collectProgramDayTasks(row?.share?.program||{},week,day).map(task=>String(task.text||"").toLocaleLowerCase("tr-TR")).join(" | "));
+  return days;
+}
+function topicV55PlanDay(plan,item){const name=String(item?.topic||"").toLocaleLowerCase("tr-TR");if(name.length<3)return-1;return plan.findIndex(text=>text.includes(name))}
+function topicV55Action(row,item,plan){
+  const day=topicV55PlanDay(plan,item);
+  return day>=0?'<span class="topic-v55-pill blue">Programda · '+TOPIC_V55_DAYS[day]+'</span>'
+    :'<button type="button" class="topic-v55-assign" data-v55-assign="'+escHtml(row.studentUid)+'" data-v55-key="'+escHtml(item.key||"")+'">Görev ver</button>';
+}
+function topicV55Reasons(reasons){return reasons.map(([tone,text])=>'<span class="topic-v55-pill '+tone+'">'+escHtml(text)+'</span>').join("")}
+function topicV55Bar(counts){
+  if(!counts.total)return'<i class="topic-v55-stages"></i>';
+  return'<i class="topic-v55-stages">'+[3,2,1].map(i=>counts.c[i]?'<b class="s'+i+'" style="width:'+(counts.c[i]/counts.total*100).toFixed(1)+'%"></b>':"").join("")+'</i>';
+}
+function topicV55Query(){return String($("topicSearchInput")?.value||"").trim().toLocaleLowerCase("tr-TR")}
+function topicV55Match(item,query){return!query||topicSearchText(item).includes(query)}
+function topicV55SyncControls(uid){
+  const select=$("topicV55Student"),search=$("topicV55Search");
+  if(select){
+    const html='<option value="all">Tüm öğrenciler</option>'+coachReportRows.map(row=>'<option value="'+escHtml(row.studentUid)+'">'+escHtml(studentName(row))+'</option>').join("");
+    if(select.dataset.html!==html){select.innerHTML=html;select.dataset.html=html}
+    select.value=uid||"all";
+  }
+  if(search&&document.activeElement!==search)search.value=$("topicSearchInput")?.value||"";
+}
+function renderTopicV55(scope){
+  const body=$("topicV55Body");if(!body)return;
+  $("topicsPage")?.setAttribute("data-v55","on");
+  const uid=scope&&scope!=="all"&&coachReportRows.some(row=>row.studentUid===scope)?scope:"";
+  topicV55Uid=uid;topicV55SyncControls(uid);
+  if(!coachReportRows.length){body.innerHTML='<div class="topic-v55-empty"><b>Henüz bağlı öğrenci yok</b><p>Öğrenci bağlandığında konu ilerlemesi burada görünür.</p></div>';return}
+  body.innerHTML=uid?topicV55StudentHtml(coachReportRows.find(row=>row.studentUid===uid)):topicV55OverviewHtml();
+}
+function topicV55StudentHtml(row){
+  const exams=topicV55Exams(row);if(!exams.includes(topicV55Exam))topicV55Exam="TYT";
+  const track=topicV55Track(row),sync=studentSyncLabel(row),full=row?.share?.topics?.full===true,plan=topicV55Plan(row),query=topicV55Query();
+  const scope=topicV55Scope(row,topicV55Exam),counts=topicV55Counts(scope);
+  let html='<header class="topic-v55-head"><div><span>Konular'+(track?" · "+escHtml(track==="SOZ"?"SÖZ":track==="DIL"?"DİL":track):"")+'</span><h2>'+escHtml(studentName(row))+'</h2><small class="'+(sync.stale?"is-stale":"")+'">'+escHtml(sync.text)+'</small></div></header>';
+  if(!full)html+='<p class="topic-v55-note">Öğrenci uygulaması güncellenince müfredatın tamamı ve tekrar zamanları görünür. Şimdilik yalnız öğrencinin işaretlediği konular var.</p>';
+  html+='<div class="topic-v55-tabs" role="tablist">'+exams.map(exam=>{const n=topicV55Scope(row,exam).length;return'<button type="button" role="tab" data-v55-exam="'+exam+'" aria-selected="'+(exam===topicV55Exam)+'">'+escHtml(topicV55ExamLabel(row,exam))+(n?' · '+n+' konu':'')+'</button>'}).join("")+'</div>';
+  if(!scope.length)return html+'<div class="topic-v55-empty"><b>Bu sınavda konu verisi yok</b><p>Öğrenci konu işaretledikçe burada görünür.</p></div>';
+  html+='<article class="topic-v55-card"><span class="topic-v55-eyebrow">'+escHtml(topicV55ExamLabel(row,topicV55Exam))+' ilerlemesi</span><div class="topic-v55-big"><strong>%'+counts.ratio+'</strong><small>'+counts.done+' / '+counts.total+' konu pekişti</small></div>'+topicV55Bar(counts)
+    +'<div class="topic-v55-legend">'+[3,2,1,0].map(i=>'<span class="s'+i+'">'+TOPIC_V55_STAGE[i]+' <b>'+counts.c[i]+'</b></span>').join("")+'</div></article>';
+  const reviews=scope.map(item=>({item,review:topicV55Review(item)})).filter(x=>x.review&&!x.review.done&&x.review.days<=7&&topicV55Match(x.item,query)).sort((a,b)=>a.review.days-b.review.days);
+  const late=reviews.filter(x=>x.review.days<0).length;
+  if(full||reviews.length)html+='<article class="topic-v55-card"><div class="topic-v55-row"><span class="topic-v55-eyebrow">Tekrar zamanı</span>'+(late?'<span class="topic-v55-pill bad">'+late+' gecikti</span>':"")+(reviews.length-late?'<span class="topic-v55-pill warn">'+(reviews.length-late)+' bu hafta</span>':"")+'</div>'
+    +(reviews.length?'<div class="topic-v55-list">'+reviews.slice(0,6).map(({item,review})=>'<div><span><b>'+escHtml(item.topic||"Konu")+' · '+escHtml(item.subject||"Ders")+'</b><small>'+escHtml(topicV55ReviewText(review))+'</small></span>'+topicV55Action(row,item,plan)+'</div>').join("")+'</div>'
+      :'<p class="topic-v55-muted">Bu hafta tekrar bekleyen konu yok.</p>')+'</article>';
+  const priority=scope.map(item=>({item,...topicV55Priority(row,item)})).filter(x=>x.score>0&&topicV55Match(x.item,query)).sort((a,b)=>b.score-a.score).slice(0,5);
+  html+='<article class="topic-v55-card"><span class="topic-v55-eyebrow">Önce bunlara bak</span>'+(priority.length?'<div class="topic-v55-list">'+priority.map(({item,reasons})=>'<div><span><b>'+escHtml(item.topic||"Konu")+' · '+escHtml(item.subject||"Ders")+'</b><small>'+topicV55Reasons(reasons)+' '+TOPIC_V55_STAGE[topicV55Stage(item)]+'</small></span>'+topicV55Action(row,item,plan)+'</div>').join("")+'</div>'
+    :'<p class="topic-v55-muted">Yanlış, düşük güven ya da gecikmiş tekrar öne çıkan konu yok.</p>')+'</article>';
+  const subjects=[];scope.forEach(item=>{const name=String(item.subject||"Ders");let entry=subjects.find(x=>x.name===name);if(!entry){entry={name,items:[]};subjects.push(entry)}entry.items.push(item)});
+  const shown=subjects.map(entry=>({...entry,hits:entry.items.filter(item=>topicV55Match(item,query))})).filter(entry=>entry.hits.length);
+  html+='<article class="topic-v55-card"><span class="topic-v55-eyebrow">Dersler</span>'+(shown.length?shown.map(entry=>{
+    const c=topicV55Counts(entry.items),key=row.studentUid+"|"+topicV55Exam+"|"+entry.name,open=Boolean(query)||topicV55Open.has(key);
+    return'<div class="topic-v55-subject'+(open?" is-open":"")+'"><button type="button" data-v55-subject="'+escHtml(key)+'" aria-expanded="'+open+'"><b>'+escHtml(entry.name)+'</b><em>'+c.done+' / '+c.total+'</em>'+topicV55Bar(c)+'</button>'
+      +(open?'<div class="topic-v55-topics">'+entry.hits.map(item=>{
+        const stage=topicV55Stage(item),review=topicV55Review(item),errors=topicV55Errors(row,item),conf=Math.floor(reportNum(item.conf));
+        const notes=[TOPIC_V55_STAGE[stage]];if(review)notes.push(review.done?"tekrarlar tamam":"tekrar "+review.index+"/3");if(errors)notes.push(errors+" yanlış");
+        return'<div><i class="s'+stage+'"></i><span><b>'+escHtml(item.topic||"Konu")+'</b><small>'+escHtml(notes.join(" · "))+'</small></span>'+(conf>=1&&conf<=5?'<em class="topic-v55-stars" aria-label="güven '+conf+'/5">'+"★".repeat(conf)+"☆".repeat(5-conf)+'</em>':"")+(stage<3||(review&&!review.done)?topicV55Action(row,item,plan):"")+'</div>';
+      }).join("")+'</div>':"")+'</div>';
+  }).join(""):'<p class="topic-v55-muted">Aramaya uyan konu yok.</p>')+'</article>';
+  return html;
+}
+function topicV55OverviewHtml(){
+  const query=topicV55Query(),focus=[];
+  const cards=coachReportRows.map(row=>{
+    const exams=topicV55Exams(row),sync=studentSyncLabel(row),full=row?.share?.topics?.full===true,plan=topicV55Plan(row),all=exams.flatMap(exam=>topicV55Scope(row,exam));
+    const late=all.filter(item=>{const r=topicV55Review(item);return r&&!r.done&&r.days<0}).length;
+    const ranked=all.map(item=>({row,item,plan,...topicV55Priority(row,item)})).filter(x=>x.score>0&&topicV55Match(x.item,query)).sort((a,b)=>b.score-a.score);focus.push(...ranked.slice(0,3));
+    const top=ranked[0],track=topicV55Track(row);
+    const pill=late?'<span class="topic-v55-pill bad">'+late+' tekrar gecikti</span>':full?'<span class="topic-v55-pill ok">tekrarlar güncel</span>':'<span class="topic-v55-pill">eski sürüm</span>';
+    return'<article class="topic-v55-card topic-v55-student"><button type="button" class="topic-v55-open" data-v55-student="'+escHtml(row.studentUid)+'"><i>'+escHtml(reportInitial(studentName(row)))+'</i><span><b>'+escHtml(studentName(row))+'</b><small>'+escHtml([track==="SOZ"?"SÖZ":track==="DIL"?"DİL":track,sync.text].filter(Boolean).join(" · "))+'</small></span>'+pill+'</button>'
+      +'<div class="topic-v55-mini">'+exams.map(exam=>{const c=topicV55Counts(topicV55Scope(row,exam));return'<span>'+escHtml(topicV55ExamLabel(row,exam))+'<b>%'+c.ratio+' · '+c.done+'/'+c.total+'</b></span>'}).join("")+'</div>'
+      +(top?'<div class="topic-v55-list"><div><span><b>'+escHtml(top.item.topic||"Konu")+' · '+escHtml(top.item.subject||"Ders")+'</b><small>'+topicV55Reasons(top.reasons)+'</small></span>'+topicV55Action(row,top.item,plan)+'</div></div>':"")+'</article>';
+  }).join("");
+  focus.sort((a,b)=>b.score-a.score);
+  return'<header class="topic-v55-head"><div><span>Konular</span><h2>Tüm öğrenciler</h2><small>'+coachReportRows.length+' öğrenci · müfredatın tamamı üzerinden</small></div></header>'+cards
+    +(focus.length?'<article class="topic-v55-card"><span class="topic-v55-eyebrow">Bu hafta önce bunlara bak</span><div class="topic-v55-list">'+focus.slice(0,6).map(({row,item,reasons,plan})=>'<div><span><b>'+escHtml(item.topic||"Konu")+' · '+escHtml(studentName(row))+'</b><small>'+topicV55Reasons(reasons)+'</small></span>'+topicV55Action(row,item,plan)+'</div>').join("")+'</div></article>':"");
+}
+/* Görev ver: mevcut program penceresi öğrenci, TYT/AYT, ders, konu ve çalışma türü hazır açılır. */
+function topicV55Assign(uid,key){
+  const row=coachReportRows.find(item=>item.studentUid===uid),item=topicItems(row).find(x=>x.key===key);if(!row||!item)return;
+  selectedProgramStudentUid=uid;openProgramTaskModal("",{});
+  coachV18SetLevel(topicV55ItemExam(item)==="AYT"?"AYT":"TYT");
+  const subject=$("programBuilderSubject"),base=topicV55Base(item.subject);
+  if(subject){subject.value=[...subject.options].some(option=>option.value===base)?base:"";subject.dispatchEvent(new Event("change",{bubbles:true}))}
+  const review=topicV55Review(item),activity=$("programBuilderActivity");
+  if(activity){activity.value=review&&!review.done&&review.days<=7?"Tekrar":topicV55Stage(item)===0?"Konu anlatımı":"Soru çözümü";activity.dispatchEvent(new Event("change",{bubbles:true}))}
+  const topic=$("programBuilderTopic");if(topic){topic.value=String(item.topic||"");topic.dispatchEvent(new Event("input",{bubbles:true}));topic.dispatchEvent(new Event("change",{bubbles:true}))}
+}
+const topicV55Legacy=renderTopicAnalysis;
+renderTopicAnalysis=function(scope){
+  try{topicV55Legacy(scope)}catch(error){console.error("Konular (eski görünüm)",error)}
+  renderTopicV55(scope);
+};
+$("topicV55Student")?.addEventListener("change",event=>{const value=event.currentTarget.value||"all";if($("topicStudentSelect"))$("topicStudentSelect").value=value;renderTopicAnalysis(value)});
+$("topicV55Search")?.addEventListener("input",event=>{if($("topicSearchInput"))$("topicSearchInput").value=event.currentTarget.value;renderTopicV55(topicV55Uid||"all")});
+$("topicV55Body")?.addEventListener("click",event=>{
+  const assign=event.target.closest("[data-v55-assign]");if(assign){topicV55Assign(assign.dataset.v55Assign,assign.dataset.v55Key);return}
+  const exam=event.target.closest("[data-v55-exam]");if(exam){topicV55Exam=exam.dataset.v55Exam;renderTopicV55(topicV55Uid||"all");return}
+  const subject=event.target.closest("[data-v55-subject]");if(subject){const key=subject.dataset.v55Subject;if(topicV55Open.has(key))topicV55Open.delete(key);else topicV55Open.add(key);renderTopicV55(topicV55Uid||"all");return}
+  const student=event.target.closest("[data-v55-student]");if(student){const value=student.dataset.v55Student;if($("topicStudentSelect"))$("topicStudentSelect").value=value;topicV55Exam="TYT";renderTopicAnalysis(value)}
+});
+
 
 /* v52 · Hata Defteri fotoğraf arşivi: öğrencinin koçla paylaştığı çözülmemiş yanlışların fotoğrafları
    (bilgi + küçük önizleme) tek dinleyiciyle gelir; büyük fotoğraf yalnız açınca okunur.

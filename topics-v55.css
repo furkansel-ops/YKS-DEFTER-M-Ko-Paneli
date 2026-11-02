@@ -1,0 +1,82 @@
+/* YKS Defterim Koç Paneli · Konular v55: müfredatın tamamı, öğrencinin 4 aşaması, tekrar zamanı,
+   nedenli öncelik ve konudan görev. Eski kartlar gizlenir; renkler tema betiğiyle --kc-* olur. */
+#topicsPage[data-v55="on"]>:is(.topic-control-card,#topicQuickFilters,#topicLoading,#topicEmpty,#topicOverview,#topicStudentDetail){display:none!important}
+#topicsPage[data-v55="on"] .topics-head p{display:none}
+.topic-v55{display:grid;gap:12px;max-width:980px}
+.topic-v55-bar{display:flex;gap:8px;flex-wrap:wrap}
+.topic-v55-bar label{display:grid;gap:2px;min-width:180px;padding:6px 11px;border:1px solid var(--kc-e0e7f0,#e0e7f0);border-radius:12px;background:var(--kc-ffffff,#ffffff)}
+.topic-v55-bar .topic-v55-search{flex:1;min-width:200px}
+.topic-v55-bar span{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.04em;color:var(--kc-6b7a90,#6b7a90)}
+.topic-v55-bar :is(select,input){min-width:0;border:0;outline:0;background:transparent;color:var(--kc-253750,#253750);font:inherit;font-size:14px;font-weight:750}
+#topicV55Body{display:grid;gap:12px}
+.topic-v55-head span{font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:var(--kc-6b7a90,#6b7a90)}
+.topic-v55-head h2{margin:2px 0 0;font-size:22px;letter-spacing:-.02em;color:var(--kc-14243a,#14243a)}
+.topic-v55-head small{display:block;font-size:12px;color:var(--kc-6b7a90,#6b7a90)}
+.topic-v55-head small.is-stale{color:var(--kc-9a5806,#9a5806);font-weight:800}
+.topic-v55-note{margin:0;padding:10px 12px;border-radius:12px;background:var(--kc-fff4de,#fff4de);color:var(--kc-6b4a00,#6b4a00);font-size:13px}
+.topic-v55-tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border:1px solid var(--kc-e0e7f0,#e0e7f0);border-radius:14px;background:var(--kc-ffffff,#ffffff)}
+.topic-v55-tabs button{min-height:40px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:var(--kc-5f6b80,#5f6b80);font:inherit;font-size:13px;font-weight:850;cursor:pointer}
+.topic-v55-tabs button[aria-selected="true"]{background:var(--kc-2f6bea,#2f6bea);color:var(--kc-ffffff,#ffffff)}
+.topic-v55-card{display:grid;gap:8px;min-width:0;padding:14px;border:1px solid var(--kc-e0e7f0,#e0e7f0);border-radius:16px;background:var(--kc-ffffff,#ffffff)}
+.topic-v55-eyebrow{font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:var(--kc-6b7a90,#6b7a90)}
+.topic-v55-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.topic-v55-row .topic-v55-eyebrow{margin-right:auto}
+.topic-v55-big{display:flex;align-items:baseline;gap:8px}
+.topic-v55-big strong{font-size:30px;letter-spacing:-.03em;color:var(--kc-14243a,#14243a)}
+.topic-v55-big small{font-size:13px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-stages{display:flex;height:10px;overflow:hidden;border-radius:99px;background:var(--kc-dfe5ee,#dfe5ee)}
+.topic-v55-stages b{display:block;height:100%}
+.topic-v55-stages .s3,.topic-v55-legend .s3::before,.topic-v55-topics i.s3{background:var(--kc-13906b,#13906b)}
+.topic-v55-stages .s2,.topic-v55-legend .s2::before,.topic-v55-topics i.s2{background:var(--kc-4f86f0,#4f86f0)}
+.topic-v55-stages .s1,.topic-v55-legend .s1::before,.topic-v55-topics i.s1{background:var(--kc-9cc0ff,#9cc0ff)}
+.topic-v55-legend .s0::before,.topic-v55-topics i.s0{background:var(--kc-dfe5ee,#dfe5ee)}
+.topic-v55-legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px 10px;font-size:12px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-legend span::before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;border-radius:3px}
+.topic-v55-legend b{color:var(--kc-14243a,#14243a)}
+.topic-v55-list{display:grid}
+.topic-v55-list>div{display:flex;align-items:center;gap:10px;min-width:0;padding:9px 0;border-top:1px solid var(--kc-edf1f6,#edf1f6)}
+.topic-v55-list>div:first-child{border-top:0;padding-top:2px}
+.topic-v55-list>div>span{flex:1;min-width:0}
+.topic-v55-list b{display:block;font-size:13.5px;color:var(--kc-14243a,#14243a);overflow-wrap:anywhere}
+.topic-v55-list small{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:2px;font-size:12px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-muted{margin:0;font-size:13px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-pill{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--kc-eef3fb,#eef3fb);color:var(--kc-5f6b80,#5f6b80);font-size:11px;font-weight:850;white-space:nowrap}
+.topic-v55-pill.bad{background:var(--kc-fdecea,#fdecea);color:var(--kc-b42d22,#b42d22)}
+.topic-v55-pill.warn{background:var(--kc-fff4de,#fff4de);color:var(--kc-94570a,#94570a)}
+.topic-v55-pill.ok{background:var(--kc-e3f4ec,#e3f4ec);color:var(--kc-0f7a59,#0f7a59)}
+.topic-v55-pill.blue{background:var(--kc-e9f0fe,#e9f0fe);color:var(--kc-2453b8,#2453b8)}
+.topic-v55-assign{flex:none;min-height:34px;padding:0 12px;border:0;border-radius:10px;background:var(--kc-e9f0fe,#e9f0fe);color:var(--kc-2453b8,#2453b8);font:inherit;font-size:12.5px;font-weight:850;white-space:nowrap;cursor:pointer}
+.topic-v55-assign:hover{background:var(--kc-dbe7fd,#dbe7fd)}
+.topic-v55-subject{border-top:1px solid var(--kc-edf1f6,#edf1f6)}
+.topic-v55-subject:first-of-type{border-top:0}
+.topic-v55-subject>button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;width:100%;padding:10px 0;border:0;background:transparent;color:var(--kc-14243a,#14243a);font:inherit;text-align:left;cursor:pointer}
+.topic-v55-subject>button b{font-size:14px}
+.topic-v55-subject>button em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-subject>button em::after{content:" ▾"}
+.topic-v55-subject.is-open>button em::after{content:" ▴"}
+.topic-v55-subject>button .topic-v55-stages{grid-column:1/-1;height:7px}
+.topic-v55-topics{display:grid;margin:0 0 10px;padding:2px 12px;border:1px solid var(--kc-e0e7f0,#e0e7f0);border-radius:12px;background:var(--kc-f9fbfd,#f9fbfd)}
+.topic-v55-topics>div{display:flex;align-items:center;gap:8px;min-width:0;padding:8px 0;border-top:1px solid var(--kc-edf1f6,#edf1f6)}
+.topic-v55-topics>div:first-child{border-top:0}
+.topic-v55-topics i{flex:none;width:10px;height:10px;border-radius:50%}
+.topic-v55-topics span{flex:1;min-width:0}
+.topic-v55-topics b{display:block;font-size:13px;color:var(--kc-14243a,#14243a);overflow-wrap:anywhere}
+.topic-v55-topics small{display:block;font-size:11.5px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-stars{flex:none;font-style:normal;font-size:11px;letter-spacing:-1px;color:var(--kc-c98a00,#c98a00)}
+.topic-v55-open{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;padding:0;border:0;background:transparent;color:var(--kc-14243a,#14243a);font:inherit;text-align:left;cursor:pointer}
+.topic-v55-open>i{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--kc-e9f0fe,#e9f0fe);color:var(--kc-2453b8,#2453b8);font-style:normal;font-weight:900}
+.topic-v55-open b{display:block;font-size:15px}
+.topic-v55-open small{display:block;font-size:12px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.topic-v55-mini span{padding:8px 10px;border-radius:12px;background:var(--kc-eef3fb,#eef3fb);font-size:12px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55-mini b{display:block;font-size:15px;color:var(--kc-14243a,#14243a)}
+.topic-v55-empty{padding:16px;border:1px dashed var(--kc-c9d5e8,#c9d5e8);border-radius:16px;background:var(--kc-ffffff,#ffffff);text-align:center}
+.topic-v55-empty b{display:block;color:var(--kc-14243a,#14243a)}
+.topic-v55-empty p{margin:4px 0 0;font-size:13px;color:var(--kc-5f6b80,#5f6b80)}
+.topic-v55 :is(button,select,input):focus-visible{outline:3px solid var(--kc-8fb8f6,#8fb8f6);outline-offset:2px}
+@media(max-width:560px){
+  .topic-v55-bar label{flex:1 1 100%}
+  .topic-v55-legend{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topic-v55-list>div{align-items:flex-start}
+  .topic-v55-card{padding:12px}
+}
