@@ -1390,7 +1390,9 @@ function paragraphProblemEntries(row){
     correct:Math.max(0,Math.floor(reportNum(item.correct))),
     wrong:Math.max(0,Math.floor(reportNum(item.wrong))),
     blank:Math.max(0,Math.floor(reportNum(item.blank))),
-    createdAt:Math.max(0,reportNum(item.createdAt))
+    createdAt:Math.max(0,reportNum(item.createdAt)),
+    // v57: öğrencinin kayda yazdığı süre ve problem türü (varsa).
+    minutes:Math.max(0,Math.min(600,Math.floor(reportNum(item.minutes)))),topic:String(item.topic||"").trim().slice(0,40)
   }));
 }
 function paragraphProblemDateOffset(offset){
@@ -1489,6 +1491,93 @@ function renderParagraphProblem(scope=""){
 }
 $("ppCoachStudentSelect")?.addEventListener("change",event=>renderParagraphProblem(event.currentTarget.value));
 $("ppCoachRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user)void loadCoachReports(user.uid)});
+
+/* v57 · Paragraf + Problem: öğrencinin günlük hedefi (öğrenci 1.2.30+ paragraphProblem.goals), tek "Bugün" kartı,
+   7/30 gün grafiği ve karşılaştırma, zayıf problem türleri, kısa kayıt defteri ve buradan görev. Eski kartlar
+   gizlenir; seçim ve boş/yükleniyor durumları eskisi gibi çalışır. Hiçbir veri yazılmaz (görev, program penceresiyle). */
+let ppV57Period=7,ppV57AllHistory=false,ppV57Uid="";
+const PP_V57_KIND={paragraph:"Paragraf",problem:"Problem"};
+function ppV57Goals(row){const g=row?.share?.paragraphProblem?.goals||{},out={};for(const kind of ["paragraph","problem"]){const n=Math.floor(reportNum(g[kind]));if(n>=1&&n<=500)out[kind]=n}return out}
+function ppV57Minutes(list){return list.reduce((sum,item)=>sum+Math.max(0,Math.floor(reportNum(item.minutes))),0)}
+function ppV57Speed(list){const timed=list.filter(item=>reportNum(item.minutes)>0),minutes=ppV57Minutes(timed),total=paragraphProblemMetrics(timed).total;return minutes?total/minutes:0}
+function ppV57Fmt(value,digits=1){return reportNum(value).toLocaleString("tr-TR",{maximumFractionDigits:digits})}
+function ppV57DayName(date){
+  if(date===paragraphProblemDateOffset(0))return"Bugün";if(date===paragraphProblemDateOffset(-1))return"Dün";
+  return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short"}).format(new Date(date+"T12:00:00"));
+}
+function ppV57TodayHtml(entries,goals){
+  const today=paragraphProblemEntriesForDays(entries,1),week=paragraphProblemEntriesForDays(entries,7),wm=paragraphProblemMetrics(week),goalSum=(goals.paragraph||0)+(goals.problem||0);
+  const todayTotal=paragraphProblemMetrics(today).total,ratio=goalSum?Math.round(todayTotal/goalSum*100):0,speed=ppV57Speed(week);
+  const rows=["paragraph","problem"].map(kind=>{
+    const list=today.filter(item=>item.kind===kind),m=paragraphProblemMetrics(list),goal=goals[kind]||0,minutes=ppV57Minutes(list);
+    const note=[m.total?"%"+Math.round(m.accuracy):"",minutes?minutes+" dk":""].filter(Boolean).join(" · ")||"kayıt yok";
+    return'<div class="pp-v57-kind '+kind+'"><div><b>'+PP_V57_KIND[kind]+'</b><small>'+escHtml(note)+'</small><strong>'+m.total+(goal?' <small>/ '+goal+'</small>':'')+'</strong></div>'+(goal?'<i class="pp-v57-bar"><b style="width:'+Math.min(100,m.total/goal*100).toFixed(1)+'%"></b></i>':'')+'</div>';
+  }).join("");
+  return'<article class="pp-v57-card"><div class="pp-v57-row"><span class="pp-v57-eyebrow">Bugün</span>'+(goalSum?'<span class="pp-v57-pill '+(ratio>=100?"ok":ratio>=50?"warn":"bad")+'">hedef %'+ratio+'</span>':'<span class="pp-v57-pill">hedef girilmemiş</span>')+'</div>'+rows
+    +'<div class="pp-v57-stats"><span>Bu hafta<b>'+wm.total+(goalSum?' <small>/ '+goalSum*7+'</small>':'')+'</b></span><span>Doğruluk<b>'+(wm.total?"%"+Math.round(wm.accuracy):"—")+'</b></span><span>Hız<b>'+(speed?ppV57Fmt(speed)+" soru/dk":"—")+'</b></span></div></article>';
+}
+function ppV57ChartHtml(entries,goals){
+  const days=ppV57Period,keys=Array.from({length:days},(_,i)=>paragraphProblemDateOffset(i-(days-1)));
+  const rows=keys.map(date=>{const list=entries.filter(item=>item.date===date);return{date,p:paragraphProblemMetrics(list.filter(x=>x.kind==="paragraph")).total,q:paragraphProblemMetrics(list.filter(x=>x.kind==="problem")).total}});
+  const goal=(goals.paragraph||0)+(goals.problem||0),max=Math.max(1,goal,...rows.map(r=>r.p+r.q));
+  const cur=paragraphProblemMetrics(paragraphProblemEntriesForDays(entries,days)),prev=paragraphProblemMetrics(paragraphProblemEntriesForDays(entries,days,-days));
+  const diff=(value,unit="")=>{const n=Math.round(value*10)/10;return'<em class="'+(n<0?"down":n>0?"up":"")+'">'+(n>0?"+":n<0?"−":"")+ppV57Fmt(Math.abs(n))+unit+'</em>'};
+  const label=(date,i)=>days===7?(i===days-1?"Bugün":new Intl.DateTimeFormat("tr-TR",{weekday:"short"}).format(new Date(date+"T12:00:00"))):(i%5===4||i===days-1?String(Number(date.slice(8))):"");
+  return'<div class="pp-v57-seg" role="tablist">'+[7,30].map(n=>'<button type="button" role="tab" data-pp-v57-period="'+n+'" aria-selected="'+(n===days)+'">Son '+n+' gün</button>').join("")+'</div>'
+    +'<article class="pp-v57-card"><span class="pp-v57-eyebrow">Günlük soru</span><div class="pp-v57-chart" style="grid-template-columns:repeat('+days+',minmax(0,1fr))">'
+    +(goal?'<span class="pp-v57-goal" style="bottom:'+(goal/max*100).toFixed(1)+'%"></span>':'')
+    +rows.map(r=>'<div title="'+escHtml(ppV57DayName(r.date))+' · paragraf '+r.p+' · problem '+r.q+'"><i class="q" style="height:'+(r.q/max*100).toFixed(1)+'%"></i><i class="p" style="height:'+(r.p/max*100).toFixed(1)+'%"></i></div>').join("")+'</div>'
+    +'<div class="pp-v57-days" style="grid-template-columns:repeat('+days+',minmax(0,1fr))">'+rows.map((r,i)=>'<span>'+escHtml(label(r.date,i))+'</span>').join("")+'</div>'
+    +'<div class="pp-v57-legend"><span class="p">Paragraf</span><span class="q">Problem</span>'+(goal?'<span class="g">Günlük hedef</span>':'')+'</div>'
+    +'<div class="pp-v57-cmp"><span>Önceki '+days+' güne göre</span>'+(prev.total?'<b>Soru</b>'+diff(cur.total-prev.total)+'<b>Doğruluk</b>'+diff(cur.accuracy-prev.accuracy," puan")+'<b>Aktif gün</b>'+diff(cur.activeDays-prev.activeDays):'<b>önceki dönem verisi yok</b>')+'</div></article>';
+}
+function ppV57Types(entries){
+  const map=new Map();
+  paragraphProblemEntriesForDays(entries,30).filter(item=>item.kind==="problem"&&item.topic).forEach(item=>{const key=String(item.topic);const list=map.get(key)||[];list.push(item);map.set(key,list)});
+  return[...map.entries()].map(([topic,list])=>({topic,m:paragraphProblemMetrics(list)})).filter(x=>x.m.total>=5).sort((a,b)=>a.m.accuracy-b.m.accuracy||b.m.total-a.m.total).slice(0,4);
+}
+function ppV57TypesHtml(row,entries){
+  const types=ppV57Types(entries);if(!types.length)return"";
+  return'<article class="pp-v57-card"><span class="pp-v57-eyebrow">Zayıf problem türleri · 30 gün</span><div class="pp-v57-list">'+types.map(({topic,m})=>{
+    const acc=Math.round(m.accuracy),tone=acc<55?"bad":acc<70?"warn":"ok";
+    return'<div><span><b>'+escHtml(topic)+'</b><small><span class="pp-v57-pill '+tone+'">%'+acc+' doğru</span> '+m.total+' soru · '+m.wrong+' yanlış</small></span>'+(acc<70?'<button type="button" class="pp-v57-assign" data-pp-v57-assign="problem" data-pp-v57-topic="'+escHtml(topic)+'">Görev ver</button>':'')+'</div>';
+  }).join("")+'</div></article>';
+}
+function ppV57HistoryHtml(entries){
+  const list=ppV57AllHistory?entries:entries.slice(0,10);
+  return'<article class="pp-v57-card"><div class="pp-v57-row"><span class="pp-v57-eyebrow">Son kayıtlar</span>'+(entries.length>10?'<button type="button" class="pp-v57-more" data-pp-v57-history>'+(ppV57AllHistory?"Daha az":"Tümü ("+entries.length+")")+'</button>':'')+'</div><div class="pp-v57-history">'
+    +list.map(item=>'<div><span class="pp-v57-tag '+item.kind+'">'+PP_V57_KIND[item.kind]+'</span><span><b>'+escHtml(ppV57DayName(item.date))+'</b> <small>'+escHtml([item.topic,item.minutes?item.minutes+" dk":""].filter(Boolean).join(" · "))+'</small></span><span>'+item.correct+'D '+item.wrong+'Y '+item.blank+'B</span></div>').join("")+'</div></article>';
+}
+function renderParagraphProblemV57(scope){
+  const box=$("ppV57Body"),page=$("paragraphProblemPage");if(!box||!page)return;
+  page.setAttribute("data-v57","on");
+  const uid=$("ppCoachStudentSelect")?.value||scope||"",row=coachReportRows.find(item=>item.studentUid===uid);ppV57Uid=row?.studentUid||"";
+  const entries=row?paragraphProblemEntries(row).sort((a,b)=>String(b.date).localeCompare(String(a.date))||b.createdAt-a.createdAt):[];
+  if(!row||!entries.length){box.innerHTML="";box.hidden=true;return}
+  const goals=ppV57Goals(row);box.hidden=false;
+  box.innerHTML=ppV57TodayHtml(entries,goals)+ppV57ChartHtml(entries,goals)+ppV57TypesHtml(row,entries)
+    +'<div class="pp-v57-actions"><button type="button" class="pp-v57-assign" data-pp-v57-assign="paragraph">+ Paragraf görevi ver</button><button type="button" class="pp-v57-assign" data-pp-v57-assign="problem">+ Problem görevi ver</button></div>'
+    +ppV57HistoryHtml(entries);
+}
+/* Görev ver: program penceresi TYT, ders, konu, "Soru çözümü" ve soru sayısı (günlük hedef) hazır açılır. */
+function ppV57Assign(uid,kind,type){
+  const row=coachReportRows.find(item=>item.studentUid===uid);if(!row)return;
+  const goals=ppV57Goals(row);selectedProgramStudentUid=uid;openProgramTaskModal("",{});coachV18SetLevel("TYT");
+  const subject=$("programBuilderSubject");if(subject){subject.value=kind==="paragraph"?"Paragraf":"Matematik";subject.dispatchEvent(new Event("change",{bubbles:true}))}
+  const activity=$("programBuilderActivity");if(activity){activity.value="Soru çözümü";activity.dispatchEvent(new Event("change",{bubbles:true}))}
+  const count=$("programBuilderCount");if(count){count.value=String(goals[kind]||(kind==="paragraph"?30:20));count.dispatchEvent(new Event("input",{bubbles:true}));count.dispatchEvent(new Event("change",{bubbles:true}))}
+  const topic=$("programBuilderTopic");if(topic){topic.value=kind==="paragraph"?"":"Problemler"+(type?" · "+type:"");topic.dispatchEvent(new Event("input",{bubbles:true}));topic.dispatchEvent(new Event("change",{bubbles:true}))}
+}
+const ppV57Legacy=renderParagraphProblem;
+renderParagraphProblem=function(scope=""){
+  try{ppV57Legacy(scope)}catch(error){console.error("Paragraf + Problem (eski görünüm)",error)}
+  renderParagraphProblemV57(scope);
+};
+$("ppV57Body")?.addEventListener("click",event=>{
+  const period=event.target.closest("[data-pp-v57-period]");if(period){ppV57Period=Number(period.dataset.ppV57Period)===30?30:7;renderParagraphProblemV57(ppV57Uid);return}
+  if(event.target.closest("[data-pp-v57-history]")){ppV57AllHistory=!ppV57AllHistory;renderParagraphProblemV57(ppV57Uid);return}
+  const assign=event.target.closest("[data-pp-v57-assign]");if(assign&&ppV57Uid)ppV57Assign(ppV57Uid,assign.dataset.ppV57Assign==="paragraph"?"paragraph":"problem",assign.dataset.ppV57Topic||"");
+});
 
 
 function examList(row,type="all"){
