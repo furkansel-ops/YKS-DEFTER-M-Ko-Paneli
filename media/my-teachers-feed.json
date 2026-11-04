@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-03T10:05:41.386Z",
+  "generatedAt": "2026-11-04T09:55:31.713Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-03T10:00:28.770Z"
+      "refreshedAt": "2026-11-04T09:49:54.713Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3547,7 +3547,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-03T10:04:27.110Z"
+      "refreshedAt": "2026-11-04T09:54:01.448Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4695,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-03T10:04:47.166Z"
+      "refreshedAt": "2026-11-04T09:54:26.171Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5692,7 +5692,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-03T10:04:54.261Z"
+      "refreshedAt": "2026-11-04T09:54:34.866Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8211,7 +8211,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-03T10:05:02.983Z"
+      "refreshedAt": "2026-11-04T09:54:45.122Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8717,6 +8717,13 @@
           "videoCount": 5,
           "videos": [
             {
+              "id": "HXoS2v-pzm0",
+              "title": "4. Mektup (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=HXoS2v-pzm0",
+              "thumbnail": "https://i.ytimg.com/vi/HXoS2v-pzm0/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
               "id": "ks4LAE_jQf4",
               "title": "3. Meddah, Köy Seyirlik Oyunları, Kukla (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=ks4LAE_jQf4",
@@ -8738,13 +8745,6 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "HXoS2v-pzm0",
-              "title": "4. Mektup (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=HXoS2v-pzm0",
-              "thumbnail": "https://i.ytimg.com/vi/HXoS2v-pzm0/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "pnvekAoGApE",
               "title": "1. Orta Oyunu (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=pnvekAoGApE",
@@ -8760,6 +8760,13 @@
           "url": "https://www.youtube.com/playlist?list=PLTUbSm81UVOc",
           "videoCount": 10,
           "videos": [
+            {
+              "id": "RoJypolF1kY",
+              "title": "3. Şiirde Ölçü (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=RoJypolF1kY",
+              "thumbnail": "https://i.ytimg.com/vi/RoJypolF1kY/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
             {
               "id": "JlGwpbl7IBI",
               "title": "2. Nazım Birimi (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
@@ -8817,13 +8824,6 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "RoJypolF1kY",
-              "title": "3. Şiirde Ölçü (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=RoJypolF1kY",
-              "thumbnail": "https://i.ytimg.com/vi/RoJypolF1kY/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "r859PLlkI2A",
               "title": "1.Sav - Sagu - Koşuk - Destan (İslamiyet Öncesi Türk Şiiri) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=r859PLlkI2A",
@@ -8839,6 +8839,13 @@
           "url": "https://www.youtube.com/playlist?list=PLbJSnKeFOIks",
           "videoCount": 11,
           "videos": [
+            {
+              "id": "P28MKCBzGx8",
+              "title": "7. Nazım Birimi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
+              "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
             {
               "id": "EuNOV7yuyoM",
               "title": "6. Tema (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
@@ -8900,13 +8907,6 @@
               "title": "8. Şiirde Ölçü (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=0yO3aFO6xbk",
               "thumbnail": "https://i.ytimg.com/vi/0yO3aFO6xbk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "P28MKCBzGx8",
-              "title": "7. Nazım Birimi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
-              "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -8996,6 +8996,27 @@
       ],
       "videos": [
         {
+          "id": "RoJypolF1kY",
+          "title": "3. Şiirde Ölçü (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=RoJypolF1kY",
+          "thumbnail": "https://i.ytimg.com/vi/RoJypolF1kY/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "P28MKCBzGx8",
+          "title": "7. Nazım Birimi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
+          "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "HXoS2v-pzm0",
+          "title": "4. Mektup (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=HXoS2v-pzm0",
+          "thumbnail": "https://i.ytimg.com/vi/HXoS2v-pzm0/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
           "id": "EuNOV7yuyoM",
           "title": "6. Tema (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
           "url": "https://www.youtube.com/watch?v=EuNOV7yuyoM",
@@ -9045,13 +9066,6 @@
           "channel": "Kadir Gümüş"
         },
         {
-          "id": "HXoS2v-pzm0",
-          "title": "4. Mektup (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=HXoS2v-pzm0",
-          "thumbnail": "https://i.ytimg.com/vi/HXoS2v-pzm0/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
           "id": "esiXgWYXcYY",
           "title": "4. İmge (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
           "url": "https://www.youtube.com/watch?v=esiXgWYXcYY",
@@ -9064,23 +9078,9 @@
           "url": "https://www.youtube.com/watch?v=OETLoSZsW5Q",
           "thumbnail": "https://i.ytimg.com/vi/OETLoSZsW5Q/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "9uo3-aoanGA",
-          "title": "10. Sıfat (Ön Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=9uo3-aoanGA",
-          "thumbnail": "https://i.ytimg.com/vi/9uo3-aoanGA/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "FjBAzUQ77EA",
-          "title": "11. Tamlamalar (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=FjBAzUQ77EA",
-          "thumbnail": "https://i.ytimg.com/vi/FjBAzUQ77EA/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-03T10:05:09.877Z"
+      "refreshedAt": "2026-11-04T09:54:53.722Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9909,7 +9909,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-03T10:05:12.163Z"
+      "refreshedAt": "2026-11-04T09:54:56.436Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10911,7 +10911,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-03T10:05:41.373Z"
+      "refreshedAt": "2026-11-04T09:55:31.694Z"
     }
   }
 }
