@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-05T09:55:26.446Z",
+  "generatedAt": "2026-11-06T09:55:19.401Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-05T09:49:55.893Z"
+      "refreshedAt": "2026-11-06T09:49:53.821Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -2824,8 +2824,8 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/3d-yayinlari/index.json",
-      "videoCount": 6029,
-      "playlistCount": 123,
+      "videoCount": 6089,
+      "playlistCount": 127,
       "archiveComplete": false,
       "playlists": [
         {
@@ -2888,6 +2888,243 @@
               "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT B Kitapçığı Sosyal Bilimler Soru Çözümleri",
               "url": "https://www.youtube.com/watch?v=lXoJY1-9-Z0",
               "thumbnail": "https://i.ytimg.com/vi/lXoJY1-9-Z0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLTGNw8ghzf2w",
+          "title": "AYT EDEBİYAT - SOSYAL BİLİMLER 1 DENEMELERİ 2027",
+          "url": "https://www.youtube.com/playlist?list=PLTGNw8ghzf2w",
+          "videoCount": 10,
+          "videos": [
+            {
+              "id": "pprCnp3d6Wc",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 10 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=pprCnp3d6Wc",
+              "thumbnail": "https://i.ytimg.com/vi/pprCnp3d6Wc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "c02kulz8VaQ",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 09 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=c02kulz8VaQ",
+              "thumbnail": "https://i.ytimg.com/vi/c02kulz8VaQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "-1kcZA_EaNo",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 08 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=-1kcZA_EaNo",
+              "thumbnail": "https://i.ytimg.com/vi/-1kcZA_EaNo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "f3FT1_nDdIk",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 07 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=f3FT1_nDdIk",
+              "thumbnail": "https://i.ytimg.com/vi/f3FT1_nDdIk/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "X88AjVqD-ng",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 06 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=X88AjVqD-ng",
+              "thumbnail": "https://i.ytimg.com/vi/X88AjVqD-ng/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "f9SL4WbDnWU",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 05 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=f9SL4WbDnWU",
+              "thumbnail": "https://i.ytimg.com/vi/f9SL4WbDnWU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "tdx3NpTmXfI",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 04 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=tdx3NpTmXfI",
+              "thumbnail": "https://i.ytimg.com/vi/tdx3NpTmXfI/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "yDGofmHqANA",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 03 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=yDGofmHqANA",
+              "thumbnail": "https://i.ytimg.com/vi/yDGofmHqANA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "dNcGojGbnQk",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 02 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=dNcGojGbnQk",
+              "thumbnail": "https://i.ytimg.com/vi/dNcGojGbnQk/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "YkU9dOkIndw",
+              "title": "AYT 3D Edebiyat - Sosyal Bilimler 1 Simülasyon Denemeleri Deneme 01 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=YkU9dOkIndw",
+              "thumbnail": "https://i.ytimg.com/vi/YkU9dOkIndw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLHKFDO2DXqMo",
+          "title": "AYT MATEMATİK SİMÜLASYON DENEMELERİ 2027 | FATİH DEMİRKAYA",
+          "url": "https://www.youtube.com/playlist?list=PLHKFDO2DXqMo",
+          "videoCount": 10,
+          "videos": [
+            {
+              "id": "W4HmLjKVuo8",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=W4HmLjKVuo8",
+              "thumbnail": "https://i.ytimg.com/vi/W4HmLjKVuo8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "DxoeqSiGmtQ",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=DxoeqSiGmtQ",
+              "thumbnail": "https://i.ytimg.com/vi/DxoeqSiGmtQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "XtD51OJac1k",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=XtD51OJac1k",
+              "thumbnail": "https://i.ytimg.com/vi/XtD51OJac1k/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "NMkEslWu5VI",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=NMkEslWu5VI",
+              "thumbnail": "https://i.ytimg.com/vi/NMkEslWu5VI/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "WuodsJ4uxBo",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=WuodsJ4uxBo",
+              "thumbnail": "https://i.ytimg.com/vi/WuodsJ4uxBo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "vSQnbZx4z7s",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=vSQnbZx4z7s",
+              "thumbnail": "https://i.ytimg.com/vi/vSQnbZx4z7s/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "qobmNfB24DM",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=qobmNfB24DM",
+              "thumbnail": "https://i.ytimg.com/vi/qobmNfB24DM/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "aR0V5A-E9qY",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=aR0V5A-E9qY",
+              "thumbnail": "https://i.ytimg.com/vi/aR0V5A-E9qY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "otRuWm9JUTc",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=otRuWm9JUTc",
+              "thumbnail": "https://i.ytimg.com/vi/otRuWm9JUTc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "7r_BFe68cDM",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Fatih Demirkaya",
+              "url": "https://www.youtube.com/watch?v=7r_BFe68cDM",
+              "thumbnail": "https://i.ytimg.com/vi/7r_BFe68cDM/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLUmpmUm4thyM",
+          "title": "AYT MATEMATİK SİMÜLASYON DENEMELERİ 2027 | EYÜP BONCUK",
+          "url": "https://www.youtube.com/playlist?list=PLUmpmUm4thyM",
+          "videoCount": 10,
+          "videos": [
+            {
+              "id": "8uK9DORkR3E",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=8uK9DORkR3E",
+              "thumbnail": "https://i.ytimg.com/vi/8uK9DORkR3E/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "fWKnwTLhQ7Y",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=fWKnwTLhQ7Y",
+              "thumbnail": "https://i.ytimg.com/vi/fWKnwTLhQ7Y/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "dKIHzqdiDRA",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=dKIHzqdiDRA",
+              "thumbnail": "https://i.ytimg.com/vi/dKIHzqdiDRA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "nXDckZALC-Y",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=nXDckZALC-Y",
+              "thumbnail": "https://i.ytimg.com/vi/nXDckZALC-Y/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "8_f5sI3lm04",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=8_f5sI3lm04",
+              "thumbnail": "https://i.ytimg.com/vi/8_f5sI3lm04/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "9E4FjBG5EHg",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=9E4FjBG5EHg",
+              "thumbnail": "https://i.ytimg.com/vi/9E4FjBG5EHg/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "tDkKlfNwmdw",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=tDkKlfNwmdw",
+              "thumbnail": "https://i.ytimg.com/vi/tDkKlfNwmdw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "5IHzhk2Fm1k",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=5IHzhk2Fm1k",
+              "thumbnail": "https://i.ytimg.com/vi/5IHzhk2Fm1k/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "asWmgEMXJ-g",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=asWmgEMXJ-g",
+              "thumbnail": "https://i.ytimg.com/vi/asWmgEMXJ-g/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "wIAgJgYsArg",
+              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Eyüp Boncuk",
+              "url": "https://www.youtube.com/watch?v=wIAgJgYsArg",
+              "thumbnail": "https://i.ytimg.com/vi/wIAgJgYsArg/hqdefault.jpg",
               "channel": "3D Yayınları"
             }
           ],
@@ -3052,6 +3289,225 @@
           "contentComplete": true
         },
         {
+          "id": "PLKNpTVc87i3Q",
+          "title": "TYT DİL BİLGİSİ SİMÜLASYON DENEMELERİ 2027 | SALİME FIRAT",
+          "url": "https://www.youtube.com/playlist?list=PLKNpTVc87i3Q",
+          "videoCount": 30,
+          "videos": [
+            {
+              "id": "XyUXn-If6xs",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 30 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=XyUXn-If6xs",
+              "thumbnail": "https://i.ytimg.com/vi/XyUXn-If6xs/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "hLImiVGCB5w",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 29 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=hLImiVGCB5w",
+              "thumbnail": "https://i.ytimg.com/vi/hLImiVGCB5w/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Ftjk889zzzo",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 28 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=Ftjk889zzzo",
+              "thumbnail": "https://i.ytimg.com/vi/Ftjk889zzzo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "7gEMJcaIua8",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 27 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=7gEMJcaIua8",
+              "thumbnail": "https://i.ytimg.com/vi/7gEMJcaIua8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "7MP9X44-NY4",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 26 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=7MP9X44-NY4",
+              "thumbnail": "https://i.ytimg.com/vi/7MP9X44-NY4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "grvmfyB7GaU",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 25 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=grvmfyB7GaU",
+              "thumbnail": "https://i.ytimg.com/vi/grvmfyB7GaU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "LemH4vrRP28",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 24 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=LemH4vrRP28",
+              "thumbnail": "https://i.ytimg.com/vi/LemH4vrRP28/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "my4JRd79f0Y",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 23 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=my4JRd79f0Y",
+              "thumbnail": "https://i.ytimg.com/vi/my4JRd79f0Y/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "N-AJYx9LFM0",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 22 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=N-AJYx9LFM0",
+              "thumbnail": "https://i.ytimg.com/vi/N-AJYx9LFM0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ddOmzDPkqAQ",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 21 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=ddOmzDPkqAQ",
+              "thumbnail": "https://i.ytimg.com/vi/ddOmzDPkqAQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "BXQ8ud0KEVE",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 20 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=BXQ8ud0KEVE",
+              "thumbnail": "https://i.ytimg.com/vi/BXQ8ud0KEVE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "MuhlpbxBDLE",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 19 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=MuhlpbxBDLE",
+              "thumbnail": "https://i.ytimg.com/vi/MuhlpbxBDLE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "_PFLL61Xqzs",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 18 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=_PFLL61Xqzs",
+              "thumbnail": "https://i.ytimg.com/vi/_PFLL61Xqzs/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Q2o3G_Je1n4",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 17 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=Q2o3G_Je1n4",
+              "thumbnail": "https://i.ytimg.com/vi/Q2o3G_Je1n4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "EGzL0nNnbPA",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 16 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=EGzL0nNnbPA",
+              "thumbnail": "https://i.ytimg.com/vi/EGzL0nNnbPA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "pRrej_TXAK0",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 15 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=pRrej_TXAK0",
+              "thumbnail": "https://i.ytimg.com/vi/pRrej_TXAK0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "f3gQ7iQvThc",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 14 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=f3gQ7iQvThc",
+              "thumbnail": "https://i.ytimg.com/vi/f3gQ7iQvThc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "PnIIM9aYjPs",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 13 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=PnIIM9aYjPs",
+              "thumbnail": "https://i.ytimg.com/vi/PnIIM9aYjPs/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "IZC5TFVFADs",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 12 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=IZC5TFVFADs",
+              "thumbnail": "https://i.ytimg.com/vi/IZC5TFVFADs/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "zgdiFPLMwn4",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 11 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=zgdiFPLMwn4",
+              "thumbnail": "https://i.ytimg.com/vi/zgdiFPLMwn4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "pLqSy_GL4-Q",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=pLqSy_GL4-Q",
+              "thumbnail": "https://i.ytimg.com/vi/pLqSy_GL4-Q/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ygQQ5NoE0BI",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=ygQQ5NoE0BI",
+              "thumbnail": "https://i.ytimg.com/vi/ygQQ5NoE0BI/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "-naYxvRnVqg",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=-naYxvRnVqg",
+              "thumbnail": "https://i.ytimg.com/vi/-naYxvRnVqg/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "UqcSHbNNLtA",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=UqcSHbNNLtA",
+              "thumbnail": "https://i.ytimg.com/vi/UqcSHbNNLtA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "lNPycd-wnws",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=lNPycd-wnws",
+              "thumbnail": "https://i.ytimg.com/vi/lNPycd-wnws/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "GPBJPkcfhv8",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=GPBJPkcfhv8",
+              "thumbnail": "https://i.ytimg.com/vi/GPBJPkcfhv8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "1nvXKQTOx5M",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=1nvXKQTOx5M",
+              "thumbnail": "https://i.ytimg.com/vi/1nvXKQTOx5M/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "IQhJUmNg_Vg",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=IQhJUmNg_Vg",
+              "thumbnail": "https://i.ytimg.com/vi/IQhJUmNg_Vg/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "LkFVlu1GL6w",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=LkFVlu1GL6w",
+              "thumbnail": "https://i.ytimg.com/vi/LkFVlu1GL6w/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "xjW028jQaY0",
+              "title": "TYT 3D Dil Bilgisi Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Salime Fırat",
+              "url": "https://www.youtube.com/watch?v=xjW028jQaY0",
+              "thumbnail": "https://i.ytimg.com/vi/xjW028jQaY0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLQtx28aWHN0E",
           "title": "TYT 4'LÜ SİMÜLASYON DENEMELERİ 2027",
           "url": "https://www.youtube.com/playlist?list=PLQtx28aWHN0E",
@@ -3171,294 +3627,6 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLcHkGlZNVVaM",
-          "title": "TYT TÜRKÇE SİMÜLASYON DENEMELERİ 2027 | SALİME FIRAT",
-          "url": "https://www.youtube.com/playlist?list=PLcHkGlZNVVaM",
-          "videoCount": 10,
-          "videos": [
-            {
-              "id": "0QbX9Rlr5wA",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=0QbX9Rlr5wA",
-              "thumbnail": "https://i.ytimg.com/vi/0QbX9Rlr5wA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "1smIhFv6JY0",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=1smIhFv6JY0",
-              "thumbnail": "https://i.ytimg.com/vi/1smIhFv6JY0/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "MihWHDBDvYE",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=MihWHDBDvYE",
-              "thumbnail": "https://i.ytimg.com/vi/MihWHDBDvYE/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "0GTs-SuTt3c",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=0GTs-SuTt3c",
-              "thumbnail": "https://i.ytimg.com/vi/0GTs-SuTt3c/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "0zzSzV5JU_4",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=0zzSzV5JU_4",
-              "thumbnail": "https://i.ytimg.com/vi/0zzSzV5JU_4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "Jk66TI7fPng",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=Jk66TI7fPng",
-              "thumbnail": "https://i.ytimg.com/vi/Jk66TI7fPng/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "6NAFfg2Ludw",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=6NAFfg2Ludw",
-              "thumbnail": "https://i.ytimg.com/vi/6NAFfg2Ludw/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "eDbuG_xz9jE",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=eDbuG_xz9jE",
-              "thumbnail": "https://i.ytimg.com/vi/eDbuG_xz9jE/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "F7D_Oc-7_0E",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=F7D_Oc-7_0E",
-              "thumbnail": "https://i.ytimg.com/vi/F7D_Oc-7_0E/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "L7WUOetNRvU",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Salime Fırat",
-              "url": "https://www.youtube.com/watch?v=L7WUOetNRvU",
-              "thumbnail": "https://i.ytimg.com/vi/L7WUOetNRvU/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLJuNC5fVxYIo",
-          "title": "TYT MATEMATİK SİMÜLASYON DENEMELERİ 2027 | EYÜP BONCUK",
-          "url": "https://www.youtube.com/playlist?list=PLJuNC5fVxYIo",
-          "videoCount": 10,
-          "videos": [
-            {
-              "id": "MRRIWcw8ZA8",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=MRRIWcw8ZA8",
-              "thumbnail": "https://i.ytimg.com/vi/MRRIWcw8ZA8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "7HTD45HRnWs",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=7HTD45HRnWs",
-              "thumbnail": "https://i.ytimg.com/vi/7HTD45HRnWs/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "mjEdY2U447E",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=mjEdY2U447E",
-              "thumbnail": "https://i.ytimg.com/vi/mjEdY2U447E/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "zshDTOsm7k4",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=zshDTOsm7k4",
-              "thumbnail": "https://i.ytimg.com/vi/zshDTOsm7k4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "JYml8FW_Bvo",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=JYml8FW_Bvo",
-              "thumbnail": "https://i.ytimg.com/vi/JYml8FW_Bvo/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "5lLbIHt-hHg",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=5lLbIHt-hHg",
-              "thumbnail": "https://i.ytimg.com/vi/5lLbIHt-hHg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "znpeErZaZ9k",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=znpeErZaZ9k",
-              "thumbnail": "https://i.ytimg.com/vi/znpeErZaZ9k/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "wOA6JcYNq10",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=wOA6JcYNq10",
-              "thumbnail": "https://i.ytimg.com/vi/wOA6JcYNq10/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "6qj8fMi_LXY",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=6qj8fMi_LXY",
-              "thumbnail": "https://i.ytimg.com/vi/6qj8fMi_LXY/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "jA-haMNuymA",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=jA-haMNuymA",
-              "thumbnail": "https://i.ytimg.com/vi/jA-haMNuymA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLyiXTl2rW_wqPpvPIPOGiu8WZ1qrONoP6",
-          "title": "2026 3D Türkiye Geneli Deneme Sınavı 4 - AYT",
-          "url": "https://www.youtube.com/playlist?list=PLyiXTl2rW_wqPpvPIPOGiu8WZ1qrONoP6",
-          "videoCount": 8,
-          "videos": [
-            {
-              "id": "VgIA8uYPbo8",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT A Kitapçığı Matematik Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=VgIA8uYPbo8",
-              "thumbnail": "https://i.ytimg.com/vi/VgIA8uYPbo8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "VicW553emkY",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT A Kitapçığı Sosyal Bilimler 02 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=VicW553emkY",
-              "thumbnail": "https://i.ytimg.com/vi/VicW553emkY/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "imkBVmzkn3Y",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT A Kitapçığı Fen Bilimleri Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=imkBVmzkn3Y",
-              "thumbnail": "https://i.ytimg.com/vi/imkBVmzkn3Y/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "schAckI-voA",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT B Kitapçığı Fen Bilimleri Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=schAckI-voA",
-              "thumbnail": "https://i.ytimg.com/vi/schAckI-voA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "vnM-3qo8YME",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT B Kitapçığı Edebiyat - Sosyal Bilimler 01 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=vnM-3qo8YME",
-              "thumbnail": "https://i.ytimg.com/vi/vnM-3qo8YME/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "LpS362wUzZs",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT B Kitapçığı Matematik Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=LpS362wUzZs",
-              "thumbnail": "https://i.ytimg.com/vi/LpS362wUzZs/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "q6TMKbPcFgI",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT A Kitapçığı Edebiyat - Sosyal Bilimler 01 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=q6TMKbPcFgI",
-              "thumbnail": "https://i.ytimg.com/vi/q6TMKbPcFgI/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "VSZ4JfDu1j8",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - AYT B Kitapçığı Sosyal Bilimler 02 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=VSZ4JfDu1j8",
-              "thumbnail": "https://i.ytimg.com/vi/VSZ4JfDu1j8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLyiXTl2rW_wpS6VqzFgpJweXHoOVyzHAv",
-          "title": "2026 3D Türkiye Geneli Deneme Sınavı 4 - TYT",
-          "url": "https://www.youtube.com/playlist?list=PLyiXTl2rW_wpS6VqzFgpJweXHoOVyzHAv",
-          "videoCount": 8,
-          "videos": [
-            {
-              "id": "AeFbU_vxCu4",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT A Kitapçığı Türkçe Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=AeFbU_vxCu4",
-              "thumbnail": "https://i.ytimg.com/vi/AeFbU_vxCu4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "MCImj2ojeAw",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT A Kitapçığı Sosyal Bilimler Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=MCImj2ojeAw",
-              "thumbnail": "https://i.ytimg.com/vi/MCImj2ojeAw/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "Y0ut4pDY5Rc",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT A Kitapçığı Matematik Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=Y0ut4pDY5Rc",
-              "thumbnail": "https://i.ytimg.com/vi/Y0ut4pDY5Rc/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "lwZ8pQ7PxS0",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT A Kitapçığı Fen Bilimleri Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=lwZ8pQ7PxS0",
-              "thumbnail": "https://i.ytimg.com/vi/lwZ8pQ7PxS0/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "1OOCGfy-CFI",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT B Kitapçığı Türkçe Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=1OOCGfy-CFI",
-              "thumbnail": "https://i.ytimg.com/vi/1OOCGfy-CFI/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "qQjscOHPKmM",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT B Kitapçığı Sosyal Bilimler Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=qQjscOHPKmM",
-              "thumbnail": "https://i.ytimg.com/vi/qQjscOHPKmM/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "hCGCwsyPt_s",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT B Kitapçığı Matematik Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=hCGCwsyPt_s",
-              "thumbnail": "https://i.ytimg.com/vi/hCGCwsyPt_s/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "mhcZIEIBDOQ",
-              "title": "3D Türkiye Geneli Deneme Sınavı 4 - TYT B Kitapçığı Fen Bilimleri Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=mhcZIEIBDOQ",
-              "thumbnail": "https://i.ytimg.com/vi/mhcZIEIBDOQ/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
@@ -3547,7 +3715,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-05T09:54:00.387Z"
+      "refreshedAt": "2026-11-06T09:53:56.640Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4695,7 +4863,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-05T09:54:24.193Z"
+      "refreshedAt": "2026-11-06T09:54:19.227Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5685,7 +5853,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-05T09:54:32.345Z"
+      "refreshedAt": "2026-11-06T09:54:27.299Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8204,7 +8372,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-05T09:54:42.316Z"
+      "refreshedAt": "2026-11-06T09:54:36.939Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8710,6 +8878,13 @@
           "videoCount": 5,
           "videos": [
             {
+              "id": "t8aARSzGvL8",
+              "title": "5. Fiilimsiler (İsim-fiil, Sıfat-fiil, Zarf-fiil) (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=t8aARSzGvL8",
+              "thumbnail": "https://i.ytimg.com/vi/t8aARSzGvL8/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
               "id": "HXoS2v-pzm0",
               "title": "4. Mektup (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=HXoS2v-pzm0",
@@ -8731,13 +8906,6 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "t8aARSzGvL8",
-              "title": "5. Fiilimsiler (İsim-fiil, Sıfat-fiil, Zarf-fiil) (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=t8aARSzGvL8",
-              "thumbnail": "https://i.ytimg.com/vi/t8aARSzGvL8/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "pnvekAoGApE",
               "title": "1. Orta Oyunu (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=pnvekAoGApE",
@@ -8753,6 +8921,13 @@
           "url": "https://www.youtube.com/playlist?list=PLTUbSm81UVOc",
           "videoCount": 10,
           "videos": [
+            {
+              "id": "8nguIMLqQ48",
+              "title": "6. Anonim Halk Edebiyatı (Mani, Türkü...) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=8nguIMLqQ48",
+              "thumbnail": "https://i.ytimg.com/vi/8nguIMLqQ48/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
             {
               "id": "0pLbNps_7Y8",
               "title": "5. Geçiş Dönemi (Kutadgu Bilig, Atabetül Hakayık ...) (10. Sınıf 1. Tema)",
@@ -8810,13 +8985,6 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "8nguIMLqQ48",
-              "title": "6. Anonim Halk Edebiyatı (Mani, Türkü...) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=8nguIMLqQ48",
-              "thumbnail": "https://i.ytimg.com/vi/8nguIMLqQ48/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "r859PLlkI2A",
               "title": "1.Sav - Sagu - Koşuk - Destan (İslamiyet Öncesi Türk Şiiri) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=r859PLlkI2A",
@@ -8832,6 +9000,20 @@
           "url": "https://www.youtube.com/playlist?list=PLbJSnKeFOIks",
           "videoCount": 11,
           "videos": [
+            {
+              "id": "x29RpYlr2QY",
+              "title": "10. Söz Sanatları (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=x29RpYlr2QY",
+              "thumbnail": "https://i.ytimg.com/vi/x29RpYlr2QY/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "ujBwrSc8hzQ",
+              "title": "9. Kafiye - Redif (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=ujBwrSc8hzQ",
+              "thumbnail": "https://i.ytimg.com/vi/ujBwrSc8hzQ/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
             {
               "id": "0yO3aFO6xbk",
               "title": "8. Şiirde Ölçü (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
@@ -8886,20 +9068,6 @@
               "title": "11. Ses Bilgisi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=cg2gWnZugvc",
               "thumbnail": "https://i.ytimg.com/vi/cg2gWnZugvc/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "x29RpYlr2QY",
-              "title": "10. Söz Sanatları (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=x29RpYlr2QY",
-              "thumbnail": "https://i.ytimg.com/vi/x29RpYlr2QY/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "ujBwrSc8hzQ",
-              "title": "9. Kafiye - Redif (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=ujBwrSc8hzQ",
-              "thumbnail": "https://i.ytimg.com/vi/ujBwrSc8hzQ/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -8989,6 +9157,34 @@
       ],
       "videos": [
         {
+          "id": "8nguIMLqQ48",
+          "title": "6. Anonim Halk Edebiyatı (Mani, Türkü...) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=8nguIMLqQ48",
+          "thumbnail": "https://i.ytimg.com/vi/8nguIMLqQ48/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "x29RpYlr2QY",
+          "title": "10. Söz Sanatları (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=x29RpYlr2QY",
+          "thumbnail": "https://i.ytimg.com/vi/x29RpYlr2QY/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "ujBwrSc8hzQ",
+          "title": "9. Kafiye - Redif (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=ujBwrSc8hzQ",
+          "thumbnail": "https://i.ytimg.com/vi/ujBwrSc8hzQ/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "t8aARSzGvL8",
+          "title": "5. Fiilimsiler (İsim-fiil, Sıfat-fiil, Zarf-fiil) (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=t8aARSzGvL8",
+          "thumbnail": "https://i.ytimg.com/vi/t8aARSzGvL8/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
           "id": "0pLbNps_7Y8",
           "title": "5. Geçiş Dönemi (Kutadgu Bilig, Atabetül Hakayık ...) (10. Sınıf 1. Tema)",
           "url": "https://www.youtube.com/watch?v=0pLbNps_7Y8",
@@ -9043,37 +9239,9 @@
           "url": "https://www.youtube.com/watch?v=OLn0z7Se9D8",
           "thumbnail": "https://i.ytimg.com/vi/OLn0z7Se9D8/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "ks4LAE_jQf4",
-          "title": "3. Meddah, Köy Seyirlik Oyunları, Kukla (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=ks4LAE_jQf4",
-          "thumbnail": "https://i.ytimg.com/vi/ks4LAE_jQf4/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "LOsR1KQENtw",
-          "title": "2. Karagöz (Gölge Oyunu) (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=LOsR1KQENtw",
-          "thumbnail": "https://i.ytimg.com/vi/LOsR1KQENtw/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "JlGwpbl7IBI",
-          "title": "2. Nazım Birimi (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=JlGwpbl7IBI",
-          "thumbnail": "https://i.ytimg.com/vi/JlGwpbl7IBI/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "FWooVrzgbwk",
-          "title": "11. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
-          "url": "https://www.youtube.com/watch?v=FWooVrzgbwk",
-          "thumbnail": "https://i.ytimg.com/vi/FWooVrzgbwk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-05T09:54:50.320Z"
+      "refreshedAt": "2026-11-06T09:54:44.336Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -9902,7 +10070,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-05T09:54:52.630Z"
+      "refreshedAt": "2026-11-06T09:54:46.567Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10904,7 +11072,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-05T09:55:26.441Z"
+      "refreshedAt": "2026-11-06T09:55:19.397Z"
     }
   }
 }
