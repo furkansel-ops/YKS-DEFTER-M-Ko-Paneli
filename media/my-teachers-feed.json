@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-06T09:55:19.401Z",
+  "generatedAt": "2026-11-07T09:18:34.234Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-06T09:49:53.821Z"
+      "refreshedAt": "2026-11-07T09:12:57.976Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3715,7 +3715,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-06T09:53:56.640Z"
+      "refreshedAt": "2026-11-07T09:17:04.321Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4863,7 +4863,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-06T09:54:19.227Z"
+      "refreshedAt": "2026-11-07T09:17:29.462Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5853,7 +5853,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-06T09:54:27.299Z"
+      "refreshedAt": "2026-11-07T09:17:38.163Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8372,7 +8372,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-06T09:54:36.939Z"
+      "refreshedAt": "2026-11-07T09:17:48.607Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8922,6 +8922,20 @@
           "videoCount": 10,
           "videos": [
             {
+              "id": "FjBAzUQ77EA",
+              "title": "11. Tamlamalar (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=FjBAzUQ77EA",
+              "thumbnail": "https://i.ytimg.com/vi/FjBAzUQ77EA/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "M0zyiXlmjkE",
+              "title": "7. Aşık Tarzı Halk Edb (Koşma-Semai, Varsağı, Destan ) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=M0zyiXlmjkE",
+              "thumbnail": "https://i.ytimg.com/vi/M0zyiXlmjkE/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
               "id": "8nguIMLqQ48",
               "title": "6. Anonim Halk Edebiyatı (Mani, Türkü...) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=8nguIMLqQ48",
@@ -8964,24 +8978,10 @@
               "channel": "Kadir Gümüş"
             },
             {
-              "id": "FjBAzUQ77EA",
-              "title": "11. Tamlamalar (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=FjBAzUQ77EA",
-              "thumbnail": "https://i.ytimg.com/vi/FjBAzUQ77EA/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "pS84slsTGEI",
               "title": "9. İsim (Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=pS84slsTGEI",
               "thumbnail": "https://i.ytimg.com/vi/pS84slsTGEI/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "M0zyiXlmjkE",
-              "title": "7. Aşık Tarzı Halk Edb (Koşma-Semai, Varsağı, Destan ) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=M0zyiXlmjkE",
-              "thumbnail": "https://i.ytimg.com/vi/M0zyiXlmjkE/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -9000,6 +9000,13 @@
           "url": "https://www.youtube.com/playlist?list=PLbJSnKeFOIks",
           "videoCount": 11,
           "videos": [
+            {
+              "id": "cg2gWnZugvc",
+              "title": "11. Ses Bilgisi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=cg2gWnZugvc",
+              "thumbnail": "https://i.ytimg.com/vi/cg2gWnZugvc/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
             {
               "id": "x29RpYlr2QY",
               "title": "10. Söz Sanatları (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
@@ -9061,13 +9068,6 @@
               "title": "2 . Sanat - Zanaat (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=4C-7BhWJVh4",
               "thumbnail": "https://i.ytimg.com/vi/4C-7BhWJVh4/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "cg2gWnZugvc",
-              "title": "11. Ses Bilgisi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=cg2gWnZugvc",
-              "thumbnail": "https://i.ytimg.com/vi/cg2gWnZugvc/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -9157,6 +9157,27 @@
       ],
       "videos": [
         {
+          "id": "FjBAzUQ77EA",
+          "title": "11. Tamlamalar (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=FjBAzUQ77EA",
+          "thumbnail": "https://i.ytimg.com/vi/FjBAzUQ77EA/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "M0zyiXlmjkE",
+          "title": "7. Aşık Tarzı Halk Edb (Koşma-Semai, Varsağı, Destan ) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=M0zyiXlmjkE",
+          "thumbnail": "https://i.ytimg.com/vi/M0zyiXlmjkE/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "cg2gWnZugvc",
+          "title": "11. Ses Bilgisi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=cg2gWnZugvc",
+          "thumbnail": "https://i.ytimg.com/vi/cg2gWnZugvc/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
           "id": "8nguIMLqQ48",
           "title": "6. Anonim Halk Edebiyatı (Mani, Türkü...) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
           "url": "https://www.youtube.com/watch?v=8nguIMLqQ48",
@@ -9218,30 +9239,9 @@
           "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
           "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "HXoS2v-pzm0",
-          "title": "4. Mektup (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=HXoS2v-pzm0",
-          "thumbnail": "https://i.ytimg.com/vi/HXoS2v-pzm0/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "EuNOV7yuyoM",
-          "title": "6. Tema (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=EuNOV7yuyoM",
-          "thumbnail": "https://i.ytimg.com/vi/EuNOV7yuyoM/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "OLn0z7Se9D8",
-          "title": "5. Açık İleti - Örtük İleti (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=OLn0z7Se9D8",
-          "thumbnail": "https://i.ytimg.com/vi/OLn0z7Se9D8/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-06T09:54:44.336Z"
+      "refreshedAt": "2026-11-07T09:17:56.927Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10070,7 +10070,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-06T09:54:46.567Z"
+      "refreshedAt": "2026-11-07T09:17:59.319Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -11072,7 +11072,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-06T09:55:19.397Z"
+      "refreshedAt": "2026-11-07T09:18:34.229Z"
     }
   }
 }
