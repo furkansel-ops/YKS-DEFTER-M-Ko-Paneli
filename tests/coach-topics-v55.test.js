@@ -90,6 +90,6 @@ test("v55 arama ve eski girişler: Deneme Analizi'nden konuya git aramayı doldu
 test("v55 dosyalar: stil ve sürüm iğnesi; renkler tema belirteçli",()=>{
   const html=read("index.html"),css=read("topics-v55.css");
   assert.match(html,/<link rel="stylesheet" href="\.\/topics-v55\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-students54-topics55-messages56-pp57"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-students54-topics55-messages56-pp57-settings58"/);
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i,"ham renk kalmaz");
 });

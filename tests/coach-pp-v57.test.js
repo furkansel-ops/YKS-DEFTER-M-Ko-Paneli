@@ -83,6 +83,6 @@ test("v57 kayıt defteri son 10, Tümü ile hepsi; hedef yoksa çubuk yok, 'hede
 test("v57 dosyalar: stil ve sürüm iğnesi; ham renk yok",()=>{
   const html=read("index.html"),css=read("paragraph-problem-v57.css");
   assert.match(html,/<link rel="stylesheet" href="\.\/paragraph-problem-v57\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-messages56-pp57"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-messages56-pp57-settings58"/);
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i);
 });

@@ -67,32 +67,34 @@ const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 const css=([r,g,b],a)=>a>=1?"#"+hex2(r)+hex2(g)+hex2(b):"rgba("+[r,g,b].map(Math.round).join(",")+","+(+a.toFixed(3))+")";
 
 // Gece: açık yüzeyler koyu laciverte, koyu yazı açığa, renkler koyu zeminde okunacak kadar açılır.
+// v58: öğrencideki v85 Gece gibi bir ton açık (simsiyah yerine yumuşak gece mavisi), vurgu ve yazılar biraz parlak.
 function night([r,g,b,a]){
   const [h,s,l]=toHsl(r,g,b);
   if(a<1){
     if(l<.35)return css([0,0,0],a<.3?Math.min(.7,a*2.2):Math.min(.88,a*1.35));
     // Koyu yüzeyler açılınca üstlerindeki yarı saydam beyazlar kaybolur; onlar da koyu iz olur.
-    if(l>.9&&s<.3)return a>=.5?css([18,26,44],a):css([4,8,18],Math.min(1,a*1.2));
-    return css(fromHsl(h,Math.min(1,s),clamp(.6+l*.18,.62,.78)),Math.min(1,a*1.6));
+    if(l>.9&&s<.3)return a>=.5?css([34,44,70],a):css([18,24,40],Math.min(1,a*1.2));
+    return css(fromHsl(h,Math.min(1,s),clamp(.64+l*.18,.66,.8)),Math.min(1,a*1.6));
   }
   if(l>=.8){
-    if(s<.3||l>.985)return css(fromHsl(222,.38,l>=.995?.118:.13+(1-l)*.75),1);
-    return css(fromHsl(h,Math.min(s,.55),.16+(1-l)*.5),1);
+    if(s<.3||l>.985)return css(fromHsl(223,.35,l>=.995?.204:.2+(1-l)*.75),1);
+    return css(fromHsl(h,Math.min(s,.55),.22+(1-l)*.5),1);
   }
-  if(l<.3)return css(fromHsl(h,Math.min(s,.3),.92-l*.3),1);
-  if(s<.25)return css(fromHsl(h,Math.min(s,.22),.6+(l-.3)*.32),1);
-  return css(fromHsl(h,Math.min(1,s*1.05),clamp(.6+l*.18,.62,.78)),1);
+  if(l<.3)return css(fromHsl(h,Math.min(s,.3),.96-l*.3),1);
+  if(s<.25)return css(fromHsl(h,Math.min(s,.22),.66+(l-.3)*.32),1);
+  return css(fromHsl(h,Math.min(1,s*1.05),clamp(.64+l*.18,.66,.8)),1);
 }
 // Canlı: maviler mora döner, açık nötrler sıcak kum tonuna, koyu nötrler mor-griye.
+// v58: öğrencideki v85 Canlı gibi doygun — şeftali zemin, şeftali çizgiler, doygun mor vurgu.
 function vivid([r,g,b,a]){
   const [h,s,l]=toHsl(r,g,b);
   if(s<.25||l>=.97){
     if(l>=.995)return css([r,g,b],a);
-    if(l>=.93)return css(fromHsl(34,.42,l),a);
-    if(l>=.8)return css(fromHsl(33,Math.min(.3,s+.1),l),a);
-    return css(fromHsl(250,s,l),a);
+    if(l>=.93)return css(fromHsl(27,.9,l),a);
+    if(l>=.8)return css(fromHsl(26,Math.min(.55,s+.3),l),a);
+    return css(fromHsl(258,Math.max(s,.18),l),a);
   }
-  if(h>=190&&h<=235)return css(fromHsl(252+(h-217)*.3,Math.min(s,.75),l),a);
+  if(h>=190&&h<=235)return css(fromHsl(258+(h-217)*.3,Math.min(1,s*1.1),l),a);
   return css([r,g,b],a);
 }
 // Açık temalar: açık gri yazılar (orta açıklıkta nötrler) beyaz zeminde 4.5:1'e ulaşacak kadar koyulaşır.

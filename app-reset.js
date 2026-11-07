@@ -153,7 +153,7 @@ document.querySelectorAll("[data-coach-page]").forEach(button=>{
 onAuthStateChanged(auth,async user=>{
   // v34 e-posta/kayıt akışı sürerken bekle; akış bitince sayfa yenilenir.
   if(window.__YKS_COACH_AUTH_BUSY__)return;
-  if(!user){stopCoachShareRealtime();stopCoachAppointments();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}stopCoachReads();coachMessageActions=[];selectedMessageStudent="";showAuth();return}
+  if(!user){coachV58Reports="loading";coachV58Note="";stopCoachShareRealtime();stopCoachAppointments();if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}stopCoachReads();coachMessageActions=[];selectedMessageStudent="";showAuth();return}
   try{
     const profile=await loadCoachProfile(user);
     if(!profile){
@@ -189,7 +189,10 @@ let coachReportRows=[];
 // v41 · Randevular durumu (aşağıdaki "Randevular" bölümü kullanır).
 let coachAppointments=[],coachAvailability=null,coachApptStop=null,coachApptUid="";
 let coachShareStops=[],coachRealtimeRenderTimer=null;
-function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null}
+// v58 · Ayarlar › Bağlantı ve eşitleme: öğrenci verisinin yüklenme durumu ve öğrenci başına canlı dinleyici durumu.
+let coachV58Reports="loading",coachV58Busy=false,coachV58Note="";
+const coachV58ShareState=new Map();
+function stopCoachShareRealtime(){coachShareStops.splice(0).forEach(stop=>{try{stop()}catch{}});clearTimeout(coachRealtimeRenderTimer);coachRealtimeRenderTimer=null;coachV58ShareState.clear()}
 function renderCoachRealtimeViews(){
   try{renderCoachDashboard()}catch(error){console.error("Canlı ana panel görünümü",error)}
   try{renderDashboardDayReviews()}catch(error){console.error("Canlı gün sonu notları",error)}
@@ -210,7 +213,11 @@ function startCoachShareRealtime(){
     const stop=onSnapshot(doc(db,"coachingShares",row.studentUid),snap=>{
       const target=coachReportRows.find(item=>item.studentUid===row.studentUid);if(!target)return;
       target.share=snap.exists()?snap.data():null;scheduleCoachRealtimeRender();
-    },error=>console.error("Öğrenci canlı paylaşımı",row.studentUid,error));
+      coachV58ShareState.set(row.studentUid,{state:"live",at:Date.now()});coachV58RenderSync();
+    },error=>{
+      console.error("Öğrenci canlı paylaşımı",row.studentUid,error);
+      coachV58ShareState.set(row.studentUid,{state:"error",error});coachV58RenderSync();
+    });
     coachShareStops.push(stop);
   });
   watchCoachErrorPhotos();
@@ -851,6 +858,7 @@ async function loadCoachReports(coachUid){
   stopCoachShareRealtime();
   setReportState("reportLoading");
   setParagraphProblemState("ppCoachLoading");
+  coachV58Reports="loading";coachV58RenderSync();
   try{
     const linkSnap=await getDocs(query(collection(db,"coachingLinks"),where("coachUid","==",coachUid)));
     const links=linkSnap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active===true);
@@ -884,8 +892,10 @@ async function loadCoachReports(coachUid){
     try{hydrateProgramStudents();renderProgramWorkspace()}catch(error){console.error("Programlar render",error)}
     try{renderMessageStudents()}catch(error){console.error("Mesaj öğrenci listesi",error)}
     startCoachShareRealtime();
+    coachV58Reports="ok";coachV58RenderSync();
   }catch(error){
     console.error("Takip raporları",error);
+    coachV58Reports="error";coachV58RenderSync();
     if($("reportErrorText"))$("reportErrorText").textContent=String(error?.message||"Rapor verileri alınamadı.");
     setReportState("reportError");
   }
@@ -2421,7 +2431,7 @@ function messageTimestamp(value){
   try{const d=value?.toDate?.()||new Date(value);if(!d||Number.isNaN(d.getTime()))return"—";return new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(d)}catch{return"—"}
 }
 function applyCoachMessageSnapshot(snap){
-  coachV56Notify(snap);coachV56Live="live";
+  coachV56Notify(snap);coachV56Live="live";coachV58RenderSync();
   // v51: sunucu saati henüz gelmemiş (yeni gönderilen) mesaj sona dizilir.
   coachMessageActions=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(coachReadMillis(a?.createdAt)||Infinity)-(coachReadMillis(b?.createdAt)||Infinity));
   renderMessageStudents();
@@ -2586,6 +2596,7 @@ function coachV56RenderStatus(){
   const [tone,text]=coachV56StatusText();
   for(const id of ["messageChatStatus","messageLiveStatus"]){const node=$(id);if(node){node.textContent=text;node.dataset.v56Tone=tone}}
   document.querySelector("#messagesPage .message-online-dot")?.setAttribute("data-v56-tone",tone);
+  coachV58RenderSync();
 }
 function coachV56Notice(text){const node=$("messageComposeStatus");if(node){node.textContent=text;node.hidden=!text}}
 function coachV56Number(value){return reportNum(value).toLocaleString("tr-TR",{maximumFractionDigits:2})}
@@ -2637,6 +2648,7 @@ function coachV56RenderNotifyButton(){
   const supported=typeof Notification!=="undefined",on=coachV56NotifyOn();
   button.textContent=!supported?"🔕 Bu tarayıcı bildirim desteklemiyor":Notification.permission==="denied"?"🔕 Bildirim tarayıcıda engelli":on?"🔔 Yeni mesajda bildirim: Açık":"🔔 Yeni mesajda bildirim: Kapalı";
   button.setAttribute("aria-pressed",String(on));button.disabled=!supported||Notification.permission==="denied";
+  coachV58RenderNotify();
 }
 $("messageNotifyBtn")?.addEventListener("click",async()=>{
   if(typeof Notification==="undefined")return;
@@ -2745,7 +2757,7 @@ $("coachNotesInput")?.addEventListener("input",event=>{
   coachNotesState("Kaydediliyor…");
   coachNotesTimer=setTimeout(()=>void saveCoachNotes(value),800);
 });
-const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#0a0f1c"},vivid:{name:"Canlı",color:"#6a4cf5"}};
+const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#192134"},vivid:{name:"Canlı",color:"#6a2cff"}};
 function coachThemeId(value){return COACH_THEMES[value]?value:"refined-blue"}
 function applyCoachTheme(value){
   const theme=coachThemeId(value),root=document.documentElement;
@@ -2794,6 +2806,7 @@ function hydrateCoachSettings(profile,user){
   if($("settingsSpecializationCount"))$("settingsSpecializationCount").textContent=String(specialization.length);
   if($("settingsAccountName"))$("settingsAccountName").textContent=name;
   if($("settingsAccountEmail"))$("settingsAccountEmail").textContent=user?.email||"—";
+  if($("settingsAccountVerified"))$("settingsAccountVerified").textContent=!user?.email?"—":user.emailVerified?"Doğrulandı":"Doğrulanmadı";
   applyCoachUiPrefs();
   updateSettingsPill("Hazır");
 }
@@ -2804,9 +2817,10 @@ function settingsDirty(){
 const COACH_SETTINGS_META={
   profile:{title:"Profil",description:"Koç bilgilerini ve öğrencilerin gördüğü profilini düzenle."},
   general:{title:"Panel ve çalışma",description:"Açılış ekranını ve panelin çalışma biçimini belirle."},
-  messaging:{title:"Mesajlar",description:"Mesaj yazma ve hızlı yanıt tercihlerini düzenle."},
-  appearance:{title:"Görünüm",description:"Temayı, ekran yoğunluğunu ve hareket davranışını kendine göre ayarla."},
-  account:{title:"Hesap ve oturum",description:"Google hesabını, senkron durumunu ve oturum bilgilerini gör."}
+  messaging:{title:"Mesajlar ve bildirim",description:"Mesaj yazma, hızlı mesaj ve tarayıcı bildirimi tercihleri."},
+  appearance:{title:"Görünüm",description:"Öğrencideki temaların aynısı."},
+  account:{title:"Hesap ve oturum",description:"Giriş yöntemin, e-postanın doğrulanması ve oturum."},
+  sync:{title:"Bağlantı ve eşitleme",description:"Panelin şu anki gerçek durumu."}
 };
 function openCoachSettingsOverview(){
   const page=$("settingsPage"),overview=$("coachSettingsOverview"),detail=$("coachSettingsDetail");
@@ -2817,6 +2831,7 @@ function openCoachSettingsOverview(){
   document.querySelectorAll("[data-settings-tab]").forEach(button=>button.classList.remove("active"));
   const search=$("coachSettingsSearch");
   if(search){search.value="";search.dispatchEvent(new Event("input"))}
+  coachV58RenderSync();
   try{window.scrollTo({top:0,behavior:"instant"})}catch{}
 }
 function openCoachSettingsTab(tab){
@@ -2829,6 +2844,7 @@ function openCoachSettingsTab(tab){
   document.querySelectorAll("[data-settings-panel]").forEach(panel=>panel.classList.toggle("hidden",panel.dataset.settingsPanel!==tab));
   if($("coachSettingsDetailTitle"))$("coachSettingsDetailTitle").textContent=meta.title;
   if($("coachSettingsDetailDescription"))$("coachSettingsDetailDescription").textContent=meta.description;
+  if(tab==="sync")coachV58RenderSync();
   try{window.scrollTo({top:0,behavior:"instant"})}catch{}
 }
 document.querySelectorAll("[data-settings-tab]").forEach(button=>button.addEventListener("click",()=>openCoachSettingsTab(button.dataset.settingsTab)));
@@ -5090,3 +5106,138 @@ $("programTaskSend")?.addEventListener("click",async()=>{
     }
   }finally{if(button)button.disabled=false}
 });
+
+/* v58 · Ayarlar: gerçek bağlantı ve eşitleme durumu. Ayarlar'ın en üstünde tek satır; ayrıntıda internet, mesajlar ve
+   öğrenci verileri ayrı ayrı, verisi eski ya da alınamayan öğrenci adıyla, ne yapılacağıyla ve Mesaj / Öğrenciler düğmesiyle.
+   "Yeniden bağlan" öğrenci, mesaj ve randevu dinleyicilerini baştan kurar. Bildirim tercihi Mesajlar'daki düğmeyle ortak.
+   Hiçbir kayıt yazılmaz. */
+function coachV58Ago(ms){
+  if(!ms)return"";
+  const diff=Math.max(0,Date.now()-ms);
+  if(diff<60000)return"az önce";
+  if(diff<3600000)return Math.floor(diff/60000)+" dk önce";
+  if(diff<86400000)return Math.floor(diff/3600000)+" sa önce";
+  return Math.floor(diff/86400000)+" gün önce";
+}
+function coachV58ShareFix(error){
+  const code=String(error?.code||"");
+  if(code.includes("permission-denied"))return"İzin yok: bağlantı kapalı olabilir. Öğrenciler'den bağlantıyı kontrol et.";
+  if(code.includes("unavailable"))return"Sunucuya ulaşılamadı. İnternet gelince Yeniden bağlan'a bas.";
+  return"Veri alınamadı. Yeniden bağlan'a bas; sürerse Öğrenciler'den bağlantıyı kontrol et.";
+}
+/* Bağlı her öğrenci için: ok (güncel), warn (veri eski / henüz yok) ya da bad (canlı veri alınamadı). */
+function coachV58Students(){
+  return coachReportRows.filter(row=>row?.link?.active===true).map(row=>{
+    const live=coachV58ShareState.get(row.studentUid),ms=reportUpdatedMs(row?.share?.updatedAt);
+    if(live?.state==="error")return{row,tone:"bad",kind:"error",title:"veri alınamadı",fix:coachV58ShareFix(live.error),action:"students"};
+    if(!row.share)return{row,tone:"warn",kind:"none",title:"henüz veri yok",fix:"Öğrenci uygulamayı açıp internete bağlanınca ilk veri gelir.",action:"message"};
+    const days=studentSyncDays(row);
+    if(days!==null&&days>=STUDENT_STALE_DAYS)return{row,tone:"warn",kind:"stale",title:"veri eski",fix:"Son eşitleme "+coachV58Ago(ms)+". Öğrenci uygulamayı açıp internete bağlanınca kendiliğinden gelir; gerekirse ona mesaj at.",action:"message"};
+    return{row,tone:"ok",kind:"ok",ms};
+  });
+}
+function coachV58MessageLine(){
+  const [tone,text]=coachV56StatusText();
+  return{tone:tone==="on"?"ok":tone==="wait"?"wait":"bad",text};
+}
+function coachV58Summary(){
+  if(navigator.onLine===false)return{tone:"bad",text:"Bağlantı yok · internet bekleniyor"};
+  if(coachV58Busy)return{tone:"wait",text:"Yeniden bağlanıyor…"};
+  if(coachV58Reports==="loading")return{tone:"wait",text:"Bağlanıyor…"};
+  if(coachV58Reports==="error")return{tone:"bad",text:"Öğrenci verileri alınamadı"};
+  const list=coachV58Students(),count=kind=>list.filter(item=>item.kind===kind).length,msg=coachV58MessageLine(),parts=[];
+  if(count("error"))parts.push(count("error")+" öğrencinin verisi alınamadı");
+  if(count("stale"))parts.push(count("stale")+" öğrencinin verisi eski");
+  if(count("none"))parts.push(count("none")+" öğrenciden veri bekleniyor");
+  const head=msg.tone==="ok"?"Canlı":msg.text;
+  const tone=count("error")||msg.tone==="bad"?"bad":parts.length?"warn":msg.tone==="wait"?"wait":"ok";
+  return{tone,text:head+(parts.length?" · "+parts.join(" · "):list.length?" · "+list.length+" öğrenci güncel":"")};
+}
+function coachV58Line(tone,title,sub,end){
+  return '<div class="coach-v58-line" data-tone="'+tone+'"><i class="coach-v58-dot" data-tone="'+tone+'" aria-hidden="true"></i>'
+    +'<span class="coach-v58-line-copy"><b>'+escHtml(title)+'</b>'+(sub?'<small>'+escHtml(sub)+'</small>':"")+'</span>'+end+'</div>';
+}
+const coachV58Status=(tone,text)=>'<em data-tone="'+tone+'">'+escHtml(text)+'</em>';
+function coachV58StudentLines(list){
+  return list.filter(item=>item.tone!=="ok").sort((a,b)=>(a.tone==="bad"?0:1)-(b.tone==="bad"?0:1)).map(item=>{
+    const uid=escHtml(item.row.studentUid);
+    const button=item.action==="message"?'<button type="button" data-v58-message="'+uid+'">Mesaj</button>':'<button type="button" data-v58-go="students">Öğrenciler</button>';
+    return coachV58Line(item.tone,studentName(item.row)+" · "+item.title,item.fix,button);
+  });
+}
+function coachV58DetailHtml(){
+  const online=navigator.onLine!==false,msg=coachV58MessageLine(),list=coachV58Students(),lines=[];
+  lines.push(coachV58Line(online?"ok":"bad","İnternet",online?"":"Bağlantı gelince panel kendiliğinden eşitlenir.",coachV58Status(online?"ok":"bad",online?"Bağlı":"Yok")));
+  lines.push(coachV58Line(msg.tone,"Mesajlar","",coachV58Status(msg.tone,msg.text)));
+  if(coachV58Reports==="loading")lines.push(coachV58Line("wait","Öğrenci verileri","Yükleniyor",coachV58Status("wait","Bağlanıyor…")));
+  else if(coachV58Reports==="error")lines.push(coachV58Line("bad","Öğrenci verileri","Liste alınamadı. Yeniden bağlan'a bas.",coachV58Status("bad","Alınamadı")));
+  else{
+    const latest=Math.max(0,...list.map(item=>reportUpdatedMs(item.row?.share?.updatedAt))),issues=list.filter(item=>item.tone!=="ok").length;
+    const sub=list.length?list.length+" öğrenci"+(latest?" · son veri "+coachV58Ago(latest):""):"Bağlı öğrenci yok";
+    const tone=list.some(item=>item.tone==="bad")?"bad":issues?"warn":"ok";
+    lines.push(coachV58Line(tone,"Öğrenci verileri",sub,coachV58Status(tone,tone==="ok"?"Canlı":issues+" sorun")));
+    lines.push(...coachV58StudentLines(list));
+  }
+  return '<div class="coach-v58-card"><div class="coach-v58-lines">'+lines.join("")+'</div>'
+    +'<button type="button" class="coach-v58-reconnect" id="coachV58Reconnect"'+(coachV58Busy?" disabled":"")+'>'+(coachV58Busy?"Yeniden bağlanıyor…":"↻ Yeniden bağlan")+'</button>'
+    +(coachV58Note?'<p class="coach-v58-note">'+escHtml(coachV58Note)+'</p>':"")+'</div>';
+}
+function coachV58RenderSync(){
+  const summary=coachV58Summary(),card=$("coachV58SyncCard");
+  if(card){
+    card.querySelector(".coach-v58-dot")?.setAttribute("data-tone",summary.tone);
+    if($("coachV58SyncSummary"))$("coachV58SyncSummary").textContent=summary.text;
+  }
+  const detail=$("coachV58SyncDetail");
+  if(detail&&!detail.closest("[data-settings-panel]")?.classList.contains("hidden")){
+    // Aynı içerik yeniden yazılmaz: odaktaki düğme kaybolmaz, ekran okuyucu paneli tekrar okumaz.
+    const html=coachV58DetailHtml();if(detail.innerHTML!==html)detail.innerHTML=html;
+  }
+}
+async function coachV58Reconnect(){
+  const user=auth.currentUser;if(!user||coachV58Busy)return;
+  coachV58Busy=true;coachV58Note="";coachV58RenderSync();
+  try{
+    if(coachMessageStop){try{coachMessageStop()}catch{}coachMessageStop=null;coachMessageUid=""}
+    coachV56Live="connecting";stopCoachAppointments();
+    await Promise.all([loadCoachReports(user.uid),loadCoachMessages(user.uid),loadCoachAppointments(user.uid)]);
+    coachV58Note=coachV58Reports==="ok"?"Yeniden bağlandı · "+new Intl.DateTimeFormat("tr-TR",{hour:"2-digit",minute:"2-digit"}).format(new Date()):"Öğrenci verileri alınamadı. İnternet gelince tekrar dene.";
+  }catch(error){
+    console.error("Yeniden bağlan",error);
+    coachV58Note="Yeniden bağlanılamadı. Biraz sonra tekrar dene.";
+  }finally{coachV58Busy=false;coachV56RenderStatus();coachV58RenderSync()}
+}
+$("coachV58SyncDetail")?.addEventListener("click",event=>{
+  if(event.target.closest("#coachV58Reconnect")){void coachV58Reconnect();return}
+  const message=event.target.closest("[data-v58-message]");
+  if(message){openCoachMessageThread(message.dataset.v58Message,"");return}
+  const go=event.target.closest("[data-v58-go]");
+  if(go)showCoachPage(go.dataset.v58Go);
+});
+window.addEventListener("online",coachV58RenderSync);
+window.addEventListener("offline",coachV58RenderSync);
+
+/* Bildirim: Ayarlar'daki iki anahtar ve Mesajlar'daki düğme aynı messageNotify tercihini gösterir. */
+function coachV58NotifyNote(){
+  if(typeof Notification==="undefined")return"Bu tarayıcı bildirim desteklemiyor";
+  if(Notification.permission==="denied")return"Bildirim tarayıcıda engelli; tarayıcının site ayarlarından izin ver";
+  return"Panel açıkken başka sekmedeysen";
+}
+function coachV58RenderNotify(){
+  const supported=typeof Notification!=="undefined",on=coachV56NotifyOn(),locked=!supported||Notification.permission==="denied";
+  document.querySelectorAll("[data-v58-notify]").forEach(input=>{input.checked=on;input.disabled=locked});
+  document.querySelectorAll("[data-v58-notify-note]").forEach(node=>{node.textContent=coachV58NotifyNote()});
+}
+async function coachV58SetNotify(want){
+  if(typeof Notification!=="undefined"){
+    let permission="granted";
+    if(want&&Notification.permission==="default"){try{permission=await Notification.requestPermission()}catch{permission="denied"}}
+    else if(want)permission=Notification.permission;
+    // Yalnız gerçekten kaydedilince "kaydedildi" yazar (izin verilmezse anahtar geri döner).
+    if(permission==="granted"){writeCoachUiPrefs({...readCoachUiPrefs(),messageNotify:want});updateSettingsPill("Tercih kaydedildi","saved")}
+  }
+  coachV56RenderNotifyButton();coachV58RenderNotify();
+}
+document.querySelectorAll("[data-v58-notify]").forEach(input=>input.addEventListener("change",()=>void coachV58SetNotify(input.checked)));
+coachV58RenderNotify();
+coachV58RenderSync();

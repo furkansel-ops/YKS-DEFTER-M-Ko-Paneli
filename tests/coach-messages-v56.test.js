@@ -119,7 +119,7 @@ test("v56 hızlı mesajlar öğrencinin verisinden; bağlantı kapalıysa yazma 
 test("v56 dosyalar: stil, sürüm iğnesi, bildirim düğmesi; ham renk yok",()=>{
   const html=read("index.html"),css=read("messages-v56.css");
   assert.match(html,/<link rel="stylesheet" href="\.\/messages-v56\.css\?v=1\.0\.0">/);
-  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-topics55-messages56-pp57"/);
+  assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-topics55-messages56-pp57-settings58"/);
   assert.match(html,/id="messageNotifyBtn"/);assert.match(html,/id="messageBackBtn"/);assert.match(html,/id="messageChatStatus">Bağlanıyor…</);
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i);
 });

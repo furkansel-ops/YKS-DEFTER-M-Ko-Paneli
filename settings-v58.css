@@ -1,0 +1,57 @@
+/* Koç Paneli · v58 Ayarlar — bağlantı ve eşitleme durumu, bildirim anahtarı, kısa Görünüm.
+   Renkler yalnız tema değişkenlerinden (--k-*); Sade Mavi, Gece ve Canlı'da aynı düzen. */
+.coach-v58-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none;background:var(--k-muted)}
+.coach-v58-dot[data-tone="ok"]{background:var(--k-ok)}
+.coach-v58-dot[data-tone="warn"]{background:var(--k-warn)}
+.coach-v58-dot[data-tone="bad"]{background:var(--k-bad)}
+
+/* Ayarlar ana: en üstte tek satır durum */
+.coach-v58-sync{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 12px;padding:14px 16px;border:1px solid var(--k-line);border-radius:16px;background:var(--k-surface);color:var(--k-ink);font:inherit;text-align:left;cursor:pointer}
+.coach-v58-sync:hover{border-color:var(--k-accent)}
+.coach-v58-sync-copy{flex:1;min-width:0;display:grid;gap:2px}
+.coach-v58-sync-copy b{font-size:15px}
+.coach-v58-sync-copy small{color:var(--k-muted);font-size:12.5px;line-height:1.35}
+.coach-v58-more{flex:none;padding:7px 11px;border-radius:10px;background:var(--k-side-on);color:var(--k-side-on-ink);font-size:12.5px;font-weight:800;white-space:nowrap}
+
+/* Ayarlar ana: bildirim satırı kategori listesinin altında */
+.coach-v58-notify-row{display:flex;align-items:center;gap:13px;margin-top:12px;padding:12px 16px;border:1px solid var(--k-line);border-radius:16px;background:var(--k-surface);cursor:pointer}
+.coach-v58-notify-row .coach-settings-category-copy{flex:1;min-width:0}
+.coach-v58-notify-row .settings-switch{flex:none}
+
+/* Bağlantı ve eşitleme ayrıntısı */
+.coach-v58-card{padding:6px 16px 16px;border:1px solid var(--k-line);border-radius:16px;background:var(--k-surface)}
+.coach-v58-lines{display:grid}
+.coach-v58-line{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-top:1px solid var(--k-line)}
+.coach-v58-line:first-child{border-top:0}
+.coach-v58-line .coach-v58-dot{margin-top:5px}
+.coach-v58-line-copy{flex:1;min-width:0;display:grid;gap:3px}
+.coach-v58-line-copy b{font-size:14px;color:var(--k-ink)}
+.coach-v58-line-copy small{color:var(--k-muted);font-size:12.5px;line-height:1.4}
+.coach-v58-line em{flex:none;font-style:normal;font-weight:850;font-size:13px;color:var(--k-muted)}
+.coach-v58-line em[data-tone="ok"]{color:var(--k-ok)}
+.coach-v58-line em[data-tone="warn"]{color:var(--k-warn)}
+.coach-v58-line em[data-tone="bad"]{color:var(--k-bad)}
+.coach-v58-line button{flex:none;min-height:34px;padding:0 12px;border:0;border-radius:10px;background:var(--k-side-on);color:var(--k-side-on-ink);font-family:inherit;font-weight:800;font-size:12.5px;line-height:1;cursor:pointer}
+.coach-v58-reconnect{width:100%;min-height:44px;margin-top:8px;border:0;border-radius:12px;background:var(--k-accent);color:var(--k-on-accent);font-family:inherit;font-weight:800;font-size:14px;line-height:1;cursor:pointer}
+.coach-v58-reconnect:disabled{opacity:.6;cursor:progress}
+.coach-v58-note{margin:10px 0 0;color:var(--k-muted);font-size:12.5px;text-align:center}
+
+/* Kısa Görünüm: temalar yan yana, iki seçenekli yoğunluk, tek satır hareket anahtarı */
+.coach-settings-detail .coach-v36-themes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.coach-v58-seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:var(--k-soft)}
+.coach-v58-seg button{min-height:40px;border:0;border-radius:9px;background:transparent;color:var(--k-muted);font-family:inherit;font-weight:800;font-size:14px;line-height:1;cursor:pointer}
+.coach-v58-seg button.active{background:var(--k-surface);color:var(--k-ink);box-shadow:0 1px 3px color-mix(in srgb,var(--k-ink) 18%,transparent)}
+.coach-settings-detail .coach-v58-motion{margin-top:12px;padding:14px 17px;border:1px solid var(--k-line);border-radius:16px;background:var(--k-surface)}
+.coach-v58-instant{margin:10px 0 0;color:var(--k-muted);font-size:12.5px;text-align:center}
+
+/* Satırlar telefonda da yan yana kalır (eski düzen anahtarı alta itiyordu) */
+.coach-settings-detail .settings-toggle-row.coach-v58-motion,
+.coach-settings-detail [data-settings-panel="messaging"] .settings-toggle-row:has([data-v58-notify]){flex-direction:row;align-items:center}
+.settings-account-list span small{display:block;margin-top:2px;color:var(--k-muted);font-size:12px;font-weight:600}
+
+@media(max-width:520px){
+  .coach-settings-detail .coach-v36-themes button{display:block;padding:8px;text-align:left}
+  .coach-settings-detail .coach-v36-themes .coach-v36-swatch{height:30px;margin:0 0 6px}
+  .coach-settings-detail .coach-v36-themes small{display:none}
+  .coach-settings-detail .coach-v36-themes b{font-size:12.5px}
+}

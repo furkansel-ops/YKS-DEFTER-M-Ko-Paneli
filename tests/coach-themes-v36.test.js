@@ -84,7 +84,7 @@ test("v36 renk eşlemesi: açık temalarda gri yazı okunur, Gece'de yarı sayda
       const hex=value(scope,key);
       assert.ok(hex&&onWhite(hex)>=4.5,scope+" "+key+" → "+hex+" beyazda "+(hex?onWhite(hex).toFixed(2):"yok"));
     }
-  assert.match(value(':root[data-theme="night"]',"ffffff-a140"),/^rgba\(4,8,18,/);
+  assert.match(value(':root[data-theme="night"]',"ffffff-a140"),/^rgba\(18,24,40,/);
   assert.ok(onWhite(value(":root:not([data-theme])","2873f0"))>=4.5,"Sade Mavi ana mavisi beyazla 4.5:1");
 });
 
@@ -106,7 +106,7 @@ test("v36 Ayarlar › Görünüm üç temayı seçer, kaydeder ve uygular",t=>{
   assert.equal(JSON.parse(w.localStorage.getItem("yks_coach_ui_preferences_v2")).theme,"night");
   assert.equal(buttons[1].getAttribute("aria-pressed"),"true");
   assert.equal(doc.querySelector("#appearanceThemeLabel").textContent,"Gece");
-  assert.equal(doc.querySelector('meta[name="theme-color"]').content,"#0a0f1c");
+  assert.equal(doc.querySelector('meta[name="theme-color"]').content,"#192134");
   buttons[0].click();
   assert.equal(doc.documentElement.dataset.theme,undefined);
   assert.equal(buttons[0].getAttribute("aria-pressed"),"true");
