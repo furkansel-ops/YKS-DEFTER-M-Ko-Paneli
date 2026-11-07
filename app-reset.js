@@ -3037,6 +3037,7 @@ function openStudentCard(uid){
   const fact=(label,value,cls="")=>'<span class="'+cls+'">'+escHtml(label)+'<b>'+escHtml(value)+'</b></span>';
   $("studentCardFacts").innerHTML=fact("Rank · seviye",studentRankText(row)||"—")+fact("Hedef net",targets||"—")+fact("Son çalışma",studentStudyLabel(row))+fact("Eşitleme",sync.text,sync.stale?"is-stale":"")+fact("Bağlantı",linked?new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long"}).format(linked)+"'den beri":"—")+fact("Hızlı okuma",reading?.tests30?Math.round(reportNum(reading.wpm30))+" k/dk · %"+Math.round(reportNum(reading.comprehension30)):"—");
   $("studentCardActions").innerHTML=[["report","▥ Rapor"],["program","▣ Program"],["message","✉ Mesaj"],["exams","▤ Deneme"],["errors","✎ Hata Defteri"],["topics","◫ Konular"]].map(([act,label])=>'<button type="button" data-student-card-act="'+act+'">'+label+'</button>').join("");
+  if($("studentCardBooks"))$("studentCardBooks").innerHTML=coachV59BooksHtml(row);
   modal.hidden=false;$("studentCardModal").querySelector("[data-student-card-close]")?.focus();
 }
 function closeStudentCard(){const modal=$("studentCardModal");if(modal)modal.hidden=true;studentCardUid=""}
@@ -4868,6 +4869,39 @@ $("programBuilderActivity")?.addEventListener("input",coachV45SyncChips);
 $("programTaskPrevWeek")?.addEventListener("click",()=>coachV45ShiftWeek(-1));
 $("programTaskNextWeek")?.addEventListener("click",()=>coachV45ShiftWeek(1));
 
+/* v59 · Kitaplar: öğrencinin Kitaplarım listesi (share.progress.books) öğrenci kartında görünür;
+   görev penceresinde "Kitaptan ödev" sıradaki testlerden görev metni yazar. Görev yine düz metin gider. */
+function coachV59Books(row){return (Array.isArray(row?.share?.progress?.books)?row.share.progress.books:[]).filter(b=>b&&String(b.name||"").trim()&&reportNum(b.total)>0)}
+function coachV59Initials(pub){const p=String(pub||"").trim().split(/\s+/).filter(Boolean);return (p.length===1?p[0].slice(0,3):p.map(w=>w[0]).join("").slice(0,3)).toLocaleUpperCase("tr-TR")||"?"}
+function coachV59DaysAgo(day){if(!/^\d{4}-\d{2}-\d{2}$/.test(String(day||"")))return null;const [y,m,d]=day.split("-").map(Number),t=new Date(),a=Date.UTC(y,m-1,d),b=Date.UTC(t.getFullYear(),t.getMonth(),t.getDate());return Math.max(0,Math.round((b-a)/864e5))}
+function coachV59BookTaskText(book,tests){
+  const total=Math.floor(reportNum(book?.total)),done=Math.min(total,Math.max(0,Math.floor(reportNum(book?.done))));if(done>=total)return "";
+  const n=Math.max(1,Math.min(total-done,Math.floor(reportNum(tests))||1)),from=done+1,to=done+n,per=Math.floor(reportNum(book?.perTest));
+  return ["📚 "+String(book.name).trim().slice(0,120),from===to?from+". test":from+"–"+to+". testler",per>0?n*per+" soru":""].filter(Boolean).join(" · ");
+}
+function coachV59BooksHtml(row){
+  const books=coachV59Books(row);
+  if(!books.length)return '<div class="coach-v59-books-empty"><b>Kitapları</b><span>Öğrenci henüz Kitaplarım\'a kitap eklemedi.</span></div>';
+  const finished=books.filter(b=>reportNum(b.done)>=reportNum(b.total)).length,questions=books.reduce((s,b)=>s+Math.floor(reportNum(b.done))*Math.floor(reportNum(b.perTest)),0);
+  return '<div class="coach-v59-books-head"><b>Kitapları · '+books.length+'</b><small>'+finished+' bitti · '+questions.toLocaleString("tr-TR")+' soru</small></div>'+books.map(b=>{
+    const total=Math.floor(reportNum(b.total)),done=Math.min(total,Math.floor(reportNum(b.done))),pct=Math.round(done/total*100),per=Math.floor(reportNum(b.perTest)),ago=coachV59DaysAgo(b.last);
+    const when=done>=total?'<small class="is-done">Bitti</small>':ago===null?'<small>Henüz ilerleme yok</small>':'<small class="'+(ago>=7?"is-stale":"")+'">'+(ago===0?"Son ilerleme bugün":ago===1?"Son ilerleme dün":ago+" gündür ilerleme yok")+'</small>';
+    return '<div class="coach-v59-book"><span class="coach-v59-cover" aria-hidden="true">'+escHtml(coachV59Initials(b.pub||b.name))+'<small>'+escHtml(b.exam||String(b.subject||"").slice(0,3))+'</small></span><span class="coach-v59-book-body"><span class="coach-v59-row"><b>'+escHtml(b.name)+'</b><em>'+escHtml(b.subject||"")+'</em></span><span class="coach-v59-bar" role="progressbar" aria-label="'+escHtml(b.name)+' ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></span><span class="coach-v59-row"><small>'+done+' / '+total+' test'+(per?' · '+(done*per).toLocaleString("tr-TR")+' soru':'')+'</small>'+when+'</span></span></div>';
+  }).join("");
+}
+function coachV59RenderBookHost(row,edit){
+  const box=$("coachV59BookBox"),host=$("coachV59BookHost");if(!box||!host)return;
+  const books=coachV59Books(row).filter(b=>reportNum(b.done)<reportNum(b.total));
+  box.hidden=edit||!books.length;box.open=false;if(box.hidden){host.innerHTML="";return}
+  host.innerHTML='<label><span>Öğrencinin kitabı</span><select id="coachV59Book">'+books.map((b,i)=>'<option value="'+i+'">'+escHtml(b.name+" · "+Math.floor(reportNum(b.done))+"/"+Math.floor(reportNum(b.total)))+'</option>').join("")+'</select></label>'+
+    '<div class="coach-v59-tests" role="group" aria-label="Kaç test">'+[1,2,3,5].map(n=>'<button type="button" data-v59-tests="'+n+'" aria-pressed="'+(n===3)+'">'+n+' test</button>').join("")+'<label><span class="sr-only">Diğer test sayısı</span><input id="coachV59Tests" type="number" min="1" max="200" inputmode="numeric" value="3"></label></div>'+
+    '<p id="coachV59Preview" class="coach-v59-preview"></p><button type="button" id="coachV59Use" class="coach-v59-use">Görev metnine yaz</button>';
+  const preview=()=>{const b=books[Number($("coachV59Book")?.value)||0],t=coachV59BookTaskText(b,$("coachV59Tests")?.value);if($("coachV59Preview"))$("coachV59Preview").textContent=t;return t};
+  host.querySelectorAll("[data-v59-tests]").forEach(btn=>btn.addEventListener("click",()=>{$("coachV59Tests").value=btn.dataset.v59Tests;host.querySelectorAll("[data-v59-tests]").forEach(x=>x.setAttribute("aria-pressed",String(x===btn)));preview()}));
+  $("coachV59Book")?.addEventListener("change",preview);$("coachV59Tests")?.addEventListener("input",()=>{host.querySelectorAll("[data-v59-tests]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.v59Tests===$("coachV59Tests").value)));preview()});
+  $("coachV59Use")?.addEventListener("click",()=>{const t=preview();if(!t||!$("programTaskText"))return;$("programTaskText").value=t;updateCoachProgramBuilder();$("programTaskText").focus()});
+  preview();
+}
 function coachProgramTaskText(){return String($("programTaskText")?.value||"").trim()}
 function coachProgramResource(){
   const raw=String($("programTaskVideo")?.value||"").trim();if(!raw)return "";
@@ -4958,6 +4992,7 @@ function openProgramTaskModal(prefill="",options={}){
   if(edit&&coachProgramEditContext)coachProgramEditContext.prefix=parsed.prefix;
   if($("programTaskText"))$("programTaskText").value=parsed.text;if($("programTaskVideo"))$("programTaskVideo").value=parsed.resource;
   coachV18Reset();
+  coachV59RenderBookHost(row,edit);
   if($("programTaskTitle"))$("programTaskTitle").textContent=edit?"Çalışmayı düzenle":"Çalışma ekle";
   if($("programTaskStatus")){$("programTaskStatus").className="program-task-status hidden";$("programTaskStatus").textContent=""}updateCoachProgramBuilder();
   coachV19LinkStatus();

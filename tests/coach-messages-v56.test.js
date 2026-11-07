@@ -29,7 +29,7 @@ function fixture(t,{addDoc}={}){
    {studentUid:"a",link:{id:"l-a",active:true,coachUid:"coach-1"},share:{profile:{name:"Ayşe Yılmaz",track:"SAY"},updatedAt:new Date().toISOString(),
      program:{weeks:[{week:wk,data:{r,dn:{["r-1-"+day]:true}}}],rowLabels:{r:["Ders","Ders"]}},
      exams:[{type:"TYT",date:"2026-10-20",totalNet:70},{type:"TYT",date:"2026-10-30",totalNet:78.75}],
-     topics:{full:true,items:[{key:"TYT|Fizik|Optik",exam:"TYT",subject:"Fizik",topic:"Optik",st:3,ts:new Date(now-12*864e5).toISOString().slice(0,10),rev:[0]}]},progress:{}}},
+     topics:{full:true,items:[{key:"TYT|Fizik|Optik",exam:"TYT",subject:"Fizik",topic:"Optik",st:3,ts:(d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"))(new Date(now-12*864e5)),rev:[0]}]},progress:{}}},
    {studentUid:"b",link:{id:"l-b",active:true,coachUid:"coach-1"},share:{profile:{name:"Berk Can"},progress:{}}}];
   window.__rows=coachReportRows;void loadCoachMessages("coach-1");}`);
   const doc=w.document,now=Date.now();

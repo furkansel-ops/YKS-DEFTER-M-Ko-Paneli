@@ -67,6 +67,7 @@
   <link rel="stylesheet" href="./messages-v56.css?v=1.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v57.css?v=1.0.0">
   <link rel="stylesheet" href="./settings-v58.css?v=1.0.0">
+  <link rel="stylesheet" href="./books-v59.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -246,6 +247,7 @@
             <div class="student-v54-sheet">
               <div class="student-v54-head"><span class="student-v54-avatar" id="studentCardAvatar">Ö</span><span><b id="studentCardName">Öğrenci</b><small id="studentCardMeta"></small></span><button type="button" data-student-card-close aria-label="Kapat">✕</button></div>
               <div class="student-v54-kv" id="studentCardFacts"></div>
+              <div class="coach-v59-books" id="studentCardBooks"></div>
               <div class="student-v54-actions" id="studentCardActions"></div>
               <button type="button" class="student-v54-remove" id="studentCardRemove">Panelden kaldır…</button>
             </div>
@@ -1507,6 +1509,7 @@
           </div>
           <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
         </section>
+        <details class="coach-v59-book-box" id="coachV59BookBox" hidden><summary>📚 Kitaptan ödev <span>Öğrencinin kitapları</span></summary><div id="coachV59BookHost" class="coach-v59-book-host"></div></details>
         <details class="coach-v18-quick"><summary>Hazır çalışma örnekleri <span>İsteğe bağlı</span></summary><div id="coachV8ModalPicker" class="coach-v8-modal-host"></div></details>
         <label class="coach-v18-task-text"><span>Görev metni <em>Düzenlenebilir</em></span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
         <label class="coach-v22-legacy-video-link"><span>Link · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://… (video, PDF, Drive)"></label>
