@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-07T09:18:34.234Z",
+  "generatedAt": "2026-11-08T09:32:37.363Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-07T09:12:57.976Z"
+      "refreshedAt": "2026-11-08T09:27:12.903Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3715,7 +3715,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-07T09:17:04.321Z"
+      "refreshedAt": "2026-11-08T09:31:15.410Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4863,7 +4863,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-07T09:17:29.462Z"
+      "refreshedAt": "2026-11-08T09:31:38.092Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5853,7 +5853,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-07T09:17:38.163Z"
+      "refreshedAt": "2026-11-08T09:31:45.898Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8372,7 +8372,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-07T09:17:48.607Z"
+      "refreshedAt": "2026-11-08T09:31:55.232Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8848,13 +8848,6 @@
           "videoCount": 3,
           "videos": [
             {
-              "id": "FWooVrzgbwk",
-              "title": "11. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
-              "url": "https://www.youtube.com/watch?v=FWooVrzgbwk",
-              "thumbnail": "https://i.ytimg.com/vi/FWooVrzgbwk/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
               "id": "OETLoSZsW5Q",
               "title": "10. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. Tema) (Kadir GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=OETLoSZsW5Q",
@@ -8866,6 +8859,13 @@
               "title": "9. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=YJr47c_81PA",
               "thumbnail": "https://i.ytimg.com/vi/YJr47c_81PA/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "FWooVrzgbwk",
+              "title": "11. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+              "url": "https://www.youtube.com/watch?v=FWooVrzgbwk",
+              "thumbnail": "https://i.ytimg.com/vi/FWooVrzgbwk/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             }
           ],
@@ -8922,6 +8922,20 @@
           "videoCount": 10,
           "videos": [
             {
+              "id": "9uo3-aoanGA",
+              "title": "10. Sıfat (Ön Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=9uo3-aoanGA",
+              "thumbnail": "https://i.ytimg.com/vi/9uo3-aoanGA/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
+              "id": "pS84slsTGEI",
+              "title": "9. İsim (Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+              "url": "https://www.youtube.com/watch?v=pS84slsTGEI",
+              "thumbnail": "https://i.ytimg.com/vi/pS84slsTGEI/hqdefault.jpg",
+              "channel": "Kadir Gümüş"
+            },
+            {
               "id": "FjBAzUQ77EA",
               "title": "11. Tamlamalar (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=FjBAzUQ77EA",
@@ -8968,20 +8982,6 @@
               "title": "2. Nazım Birimi (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
               "url": "https://www.youtube.com/watch?v=JlGwpbl7IBI",
               "thumbnail": "https://i.ytimg.com/vi/JlGwpbl7IBI/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "9uo3-aoanGA",
-              "title": "10. Sıfat (Ön Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=9uo3-aoanGA",
-              "thumbnail": "https://i.ytimg.com/vi/9uo3-aoanGA/hqdefault.jpg",
-              "channel": "Kadir Gümüş"
-            },
-            {
-              "id": "pS84slsTGEI",
-              "title": "9. İsim (Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-              "url": "https://www.youtube.com/watch?v=pS84slsTGEI",
-              "thumbnail": "https://i.ytimg.com/vi/pS84slsTGEI/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
@@ -9157,6 +9157,48 @@
       ],
       "videos": [
         {
+          "id": "OETLoSZsW5Q",
+          "title": "10. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. Tema) (Kadir GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=OETLoSZsW5Q",
+          "thumbnail": "https://i.ytimg.com/vi/OETLoSZsW5Q/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "YJr47c_81PA",
+          "title": "9. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=YJr47c_81PA",
+          "thumbnail": "https://i.ytimg.com/vi/YJr47c_81PA/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "FWooVrzgbwk",
+          "title": "11. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+          "url": "https://www.youtube.com/watch?v=FWooVrzgbwk",
+          "thumbnail": "https://i.ytimg.com/vi/FWooVrzgbwk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "_Vzanw8ulqk",
+          "title": "8. Tekke Tasavvuf Edb (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=_Vzanw8ulqk",
+          "thumbnail": "https://i.ytimg.com/vi/_Vzanw8ulqk/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "9uo3-aoanGA",
+          "title": "10. Sıfat (Ön Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=9uo3-aoanGA",
+          "thumbnail": "https://i.ytimg.com/vi/9uo3-aoanGA/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
+          "id": "pS84slsTGEI",
+          "title": "9. İsim (Ad) (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
+          "url": "https://www.youtube.com/watch?v=pS84slsTGEI",
+          "thumbnail": "https://i.ytimg.com/vi/pS84slsTGEI/hqdefault.jpg",
+          "channel": "Kadir Gümüş"
+        },
+        {
           "id": "FjBAzUQ77EA",
           "title": "11. Tamlamalar (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
           "url": "https://www.youtube.com/watch?v=FjBAzUQ77EA",
@@ -9197,51 +9239,9 @@
           "url": "https://www.youtube.com/watch?v=ujBwrSc8hzQ",
           "thumbnail": "https://i.ytimg.com/vi/ujBwrSc8hzQ/hqdefault.jpg",
           "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "t8aARSzGvL8",
-          "title": "5. Fiilimsiler (İsim-fiil, Sıfat-fiil, Zarf-fiil) (11. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=t8aARSzGvL8",
-          "thumbnail": "https://i.ytimg.com/vi/t8aARSzGvL8/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "0pLbNps_7Y8",
-          "title": "5. Geçiş Dönemi (Kutadgu Bilig, Atabetül Hakayık ...) (10. Sınıf 1. Tema)",
-          "url": "https://www.youtube.com/watch?v=0pLbNps_7Y8",
-          "thumbnail": "https://i.ytimg.com/vi/0pLbNps_7Y8/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "0yO3aFO6xbk",
-          "title": "8. Şiirde Ölçü (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=0yO3aFO6xbk",
-          "thumbnail": "https://i.ytimg.com/vi/0yO3aFO6xbk/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "tYdk6QFc2SE",
-          "title": "4. Kafiye Redif (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=tYdk6QFc2SE",
-          "thumbnail": "https://i.ytimg.com/vi/tYdk6QFc2SE/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "RoJypolF1kY",
-          "title": "3. Şiirde Ölçü (10. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=RoJypolF1kY",
-          "thumbnail": "https://i.ytimg.com/vi/RoJypolF1kY/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
-        },
-        {
-          "id": "P28MKCBzGx8",
-          "title": "7. Nazım Birimi (9. Sınıf 1. Tema) KADİR GÜMÜŞ",
-          "url": "https://www.youtube.com/watch?v=P28MKCBzGx8",
-          "thumbnail": "https://i.ytimg.com/vi/P28MKCBzGx8/hqdefault.jpg",
-          "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-07T09:17:56.927Z"
+      "refreshedAt": "2026-11-08T09:32:02.770Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10070,7 +10070,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-07T09:17:59.319Z"
+      "refreshedAt": "2026-11-08T09:32:05.327Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10083,7 +10083,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2307,
+      "videoCount": 2310,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10988,6 +10988,27 @@
       ],
       "videos": [
         {
+          "id": "FAJ0rVKFIrM",
+          "title": "11.SINIF 1.DÖNEM 1.YAZILI SORULARI / 2.Prova / ORTAK SINAV",
+          "url": "https://www.youtube.com/watch?v=FAJ0rVKFIrM",
+          "thumbnail": "https://i.ytimg.com/vi/FAJ0rVKFIrM/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "Z84ZpW80MUY",
+          "title": "9.SINIF 1.DÖNEM 1.YAZILI SORULARI / Maarif Modeli / 2.Prova",
+          "url": "https://www.youtube.com/watch?v=Z84ZpW80MUY",
+          "thumbnail": "https://i.ytimg.com/vi/Z84ZpW80MUY/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "CH4wmdgBB5k",
+          "title": "10.SINIF 1.DÖNEM 1.YAZILI SORULARI / ORTAK SINAV / 2.Prova",
+          "url": "https://www.youtube.com/watch?v=CH4wmdgBB5k",
+          "thumbnail": "https://i.ytimg.com/vi/CH4wmdgBB5k/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "-yBXIMNN66E",
           "title": "9.Sınıf 1.Dönem 1.Yazılı Soruları / Maarif Modeli",
           "url": "https://www.youtube.com/watch?v=-yBXIMNN66E",
@@ -11049,30 +11070,9 @@
           "url": "https://www.youtube.com/watch?v=Ceokr-lOkck",
           "thumbnail": "https://i.ytimg.com/vi/Ceokr-lOkck/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "b6gEud6hg7M",
-          "title": "YAZIM KURALLARI SORU ÇÖZÜMÜ / 2027 TYT TÜRKÇE",
-          "url": "https://www.youtube.com/watch?v=b6gEud6hg7M",
-          "thumbnail": "https://i.ytimg.com/vi/b6gEud6hg7M/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "rJXmLaOYFqM",
-          "title": "SES BİLGİSİ SORU ÇÖZÜMÜ / 2027 TYT TÜRKÇE",
-          "url": "https://www.youtube.com/watch?v=rJXmLaOYFqM",
-          "thumbnail": "https://i.ytimg.com/vi/rJXmLaOYFqM/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "JBTvJSWiSAo",
-          "title": "ÇALIŞMAYA BAŞLADIYSAN ŞU 3 ŞEY MORAL BOZMASIN!",
-          "url": "https://www.youtube.com/watch?v=JBTvJSWiSAo",
-          "thumbnail": "https://i.ytimg.com/vi/JBTvJSWiSAo/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-07T09:18:34.229Z"
+      "refreshedAt": "2026-11-08T09:32:37.359Z"
     }
   }
 }
