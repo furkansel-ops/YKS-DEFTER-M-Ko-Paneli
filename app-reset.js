@@ -2218,12 +2218,12 @@ function renderErrorPhotos(){
   const shown=rows.filter(item=>errorPhotoFilter==="all"||errorPhotoState(item)===errorPhotoFilter);
   $("errorPhotoGrid").innerHTML=shown.length?shown.map(item=>{
     const state=errorPhotoState(item),src=errorPhotoSrc(item.thumb),meta=[item.examName||"Hata Defteri",item.question?"S."+item.question:"",examDateLabel(item.date)].filter(Boolean).join(" · ");
-    return'<button type="button" class="error-photo-item" data-photo-id="'+escHtml(item.id)+'"><span class="error-photo-thumb">'+(src?'<img src="'+src+'" alt="" loading="lazy">':"")+'<em class="is-'+state+'">'+ERROR_PHOTO_LABEL[state]+'</em></span><b>'+escHtml(String(item.subject||"Ders")+" · "+String(item.topic||"Konu"))+'</b><small>'+escHtml(meta)+'</small>'+(many?'<small>'+escHtml(errorPhotoStudent(item.studentUid))+'</small>':"")+'</button>';
+    return'<button type="button" class="error-photo-item" data-photo-id="'+escHtml(item.id)+'"><span class="error-photo-thumb">'+(src?'<img src="'+src+'" alt="" loading="lazy">':"")+'<em class="is-'+state+'">'+ERROR_PHOTO_LABEL[state]+'</em></span><b>'+escHtml(String(item.subject||"Ders")+" · "+String(item.topic||"Konu"))+'</b><small>'+escHtml(meta)+'</small>'+(many?'<small>'+escHtml(errorPhotoStudent(item.studentUid))+'</small>':"")+coachV62RepHtml(item)+'</button>';
   }).join(""):'<div class="exam-mini-empty">Bu süzgeçte fotoğraf yok.</div>';
 }
 function errorPhotoMetaHtml(item){
   const cell=(label,value)=>value?'<span>'+escHtml(label)+'<b>'+escHtml(value)+'</b></span>':"";
-  return cell("Öğrenci",errorPhotoStudent(item.studentUid))+cell("Deneme",item.examName||"Hata Defteri")+cell("Soru",item.question||"")+cell("Ders · konu",String(item.subject||"Ders")+" · "+String(item.topic||"Konu"))+cell("Tarih",examDateLabel(item.date))+cell("Hata türü",ERROR_PHOTO_KIND[String(item.kind||"")]||String(item.kind||""));
+  return cell("Öğrenci",errorPhotoStudent(item.studentUid))+cell("Deneme",item.examName||"Hata Defteri")+cell("Soru",item.question||"")+cell("Ders · konu",String(item.subject||"Ders")+" · "+String(item.topic||"Konu"))+cell("Tarih",examDateLabel(item.date))+cell("Hata türü",ERROR_PHOTO_KIND[String(item.kind||"")]||String(item.kind||""))+coachV62MetaHtml(item);
 }
 function openErrorPhoto(id){
   const item=coachErrorPhotos.find(x=>x.id===id),modal=$("errorPhotoModal");if(!item||!modal)return;
@@ -3037,6 +3037,7 @@ function openStudentCard(uid){
   const fact=(label,value,cls="")=>'<span class="'+cls+'">'+escHtml(label)+'<b>'+escHtml(value)+'</b></span>';
   $("studentCardFacts").innerHTML=fact("Rank · seviye",studentRankText(row)||"—")+fact("Hedef net",targets||"—")+fact("Son çalışma",studentStudyLabel(row))+fact("Eşitleme",sync.text,sync.stale?"is-stale":"")+fact("Bağlantı",linked?new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long"}).format(linked)+"'den beri":"—")+fact("Hızlı okuma",reading?.tests30?Math.round(reportNum(reading.wpm30))+" k/dk · %"+Math.round(reportNum(reading.comprehension30)):"—");
   $("studentCardActions").innerHTML=[["report","▥ Rapor"],["program","▣ Program"],["message","✉ Mesaj"],["exams","▤ Deneme"],["errors","✎ Hata Defteri"],["topics","◫ Konular"]].map(([act,label])=>'<button type="button" data-student-card-act="'+act+'">'+label+'</button>').join("");
+  if($("studentCardReview")){const html=coachV62SummaryHtml(row);$("studentCardReview").innerHTML=html;$("studentCardReview").hidden=!html}
   if($("studentCardBooks"))$("studentCardBooks").innerHTML=coachV59BooksHtml(row);
   modal.hidden=false;$("studentCardModal").querySelector("[data-student-card-close]")?.focus();
 }
@@ -4884,6 +4885,28 @@ function coachV60Cover(value){const c=typeof value==="string"?value:"";return c.
 /* v61: katalogdan seçilen kitabın Kitapseç kapağı (yalnız cdn.kitapsec.com/image/urun); açılmazsa kaldırılır, kısaltma görünür. */
 function coachV61CoverUrl(value){const u=typeof value==="string"?value:"";return u.length<=200&&/^https:\/\/cdn\.kitapsec\.com\/image\/urun\/[A-Za-z0-9/_.-]+\.(?:jpe?g|png|webp|gif)$/i.test(u)?u:""}
 $("studentCardBooks")?.addEventListener("error",event=>{const img=event.target;if(img?.classList?.contains("coach-v61-remote"))img.remove()},true);
+
+/* v62 · Tekrar çöz: öğrencinin yanlış soru tekrarı (share.progress.wrongReview) fotoğraf kartında, fotoğraf penceresinde
+   ve öğrenci kartında görünür. Öğrenilen yanlış çözüldü olunca fotoğrafı koçtan kalkar; sayısı öğrenci kartında kalır. */
+function coachV62Day(n){const t=new Date();t.setDate(t.getDate()+n);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")}
+function coachV62Review(uid){const r=coachReportRows.find(x=>x.studentUid===uid)?.share?.progress?.wrongReview;return r&&typeof r==="object"?r:null}
+function coachV62Item(item){const it=coachV62Review(item?.studentUid)?.items?.[String(item?.wrongId??"")];if(!it||!/^\d{4}-\d{2}-\d{2}$/.test(String(it.due||"")))return null;return{ok:Math.max(0,Math.min(3,Math.floor(reportNum(it.ok)))),miss:Math.max(0,Math.min(999,Math.floor(reportNum(it.miss)))),due:String(it.due)}}
+function coachV62When(due){return due<=coachV62Day(0)?"bugün bekliyor":due===coachV62Day(1)?"yarın yine":"sıradaki "+examDateLabel(due)}
+function coachV62RepHtml(item){
+  if(!coachV62Review(item?.studentUid))return "";
+  const it=coachV62Item(item),rep=!it?{cls:"none",text:"Henüz tekrar çözülmedi"}:it.ok>0?{cls:"good",text:"✓ Üst üste "+it.ok+" doğru · "+coachV62When(it.due)}:it.miss>0?{cls:"bad",text:"✗ "+it.miss+" kez yanlış · "+coachV62When(it.due)}:{cls:"none",text:coachV62When(it.due)};
+  return '<span class="coach-v62-rep is-'+rep.cls+'">'+escHtml(rep.text)+'</span>';
+}
+function coachV62MetaHtml(item){
+  if(!coachV62Review(item?.studentUid))return "";
+  const it=coachV62Item(item),cell=(label,value)=>'<span>'+escHtml(label)+'<b>'+escHtml(value)+'</b></span>';
+  return it?cell("Tekrar çöz",it.ok+" doğru serisi · "+it.miss+" yanlış")+cell("Sıradaki tekrar",examDateLabel(it.due)):cell("Tekrar çöz","Henüz çözülmedi");
+}
+function coachV62SummaryHtml(row){
+  const r=row?.share?.progress?.wrongReview;if(!r||typeof r!=="object")return "";
+  const n=k=>Math.max(0,Math.floor(reportNum(r[k])));if(!n("learned")&&!n("due")&&!n("waiting"))return "";
+  return '<b>📷 Tekrar çöz</b><span>'+escHtml(n("learned")+" soru öğrenildi · "+n("due")+" soru bugün bekliyor · "+n("waiting")+" soru sırada")+'</span>';
+}
 function coachV59BooksHtml(row){
   const books=coachV59Books(row);
   if(!books.length)return '<div class="coach-v59-books-empty"><b>Kitapları</b><span>Öğrenci henüz Kitaplarım\'a kitap eklemedi.</span></div>';

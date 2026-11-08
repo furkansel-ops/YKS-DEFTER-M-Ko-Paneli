@@ -35,3 +35,10 @@
 /* v61: Kitapseç kapağı kısaltmanın üstüne biner */
 .coach-v59-cover{position:relative;overflow:hidden}
 .coach-v61-remote{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--k-surface)}
+/* v62 · Tekrar çöz sonucu: fotoğraf kartında rozet, öğrenci kartında tek satır. */
+.coach-v62-rep{justify-self:start;font-size:12px;font-weight:650;border-radius:7px;padding:2px 7px;background:var(--k-soft);color:var(--k-muted)}
+.coach-v62-rep.is-good{color:var(--k-ok)}
+.coach-v62-rep.is-bad{color:var(--k-bad)}
+.coach-v62-summary{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border:1px solid var(--k-line);border-radius:12px;padding:10px 12px;margin:12px 0 0;background:var(--k-surface)}
+.coach-v62-summary span{color:var(--k-muted);font-size:13px}
+.coach-v62-summary[hidden]{display:none}

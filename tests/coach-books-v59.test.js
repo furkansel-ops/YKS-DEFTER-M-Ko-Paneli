@@ -74,7 +74,7 @@ test("v59 görev penceresi: Kitaptan ödev yalnız bitmemiş kitaplarla, metne y
 
 test("v59 stil bağlı, görev gönderme sözleşmesi değişmedi",()=>{
   const html=read("index.html"),js=read("app-reset.js");
-  assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.0\.0">/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.1\.0">/);
   assert.match(js,/const task=base\+\(resource\?" — "\+resource:""\)/);
 });
 
