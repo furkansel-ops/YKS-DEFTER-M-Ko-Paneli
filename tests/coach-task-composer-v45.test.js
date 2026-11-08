@@ -119,7 +119,7 @@ test("v45 5: hafta tek satırda değişir; seçili günler yeni haftada da aynı
 test("v45 stilleri: gizli seçim kutuları, kalkan tarih kutusu, Vazgeç ve hazır örnekler",()=>{
   assert.match(css,/label:is\(:has\(#programBuilderSubject\),:has\(#programBuilderActivity\)\) select\{display:none\}/);
   assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v18-date\{display:none\}/,"düzenlemede görevin günü görünür kalır");
-  assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v19-left>\.program-task-body\{grid-template-areas:"builder days" "builder task" "keep link" "info info" "status status"\}/);
+  assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v19-left>\.program-task-body\{grid-template-areas:"builder days" "builder task" "builder book" "keep link" "info info" "status status"\}/);
   // v48: görev metninin altında link alanı (yeni görevde de görünür)
   assert.match(css,/#programTaskBackdrop:not\(\[data-editing\]\) \.coach-v22-legacy-video-link\{display:grid!important;grid-area:link;/);
   assert.match(css,/#programTaskBackdrop #programTaskCancel\{display:none\}/);

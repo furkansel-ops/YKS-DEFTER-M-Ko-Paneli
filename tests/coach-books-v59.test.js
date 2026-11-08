@@ -57,24 +57,47 @@ test("v59 öğrenci kartında kitaplar: ilerleme, son ilerleme uyarısı, bitti,
   assert.deepEqual(errors,[]);
 });
 
-test("v59 görev penceresi: Kitaptan ödev yalnız bitmemiş kitaplarla, metne yazınca görev metni dolar",t=>{
+test("v63 Kitap seç: yalnız Soru çözümünde, bitmemiş kitaplar, seçili ders önce; basınca metin yazılır, tekrar basınca geri alınır",t=>{
   const {w,doc,errors}=fixture(t);
-  w.__v59.set(BOOKS);w.__v59.host();
-  const box=doc.getElementById("coachV59BookBox");assert.equal(box.hidden,false);
-  assert.equal(doc.querySelectorAll("#coachV59Book option").length,2,"bitmiş Türkçe kitabı listede yok");
-  assert.equal(doc.getElementById("coachV59Preview").textContent,"📚 345 TYT Matematik Soru Bankası · 18–20. testler · 39 soru");
-  doc.querySelector('[data-v59-tests="5"]').click();
-  assert.equal(doc.querySelector('[data-v59-tests="5"]').getAttribute("aria-pressed"),"true");
-  doc.getElementById("coachV59Use").click();
-  assert.equal(doc.getElementById("programTaskText").value,"📚 345 TYT Matematik Soru Bankası · 18–22. testler · 65 soru");
+  const box=doc.getElementById("coachV59BookBox"),area=doc.getElementById("programTaskText"),activity=doc.getElementById("programBuilderActivity");
+  const books=()=>[...doc.querySelectorAll("[data-v63-book]")];
+  w.__v59.set(BOOKS);activity.value="Soru çözümü";w.__v59.host();
+  assert.equal(box.hidden,false);
+  assert.equal(books().length,2,"bitmiş Türkçe kitabı listede yok");
+  assert.ok(doc.querySelector(".coach-v59-tests").hidden,"kitap seçilmeden test sayısı yok");
+  assert.equal(doc.querySelectorAll("#coachV59BookHost b").length,2,"kitap adındaki <b> metin olarak kalır");
+  books()[0].click();
+  assert.equal(area.value,"📚 345 TYT Matematik Soru Bankası · 18–20. testler · 39 soru");
+  assert.equal(books()[0].getAttribute("aria-pressed"),"true");assert.equal(doc.activeElement,books()[0],"odak seçilen kitapta kalır");
+  doc.querySelector('[data-v63-tests="5"]').click();
+  assert.equal(area.value,"📚 345 TYT Matematik Soru Bankası · 18–22. testler · 65 soru");
+  const num=doc.getElementById("coachV63Tests");num.value="2";num.dispatchEvent(new w.Event("input",{bubbles:true}));
+  assert.equal(area.value,"📚 345 TYT Matematik Soru Bankası · 18–19. testler · 26 soru");
+  books()[0].click();
+  assert.equal(area.value,"","seçim kalkınca kitap metni silinir");assert.equal(books()[0].getAttribute("aria-pressed"),"false");
+  books()[0].click();area.value="elle yazdım";
+  activity.value="Konu anlatımı";activity.dispatchEvent(new w.Event("input",{bubbles:true}));
+  assert.equal(box.hidden,true,"Soru çözümü dışında gizli");assert.equal(area.value,"elle yazdım","elle değiştirilen metne dokunulmaz");
+  activity.value="Soru çözümü";activity.dispatchEvent(new w.Event("change",{bubbles:true}));
+  assert.equal(box.hidden,false);assert.ok(books().every(b=>b.getAttribute("aria-pressed")==="false"),"tür değişince seçim kalktı");
+  const subject=doc.getElementById("programBuilderSubject");subject.value="Fizik";subject.dispatchEvent(new w.Event("change",{bubbles:true}));
+  assert.match(books()[0].textContent,/Fizik/,"seçili dersin kitabı önce");
   w.__v59.host(true);assert.equal(box.hidden,true,"düzenlemede gizli");
-  w.__v59.set([BOOKS[1]]);w.__v59.host();assert.equal(box.hidden,true,"bitmemiş kitap yoksa gizli");
+  w.__v59.set([BOOKS[1]]);w.__v59.host();assert.match(box.textContent,/bütün kitapları bitti/);
+  w.__v59.set([]);w.__v59.host();assert.match(box.textContent,/henüz Kitaplarım'a kitap eklemedi/);
   assert.deepEqual(errors,[]);
+});
+
+test("v63 Kitap seç link alanının üstünde; Video ekle bilgisayarda iki sütun",()=>{
+  const html=read("index.html"),css=read("coach-task-composer-v45.css"),video=read("coach-video-picker-v46.css");
+  assert.ok(html.indexOf('id="coachV59BookBox"')>html.indexOf('id="programTaskText"')&&html.indexOf('id="coachV59BookBox"')<html.indexOf('id="programTaskVideo"'));
+  assert.match(css,/"builder book" "keep link"/);assert.match(css,/"task" "book" "link"/);
+  assert.match(video,/grid-template-columns:340px minmax\(0,1fr\)/);
 });
 
 test("v59 stil bağlı, görev gönderme sözleşmesi değişmedi",()=>{
   const html=read("index.html"),js=read("app-reset.js");
-  assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.1\.0">/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.2\.0">/);
   assert.match(js,/const task=base\+\(resource\?" — "\+resource:""\)/);
 });
 

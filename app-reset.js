@@ -4917,19 +4917,57 @@ function coachV59BooksHtml(row){
     return '<div class="coach-v59-book">'+(coachV60Cover(b.cover)?'<span class="coach-v59-cover has-img" aria-hidden="true"><img src="'+escHtml(coachV60Cover(b.cover))+'" alt=""></span>':'<span class="coach-v59-cover" aria-hidden="true">'+escHtml(coachV59Initials(b.pub||b.name))+'<small>'+escHtml(b.exam||String(b.subject||"").slice(0,3))+'</small>'+(coachV61CoverUrl(b.coverUrl)?'<img class="coach-v61-remote" src="'+escHtml(coachV61CoverUrl(b.coverUrl))+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'')+'</span>')+'<span class="coach-v59-book-body"><span class="coach-v59-row"><b>'+escHtml(b.name)+'</b><em>'+escHtml(b.subject||"")+'</em></span><span class="coach-v59-bar" role="progressbar" aria-label="'+escHtml(b.name)+' ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></span><span class="coach-v59-row"><small>'+done+' / '+total+' test'+(per?' · '+(done*per).toLocaleString("tr-TR")+' soru':'')+'</small>'+when+'</span></span></div>';
   }).join("");
 }
-function coachV59RenderBookHost(row,edit){
-  const box=$("coachV59BookBox"),host=$("coachV59BookHost");if(!box||!host)return;
-  const books=coachV59Books(row).filter(b=>reportNum(b.done)<reportNum(b.total));
-  box.hidden=edit||!books.length;box.open=false;if(box.hidden){host.innerHTML="";return}
-  host.innerHTML='<label><span>Öğrencinin kitabı</span><select id="coachV59Book">'+books.map((b,i)=>'<option value="'+i+'">'+escHtml(b.name+" · "+Math.floor(reportNum(b.done))+"/"+Math.floor(reportNum(b.total)))+'</option>').join("")+'</select></label>'+
-    '<div class="coach-v59-tests" role="group" aria-label="Kaç test">'+[1,2,3,5].map(n=>'<button type="button" data-v59-tests="'+n+'" aria-pressed="'+(n===3)+'">'+n+' test</button>').join("")+'<label><span class="sr-only">Diğer test sayısı</span><input id="coachV59Tests" type="number" min="1" max="200" inputmode="numeric" value="3"></label></div>'+
-    '<p id="coachV59Preview" class="coach-v59-preview"></p><button type="button" id="coachV59Use" class="coach-v59-use">Görev metnine yaz</button>';
-  const preview=()=>{const b=books[Number($("coachV59Book")?.value)||0],t=coachV59BookTaskText(b,$("coachV59Tests")?.value);if($("coachV59Preview"))$("coachV59Preview").textContent=t;return t};
-  host.querySelectorAll("[data-v59-tests]").forEach(btn=>btn.addEventListener("click",()=>{$("coachV59Tests").value=btn.dataset.v59Tests;host.querySelectorAll("[data-v59-tests]").forEach(x=>x.setAttribute("aria-pressed",String(x===btn)));preview()}));
-  $("coachV59Book")?.addEventListener("change",preview);$("coachV59Tests")?.addEventListener("input",()=>{host.querySelectorAll("[data-v59-tests]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.v59Tests===$("coachV59Tests").value)));preview()});
-  $("coachV59Use")?.addEventListener("click",()=>{const t=preview();if(!t||!$("programTaskText"))return;$("programTaskText").value=t;updateCoachProgramBuilder();$("programTaskText").focus()});
-  preview();
+/* v63 · Çalışma ekle'de "Kitap seç": yalnız Soru çözümü seçiliyken, link alanının üstünde. Kitaba basınca görev metni
+   sıradaki testlerden yazılır; aynı kitaba yine basınca ya da tür değişince seçim kalkar ve metin geri alınır. */
+let coachV63Books=[],coachV63Pick=-1,coachV63Tests=3,coachV63Edit=false,coachV63Text="",coachV63HasBooks=false;
+function coachV63CoverHtml(b){
+  const cover=coachV60Cover(b.cover),url=coachV61CoverUrl(b.coverUrl);
+  return cover?'<span class="coach-v59-cover has-img" aria-hidden="true"><img src="'+escHtml(cover)+'" alt=""></span>':'<span class="coach-v59-cover" aria-hidden="true">'+escHtml(coachV59Initials(b.pub||b.name))+(url?'<img class="coach-v61-remote" src="'+escHtml(url)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'')+'</span>';
 }
+function coachV63Render(){
+  const host=$("coachV59BookHost");if(!host)return;
+  if(!coachV63Books.length){host.innerHTML='<p class="coach-v63-empty">'+(coachV63HasBooks?"Öğrencinin bütün kitapları bitti.":"Öğrenci henüz Kitaplarım'a kitap eklemedi.")+'</p>';return}
+  const subject=$("programBuilderSubject")?.value||"";
+  const order=coachV63Books.map((b,i)=>i).sort((a,c)=>(coachV63Books[c].subject===subject)-(coachV63Books[a].subject===subject)); // seçili dersin kitapları önce
+  host.innerHTML='<div class="coach-v63-list">'+order.map(i=>{
+    const b=coachV63Books[i],total=Math.floor(reportNum(b.total)),done=Math.floor(reportNum(b.done)),ago=coachV59DaysAgo(b.last);
+    const when=ago===null?"":ago===0?" · bugün":ago===1?" · dün":" · "+ago+" gün önce";
+    return '<button type="button" class="coach-v63-book" data-v63-book="'+i+'" aria-pressed="'+(i===coachV63Pick)+'">'+coachV63CoverHtml(b)+'<span class="coach-v59-book-body"><b>'+escHtml(b.name)+'</b><span class="coach-v59-bar" aria-hidden="true"><i style="width:'+Math.round(done/total*100)+'%"></i></span><small'+(ago!==null&&ago>=7?' class="is-stale"':'')+'>'+done+' / '+total+' test'+when+'</small></span></button>';
+  }).join("")+'</div>'+
+  '<div class="coach-v59-tests" role="group" aria-label="Kaç test"'+(coachV63Pick<0?" hidden":"")+'>'+[1,2,3,5].map(n=>'<button type="button" data-v63-tests="'+n+'" aria-pressed="'+(n===coachV63Tests)+'">'+n+' test</button>').join("")+'<label><span class="sr-only">Diğer test sayısı</span><input id="coachV63Tests" type="number" min="1" max="200" inputmode="numeric" value="'+coachV63Tests+'"></label></div>';
+}
+function coachV63Write(){
+  const text=coachV59BookTaskText(coachV63Books[coachV63Pick],coachV63Tests),area=$("programTaskText");if(!text||!area)return;
+  area.value=text;coachV63Text=text;updateCoachProgramBuilder();
+}
+function coachV63Unpick(){
+  if(coachV63Pick<0)return;coachV63Pick=-1;
+  const area=$("programTaskText");if(area&&area.value===coachV63Text){area.value="";coachV18Apply(true);updateCoachProgramBuilder()} // elle değiştirilen metne dokunulmaz
+  coachV63Text="";coachV63Render();
+}
+function coachV63Sync(){
+  const box=$("coachV59BookBox");if(!box)return;
+  box.hidden=coachV63Edit||$("programBuilderActivity")?.value!=="Soru çözümü";
+  if(box.hidden)coachV63Unpick();
+}
+function coachV59RenderBookHost(row,edit){
+  const all=coachV59Books(row);
+  coachV63Books=all.filter(b=>reportNum(b.done)<reportNum(b.total));coachV63HasBooks=all.length>0;
+  coachV63Edit=Boolean(edit);coachV63Pick=-1;coachV63Tests=3;coachV63Text="";
+  coachV63Render();coachV63Sync();
+}
+$("coachV59BookHost")?.addEventListener("click",event=>{
+  const book=event.target.closest("[data-v63-book]"),tests=event.target.closest("[data-v63-tests]");
+  const refocus=selector=>$("coachV59BookHost")?.querySelector(selector)?.focus(); // yeniden çizimde odak kaybolmasın
+  if(book){const i=Number(book.dataset.v63Book);if(i===coachV63Pick)coachV63Unpick();else{coachV63Pick=i;coachV63Render();coachV63Write()}refocus('[data-v63-book="'+i+'"]')}
+  else if(tests){coachV63Tests=Number(tests.dataset.v63Tests);coachV63Render();coachV63Write();refocus('[data-v63-tests="'+coachV63Tests+'"]')}
+});
+$("coachV59BookHost")?.addEventListener("input",event=>{
+  if(event.target.id!=="coachV63Tests")return;const n=Math.floor(Number(event.target.value));if(!(n>=1&&n<=200))return;
+  coachV63Tests=n;$("coachV59BookHost").querySelectorAll("[data-v63-tests]").forEach(x=>x.setAttribute("aria-pressed",String(Number(x.dataset.v63Tests)===n)));coachV63Write();
+});
+["input","change"].forEach(type=>$("programBuilderActivity")?.addEventListener(type,coachV63Sync));
+$("programBuilderSubject")?.addEventListener("change",()=>{if(!$("coachV59BookBox")?.hidden)coachV63Render()});
 function coachProgramTaskText(){return String($("programTaskText")?.value||"").trim()}
 function coachProgramResource(){
   const raw=String($("programTaskVideo")?.value||"").trim();if(!raw)return "";

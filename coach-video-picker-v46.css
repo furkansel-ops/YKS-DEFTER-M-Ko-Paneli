@@ -73,3 +73,29 @@
   #coachVideoPickerBackdrop .coach-video-picker-target{grid-template-columns:minmax(0,1fr)}
   #coachVideoPickerBackdrop .coach-v46-week strong{min-width:88px}
 }
+
+/* v63 — bilgisayarda iki sütun: solda gün ve filtreler, sağda videolar. Kütüphane kabuğu (display:contents) açılır,
+   filtreler ve sonuçlar pencerenin ızgarasına yerleşir; telefonda ve dar ekranda üstteki tek sütun düzeni kalır. */
+@media(min-width:1001px){
+  #coachVideoPickerBackdrop .coach-video-picker-dialog{display:grid;grid-template-columns:340px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto auto}
+  #coachVideoPickerBackdrop .coach-video-picker-header,#coachVideoPickerBackdrop .coach-video-picker-footer{grid-column:1 / -1}
+  #coachVideoPickerBackdrop .coach-video-picker-header{grid-row:1}
+  #coachVideoPickerBackdrop .coach-video-picker-footer{grid-row:5}
+  #coachVideoPickerBackdrop :is(#coachVideoLibraryHost,#coachVideoLibraryHost>.coach-video-library){display:contents}
+  #coachVideoPickerBackdrop .coach-video-picker-target{grid-column:1;grid-row:2;grid-template-columns:minmax(0,1fr);border-right:1px solid var(--k-line)}
+  #coachVideoPickerBackdrop .coach-video-controls{grid-column:1;grid-row:3 / 5;align-self:stretch;align-content:start;position:static;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:12px 16px;overflow-y:auto;border:0;border-right:1px solid var(--k-line);border-radius:0;box-shadow:none}
+  #coachVideoPickerBackdrop .coach-video-controls>*,#coachVideoPickerBackdrop .coach-video-controls :is(.coach-video-filters,.coach-video-tools)>*{grid-column:1 / -1!important}
+  #coachVideoPickerBackdrop .coach-video-controls #coachVideoScope{grid-row:1!important}
+  #coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label:nth-of-type(1){grid-row:2!important}
+  #coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label:nth-of-type(3){grid-row:3!important}
+  #coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label:nth-of-type(2){grid-row:4!important}
+  #coachVideoPickerBackdrop .coach-video-controls #coachVideoMode{grid-row:5!important}
+  #coachVideoPickerBackdrop .coach-video-controls #coachVideoCategories{grid-row:6!important;flex-wrap:wrap;overflow:visible}
+  #coachVideoPickerBackdrop .coach-video-controls .coach-video-search{grid-row:7!important}
+  #coachVideoPickerBackdrop .coach-video-controls .coach-video-meta{grid-row:8!important;grid-column:1 / 2!important}
+  #coachVideoPickerBackdrop .coach-video-controls #coachVideoRefresh{grid-row:8!important;grid-column:2 / 3!important}
+  #coachVideoPickerBackdrop .coach-video-controls .coach-video-filters>label>span{position:static;width:auto;height:auto;overflow:visible;clip-path:none;display:block;margin:0 0 4px;font-size:12px;font-weight:800;color:var(--k-ink)}
+  #coachVideoPickerBackdrop .coach-video-results{grid-column:2;grid-row:2 / 4;min-height:0;overflow-y:auto;overscroll-behavior:contain;align-content:start;grid-auto-rows:max-content;padding:12px 14px;background:var(--k-soft);grid-template-columns:repeat(2,minmax(0,1fr))}
+  #coachVideoPickerBackdrop .coach-video-more-row{grid-column:2;grid-row:4;padding:0 14px 8px;background:var(--k-soft)}
+}
+@media(min-width:1500px){#coachVideoPickerBackdrop .coach-video-results{grid-template-columns:repeat(3,minmax(0,1fr))}}

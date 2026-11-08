@@ -54,8 +54,8 @@
   <link rel="stylesheet" href="./coach-home-v42.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-students-v43.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-programs-v44.css?v=1.0.1">
-  <link rel="stylesheet" href="./coach-task-composer-v45.css?v=1.0.1">
-  <link rel="stylesheet" href="./coach-video-picker-v46.css?v=1.0.2">
+  <link rel="stylesheet" href="./coach-task-composer-v45.css?v=1.0.2">
+  <link rel="stylesheet" href="./coach-video-picker-v46.css?v=1.0.3">
   <link rel="stylesheet" href="./coach-bulk-v50.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-messages-read-v51.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-home-appts-v47.css?v=1.0.0">
@@ -67,7 +67,7 @@
   <link rel="stylesheet" href="./messages-v56.css?v=1.0.0">
   <link rel="stylesheet" href="./paragraph-problem-v57.css?v=1.0.0">
   <link rel="stylesheet" href="./settings-v58.css?v=1.0.0">
-  <link rel="stylesheet" href="./books-v59.css?v=1.1.0">
+  <link rel="stylesheet" href="./books-v59.css?v=1.2.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -1510,9 +1510,9 @@
           </div>
           <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
         </section>
-        <details class="coach-v59-book-box" id="coachV59BookBox" hidden><summary>📚 Kitaptan ödev <span>Öğrencinin kitapları</span></summary><div id="coachV59BookHost" class="coach-v59-book-host"></div></details>
         <details class="coach-v18-quick"><summary>Hazır çalışma örnekleri <span>İsteğe bağlı</span></summary><div id="coachV8ModalPicker" class="coach-v8-modal-host"></div></details>
         <label class="coach-v18-task-text"><span>Görev metni <em>Düzenlenebilir</em></span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
+        <section class="coach-v59-book-box" id="coachV59BookBox" aria-labelledby="coachV63BookTitle" hidden><div class="coach-v63-head"><b id="coachV63BookTitle">📚 Kitap seç</b><small>İsteğe bağlı · öğrencinin kitapları</small></div><div id="coachV59BookHost" class="coach-v59-book-host"></div></section>
         <label class="coach-v22-legacy-video-link"><span>Link · isteğe bağlı</span><input id="programTaskVideo" type="url" maxlength="500" inputmode="url" placeholder="https://… (video, PDF, Drive)"></label>
         <label class="coach-fast-keep" id="programTaskKeepArea"><input id="programTaskKeepOpen" type="checkbox"><span>Gönderince pencere açık kalsın <small>Sıradaki çalışmayı hemen yazabilirsin.</small></span></label>
         <div class="program-task-info">Öğrencinin programına <b>Koç ·</b> etiketiyle gider.</div>
