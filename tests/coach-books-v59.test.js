@@ -77,3 +77,14 @@ test("v59 stil bağlı, görev gönderme sözleşmesi değişmedi",()=>{
   assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.0\.0">/);
   assert.match(js,/const task=base\+\(resource\?" — "\+resource:""\)/);
 });
+
+test("v60 öğrenci kartında öğrencinin çektiği kapak; bozuk ya da zararlı kapak yerine kısaltma",t=>{
+  const {w,doc,errors}=fixture(t);
+  const jpeg="data:image/jpeg;base64,"+"A".repeat(40);
+  w.__v59.set([{...BOOKS[0],cover:jpeg},{...BOOKS[2],cover:'data:image/jpeg;base64,AA" onerror="alert(1)'},{...BOOKS[1],cover:"data:image/png;base64,AAAA"}]);w.__v59.card();
+  const imgs=doc.querySelectorAll("#studentCardBooks .coach-v59-cover img");
+  assert.equal(imgs.length,1);assert.equal(imgs[0].getAttribute("src"),jpeg);
+  assert.equal(doc.querySelectorAll("#studentCardBooks [onerror]").length,0);
+  assert.equal(doc.querySelectorAll("#studentCardBooks .coach-v59-cover:not(.has-img)").length,2,"diğerleri kısaltmalı kapak");
+  assert.deepEqual(errors,[]);
+});
