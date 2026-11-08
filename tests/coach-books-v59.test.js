@@ -88,3 +88,22 @@ test("v60 öğrenci kartında öğrencinin çektiği kapak; bozuk ya da zararlı
   assert.equal(doc.querySelectorAll("#studentCardBooks .coach-v59-cover:not(.has-img)").length,2,"diğerleri kısaltmalı kapak");
   assert.deepEqual(errors,[]);
 });
+
+test("v61 katalog kapağı: yalnız Kitapseç CDN adresi, yönlendiren bilgisi gönderilmez, açılmazsa kaldırılır",t=>{
+  const {w,doc,errors}=fixture(t);
+  const ok="https://cdn.kitapsec.com/image/urun/2026/07/23/1784790696.jpg";
+  w.__v59.set([{...BOOKS[0],coverUrl:ok},{...BOOKS[2],coverUrl:"https://kotu.example/x.jpg"},{...BOOKS[1],coverUrl:'https://cdn.kitapsec.com/image/urun/a.jpg" onerror="alert(1)'}]);w.__v59.card();
+  const imgs=doc.querySelectorAll("#studentCardBooks img.coach-v61-remote");
+  assert.equal(imgs.length,1);assert.equal(imgs[0].getAttribute("src"),ok);assert.equal(imgs[0].getAttribute("referrerpolicy"),"no-referrer");
+  assert.equal(doc.querySelectorAll("#studentCardBooks [onerror]").length,0);
+  imgs[0].dispatchEvent(new w.Event("error"));
+  assert.equal(doc.querySelectorAll("#studentCardBooks img.coach-v61-remote").length,0,"açılmayan kapak kaldırıldı");
+  assert.match(doc.querySelector("#studentCardBooks .coach-v59-cover").textContent,/345/,"kısaltma yerinde");
+  assert.deepEqual(errors,[]);
+});
+
+test("v61 GIF katalog kapağı da gösterilir",t=>{
+  const {w,doc}=fixture(t);const gif="https://cdn.kitapsec.com/image/urun/2026/03/10/1773144341.gif";
+  w.__v59.set([{...BOOKS[0],coverUrl:gif}]);w.__v59.card();
+  assert.equal(doc.querySelector("#studentCardBooks img.coach-v61-remote").getAttribute("src"),gif);
+});

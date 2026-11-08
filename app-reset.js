@@ -4881,6 +4881,9 @@ function coachV59BookTaskText(book,tests){
 }
 /* v60: öğrencinin çektiği kapak (öğrenciden gelen veri: yalnız küçük, düzgün JPEG kabul edilir). */
 function coachV60Cover(value){const c=typeof value==="string"?value:"";return c.length<=12000&&/^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/.test(c)?c:""}
+/* v61: katalogdan seçilen kitabın Kitapseç kapağı (yalnız cdn.kitapsec.com/image/urun); açılmazsa kaldırılır, kısaltma görünür. */
+function coachV61CoverUrl(value){const u=typeof value==="string"?value:"";return u.length<=200&&/^https:\/\/cdn\.kitapsec\.com\/image\/urun\/[A-Za-z0-9/_.-]+\.(?:jpe?g|png|webp|gif)$/i.test(u)?u:""}
+$("studentCardBooks")?.addEventListener("error",event=>{const img=event.target;if(img?.classList?.contains("coach-v61-remote"))img.remove()},true);
 function coachV59BooksHtml(row){
   const books=coachV59Books(row);
   if(!books.length)return '<div class="coach-v59-books-empty"><b>Kitapları</b><span>Öğrenci henüz Kitaplarım\'a kitap eklemedi.</span></div>';
@@ -4888,7 +4891,7 @@ function coachV59BooksHtml(row){
   return '<div class="coach-v59-books-head"><b>Kitapları · '+books.length+'</b><small>'+finished+' bitti · '+questions.toLocaleString("tr-TR")+' soru</small></div>'+books.map(b=>{
     const total=Math.floor(reportNum(b.total)),done=Math.min(total,Math.floor(reportNum(b.done))),pct=Math.round(done/total*100),per=Math.floor(reportNum(b.perTest)),ago=coachV59DaysAgo(b.last);
     const when=done>=total?'<small class="is-done">Bitti</small>':ago===null?'<small>Henüz ilerleme yok</small>':'<small class="'+(ago>=7?"is-stale":"")+'">'+(ago===0?"Son ilerleme bugün":ago===1?"Son ilerleme dün":ago+" gündür ilerleme yok")+'</small>';
-    return '<div class="coach-v59-book">'+(coachV60Cover(b.cover)?'<span class="coach-v59-cover has-img" aria-hidden="true"><img src="'+escHtml(coachV60Cover(b.cover))+'" alt=""></span>':'<span class="coach-v59-cover" aria-hidden="true">'+escHtml(coachV59Initials(b.pub||b.name))+'<small>'+escHtml(b.exam||String(b.subject||"").slice(0,3))+'</small></span>')+'<span class="coach-v59-book-body"><span class="coach-v59-row"><b>'+escHtml(b.name)+'</b><em>'+escHtml(b.subject||"")+'</em></span><span class="coach-v59-bar" role="progressbar" aria-label="'+escHtml(b.name)+' ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></span><span class="coach-v59-row"><small>'+done+' / '+total+' test'+(per?' · '+(done*per).toLocaleString("tr-TR")+' soru':'')+'</small>'+when+'</span></span></div>';
+    return '<div class="coach-v59-book">'+(coachV60Cover(b.cover)?'<span class="coach-v59-cover has-img" aria-hidden="true"><img src="'+escHtml(coachV60Cover(b.cover))+'" alt=""></span>':'<span class="coach-v59-cover" aria-hidden="true">'+escHtml(coachV59Initials(b.pub||b.name))+'<small>'+escHtml(b.exam||String(b.subject||"").slice(0,3))+'</small>'+(coachV61CoverUrl(b.coverUrl)?'<img class="coach-v61-remote" src="'+escHtml(coachV61CoverUrl(b.coverUrl))+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'')+'</span>')+'<span class="coach-v59-book-body"><span class="coach-v59-row"><b>'+escHtml(b.name)+'</b><em>'+escHtml(b.subject||"")+'</em></span><span class="coach-v59-bar" role="progressbar" aria-label="'+escHtml(b.name)+' ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></span><span class="coach-v59-row"><small>'+done+' / '+total+' test'+(per?' · '+(done*per).toLocaleString("tr-TR")+' soru':'')+'</small>'+when+'</span></span></div>';
   }).join("");
 }
 function coachV59RenderBookHost(row,edit){
