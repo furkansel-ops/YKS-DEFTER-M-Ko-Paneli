@@ -3039,6 +3039,7 @@ function openStudentCard(uid){
   $("studentCardActions").innerHTML=[["report","▥ Rapor"],["program","▣ Program"],["message","✉ Mesaj"],["exams","▤ Deneme"],["errors","✎ Hata Defteri"],["topics","◫ Konular"]].map(([act,label])=>'<button type="button" data-student-card-act="'+act+'">'+label+'</button>').join("");
   if($("studentCardReview")){const html=coachV62SummaryHtml(row);$("studentCardReview").innerHTML=html;$("studentCardReview").hidden=!html}
   if($("studentCardBooks"))$("studentCardBooks").innerHTML=coachV59BooksHtml(row);
+  coachV64Reset();
   modal.hidden=false;$("studentCardModal").querySelector("[data-student-card-close]")?.focus();
 }
 function closeStudentCard(){const modal=$("studentCardModal");if(modal)modal.hidden=true;studentCardUid=""}
@@ -4968,6 +4969,97 @@ $("coachV59BookHost")?.addEventListener("input",event=>{
 });
 ["input","change"].forEach(type=>$("programBuilderActivity")?.addEventListener(type,coachV63Sync));
 $("programBuilderSubject")?.addEventListener("change",()=>{if(!$("coachV59BookBox")?.hidden)coachV63Render()});
+
+/* v64 · Öğrenci kartında "Kitap ekle": koç öğrenci uygulamasının kitap kataloğundan seçer ya da adını yazar.
+   Kitap coach_note/book_add olarak gider (Firestore kuralı değişmez); öğrenci uygulaması Kitaplarım'a ekler,
+   eski öğrenci sürümü "Kitap önerisi" notu olarak kaydeder. */
+const COACH_V64_CATALOG="https://furkansel-ops.github.io/YKS-DEFTER-M-/book-catalog-v92.json",COACH_V64_LIMIT=20;
+const COACH_V64_SUBJECTS=["Matematik","Geometri","Türkçe","Fizik","Kimya","Biyoloji","Edebiyat","Tarih","Coğrafya","Deneme"];
+let coachV64Catalog=null,coachV64Loading=null,coachV64Failed=false,coachV64Open=false,coachV64Query="",coachV64Draft=null,coachV64Busy=false,coachV64Status={text:"",error:false};
+function coachV64Words(v){return String(v||"").toLocaleLowerCase("tr-TR").replace(/[^a-zçğıöşü0-9 ]/gu," ").split(/\s+/).filter(Boolean)}
+function coachV64Count(v,max){const n=Math.floor(Number(v));return n>=1&&n<=max?n:0}
+function coachV64Load(){
+  if(coachV64Catalog||coachV64Loading)return coachV64Loading;
+  coachV64Failed=false;
+  coachV64Loading=fetch(COACH_V64_CATALOG,{cache:"no-cache"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(json=>{
+    const cdn=String(json?.cdn||"");
+    coachV64Catalog=(Array.isArray(json?.items)?json.items:[]).map(it=>{
+      const name=String(it?.n||"").trim().slice(0,120),pub=String(it?.p||"").trim().slice(0,40);
+      return{name,pub,subject:String(it?.s||"").slice(0,40)||"Matematik",exam:String(it?.e||"").slice(0,8),kind:String(it?.k||"").slice(0,40),coverUrl:coachV61CoverUrl(it?.c?cdn+String(it.c):""),total:coachV64Count(it?.t,2000),perTest:coachV64Count(it?.q,400),
+        words:coachV64Words(name+" "+pub+(/üç\s*dört\s*beş/i.test(name+" "+pub)?" 345":""))};
+    }).filter(it=>it.name);
+  }).catch(error=>{console.warn("v64 kitap kataloğu",error);coachV64Failed=true}).finally(()=>{coachV64Loading=null;coachV64Results()});
+  return coachV64Loading;
+}
+function coachV64Row(){return coachReportRows.find(x=>x.studentUid===studentCardUid)||null}
+function coachV64Has(row,name){const n=String(name||"").trim().toLocaleLowerCase("tr-TR");return coachV59Books(row).some(b=>String(b.name||"").trim().toLocaleLowerCase("tr-TR")===n)}
+function coachV64Matches(){
+  const q=coachV64Words(coachV64Query);if(!q.length||!coachV64Catalog)return[];
+  const out=[];for(const it of coachV64Catalog){if(q.every(p=>it.words.some(w=>w.startsWith(p))))out.push(it);if(out.length>COACH_V64_LIMIT)break}
+  return out;
+}
+function coachV64Results(){
+  const box=$("coachV64Results"),hint=$("coachV64Hint");if(!box||!hint)return;
+  const hits=coachV64Matches(),row=coachV64Row(),q=coachV64Query.trim();
+  hint.textContent=!coachV64Catalog&&!coachV64Failed?"Katalog yükleniyor…":coachV64Failed?"Katalog açılamadı · kitabın adını yazıp “Listede yok” ile ekleyebilirsin.":!q?(coachV64Catalog?.length||0).toLocaleString("tr-TR")+" kitap · yayınevi, ders ya da kitap adı yaz":hits.length?(hits.length>COACH_V64_LIMIT?"İlk "+COACH_V64_LIMIT+" sonuç · aramayı daralt":hits.length+" sonuç"):"Bulunamadı";
+  box.innerHTML='<div class="coach-v63-list">'+hits.slice(0,COACH_V64_LIMIT).map((b,i)=>{const has=coachV64Has(row,b.name);
+    return '<button type="button" class="coach-v63-book" data-v64-pick="'+i+'"'+(has?' disabled':'')+'>'+coachV63CoverHtml(b)+'<span class="coach-v59-book-body"><b>'+escHtml(b.name)+'</b><small>'+escHtml(has?"Kitaplarında var":[b.pub,b.subject].filter(Boolean).join(" · "))+'</small></span></button>'}).join("")+'</div>'+
+    (q?'<button type="button" class="coach-v64-link" data-v64="manual">Listede yok · “'+escHtml(q.slice(0,120))+'” adıyla ekle</button>':'');
+}
+function coachV64Render(){
+  const host=$("coachV64Add");if(!host)return;
+  const status=coachV64Status.text?'<p class="coach-v64-status'+(coachV64Status.error?' is-error':'')+'" role="status">'+escHtml(coachV64Status.text)+'</p>':'';
+  if(!coachV64Open){host.innerHTML='<button type="button" class="coach-v64-open" data-v64="open">+ Kitap ekle</button>'+status;return}
+  const d=coachV64Draft;
+  if(d){
+    const subjects=[...new Set([...COACH_V64_SUBJECTS,d.subject].filter(Boolean))].map(s=>'<option'+(s===d.subject?' selected':'')+'>'+escHtml(s)+'</option>').join("");
+    host.innerHTML='<form class="coach-v64-form" data-v64-form><b class="coach-v64-title">📚 Öğrenciye kitap ekle</b>'+
+      '<label><span>Kitap adı</span><input id="coachV64Name" required maxlength="120" value="'+escHtml(d.name)+'"></label>'+
+      '<div class="coach-v64-grid"><label><span>Ders</span><select id="coachV64Subject">'+subjects+'</select></label>'+
+      '<label><span>Toplam test</span><input id="coachV64Total" type="number" inputmode="numeric" min="1" max="2000" required value="'+(d.total||"")+'"></label>'+
+      '<label><span>Testteki soru</span><input id="coachV64Per" type="number" inputmode="numeric" min="1" max="400" required value="'+(d.perTest||"")+'"></label></div>'+
+      '<small class="coach-v64-note">'+(d.total&&d.perTest?"Sayılar katalogdan geldi; kitaptakiyle aynı mı, kontrol et.":"Test sayılarını kitabın içindekiler sayfasından yaz.")+'</small>'+
+      '<div class="coach-v64-actions"><button type="button" data-v64="back">‹ Geri</button><button type="submit" class="is-primary"'+(coachV64Busy?' disabled':'')+'>'+(coachV64Busy?"Gönderiliyor…":"Öğrenciye gönder")+'</button></div></form>'+status;
+    return;
+  }
+  host.innerHTML='<div class="coach-v64-search"><label class="sr-only" for="coachV64Query">Kitap ara</label><input id="coachV64Query" type="search" placeholder="ör. 345 tyt matematik" autocomplete="off" value="'+escHtml(coachV64Query)+'"><button type="button" data-v64="close">Kapat</button></div>'+
+    '<p class="coach-v64-hint" id="coachV64Hint" aria-live="polite"></p><div id="coachV64Results"></div>'+status;
+  coachV64Results();
+}
+function coachV64Reset(){coachV64Open=false;coachV64Query="";coachV64Draft=null;coachV64Status={text:"",error:false};coachV64Render()}
+async function coachV64Send(){
+  const row=coachV64Row(),user=auth.currentUser,d=coachV64Draft;if(!row||!user||!d||coachV64Busy)return;
+  const name=String($("coachV64Name")?.value||"").trim().slice(0,120),subject=String($("coachV64Subject")?.value||"Matematik").slice(0,40);
+  const total=coachV64Count($("coachV64Total")?.value,2000),perTest=coachV64Count($("coachV64Per")?.value,400);
+  const fail=text=>{coachV64Status={text,error:true};coachV64Draft={...d,name,subject,total,perTest};coachV64Render()};
+  if(!name)return fail("Kitap adını yaz.");
+  if(!total)return fail("Toplam test 1 ile 2000 arasında olmalı.");
+  if(!perTest)return fail("Testteki soru 1 ile 400 arasında olmalı.");
+  if(coachV64Has(row,name))return fail("Bu kitap öğrencinin Kitaplarım'ında zaten var.");
+  coachV64Busy=true;coachV64Draft={...d,name,subject,total,perTest};coachV64Status={text:"",error:false};coachV64Render();
+  try{
+    await addDoc(collection(db,"coachingActions"),{
+      studentUid:row.studentUid,coachUid:user.uid,type:"coach_note",
+      payload:{operation:"book_add",text:"Kitap önerisi · "+name,name,subject,pub:d.pub||"",exam:d.exam||"",kind:d.kind||"",total,perTest,coverUrl:name===d.name?d.coverUrl||"":""},
+      status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+    });
+    coachV64Open=false;coachV64Draft=null;coachV64Query="";
+    coachV64Status={text:"“"+name+"” gönderildi ✓ Öğrenci uygulamayı açınca Kitaplarım'a eklenir.",error:false};
+  }catch(error){
+    console.error("v64 kitap ekle",error);coachV64Status={text:"Gönderilemedi: "+String(error?.message||"Bilinmeyen hata"),error:true};
+  }finally{coachV64Busy=false;coachV64Render()}
+}
+$("coachV64Add")?.addEventListener("click",event=>{
+  const act=event.target.closest("[data-v64]")?.dataset.v64,pick=event.target.closest("[data-v64-pick]");
+  if(pick&&!pick.disabled){const b=coachV64Matches()[Number(pick.dataset.v64Pick)];if(b){coachV64Draft={...b};coachV64Status={text:"",error:false};coachV64Render();$("coachV64Total")?.focus()}return}
+  if(act==="open"){coachV64Open=true;coachV64Status={text:"",error:false};coachV64Render();$("coachV64Query")?.focus();void coachV64Load()}
+  else if(act==="close")coachV64Reset();
+  else if(act==="back"){coachV64Draft=null;coachV64Status={text:"",error:false};coachV64Render();$("coachV64Query")?.focus()}
+  else if(act==="manual"){coachV64Draft={name:coachV64Query.trim().slice(0,120),pub:"",subject:"Matematik",exam:"",kind:"",coverUrl:"",total:0,perTest:0};coachV64Status={text:"",error:false};coachV64Render();$("coachV64Total")?.focus()}
+});
+$("coachV64Add")?.addEventListener("input",event=>{if(event.target.id!=="coachV64Query")return;coachV64Query=event.target.value;coachV64Results()});
+$("coachV64Add")?.addEventListener("submit",event=>{event.preventDefault();void coachV64Send()});
+$("coachV64Add")?.addEventListener("error",event=>{const img=event.target;if(img?.classList?.contains("coach-v61-remote"))img.remove()},true);
 function coachProgramTaskText(){return String($("programTaskText")?.value||"").trim()}
 function coachProgramResource(){
   const raw=String($("programTaskVideo")?.value||"").trim();if(!raw)return "";

@@ -97,7 +97,7 @@ test("v63 Kitap seç link alanının üstünde; Video ekle bilgisayarda iki süt
 
 test("v59 stil bağlı, görev gönderme sözleşmesi değişmedi",()=>{
   const html=read("index.html"),js=read("app-reset.js");
-  assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.2\.0">/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/books-v59\.css\?v=1\.3\.0">/);
   assert.match(js,/const task=base\+\(resource\?" — "\+resource:""\)/);
 });
 
@@ -129,4 +129,61 @@ test("v61 GIF katalog kapağı da gösterilir",t=>{
   const {w,doc}=fixture(t);const gif="https://cdn.kitapsec.com/image/urun/2026/03/10/1773144341.gif";
   w.__v59.set([{...BOOKS[0],coverUrl:gif}]);w.__v59.card();
   assert.equal(doc.querySelector("#studentCardBooks img.coach-v61-remote").getAttribute("src"),gif);
+});
+
+const tick=async(n=6)=>{for(let i=0;i<n;i++)await new Promise(r=>setImmediate(r))};
+const CATALOG={cdn:"https://cdn.kitapsec.com/image/urun/",items:[
+  {id:1,n:"Üç Dört Beş TYT Matematik Soru Bankası",p:"Üç Dört Beş",c:"2024/a.jpg",s:"Matematik",e:"TYT",k:"Soru Bankası",t:40,q:13},
+  {id:2,n:"345 TYT Matematik Soru Bankası",p:"345",s:"Matematik",e:"TYT"},
+  {id:3,n:"Limit <b>AYT</b> Fizik",p:"Limit",s:"Fizik",e:"AYT",t:"x"}
+]};
+test("v64 öğrenci kartında Kitap ekle: katalogdan ara, var olanı engelle, sayıları doğrula, coach_note/book_add gönder",async t=>{
+  const {w,doc,errors}=fixture(t),sent=[];
+  w.fetch=async()=>({ok:true,json:async()=>CATALOG});w.addDoc=async(ref,data)=>{sent.push({ref,data});return{id:"x"}};
+  w.__v59.set([BOOKS[0]]);w.__v59.card();
+  const host=doc.getElementById("coachV64Add"),click=sel=>host.querySelector(sel).click();
+  assert.equal(host.querySelector("[data-v64=open]").textContent,"+ Kitap ekle");
+  click("[data-v64=open]");assert.equal(doc.getElementById("coachV64Hint").textContent,"Katalog yükleniyor…");
+  await tick();assert.match(doc.getElementById("coachV64Hint").textContent,/^3 kitap/);
+  const q=doc.getElementById("coachV64Query");q.value="345 mat";q.dispatchEvent(new w.Event("input",{bubbles:true}));
+  const hits=[...host.querySelectorAll("[data-v64-pick]")];
+  assert.equal(hits.length,2,"Üç Dört Beş adı 345 ile de bulunur");
+  assert.equal(hits[1].disabled,true);assert.match(hits[1].textContent,/Kitaplarında var/);
+  q.value="limit";q.dispatchEvent(new w.Event("input",{bubbles:true}));
+  assert.ok(!host.innerHTML.includes("<b>AYT</b>"),"katalog adı kaçışlı");
+  q.value="345 mat";q.dispatchEvent(new w.Event("input",{bubbles:true}));
+  click('[data-v64-pick="0"]');
+  assert.equal(doc.getElementById("coachV64Total").value,"40");assert.equal(doc.getElementById("coachV64Per").value,"13");assert.equal(doc.getElementById("coachV64Subject").value,"Matematik");
+  host.querySelector("form").dispatchEvent(new w.Event("submit",{bubbles:true,cancelable:true}));await tick();
+  assert.equal(sent.length,1);const a=sent[0].data;
+  assert.equal(sent[0].ref.name,"coachingActions");assert.equal(a.type,"coach_note");assert.equal(a.status,"pending");assert.equal(a.studentUid,"elif");assert.equal(a.coachUid,"coach-1");
+  assert.equal(a.payload.operation,"book_add");assert.equal(a.payload.text,"Kitap önerisi · Üç Dört Beş TYT Matematik Soru Bankası");
+  assert.equal(a.payload.total,40);assert.equal(a.payload.perTest,13);assert.equal(a.payload.coverUrl,"https://cdn.kitapsec.com/image/urun/2024/a.jpg");
+  assert.match(host.querySelector(".coach-v64-status").textContent,/gönderildi ✓/);assert.ok(host.querySelector("[data-v64=open]"),"gönderince kapanır");
+  // Listede yok → adıyla ekle; sayılar doğrulanır, aynı ad engellenir
+  click("[data-v64=open]");await tick();
+  const q2=doc.getElementById("coachV64Query");q2.value="Kendi Kitabım";q2.dispatchEvent(new w.Event("input",{bubbles:true}));
+  click("[data-v64=manual]");assert.equal(doc.getElementById("coachV64Name").value,"Kendi Kitabım");
+  const submit=()=>host.querySelector("form").dispatchEvent(new w.Event("submit",{bubbles:true,cancelable:true}));
+  submit();await tick();assert.match(host.querySelector(".coach-v64-status").textContent,/Toplam test 1 ile 2000/);assert.equal(sent.length,1);
+  doc.getElementById("coachV64Total").value="10";doc.getElementById("coachV64Per").value="500";submit();await tick();assert.match(host.querySelector(".coach-v64-status").textContent,/Testteki soru/);
+  doc.getElementById("coachV64Name").value=" 345 tyt matematik soru bankası ";doc.getElementById("coachV64Per").value="20";submit();await tick();
+  assert.match(host.querySelector(".coach-v64-status").textContent,/zaten var/);assert.equal(sent.length,1);
+  doc.getElementById("coachV64Name").value="Kendi Kitabım";doc.getElementById("coachV64Subject").value="Fizik";submit();await tick();
+  assert.equal(sent.length,2);assert.equal(sent[1].data.payload.subject,"Fizik");assert.equal(sent[1].data.payload.coverUrl,"");assert.equal(sent[1].data.payload.perTest,20);
+  // kart yeniden açılınca sıfırlanır
+  w.__v59.card();assert.ok(host.querySelector("[data-v64=open]"));assert.equal(host.querySelector(".coach-v64-status"),null);
+  assert.deepEqual(errors,[]);
+});
+test("v64 katalog açılamazsa koç adını yazarak ekleyebilir; gönderim hatası gösterilir",async t=>{
+  const {w,doc}=fixture(t);
+  w.fetch=async()=>({ok:false,status:503});w.addDoc=async()=>{throw new Error("izin yok")};
+  w.__v59.set([]);w.__v59.card();
+  const host=doc.getElementById("coachV64Add");host.querySelector("[data-v64=open]").click();await tick();
+  assert.match(doc.getElementById("coachV64Hint").textContent,/Katalog açılamadı/);
+  const q=doc.getElementById("coachV64Query");q.value="Bir Kitap";q.dispatchEvent(new w.Event("input",{bubbles:true}));
+  host.querySelector("[data-v64=manual]").click();doc.getElementById("coachV64Total").value="5";doc.getElementById("coachV64Per").value="10";
+  host.querySelector("form").dispatchEvent(new w.Event("submit",{bubbles:true,cancelable:true}));await tick();
+  assert.match(host.querySelector(".coach-v64-status.is-error").textContent,/Gönderilemedi: izin yok/);
+  assert.equal(doc.getElementById("coachV64Name").value,"Bir Kitap","form açık kalır");
 });
