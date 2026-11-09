@@ -258,7 +258,8 @@ test('changing students closes an old edit and cannot write it to the newly sele
   h.$('programTaskDelete').click();
   await h.settle();
   assert.equal(h.writes.length,0);
-  assert.match(h.task('r-0-0').textContent,/Ada farklı çalışma/);
+  assert.match(h.w.classicTest.data('student-a').weeks[0].data.r[0][0],/Ada farklı çalışma/,'eski görev değişmedi');
+  assert.equal(h.task('r-0-0'),null,'öğrenci değişince son kayıtlı hafta (5 Ekim) değil bu hafta açılır');
   h.$('programAddTaskBtn').click();
   h.change('programTaskDate','2026-10-08');
   h.change('programTaskText','Ada için yeni çalışma');

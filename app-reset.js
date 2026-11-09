@@ -3435,7 +3435,7 @@ function shiftProgramWeek(start,amount){
 }
 function activeProgramWeek(row){
   const weeks=programWeeks(row);
-  if(!selectedProgramWeekStart)selectedProgramWeekStart=weeks.at(-1)?.week||programCurrentWeekStart();
+  if(!selectedProgramWeekStart)selectedProgramWeekStart=programCurrentWeekStart(); // v64: son kayıtlı hafta değil, bu hafta (eski haftaya görev gitmesin)
   return weeks.find(item=>item?.week===selectedProgramWeekStart)||{week:selectedProgramWeekStart,data:{}};
 }
 
