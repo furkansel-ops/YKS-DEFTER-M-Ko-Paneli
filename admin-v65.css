@@ -1,0 +1,9 @@
+/* Koç Paneli · v65 — Admin V2: yazı tipi ve çizgi simgeler (tüm temalar). Renkler coach-themes-v36.css'te. */
+body,button,input,select,textarea{font-family:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,sans-serif}
+.coach-v65-ic{display:block;width:1.2em;height:1.2em;margin:auto;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.coach-shell-reset .coach-nav-item>span{display:grid;place-items:center;line-height:1}
+.coach-shell-reset .coach-nav-item>b{font-weight:600;letter-spacing:-.005em}
+.coach-shell-reset .coach-nav-item.on>b{font-weight:700}
+.coach-nav-group{font-size:11px;letter-spacing:.12em}
+/* Tablet ikon şeridi: Jakarta biraz geniş, 70px'lik düğmede etiketler sığsın */
+@media(min-width:760px) and (max-width:1179px){.coach-shell-reset .coach-nav-item>b{font-size:11px;letter-spacing:-.01em}}

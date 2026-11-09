@@ -153,3 +153,28 @@ textarea.coach-v38-notes:focus-visible{outline:2px solid var(--k-accent);outline
   .coach-v38-task-actions button{min-height:44px}
 }
 .coach-v38-more{justify-self:start;min-height:40px;padding:0 14px;border:1px dashed var(--k-line);border-radius:10px;background:transparent;color:var(--k-accent);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+
+/* v65 · Sade Mavi = Admin V2: beyaz-mavi zemin, mavi degrade seçili menü, yumuşak mavi gölgeli kartlar.
+   Yalnız data-theme yokken (Sade Mavi); Gece ve Canlı değişmez. Yazı tipi ve simgeler admin-v65.css'te. */
+:root:not([data-theme]){
+  --k-bg:#f3f6fd;--k-line:#e6ecf7;--k-accent:#2453e6;--k-muted:#5d6a8a;--k-ink:#101b3d;
+  --k-hero:linear-gradient(135deg,#3d73ff 0%,#2453e6 55%,#1a3fc0 100%);--k-hero-btn-ink:#1a3fc0;
+  --k-side-ink:#4b5878;--k-side-on:#e9f0ff;--k-side-on-ink:#1e46c8;
+  --k65-grad:linear-gradient(135deg,#3d73ff 0%,#2453e6 55%,#1a3fc0 100%);
+  --k65-shadow:0 10px 30px -14px rgba(30,64,175,.22);
+}
+:root:not([data-theme]) body,:root:not([data-theme]) .coach-shell-reset .coach-reset-canvas{
+  background:radial-gradient(520px 520px at 0% 0%,rgba(61,115,255,.16),transparent 70%),
+    radial-gradient(620px 620px at 100% 100%,rgba(61,115,255,.13),transparent 70%),#f3f6fd;
+  background-attachment:fixed;
+}
+:root:not([data-theme]) .coach-shell-reset .coach-sidebar-v20{background:rgba(255,255,255,.86);border-right-color:#e6ecf7;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+:root:not([data-theme]) .coach-shell-reset .coach-nav-item:hover{background:#eef3ff;color:#101b3d}
+:root:not([data-theme]) .coach-shell-reset .coach-nav-item.on{background:var(--k65-grad);color:#fff;box-shadow:0 10px 22px -10px rgba(36,83,230,.75)}
+:root:not([data-theme]) :is(.stat-card,.dash-panel,.report-card,.topic-card,.exam-card,.error-card,.pp-coach-card,.coach-v41-card,.students-card){
+  border-color:#e6ecf7;border-radius:18px;box-shadow:var(--k65-shadow);
+}
+:root:not([data-theme]) .stat-card .stat-icon{border-radius:12px;background:#e9f0ff;color:#2453e6}
+:root:not([data-theme]) .quick-actions button{border-color:#e6ecf7;background:#fff;border-radius:14px}
+:root:not([data-theme]) .quick-actions button:hover{border-color:#c9d8ff;background:#f6f9ff}
+:root:not([data-theme]) .quick-actions button>span{color:#2453e6}
