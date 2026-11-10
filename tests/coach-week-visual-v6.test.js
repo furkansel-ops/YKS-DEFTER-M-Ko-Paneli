@@ -989,6 +989,10 @@ test('new coach composer generates editable TYT and AYT lesson tasks',t=>{
  set('programBuilderActivity','Tekrar');
  assert.equal(h.$('programTaskText').value,'AYT Matematik · Problemler · Tekrar');
  assert.equal(h.$('programBuilderCount').closest('label').hidden,true);
+ // Süre öğrencinin "Etüt oluştur"una " · N dk" olarak gider; her çalışma türünde görünür.
+ set('programBuilderMinutes','120');
+ assert.equal(h.$('programTaskText').value,'AYT Matematik · Problemler · Tekrar · 120 dk');
+ assert.equal(h.$('programBuilderMinutes').closest('label').hidden,false);
 });
 test('manual instructions are preserved unless regenerate is explicitly selected',t=>{
  const h=harness(t);h.$('programAddTaskBtn').click();

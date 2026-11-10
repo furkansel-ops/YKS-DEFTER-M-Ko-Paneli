@@ -4753,6 +4753,9 @@ function coachV18Compose(){
   if(topic)pieces.push(topic);
   pieces.push(activity);
   if(activity==="Soru çözümü"&&Number.isInteger(n)&&n>=1&&n<=999)pieces.push(n+" soru");
+  // Öğrencideki "Etüt oluştur" süreyi bu " · N dk" parçasından okur.
+  const minutes=Number($("programBuilderMinutes")?.value||0);
+  if(Number.isInteger(minutes)&&minutes>=1&&minutes<=600)pieces.push(minutes+" dk");
   return pieces.join(" · ");
 }
 function coachV18Apply(force=false){
@@ -4782,6 +4785,7 @@ function coachV18Reset(){
   if($("programBuilderSubject"))$("programBuilderSubject").value="";
   if($("programBuilderTopic"))$("programBuilderTopic").value="";
   if($("programBuilderCount"))$("programBuilderCount").value="";
+  if($("programBuilderMinutes"))$("programBuilderMinutes").value="";
   if($("programBuilderActivity"))$("programBuilderActivity").value="Soru çözümü";
   coachV18SetLevel("TYT");
   if($("programBuilderHint"))$("programBuilderHint").textContent="Bir ders seçerek başlayabilirsin.";
@@ -4808,7 +4812,7 @@ function coachV18ReflectPreset(id,level,text){
 $("programBuilderLevel")?.querySelectorAll("[data-plan-level]").forEach(button=>
   button.addEventListener("click",()=>{coachV18SetLevel(button.dataset.planLevel);coachV18Apply()}));
 $("programBuilderSubject")?.addEventListener("change",()=>{coachV18Topics();coachV18Apply();coachV19SyncVideoFilters()});
-["programBuilderTopic","programBuilderActivity","programBuilderCount"].forEach(id=>
+["programBuilderTopic","programBuilderActivity","programBuilderCount","programBuilderMinutes"].forEach(id=>
   $(id)?.addEventListener("input",()=>coachV18Apply()));
 $("programBuilderTopic")?.addEventListener("change",coachV19SyncVideoFilters);
 $("programBuilderApply")?.addEventListener("click",()=>coachV18Apply(true));
@@ -5243,6 +5247,12 @@ $("programTaskSend")?.addEventListener("click",async()=>{
     const raw=String($("programBuilderCount")?.value||"").trim();
     if(raw&&(!/^\d+$/.test(raw)||Number(raw)<1||Number(raw)>999)){
       setProgramTaskStatus("Soru sayısı 1 ile 999 arasında olmalı.","error");return;
+    }
+  }
+  if(!coachProgramEditContext&&$("programBuilderSubject")?.value){
+    const raw=String($("programBuilderMinutes")?.value||"").trim();
+    if(raw&&(!/^\d+$/.test(raw)||Number(raw)<1||Number(raw)>600)){
+      setProgramTaskStatus("Süre 1 ile 600 dakika arasında olmalı.","error");return;
     }
   }
   if(base.length>600){setProgramTaskStatus("Çalışma metni en fazla 600 karakter olabilir.","error");return}

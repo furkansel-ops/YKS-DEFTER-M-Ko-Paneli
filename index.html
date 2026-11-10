@@ -1494,6 +1494,10 @@
             <label><span>Soru sayısı <em>İsteğe bağlı</em></span>
               <input id="programBuilderCount" type="number" min="1" max="999" step="1" inputmode="numeric" placeholder="Örn. 30">
             </label>
+            <label><span>Süre (dk) <em>İsteğe bağlı</em></span>
+              <input id="programBuilderMinutes" type="number" min="1" max="600" step="5" inputmode="numeric" list="programBuilderMinuteSuggestions" placeholder="Örn. 120">
+              <datalist id="programBuilderMinuteSuggestions"><option value="30"></option><option value="45"></option><option value="60"></option><option value="90"></option><option value="120"></option></datalist>
+            </label>
           </div>
           <div class="coach-v18-builder-bottom">
             <span id="programBuilderHint" role="status" aria-live="polite">Bir ders seçerek başlayabilirsin.</span>
