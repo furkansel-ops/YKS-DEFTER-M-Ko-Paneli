@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-09T10:22:54.239Z",
+  "generatedAt": "2026-11-10T10:25:27.767Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-09T10:17:10.230Z"
+      "refreshedAt": "2026-11-10T10:20:10.518Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3715,7 +3715,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-09T10:21:17.617Z"
+      "refreshedAt": "2026-11-10T10:24:10.735Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4863,7 +4863,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-09T10:21:43.584Z"
+      "refreshedAt": "2026-11-10T10:24:31.927Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5853,7 +5853,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-09T10:21:52.772Z"
+      "refreshedAt": "2026-11-10T10:24:39.205Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8372,7 +8372,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-09T10:22:03.811Z"
+      "refreshedAt": "2026-11-10T10:24:48.324Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -9241,7 +9241,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-09T10:22:12.507Z"
+      "refreshedAt": "2026-11-10T10:24:55.328Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10070,7 +10070,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-09T10:22:14.997Z"
+      "refreshedAt": "2026-11-10T10:24:57.711Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10083,7 +10083,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2310,
+      "videoCount": 2311,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -11072,7 +11072,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-09T10:22:54.228Z"
+      "refreshedAt": "2026-11-10T10:25:27.763Z"
     }
   }
 }
