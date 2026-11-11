@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-10T10:25:27.767Z",
+  "generatedAt": "2026-11-11T09:55:24.106Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -16,7 +16,7 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/eyup-b/index.json",
-      "videoCount": 4166,
+      "videoCount": 4167,
       "playlistCount": 35,
       "archiveComplete": true,
       "playlists": [
@@ -2727,6 +2727,13 @@
       ],
       "videos": [
         {
+          "id": "N51frB6B_Ow",
+          "title": "Eyüp B. TYT İlk 12 Konu Deneme Çıktı | inceleme,zorluk,içerik #reklam",
+          "url": "https://www.youtube.com/watch?v=N51frB6B_Ow",
+          "thumbnail": "https://i.ytimg.com/vi/N51frB6B_Ow/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
           "id": "oJvi9H1DYHw",
           "title": "Bir Polinom Sorusu (Müstakbel Ayt Mini Denemeden)",
           "url": "https://www.youtube.com/watch?v=oJvi9H1DYHw",
@@ -2802,16 +2809,9 @@
           "url": "https://www.youtube.com/watch?v=kU1Mhem41Yg",
           "thumbnail": "https://i.ytimg.com/vi/kU1Mhem41Yg/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "kClThdJ5vnY",
-          "title": "Matematik Nasıl Çalışılır? (geometrisiz) 25-30 Net Aralığı",
-          "url": "https://www.youtube.com/watch?v=kClThdJ5vnY",
-          "thumbnail": "https://i.ytimg.com/vi/kClThdJ5vnY/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-10T10:20:10.518Z"
+      "refreshedAt": "2026-11-11T09:49:54.554Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3715,7 +3715,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-10T10:24:10.735Z"
+      "refreshedAt": "2026-11-11T09:53:59.365Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3727,7 +3727,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1184,
+      "videoCount": 1185,
       "playlistCount": 45,
       "archiveComplete": true,
       "playlists": [
@@ -4395,8 +4395,15 @@
           "id": "PLB0hn7Hw33sudxmdFWxXsHjwxq27IUktj",
           "title": "Ferrum Labs | FerrumOne",
           "url": "https://www.youtube.com/playlist?list=PLB0hn7Hw33sudxmdFWxXsHjwxq27IUktj",
-          "videoCount": 3,
+          "videoCount": 4,
           "videos": [
+            {
+              "id": "gjptl5mYwKo",
+              "title": "İşe Yaramayan Taktikler - 1 | Kimyaya Nasıl Çalışılır?",
+              "url": "https://www.youtube.com/watch?v=gjptl5mYwKo",
+              "thumbnail": "https://i.ytimg.com/vi/gjptl5mYwKo/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
             {
               "id": "_yT7IySQhnI",
               "title": "Japonya’dan Hediyeler Getirdim! 🎁 | 2027 YKS Planı, AYT Kimya Kampı ve 15 Kişiye Hediye",
@@ -4863,7 +4870,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-10T10:24:31.927Z"
+      "refreshedAt": "2026-11-11T09:54:22.501Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5853,7 +5860,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-10T10:24:39.205Z"
+      "refreshedAt": "2026-11-11T09:54:30.588Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8372,7 +8379,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-10T10:24:48.324Z"
+      "refreshedAt": "2026-11-11T09:54:40.258Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -8849,21 +8856,21 @@
           "videos": [
             {
               "id": "OETLoSZsW5Q",
-              "title": "10. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. Tema) (Kadir GÜMÜŞ)",
+              "title": "10. SINIF - TÜRK DİLİ VE EDEBİYATI - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. Tema) (Kadir GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=OETLoSZsW5Q",
               "thumbnail": "https://i.ytimg.com/vi/OETLoSZsW5Q/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
               "id": "YJr47c_81PA",
-              "title": "9. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+              "title": "9. SINIF - TÜRK DİLİ VE EDEBİYATI - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=YJr47c_81PA",
               "thumbnail": "https://i.ytimg.com/vi/YJr47c_81PA/hqdefault.jpg",
               "channel": "Kadir Gümüş"
             },
             {
               "id": "FWooVrzgbwk",
-              "title": "11. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+              "title": "11. SINIF - TÜRK DİLİ VE EDEBİYATI - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
               "url": "https://www.youtube.com/watch?v=FWooVrzgbwk",
               "thumbnail": "https://i.ytimg.com/vi/FWooVrzgbwk/hqdefault.jpg",
               "channel": "Kadir Gümüş"
@@ -9158,21 +9165,21 @@
       "videos": [
         {
           "id": "OETLoSZsW5Q",
-          "title": "10. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. Tema) (Kadir GÜMÜŞ)",
+          "title": "10. SINIF - TÜRK DİLİ VE EDEBİYATI - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. Tema) (Kadir GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=OETLoSZsW5Q",
           "thumbnail": "https://i.ytimg.com/vi/OETLoSZsW5Q/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
           "id": "YJr47c_81PA",
-          "title": "9. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+          "title": "9. SINIF - TÜRK DİLİ VE EDEBİYATI - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=YJr47c_81PA",
           "thumbnail": "https://i.ytimg.com/vi/YJr47c_81PA/hqdefault.jpg",
           "channel": "Kadir Gümüş"
         },
         {
           "id": "FWooVrzgbwk",
-          "title": "11. SINIF - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
+          "title": "11. SINIF - TÜRK DİLİ VE EDEBİYATI - 1. DÖNEM 1. YAZILI - FULL TEKRAR (1. TEMA) (KADİR GÜMÜŞ)",
           "url": "https://www.youtube.com/watch?v=FWooVrzgbwk",
           "thumbnail": "https://i.ytimg.com/vi/FWooVrzgbwk/hqdefault.jpg",
           "channel": "Kadir Gümüş"
@@ -9241,7 +9248,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-10T10:24:55.328Z"
+      "refreshedAt": "2026-11-11T09:54:48.270Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10070,7 +10077,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-10T10:24:57.711Z"
+      "refreshedAt": "2026-11-11T09:54:50.596Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10083,7 +10090,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2311,
+      "videoCount": 2313,
       "playlistCount": 52,
       "archiveComplete": true,
       "playlists": [
@@ -10988,6 +10995,27 @@
       ],
       "videos": [
         {
+          "id": "JBAfrLuRg3s",
+          "title": "10.SINIF 1.DÖNEM 1.YAZILI SORULARI / ORTAK SINAV / 3.Prova",
+          "url": "https://www.youtube.com/watch?v=JBAfrLuRg3s",
+          "thumbnail": "https://i.ytimg.com/vi/JBAfrLuRg3s/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "aiRvtEqeNaI",
+          "title": "9.SINIF 1.DÖNEM 1.YAZILI SORULARI / Maarif Modeli / 3.Prova",
+          "url": "https://www.youtube.com/watch?v=aiRvtEqeNaI",
+          "thumbnail": "https://i.ytimg.com/vi/aiRvtEqeNaI/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
+          "id": "6lHBTxMqvAI",
+          "title": "11.SINIF 1.DÖNEM 1.YAZILI SORULARI / 3.Prova / ORTAK SINAV",
+          "url": "https://www.youtube.com/watch?v=6lHBTxMqvAI",
+          "thumbnail": "https://i.ytimg.com/vi/6lHBTxMqvAI/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "FAJ0rVKFIrM",
           "title": "11.SINIF 1.DÖNEM 1.YAZILI SORULARI / 2.Prova / ORTAK SINAV",
           "url": "https://www.youtube.com/watch?v=FAJ0rVKFIrM",
@@ -11049,30 +11077,9 @@
           "url": "https://www.youtube.com/watch?v=VmmLkBbFX-M",
           "thumbnail": "https://i.ytimg.com/vi/VmmLkBbFX-M/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "5Ks0teH_rDo",
-          "title": "9.SINIF EDEBİYAT 1.TEMA FULL TEKRAR / Sözün İnceliği Teması",
-          "url": "https://www.youtube.com/watch?v=5Ks0teH_rDo",
-          "thumbnail": "https://i.ytimg.com/vi/5Ks0teH_rDo/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "llnMSppeWkM",
-          "title": "10.Sınıf Edebiyat 1. Tema Full Tekrar / Sözün Ezgisi",
-          "url": "https://www.youtube.com/watch?v=llnMSppeWkM",
-          "thumbnail": "https://i.ytimg.com/vi/llnMSppeWkM/hqdefault.jpg",
-          "channel": "Deniz Hoca"
-        },
-        {
-          "id": "Ceokr-lOkck",
-          "title": "10.Sınıf Edebiyat Kitabı 2027 / Maarif Modeline Uygun",
-          "url": "https://www.youtube.com/watch?v=Ceokr-lOkck",
-          "thumbnail": "https://i.ytimg.com/vi/Ceokr-lOkck/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-10T10:25:27.763Z"
+      "refreshedAt": "2026-11-11T09:55:24.101Z"
     }
   }
 }
