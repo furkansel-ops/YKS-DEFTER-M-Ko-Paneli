@@ -111,6 +111,8 @@
 
   const $=id=>document.getElementById(id);
   function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+  // Video adresleri başka bir sitedeki akıştan gelir; javascript: gibi şemalar açılmasın diye yalnızca https kabul edilir.
+  function isHttpsUrl(v){return /^https:\/\//i.test(String(v??""));}
   function compact(v){return String(v??"").replace(/\s+/g," ").trim();}
   function teacherByName(){return TEACHERS.find(t=>t.n===state.teacher)||null;}
   function subjectKey(){
@@ -201,12 +203,12 @@
       const playlistAdd=event.target.closest("[data-playlist-video-add]");
       if(playlistAdd){const item=state.selectedPlaylist?.videos?.[Number(playlistAdd.dataset.playlistVideoAdd)];if(item)addToProgram(item);return;}
       const playlistOpen=event.target.closest("[data-playlist-video-open]");
-      if(playlistOpen){const item=state.selectedPlaylist?.videos?.[Number(playlistOpen.dataset.playlistVideoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");return;}
+      if(playlistOpen){const item=state.selectedPlaylist?.videos?.[Number(playlistOpen.dataset.playlistVideoOpen)];if(item&&isHttpsUrl(item.url))window.open(item.url,"_blank","noopener,noreferrer");return;}
       const recommend=event.target.closest("[data-video-recommend]");
       if(recommend){const item=state.items[Number(recommend.dataset.videoRecommend)];if(item)recommendResource(item);return;}
       const add=event.target.closest("[data-video-add]"),open=event.target.closest("[data-video-open]");
       if(add){const item=state.items[Number(add.dataset.videoAdd)];if(item)addToProgram(item);}
-      if(open){const item=state.items[Number(open.dataset.videoOpen)];if(item)window.open(item.url,"_blank","noopener,noreferrer");}
+      if(open){const item=state.items[Number(open.dataset.videoOpen)];if(item&&isHttpsUrl(item.url))window.open(item.url,"_blank","noopener,noreferrer");}
     });
     $("coachVideoResults")?.addEventListener("input",event=>{
       const input=event.target.closest("#coachPlaylistVideoSearch");if(!input)return;

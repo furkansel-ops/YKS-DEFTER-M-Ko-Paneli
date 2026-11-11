@@ -264,7 +264,8 @@ function weekStats(program){
   const total=taskCounts.reduce((sum,count)=>sum+count,0),completed=completedCounts.reduce((sum,count)=>sum+count,0);
   return{week:item?.week||"",taskCounts,completedCounts,plannedDays,doneDays,total,completed,ratio:total?Math.round(completed/total*100):0};
 }
-function studentName(row){return row?.share?.profile?.name||row?.profile?.displayName||"Öğrenci"}
+// Ad öğrencinin yazdığı veridir; metne çevrilmezse sayı/nesne gelen bir ad .localeCompare ile bütün listeyi çökertir.
+function studentName(row){return String(row?.share?.profile?.name||row?.profile?.displayName||"Öğrenci").slice(0,80)}
 function studentDayReviews(row){
   const entries=Array.isArray(row?.share?.progress?.dayReview?.entries)?row.share.progress.dayReview.entries:[];
   return entries.filter(item=>item&&/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||""))&&(item.mood||String(item.note||"").trim())).sort((a,b)=>String(b.date).localeCompare(String(a.date))||reportNum(b.at)-reportNum(a.at));
@@ -490,7 +491,6 @@ function apptId(coachUid,date,time){return coachUid+"_"+date.replace(/-/g,"")+"_
 function apptMinutes(time){const [h,m]=String(time||"0:0").split(":").map(Number);return h*60+m}
 function apptClock(minutes){const pad=n=>String(n).padStart(2,"0");return pad(Math.floor(minutes/60))+":"+pad(minutes%60)}
 function apptDateLabel(date,opts={weekday:"long",day:"numeric",month:"long"}){try{return new Intl.DateTimeFormat("tr-TR",opts).format(new Date(date+"T12:00:00"))}catch{return date}}
-function apptRelativeDay(date){const today=apptIso(new Date()),tomorrow=apptIso(new Date(Date.now()+864e5));return date===today?"bugün":date===tomorrow?"yarın":apptDateLabel(date,{day:"numeric",month:"long",weekday:"long"})}
 function apptIsPast(date,time){return new Date(date+"T"+time+":00").getTime()<Date.now()}
 function apptStudentName(uid){const row=coachReportRows.find(item=>item.studentUid===uid);return row?studentName(row):"Öğrenci"}
 function apptSlotsFor(availability,date){
@@ -843,12 +843,6 @@ function renderDashboardDayReviews(){
   }));
 }
 
-function reportStatus(row){
-  const overdue=reportNum(row?.share?.progress?.overdueTopics),minutes=reportNum(row?.share?.progress?.minutes7);
-  if(overdue>0)return overdue+" geciken konu";
-  if(minutes>0)return"Aktif";
-  return"Veri bekleniyor";
-}
 function setReportState(name){
   ["reportLoading","reportEmpty","reportError","reportOverview","reportStudentDetail"].forEach(id=>$(id)?.classList.add("hidden"));
   $(name)?.classList.remove("hidden");
@@ -3415,7 +3409,7 @@ window.addEventListener("yks:coach-resource-recommend",async event=>{
   if(!row||!user){reply(false,"Önce önerinin gönderileceği öğrenciyi seç.");return}
   const kind=detail.kind==="playlist"?"playlist":"video";
   const id=String(detail.id||"").trim().slice(0,120),title=String(detail.title||"").trim().slice(0,180),url=String(detail.url||"").trim().slice(0,600);
-  const teacher=String(detail.teacher||"").trim().slice(0,100),subject=String(detail.subject||"").trim().slice(0,80),topic=String(detail.topic||"").trim().slice(0,120),scope=String(detail.scope||"").trim().slice(0,10),thumb=String(detail.thumb||"").trim().slice(0,600);
+  const teacher=String(detail.teacher||"").trim().slice(0,100),subject=String(detail.subject||"").trim().slice(0,80),topic=String(detail.topic||"").trim().slice(0,120),scope=String(detail.scope||"").trim().slice(0,10),rawThumb=String(detail.thumb||"").trim().slice(0,600),thumb=/^https:\/\/(?:i\d?\.ytimg\.com|img\.youtube\.com)\//.test(rawThumb)?rawThumb:"";
   if(!id||!title||!/^https?:\/\//i.test(url)){reply(false,"Kaynak bilgisi geçersiz olduğu için öneri gönderilemedi.");return}
   try{
     await addDoc(collection(db,"coachingActions"),{
@@ -3442,16 +3436,6 @@ function activeProgramWeek(row){
 function programWeeks(row){
   const weeks=Array.isArray(row?.share?.program?.weeks)?row.share.program.weeks:[];
   return [...weeks].sort((a,b)=>String(a?.week||"").localeCompare(String(b?.week||"")));
-}
-function programTargetText(row){
-  const p=row?.share?.profile||{},parts=[];
-  if(p.targetUniversity)parts.push(String(p.targetUniversity));
-  if(p.targetDepartment)parts.push(String(p.targetDepartment));
-  if(parts.length)return parts.join(" · ");
-  const nets=[];
-  if(Number(p.targetNetTYT)>0)nets.push("TYT "+Math.round(Number(p.targetNetTYT))+" net");
-  if(Number(p.targetNetAYT)>0)nets.push("AYT "+Math.round(Number(p.targetNetAYT))+" net");
-  return nets.length?nets.join(" · "):String(p.track||"YKS öğrencisi");
 }
 function programCurrentWeekStart(){
   const d=new Date(),day=(d.getDay()+6)%7;
@@ -3490,21 +3474,6 @@ function collectProgramDayTasks(program,week,day){
   const order=Array.isArray(data?.mv?.["order-"+day])?data.mv["order-"+day]:[],rank=new Map(order.map((id,index)=>[String(id),index]));
   out.sort((a,b)=>(rank.get(a.id)??Number.MAX_SAFE_INTEGER)-(rank.get(b.id)??Number.MAX_SAFE_INTEGER));
   return out;
-}
-function coachProgramOrderIds(container){
-  return Array.from(container.querySelectorAll("[data-program-task-id]")).map(node=>node.dataset.programTaskId||"").filter(Boolean);
-}
-async function saveCoachProgramOrder(weekStart,day,ids){
-  const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser;if(!row||!user||!ids.length)return false;
-  const week=programWeeks(row).find(item=>item.week===weekStart);if(!week)return false;
-  week.data??={};week.data.mv??={};const key="order-"+day,had=Object.prototype.hasOwnProperty.call(week.data.mv,key),previous=week.data.mv[key];
-  week.data.mv[key]=ids.slice();renderProgramWorkspace();
-  try{
-    await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"program_task",payload:{operation:"order",date:programDayDate(weekStart,day),order:ids.slice()},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
-    return true;
-  }catch(error){
-    console.error("Program sırası",error);if(had)week.data.mv[key]=previous;else delete week.data.mv[key];renderProgramWorkspace();return false;
-  }
 }
 async function saveCoachProgramMove(weekStart,taskId,targetDay){
   const row=coachReportRows.find(x=>x.studentUid===selectedProgramStudentUid),user=auth.currentUser;if(!row||!user)return false;
@@ -3759,10 +3728,6 @@ function coachV7Key(studentUid,weekStart,coachUid=auth.currentUser?.uid){
 }
 function coachV7StoreKey(key){return "yks-coach-week-draft-v7:"+key}
 function coachV7ValidTime(value){return typeof value==="string"&&/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)}
-function coachV7Time(value){
-  const match=String(value||"").match(/\s+·\s+Saat\s+((?:[01]\d|2[0-3]):[0-5]\d)(?=\s+—\s+https?:\/\/|$)/i);
-  return match?match[1]:"";
-}
 function coachV7ComposeText(item){
   return item.text.trim()+(item.time?" · Saat "+item.time:"")+(item.url?" — "+item.url:"");
 }
@@ -4162,6 +4127,7 @@ async function coachV35Send(key,weekStart,studentUid,bulk){
   let items=st.pending;
   if(!items){const built=coachV35Items(st);if(built.error){say(built.error,"error");return}items=built.items}
   if(items.some(item=>!item.text.trim()||item.text.trim().length>600)){say("Her görev en fazla 600 karakter olabilir. Hiçbir görev gönderilmedi.","error");return}
+  if(items.length>200){say("Tek seferde en fazla 200 görev gönderilebilir. Hiçbir görev gönderilmedi.","error");return}
   if(!confirm(items.length+" görev öğrencinin programına gönderilsin mi?"))return;
   const coachUid=auth.currentUser.uid;let sent=0;
   coachV7SendingKeys.add(key);if(button)button.disabled=true;say("Gönderim başladı…","info");

@@ -231,12 +231,12 @@ test('video library mounts on the classic screen and recommendations preserve th
   assert.equal(h.$('programVideoLibrary').closest('#coachV19VideoPane'),h.$('coachV19VideoPane'));
   assert.equal(h.$('programVideoLibrary').closest('#programsPage'),null);
   h.w.videoLibraryTest.setContext({scope:'TYT',teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf'});
-  h.w.videoLibraryTest.recommendResource({kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',thumb:'https://example.test/thumb.jpg'});
+  h.w.videoLibraryTest.recommendResource({kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',thumb:'https://i.ytimg.com/vi/test-video/hqdefault.jpg'});
   await h.settle();
   assert.equal(h.writes.length,1);
   assert.deepEqual(h.writes[0],{
     collection:'coachingActions',studentUid:'student-b',coachUid:'coach-test',type:'coach_note',
-    payload:{operation:'resource_recommendation',text:'Kaynak önerisi · Paragraf çözümü',kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf',scope:'TYT',thumb:'https://example.test/thumb.jpg'},
+    payload:{operation:'resource_recommendation',text:'Kaynak önerisi · Paragraf çözümü',kind:'video',id:'test-video',title:'Paragraf çözümü',url:'https://youtu.be/test',teacher:'Test Hoca',subject:'Türkçe',topic:'Paragraf',scope:'TYT',thumb:'https://i.ytimg.com/vi/test-video/hqdefault.jpg'},
     status:'pending',createdAt:{serverTimestamp:true},updatedAt:{serverTimestamp:true}
   });
   h.w.dialogTest.seed([],'',week);
