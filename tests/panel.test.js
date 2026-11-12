@@ -54,14 +54,13 @@ test('koç girişi ve profil bilgisi reset runtime içinde korunur',()=>{
   assert.match(js,/signOut/);
 });
 
-test('kayıt ekranı minimal reset stilini kullanır',()=>{
+test('v71 eski kayıt sayfası yalnız yönlendirir; davetsiz eski kayıt betiği yok',()=>{
   const html=read('register.html');
-  const register=read('register.js');
   assert.match(html,/base-reset\.css\?v=1\.0\.1/);
   assert.doesNotMatch(html,/core-v20|dashboard-v20/);
-  assert.match(register,/existing\.role==="coach"/);
-  assert.match(register,/öğrenci hesabı olarak kayıtlı/);
-  assert.match(register,/emailVerified/);
+  assert.match(html,/href="\.\/#register"/);
+  assert.doesNotMatch(html,/<form|register\.js/);
+  assert.ok(!fs.existsSync(path.join(__dirname,'..','register.js')),'register.js silindi');
 });
 
 
