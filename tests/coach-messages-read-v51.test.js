@@ -88,7 +88,7 @@ test("v51 Mesajlar sayfası kapalıyken gelen mesaj okundu sayılmaz",t=>{
 test("v51 koç hesabı silinince okundu kayıtları da silinir; stiller tema değişkenleriyle",()=>{
   assert.match(read("coach-auth-v34.js"),/try\{const reads=await byCoach\("coachingReads"\);for\(const item of reads\.docs\)await deleteDoc\(item\.ref\)\}\s*catch\(error\)\{if\(!String\(error\?\.code\|\|""\)\.includes\("permission-denied"\)\)throw error\}/);
   const html=read("index.html"),css=read("coach-messages-read-v51.css");
-  assert.match(html,/coach-auth-v34\.js\?v=1\.1\.4/);
+  assert.match(html,/coach-auth-v34\.js\?v=1\.1\.5/);
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-messages-read-v51\.css\?v=1\.0\.0">/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-bulk50-read51-exams52-photos52-reports53-students54-topics55-messages56-pp57-settings58"/);
   assert.match(css,/#messagesPage \.coach-v51-state~\.message-mini-badges i\.applied\{display:none\}/);

@@ -41,7 +41,10 @@ async function verifyMail(user){try{await sendEmailVerification(user,continueUrl
 function readPending(){try{return JSON.parse(localStorage.getItem(PENDING_KEY)||"null")}catch{return null}}
 function writePending(value){try{value?localStorage.setItem(PENDING_KEY,JSON.stringify(value)):localStorage.removeItem(PENDING_KEY)}catch{}}
 
-/* register.js ile aynı sözleşme: öğrenci profili olan hesap koç olamaz. */
+/* Öğrenci profili olan hesap koç olamaz. v69: yeni koç profili yalnız açık bir kayıt davetiyle açılır;
+   davet aynı işlemde "used" olur (Firestore kuralı ikisini birlikte ister). */
+const INVITE_RE=/^[A-Z2-9]{24}$/;
+const inviteCode=value=>String(value??"").toUpperCase().replace(/[\s-]/g,"").slice(0,24);
 async function createCoachProfile(user,fields){
   return runTransaction(db,async tx=>{
     const ref=doc(db,COLLECTIONS.profiles,user.uid),snap=await tx.get(ref);
@@ -49,7 +52,16 @@ async function createCoachProfile(user,fields){
       if(snap.data().role==="coach")return{existing:true};
       throw new Error("Bu hesap öğrenci hesabı olarak kayıtlı. Koç hesabı için farklı bir hesap kullan.");
     }
-    tx.set(ref,{uid:user.uid,role:"coach",displayName:fields.displayName,coachTitle:fields.coachTitle,specialization:fields.specialization,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    const code=inviteCode(fields.inviteCode);
+    if(!INVITE_RE.test(code))throw new Error("Koç davet kodu 24 karakter olmalı.");
+    const inviteRef=doc(db,"coachRegistrationInvites",code);
+    let invite;
+    try{invite=await tx.get(inviteRef)}catch(error){if(String(error?.code||"").includes("permission-denied"))throw new Error("Koç davet kodu geçersiz.");throw error}
+    const data=invite.exists()?invite.data():null,expires=data?.expiresAt?.toMillis?.()||0;
+    if(!data||data.status!=="open")throw new Error("Koç davet kodu geçersiz ya da daha önce kullanılmış.");
+    if(expires<=Date.now())throw new Error("Koç davet kodunun süresi dolmuş.");
+    tx.update(inviteRef,{status:"used",usedBy:user.uid,usedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    tx.set(ref,{uid:user.uid,role:"coach",displayName:fields.displayName,coachTitle:fields.coachTitle,specialization:fields.specialization,registrationInvite:code,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
     return{existing:false};
   });
 }
@@ -60,7 +72,7 @@ function setMode(mode){
   document.querySelectorAll("[data-nb-mode]").forEach(button=>button.setAttribute("aria-selected",String(button.dataset.nbMode===mode)));
   $("nbAuthTitle").textContent=register?"Koç hesabı oluştur":"Tekrar hoş geldin";
   $("nbAuthSub").textContent=register?"Bilgilerin bağlantı kurduğun öğrencilere görünür.":"Koç hesabınla giriş yap.";
-  status(register?"Ad soyad zorunlu; unvan ve uzmanlık isteğe bağlı.":"Koç hesabınla giriş yap.");
+  status(register?"Ad soyad ve koç davet kodu zorunlu; unvan ve uzmanlık isteğe bağlı.":"Koç hesabınla giriş yap.");
 }
 document.querySelectorAll("[data-nb-mode]").forEach(button=>button.addEventListener("click",()=>setMode(button.dataset.nbMode)));
 if(location.hash==="#register")setMode("register");
@@ -103,12 +115,17 @@ loginForm?.querySelector("[data-nb-reset]")?.addEventListener("click",async()=>{
 });
 
 function registerFields(){
-  return{displayName:text(registerForm.displayName.value,80),coachTitle:text(registerForm.coachTitle.value,100),specialization:text(registerForm.specialization.value,160)};
+  return{displayName:text(registerForm.displayName.value,80),coachTitle:text(registerForm.coachTitle.value,100),specialization:text(registerForm.specialization.value,160),inviteCode:inviteCode(registerForm.inviteCode?.value)};
+}
+function checkRegisterFields(fields){
+  if(!fields.displayName){status("Ad Soyad alanını doldur.","err");registerForm.displayName.focus();return false}
+  if(!INVITE_RE.test(fields.inviteCode)){status("Koç davet kodunu yaz (24 karakter).","err");registerForm.inviteCode?.focus();return false}
+  return true;
 }
 registerForm?.addEventListener("submit",async event=>{
   event.preventDefault();
   const fields=registerFields(),email=text(registerForm.email.value,120).toLowerCase(),password=registerForm.password.value;
-  if(!fields.displayName){status("Ad Soyad alanını doldur.","err");return}
+  if(!checkRegisterFields(fields))return;
   if(!/^\S+@\S+\.\S+$/.test(email)){status("Geçerli bir e-posta adresi yaz.","err");return}
   if(password.length<8||!/\d/.test(password)){status("Şifre en az 8 karakter olmalı ve bir rakam içermeli.","err");return}
   busy(true);status("Hesap oluşturuluyor…");
@@ -129,7 +146,7 @@ registerForm?.addEventListener("submit",async event=>{
 
 registerForm?.querySelector("[data-nb-google-register]")?.addEventListener("click",async()=>{
   const fields=registerFields();
-  if(!fields.displayName){status("Ad Soyad alanını doldur.","err");registerForm.displayName.focus();return}
+  if(!checkRegisterFields(fields))return;
   busy(true);status("Google hesabı açılıyor…");
   let signedIn=false;
   try{

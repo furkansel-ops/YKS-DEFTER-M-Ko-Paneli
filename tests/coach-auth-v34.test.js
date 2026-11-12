@@ -37,6 +37,24 @@ test("koç auth modülü doğrulanmamış e-postayı içeri almaz ve öğrenci h
   assert.match(read("app-reset.js"),/if\(window\.__YKS_COACH_AUTH_BUSY__\)return;\s*if\(!user\)\{/);
 });
 
+test("v69 koç kaydı davet kodu ister; davet aynı işlemde kullanılır ve profile yazılır",async()=>{
+  const html=read("index.html"),js=read("coach-auth-v34.js");
+  const form=html.slice(html.indexOf('id="nbRegisterForm"'),html.indexOf("</form>",html.indexOf('id="nbRegisterForm"')));
+  assert.match(form,/name="inviteCode"[^>]*required/);
+  const create=js.slice(js.indexOf("async function createCoachProfile"),js.indexOf("function setMode"));
+  assert.match(create,/if\(!INVITE_RE\.test\(code\)\)throw/);
+  assert.match(create,/doc\(db,"coachRegistrationInvites",code\)/);
+  assert.match(create,/data\.status!=="open"/);
+  assert.match(create,/tx\.update\(inviteRef,\{status:"used",usedBy:user\.uid,usedAt:serverTimestamp\(\),updatedAt:serverTimestamp\(\)\}\)/);
+  assert.match(create,/registrationInvite:code/);
+  assert.ok(create.indexOf("snap.exists()")<create.indexOf("INVITE_RE.test"),"var olan koç davetsiz giriş yapar");
+  assert.equal((js.match(/if\(!checkRegisterFields\(fields\)\)return;/g)||[]).length,2,"e-posta ve Google kaydı kodu denetler");
+  const {makeCode}=await import("../scripts/create-coach-invite.mjs");
+  const codes=new Set(Array.from({length:200},makeCode));
+  for(const code of codes)assert.match(code,/^[A-Z2-9]{24}$/);
+  assert.equal(codes.size,200,"kodlar tekrar etmez");
+});
+
 test("Ayarlar › Hesap giriş yöntemini gösterir; e-posta hesaplarında şifre değiştirme vardır",()=>{
   const html=read("index.html"),js=read("coach-auth-v34.js");
   for(const id of ["settingsAccountMethod","settingsAccountNote","settingsPasswordBtn","settingsSessionNote"])assert.match(html,new RegExp('id="'+id+'"'));
