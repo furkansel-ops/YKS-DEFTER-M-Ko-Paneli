@@ -1,0 +1,94 @@
+/* Koç Paneli · v68 — Hareket katmanı: ekran geçişi, sıralı beliriş, pencereler, yan menü, çubuklar, mesaj balonu.
+   Yalnızca opacity ve translate/scale oynar; düzen kaymaz. translate/scale ayrı özellik olduğu için öğelerin kendi transform'u bozulmaz.
+   Kapatma: Ayarlar › Görünüm › "Azaltılmış hareket" → body.coach-reduce-motion (settings-v21.css) hepsini durdurur.
+   Sıralı beliriş, coach-motion-v68.js'in ekran açılırken ~0,9 sn koyduğu data-motion-enter ile sınırlı; canlı veri yenilenince tekrar oynamaz. */
+:root{--mv-out:cubic-bezier(.16,1,.3,1);--mv-std:cubic-bezier(.2,.8,.2,1)}
+@keyframes coach-mv-rise{from{opacity:0;translate:0 12px}}
+@keyframes coach-mv-fade{from{opacity:0}}
+@keyframes coach-mv-pop{from{opacity:0;translate:0 14px;scale:.96}}
+@keyframes coach-mv-slide{from{opacity:0;translate:28px 0}}
+@keyframes coach-mv-nav{0%{scale:.94}60%{scale:1.02}}
+@keyframes coach-mv-grow{from{scale:0 1}}
+@keyframes coach-mv-bubble{from{opacity:0;scale:.7;translate:0 8px}}
+
+/* 1 · Ekran geçişi: bölümler, ardından kartlar ve satırlar sırayla belirir */
+.coach-shell-reset section[data-motion-enter]>*,
+.coach-shell-reset section[data-motion-enter] :is(.stat-card,.dash-panel,article,li,[class*="-card"],[class*="-row"],[class*="-item"]),
+#authView:not(.hidden) .nb-auth-cover>*,
+#authView:not(.hidden) .nb-auth-panel>*{
+  animation-name:coach-mv-rise;animation-duration:.42s;animation-timing-function:var(--mv-out);animation-fill-mode:backwards;
+}
+:is(.coach-shell-reset section[data-motion-enter],#authView:not(.hidden)) :nth-child(2){animation-delay:45ms}
+:is(.coach-shell-reset section[data-motion-enter],#authView:not(.hidden)) :nth-child(3){animation-delay:90ms}
+:is(.coach-shell-reset section[data-motion-enter],#authView:not(.hidden)) :nth-child(4){animation-delay:135ms}
+:is(.coach-shell-reset section[data-motion-enter],#authView:not(.hidden)) :nth-child(5){animation-delay:180ms}
+:is(.coach-shell-reset section[data-motion-enter],#authView:not(.hidden)) :nth-child(6){animation-delay:225ms}
+:is(.coach-shell-reset section[data-motion-enter],#authView:not(.hidden)) :nth-child(n+7){animation-delay:270ms}
+
+/* 2 · İlerleme çubukları soldan dolar (dolgu öğeleri genişliği satır içi stille alır) */
+.coach-shell-reset section[data-motion-enter] :is(i,span,b,em)[style^="width:"]{
+  animation:coach-mv-grow .9s var(--mv-out) .2s backwards;transform-origin:left center;
+}
+
+/* 3 · Yan menü */
+/* Menü öğesinin eski renk geçişi kaldırılır: seçim değişince zemin anında, yazı yavaş değiştiği için yazı bir an beyaz üstünde beyaz kalıyordu. */
+.coach-shell-reset .coach-nav-v20 .coach-nav-item{transition:scale .14s var(--mv-std),box-shadow .2s var(--mv-std)}
+.coach-shell-reset .coach-nav-item.on{animation:coach-mv-nav .32s var(--mv-out)}
+.coach-shell-reset .coach-nav-item>span{transition:translate .2s var(--mv-std)}
+
+/* 4 · Basma ve üzerine gelme. :where özgüllüğü sıfırdır: bir düğmenin kendi transition'ı varsa o kazanır. */
+:where(.coach-shell-reset,.auth-page) :where(button,[role="button"]){
+  /* Renk bilerek yok: seçili öğelerin zemini gradyan olduğu için anında değişir, yazı rengi yavaş geçerse bir an okunmaz kalır. */
+  transition:scale .14s var(--mv-std),translate .2s var(--mv-std),box-shadow .2s var(--mv-std);
+}
+:where(.coach-shell-reset) :where(.stat-card,[class*="student-"][class*="-card"]){transition:translate .2s var(--mv-std),box-shadow .2s var(--mv-std)}
+:is(.coach-shell-reset,.auth-page) button:active:not(:disabled){scale:.97}
+@media(hover:hover){
+  .coach-shell-reset .coach-nav-item:not(.on):hover>span{translate:2px 0}
+  .coach-shell-reset :is(.stat-card,[class*="student-"][class*="-card"]):hover{translate:0 -3px;box-shadow:0 14px 28px -18px color-mix(in srgb,currentColor 45%,transparent)}
+}
+
+/* 5 · Pencereler: arka plan kararır, pencere alttan büyüyerek, çekmece sağdan gelir (gizliden görünüre geçince bir kez oynar) */
+:is(.student-connect-backdrop,.coach-video-picker-backdrop,.program-task-backdrop,.coach-delete-backdrop):not(.hidden),
+:is(.student-v54-modal,.error-photo-modal,.coach-v41-drawer):not([hidden]){animation:coach-mv-fade .2s ease backwards}
+:is(.student-connect-backdrop,.coach-video-picker-backdrop,.program-task-backdrop,.coach-delete-backdrop):not(.hidden)>:first-child,
+:is(.student-v54-modal,.error-photo-modal):not([hidden])>:first-child{animation:coach-mv-pop .3s var(--mv-out) backwards}
+.coach-v41-drawer:not([hidden])>.coach-v41-drawer-panel{animation:coach-mv-slide .32s var(--mv-out) backwards}
+
+/* 6 · Yeni mesaj balonu köşesinden büyür (işareti coach-motion-v68.js koyar) */
+.message-bubble-row[data-motion-new]>.message-bubble{animation:coach-mv-bubble .3s var(--mv-out) backwards;transform-origin:left bottom}
+.message-bubble-row.outgoing[data-motion-new]>.message-bubble{transform-origin:right bottom}
+
+/* 7 · Durum yazıları (kaydedildi, gönderildi, hata): metin değişince alttan belirir. İşareti coach-motion-v68.js koyar. */
+@keyframes coach-mv-spin{to{rotate:360deg}}
+@keyframes coach-mv-pulse{50%{opacity:.45}}
+[data-motion-flash]{animation:coach-mv-rise .3s var(--mv-out)}
+
+/* 8 · İşlem sürerken düğmede dönen halka (tıklanan gönder/kaydet düğmesi devre dışı kaldığı sürece) */
+button[data-motion-busy]::after{
+  content:"";display:inline-block;width:.85em;height:.85em;margin-left:.5em;vertical-align:-.12em;
+  border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:coach-mv-spin .7s linear infinite;
+}
+
+/* 9 · Pencere kapanışı: asıl pencere anında gizlenir, kapanış etkisiz bir kopyası üzerinde oynar */
+[data-motion-closing]{animation:coach-mv-fade .16s ease reverse forwards!important;pointer-events:none!important}
+[data-motion-closing]>:first-child{animation:coach-mv-pop .16s ease reverse forwards!important}
+.coach-v41-drawer[data-motion-closing]>.coach-v41-drawer-panel{animation:coach-mv-slide .18s ease reverse forwards!important}
+
+/* 10 · Bekleme: veri hazırlanırken çubuklar ve açılış simgesi nabız gibi atar */
+.placeholder-bars i{animation:coach-mv-pulse 1.2s ease-in-out infinite}
+.placeholder-bars i:nth-child(2){animation-delay:.15s}
+.placeholder-bars i:nth-child(3){animation-delay:.3s}
+.coach-boot-mark{animation:coach-mv-pulse 1.4s ease-in-out infinite}
+
+/* 11 · Giriş sekmesi: seçili zemin düğmeler arasında kayar (:has desteklenmiyorsa eski görünüm kalır) */
+@supports selector(:has(*)){
+  .nb-auth-seg{position:relative}
+  .nb-auth-seg::before{
+    content:"";position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 4.5px);border-radius:9px;
+    background:var(--kc-ffffff,#fff);box-shadow:0 1px 3px var(--kc-2e4368-a140,rgba(46,67,104,.14));transition:translate .28s var(--mv-out);
+  }
+  .nb-auth-seg:has(button:nth-child(2)[aria-selected="true"])::before{translate:calc(100% + 3px) 0}
+  .nb-auth-seg button{position:relative;z-index:1}
+  .nb-auth-seg button[aria-selected="true"]{background:transparent;box-shadow:none}
+}

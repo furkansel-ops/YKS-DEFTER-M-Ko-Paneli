@@ -375,14 +375,8 @@ body{
   }
 }
 
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    scroll-behavior:auto!important;
-    animation-duration:.001ms!important;
-    animation-iteration-count:1!important;
-    transition-duration:.001ms!important;
-  }
-}
+/* v68: panel, işletim sisteminin "hareketi azalt" ayarına göre değil, Ayarlar › Görünüm › "Azaltılmış hareket"
+   düğmesine göre davranır (body.coach-reduce-motion, settings-v21.css). Buradaki genel kapatma kuralı kaldırıldı. */
 @keyframes coach-page-in{
   from{opacity:.01;transform:translateY(3px)}
   to{opacity:1;transform:none}
