@@ -1368,6 +1368,7 @@ function renderStudentReport(row){
   $("reportExamTrend").textContent=latestDelta===null?"—":(latestDelta>=0?"+":"")+latestDelta.toFixed(1).replace(".",",")+" net";
   $("reportExamTrend").className="report-trend-pill "+(latestDelta===null?"":latestDelta>=0?"good":"warn");
   $("reportExamList").innerHTML=exams.length?exams.slice(0,5).map((exam,index)=>{const delta=reportExamDelta(exams,index);return '<div class="report-exam-row"><div><b>'+escHtml(exam.name||exam.type||"Deneme")+'</b><span>'+escHtml(exam.date||"Tarih yok")+' · '+escHtml(exam.type||"YKS")+'</span></div><span class="report-exam-delta '+(delta===null?"":delta>=0?"good":"warn")+'">'+(delta===null?"İlk veri":(delta>=0?"+":"")+delta.toFixed(1).replace(".",",")+' net')+'</span><strong>'+escHtml(paragraphProblemFmtNet(reportNum(exam.totalNet)))+' net</strong></div>';}).join(""):'<div class="report-mini-empty">Henüz deneme verisi yok.</div>';
+  renderExamTasks(row);
 
   const errorMap=new Map();(Array.isArray(share.errorJournal)?share.errorJournal:[]).forEach(item=>{const key=(item?.subject||"Ders")+"|"+(item?.topic||"Konu"),current=errorMap.get(key)||{subject:item?.subject||"Ders",topic:item?.topic||"Konu",n:0,date:""};current.n+=Math.max(1,reportNum(item?.n));if(String(item?.date||"")>current.date)current.date=String(item.date);errorMap.set(key,current);});
   const errors=[...errorMap.values()].sort((a,b)=>b.n-a.n||b.date.localeCompare(a.date)).slice(0,7);
@@ -5410,3 +5411,36 @@ async function coachV58SetNotify(want){
 document.querySelectorAll("[data-v58-notify]").forEach(input=>input.addEventListener("change",()=>void coachV58SetNotify(input.checked)));
 coachV58RenderNotify();
 coachV58RenderSync();
+
+/* v70 · Denemeden göreve: son denemeden öneri; koç metni ve günü düzenleyip post_exam_task olarak gönderir.
+   Öğrenci uygulaması bu türü zaten "Koç · Deneme sonrası · …" diye programa ekler. */
+const examTaskSent=new Set(),examTaskStatus=new Map();
+let examTaskBusy=false;
+function examTaskTomorrow(){const d=new Date();d.setDate(d.getDate()+1);const off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10)}
+function renderExamTasks(row){
+  const root=$("reportExamTasks"),api=window.YKSExamTasksV70;if(!root)return;
+  if(!api){root.innerHTML="";return}
+  const result=api.examTaskSuggestions(row?.share);
+  root.dataset.studentUid=row?.studentUid||"";root.dataset.examId=result.exam?.id||"";
+  const prefix=(row?.studentUid||"")+"|"+(result.exam?.id||"")+"|",sent=new Set(),status={};
+  for(const item of result.items){if(examTaskSent.has(prefix+item.key))sent.add(item.key);const note=examTaskStatus.get(prefix+item.key);if(note)status[item.key]=note}
+  root.innerHTML=api.examTasksHtml(result,{esc:escHtml,minDate:todayIsoLocal(),date:examTaskTomorrow(),sent,status});
+}
+$("reportExamTasks")?.addEventListener("click",async event=>{
+  const button=event.target.closest("[data-exam-task-send]"),root=$("reportExamTasks"),api=window.YKSExamTasksV70;if(!button||!root||!api||examTaskBusy)return;
+  const rowEl=button.closest("[data-exam-task]"),row=coachReportRows.find(x=>x.studentUid===root.dataset.studentUid),user=auth.currentUser;
+  const result=api.examTaskSuggestions(row?.share),item=result.items[Number(rowEl?.dataset.examTask)];
+  if(!row||!user||!item||result.exam?.id!==root.dataset.examId)return;
+  const key=row.studentUid+"|"+result.exam.id+"|"+item.key;
+  const value=String(rowEl.querySelector("[data-exam-task-text]")?.value||"").trim().slice(0,300),date=String(rowEl.querySelector("[data-exam-task-date]")?.value||"");
+  const fail=text=>{examTaskStatus.set(key,{text,error:true});renderExamTasks(row)};
+  if(!value)return fail("Görev metnini yaz.");
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date<todayIsoLocal())return fail("Bugün ya da sonrası için bir gün seç.");
+  examTaskBusy=true;button.disabled=true;button.textContent="Gönderiliyor…";
+  try{
+    await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"post_exam_task",payload:{text:value,date,exam:result.exam.name},status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    examTaskSent.add(key);examTaskStatus.set(key,{text:"Öğrenci uygulamayı açınca "+date+" gününün programına eklenir.",error:false});
+  }catch(error){
+    console.error("v70 deneme görevi",error);examTaskStatus.set(key,{text:"Gönderilemedi: "+String(error?.message||"Bilinmeyen hata").slice(0,160),error:true});
+  }finally{examTaskBusy=false;renderExamTasks(row)}
+});

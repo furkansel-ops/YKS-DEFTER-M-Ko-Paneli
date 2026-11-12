@@ -1,0 +1,18 @@
+/* v70 · Deneme sonrası öneriler (Rapor › Deneme kartı) */
+#reportExamTasks:empty{display:none}
+.exam-tasks-v70{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}
+.exam-tasks-v70-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 10px}
+.exam-tasks-v70-head small,.exam-tasks-v70-copy small,.exam-tasks-v70-empty{color:var(--muted);font-size:.82rem}
+.exam-tasks-v70-empty{margin:0}
+.exam-tasks-v70-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center}
+.exam-tasks-v70-copy{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline}
+.exam-tasks-v70-row .field{min-width:0;margin:0}
+.exam-tasks-v70-row input[type="date"]{width:9.5rem}
+.exam-tasks-v70-done{grid-column:1/-1;color:var(--coach-success);font-weight:600;font-size:.88rem}
+.exam-tasks-v70-status{grid-column:1/-1;color:var(--muted);font-size:.8rem}
+.exam-tasks-v70-status.err{color:var(--coach-danger)}
+@media (max-width:640px){
+  .exam-tasks-v70-row{grid-template-columns:1fr 1fr}
+  .exam-tasks-v70-row [data-exam-task-text]{grid-column:1/-1}
+  .exam-tasks-v70-row input[type="date"]{width:auto}
+}
