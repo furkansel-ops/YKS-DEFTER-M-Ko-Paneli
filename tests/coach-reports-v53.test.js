@@ -99,3 +99,15 @@ test("v53 stil dosyası bağlı, renkler sarılı, yazdırma kuralı var",()=>{
   assert.doesNotMatch(css.replace(/var\(--kc-[\w-]+,[^)]*\)/g,""),/#[0-9a-f]{3,8}\b/i);
   assert.match(css,/@media print\{/);
 });
+
+test("v72 risk nedeni: etiketin yanında en ağır nedenler yazılır; puan aynı kalır",t=>{
+  const {doc,errors}=fixture(t,[ROW,{studentUid:"bos"}]);
+  fixtureShow(doc,"all");
+  const rows=[...doc.querySelectorAll("#reportAttentionList button")];
+  assert.deepEqual(rows.map(b=>b.querySelector("small").textContent),["Öğrenci verisi henüz gelmedi","3 geciken konu · Bu hafta program yok"]);
+  assert.equal(rows[1].querySelector("em").textContent,"İyi gidiyor","3×6 + 8 = 26 puan");
+  assert.equal(doc.querySelector('.report-student-row[data-report-student="elif"] em').title,"3 geciken konu · Bu hafta program yok");
+  fixtureShow(doc,"elif");
+  assert.equal(doc.getElementById("reportStudentRisk").title,"3 geciken konu · Bu hafta program yok");
+  assert.deepEqual(errors,[]);
+});

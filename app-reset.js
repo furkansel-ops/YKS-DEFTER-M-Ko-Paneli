@@ -813,6 +813,14 @@ document.querySelectorAll("[data-appt-month]").forEach(button=>button.addEventLi
 }));
 $("apptHoursSave")?.addEventListener("click",()=>void saveCoachAvailability());
 $("apptHoursOpen")?.addEventListener("click",openCoachApptHours);
+// v72 · Takvime aktar: onaylı, yaklaşan randevular .ics dosyası olarak iner.
+$("apptIcsExport")?.addEventListener("click",()=>{
+  const ics=window.YKSCoachIcsV72?.appointmentsIcs(coachAppointments,apptStudentName);
+  if(!ics?.count){alert("Aktarılacak onaylı, yaklaşan randevu yok.");return}
+  const url=URL.createObjectURL(new Blob([ics.text],{type:"text/calendar;charset=utf-8"})),a=document.createElement("a");
+  a.href=url;a.download="randevular-"+todayIsoLocal()+".ics";document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
 $("apptHoursClose")?.addEventListener("click",closeCoachApptHours);
 $("apptHoursDrawer")?.addEventListener("click",event=>{if(event.target===event.currentTarget)closeCoachApptHours()});
 $("apptHoursDrawer")?.addEventListener("keydown",event=>{if(event.key==="Escape"){event.preventDefault();closeCoachApptHours()}});
@@ -967,19 +975,27 @@ function reportCohortSubjectRows(rows){
   }));
   return[...map.values()].filter(item=>item.minutes||item.questions).sort((a,b)=>b.minutes-a.minutes||b.questions-a.questions).slice(0,8);
 }
-function reportRiskScore(row){
-  if(!row?.share)return 100;
-  const progress=row.share.progress||{},w=weekStats(row.share.program),fresh=reportFreshnessHours(row),review=studentDayReviews(row)[0],pp=reportPpSummaryMetrics(row);
-  let score=0;
-  if(fresh>48)score+=28;else if(fresh>24)score+=12;
+// v72 · Risk puanı nedenleriyle birlikte hesaplanır; koç etiketin neden çıktığını görür (en ağır neden önce).
+function reportRiskReasons(row){
+  if(!row?.share)return[{points:100,text:"Öğrenci verisi henüz gelmedi"}];
+  const progress=row.share.progress||{},w=weekStats(row.share.program),fresh=reportFreshnessHours(row),review=studentDayReviews(row)[0],pp=reportPpSummaryMetrics(row),out=[];
+  const add=(points,text)=>{if(points>0)out.push({points,text})};
+  add(fresh>48?28:fresh>24?12:0,Number.isFinite(fresh)?Math.floor(fresh/24)+" gündür veri gelmedi":"Veri güncellenmedi");
   const minutes=reportNum(progress.minutes7),questions=reportNum(progress.questions7);
-  if(minutes<120)score+=20;else if(minutes<300)score+=9;
-  if(questions<80)score+=14;else if(questions<180)score+=6;
-  if(w.total){if(w.ratio<50)score+=26;else if(w.ratio<75)score+=12}else score+=8;
-  score+=Math.min(24,Math.round(reportNum(progress.overdueTopics))*6);
-  if(review?.mood==="hard")score+=14;else if(review?.mood==="mid")score+=5;
-  if(pp.total>0&&pp.activeDays<2)score+=5;
-  return Math.min(100,Math.round(score));
+  add(minutes<120?20:minutes<300?9:0,"7 günde "+reportMinutes(minutes)+" çalışma");
+  add(questions<80?14:questions<180?6:0,"7 günde "+Math.round(questions)+" soru");
+  if(w.total)add(w.ratio<50?26:w.ratio<75?12:0,"Program uyumu %"+w.ratio);else add(8,"Bu hafta program yok");
+  const overdue=Math.round(reportNum(progress.overdueTopics));add(Math.min(24,overdue*6),overdue+" geciken konu");
+  add(review?.mood==="hard"?14:review?.mood==="mid"?5:0,review?.mood==="hard"?"Son gün değerlendirmesi: zor":"Son gün değerlendirmesi: orta");
+  add(pp.total>0&&pp.activeDays<2?5:0,"P&P yalnız "+pp.activeDays+" gün");
+  return out.sort((a,b)=>b.points-a.points);
+}
+function reportRiskScore(row){
+  return Math.min(100,Math.round(reportRiskReasons(row).reduce((sum,item)=>sum+item.points,0)));
+}
+function reportRiskWhy(row,limit=3){
+  const reasons=reportRiskReasons(row).slice(0,limit).map(item=>item.text);
+  return reasons.length?reasons.join(" · "):"Belirgin risk yok";
 }
 function reportRiskMeta(score){
   if(score>=55)return{label:"Öncelikli",tone:"danger"};
@@ -1277,11 +1293,11 @@ function renderReportOverview(){
     kpi("ORT. PROGRAM UYUMU",programRows.length?avgProgram+"%":"—",programRows.length+" programlı öğrenci",avgProgram&&avgProgram<60?"warn":"");
   const studentRows=[...rows].sort((a,b)=>reportRiskScore(b)-reportRiskScore(a)).map(row=>{
     const p=row.share?.progress||{},w=weekStats(row.share?.program),name=studentName(row),pp=reportPpSummaryMetrics(row),risk=reportRiskMeta(reportRiskScore(row));
-    return '<button class="report-student-row" type="button" data-report-student="'+escHtml(row.studentUid)+'" data-report-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="report-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+escHtml(reportMinutes(reportPeriodTotals(row).minutes))+'</strong><strong>'+escHtml(String(Math.round(reportPeriodTotals(row).questions)))+'</strong><strong>'+(w.total?escHtml(w.ratio+"%"):"—")+'</strong><strong>'+escHtml(String(Math.round(pp.total)))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.overdueTopics))))+'</strong><em class="report-risk-inline '+risk.tone+'">'+escHtml(risk.label)+' ›</em></button>';
+    return '<button class="report-student-row" type="button" data-report-student="'+escHtml(row.studentUid)+'" data-report-name="'+escHtml(name.toLocaleLowerCase("tr-TR"))+'"><span class="report-student-main"><i>'+escHtml(reportInitial(name))+'</i><b>'+escHtml(name)+'</b><small>'+escHtml(row.share?.profile?.track||"YKS")+'</small></span><strong>'+escHtml(reportMinutes(reportPeriodTotals(row).minutes))+'</strong><strong>'+escHtml(String(Math.round(reportPeriodTotals(row).questions)))+'</strong><strong>'+(w.total?escHtml(w.ratio+"%"):"—")+'</strong><strong>'+escHtml(String(Math.round(pp.total)))+'</strong><strong>'+escHtml(String(Math.round(reportNum(p.overdueTopics))))+'</strong><em class="report-risk-inline '+risk.tone+'" title="'+escHtml(reportRiskWhy(row))+'">'+escHtml(risk.label)+' ›</em></button>';
   }).join("");
   $("reportStudentList").innerHTML=studentRows||'<div class="report-list-empty">Öğrenci verisi yok.</div>';
   const attentionRows=attention.slice(0,4);
-  $("reportAttentionList").innerHTML=attentionRows.length?attentionRows.map(({row,score})=>{const risk=reportRiskMeta(score),p=row.share?.progress||{},w=weekStats(row.share?.program);return '<button type="button" data-report-student="'+escHtml(row.studentUid)+'"><span><b>'+escHtml(studentName(row))+'</b><small>'+(w.total?"Program %"+w.ratio:"Program yok")+' · '+Math.round(reportNum(p.overdueTopics))+' geciken</small></span><em class="'+risk.tone+'">'+escHtml(risk.label)+'</em></button>';}).join(""):'<div class="report-mini-empty">Takip önceliği oluşmadı.</div>';
+  $("reportAttentionList").innerHTML=attentionRows.length?attentionRows.map(({row,score})=>{const risk=reportRiskMeta(score);return '<button type="button" data-report-student="'+escHtml(row.studentUid)+'"><span><b>'+escHtml(studentName(row))+'</b><small>'+escHtml(reportRiskWhy(row,2))+'</small></span><em class="'+risk.tone+'" title="'+escHtml(reportRiskWhy(row))+'">'+escHtml(risk.label)+'</em></button>';}).join(""):'<div class="report-mini-empty">Takip önceliği oluşmadı.</div>';
   const overdueTotal=withShare.reduce((s,r)=>s+reportNum(r.share?.progress?.overdueTopics),0),ppTotal=withShare.reduce((s,r)=>s+reportPpSummaryMetrics(r).total,0);
   $("reportCoachSummary").innerHTML=
     '<div><span>Verisi güncel öğrenci</span><strong>'+withShare.length+' / '+rows.length+'</strong></div>'+
@@ -1309,7 +1325,7 @@ function renderStudentReport(row){
   const career=profile.career&&typeof profile.career==="object"?profile.career:null,rank=[career?.tyt?.name?"TYT "+career.tyt.name:"",career?.ayt?.name?(career.ayt.label||"AYT")+" "+career.ayt.name:"",reportNum(career?.level)>0?"Seviye "+Math.floor(reportNum(career.level)):""].filter(Boolean).join(" · ");
   $("reportStudentTarget").textContent=[profile.track,target,rank].filter(Boolean).join(" • ")||"Hedef bilgisi yok";
   $("reportStudentSync").textContent="Son veri: "+reportTimestamp(share.updatedAt);
-  $("reportStudentRisk").textContent=risk.label;$("reportStudentRisk").className="report-risk-pill "+risk.tone;
+  $("reportStudentRisk").textContent=risk.label;$("reportStudentRisk").title=reportRiskWhy(row);$("reportStudentRisk").className="report-risk-pill "+risk.tone;
   $("reportStudentKpis").innerHTML=reportStripHtml(row,w);
 
   const pulse=reportStudyPulse(row),bestDay=pulse.best?new Intl.DateTimeFormat("tr-TR",{weekday:"short",day:"numeric"}).format(new Date(pulse.best.date+"T12:00:00")):"—";
