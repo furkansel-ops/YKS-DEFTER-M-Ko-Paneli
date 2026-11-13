@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-13T10:03:19.405Z",
+  "generatedAt": "2026-11-13T12:09:03.006Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2811,7 +2811,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-13T09:57:27.636Z"
+      "refreshedAt": "2026-11-13T12:03:41.681Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3715,7 +3715,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-13T10:01:37.029Z"
+      "refreshedAt": "2026-11-13T12:07:42.588Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3727,10 +3727,166 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1185,
-      "playlistCount": 45,
+      "videoCount": 1186,
+      "playlistCount": 46,
       "archiveComplete": true,
       "playlists": [
+        {
+          "id": "PLIXMHYf_cq-4",
+          "title": "7 Günde TYT Kimya | Kasım Ara Tatil Kampı | 2027 Tayfa",
+          "url": "https://www.youtube.com/playlist?list=PLIXMHYf_cq-4",
+          "videoCount": 21,
+          "videos": [
+            {
+              "id": "WmPfO5pgFfU",
+              "title": "TYT Kimya Kasım Ara Tatil Kampı | 5 Gün Tekrar + 2 Gün Deneme | 2027 Tayfa",
+              "url": "https://www.youtube.com/watch?v=WmPfO5pgFfU",
+              "thumbnail": "https://i.ytimg.com/vi/WmPfO5pgFfU/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "myvua2h35tA",
+              "title": "01. TYT Full Tekrar Kimya Bilimi | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=myvua2h35tA",
+              "thumbnail": "https://i.ytimg.com/vi/myvua2h35tA/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "FhvigPh7I6o",
+              "title": "02. TYT Full Tekrar Atom ve Periyodik Sistem | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=FhvigPh7I6o",
+              "thumbnail": "https://i.ytimg.com/vi/FhvigPh7I6o/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "nx3x1TMwSkM",
+              "title": "1. GÜN | 1. Fasikül | TYT Tekrar Soru Kampı",
+              "url": "https://www.youtube.com/watch?v=nx3x1TMwSkM",
+              "thumbnail": "https://i.ytimg.com/vi/nx3x1TMwSkM/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "xOyC0VWl_IA",
+              "title": "03. TYT Full Tekrar Kimyasal Türler Arası Etkileşimler | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=xOyC0VWl_IA",
+              "thumbnail": "https://i.ytimg.com/vi/xOyC0VWl_IA/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "7r-kkHnnyz4",
+              "title": "2. GÜN | 2. Fasikül | TYT Tekrar Soru Kampı",
+              "url": "https://www.youtube.com/watch?v=7r-kkHnnyz4",
+              "thumbnail": "https://i.ytimg.com/vi/7r-kkHnnyz4/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "4FRDbfQ-rF4",
+              "title": "04. TYT Full Tekrar Maddenin Halleri | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=4FRDbfQ-rF4",
+              "thumbnail": "https://i.ytimg.com/vi/4FRDbfQ-rF4/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "l1vfLGwoXfE",
+              "title": "3. GÜN | 3. Fasikül | TYT Tekrar Soru Kampı",
+              "url": "https://www.youtube.com/watch?v=l1vfLGwoXfE",
+              "thumbnail": "https://i.ytimg.com/vi/l1vfLGwoXfE/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "v6hH8vVtTgc",
+              "title": "05. TYT Full Tekrar Mol Kavramı ve Kimyasal Hesaplamalar | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=v6hH8vVtTgc",
+              "thumbnail": "https://i.ytimg.com/vi/v6hH8vVtTgc/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "gT_A66697T4",
+              "title": "06. TYT Full Tekrar Karışımlar | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=gT_A66697T4",
+              "thumbnail": "https://i.ytimg.com/vi/gT_A66697T4/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "286v8gRk5QQ",
+              "title": "5. GÜN | 5. Fasikül | TYT Tekrar Soru Kampı",
+              "url": "https://www.youtube.com/watch?v=286v8gRk5QQ",
+              "thumbnail": "https://i.ytimg.com/vi/286v8gRk5QQ/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "ib_b_BLILNs",
+              "title": "07. TYT Full Tekrar Asitler Bazlar ve Tuzlar | Garanti Konular",
+              "url": "https://www.youtube.com/watch?v=ib_b_BLILNs",
+              "thumbnail": "https://i.ytimg.com/vi/ib_b_BLILNs/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "R-EhTFO_-Lo",
+              "title": "6. GÜN | 6. Fasikül | TYT Tekrar Soru Kampı",
+              "url": "https://www.youtube.com/watch?v=R-EhTFO_-Lo",
+              "thumbnail": "https://i.ytimg.com/vi/R-EhTFO_-Lo/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "y7_I-M_uOaQ",
+              "title": "01. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=y7_I-M_uOaQ",
+              "thumbnail": "https://i.ytimg.com/vi/y7_I-M_uOaQ/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "vWV4yc6LFZY",
+              "title": "02. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=vWV4yc6LFZY",
+              "thumbnail": "https://i.ytimg.com/vi/vWV4yc6LFZY/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "9eCl1BtPNS0",
+              "title": "03. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=9eCl1BtPNS0",
+              "thumbnail": "https://i.ytimg.com/vi/9eCl1BtPNS0/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "bZgwRwMZnZk",
+              "title": "04. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=bZgwRwMZnZk",
+              "thumbnail": "https://i.ytimg.com/vi/bZgwRwMZnZk/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "fFhzyFXfOvY",
+              "title": "05. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=fFhzyFXfOvY",
+              "thumbnail": "https://i.ytimg.com/vi/fFhzyFXfOvY/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "PJUYjUqzmqE",
+              "title": "06. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=PJUYjUqzmqE",
+              "thumbnail": "https://i.ytimg.com/vi/PJUYjUqzmqE/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "9zDZGSWWT7g",
+              "title": "07. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=9zDZGSWWT7g",
+              "thumbnail": "https://i.ytimg.com/vi/9zDZGSWWT7g/hqdefault.jpg",
+              "channel": "Ferrum"
+            },
+            {
+              "id": "NmCRscvHYro",
+              "title": "08. Deneme | Ferrum TYT Kimya Branş Denemeleri",
+              "url": "https://www.youtube.com/watch?v=NmCRscvHYro",
+              "thumbnail": "https://i.ytimg.com/vi/NmCRscvHYro/hqdefault.jpg",
+              "channel": "Ferrum"
+            }
+          ],
+          "contentComplete": true
+        },
         {
           "id": "PLB0hn7Hw33ssbcLtCDjnzgIWIALTQH-Mn",
           "title": "2027 TYT Kimya Kampı",
@@ -4696,95 +4852,16 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLB0hn7Hw33stnaeFzD5LHLtWx8nFP_axh",
-          "title": "2027 AYT Kimya Tekrar Soru Kampı | 10 GÜN",
-          "url": "https://www.youtube.com/playlist?list=PLB0hn7Hw33stnaeFzD5LHLtWx8nFP_axh",
-          "videoCount": 11,
-          "videos": [
-            {
-              "id": "b8vX4T3w0i4",
-              "title": "AYT Tekrarı Nasıl Yapılır? | Tekrar Soru Kampı | Ferrum",
-              "url": "https://www.youtube.com/watch?v=b8vX4T3w0i4",
-              "thumbnail": "https://i.ytimg.com/vi/b8vX4T3w0i4/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "aYfdQr7cN84",
-              "title": "1. GÜN | 1. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=aYfdQr7cN84",
-              "thumbnail": "https://i.ytimg.com/vi/aYfdQr7cN84/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "J2QMccApJPI",
-              "title": "2. GÜN | 2. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=J2QMccApJPI",
-              "thumbnail": "https://i.ytimg.com/vi/J2QMccApJPI/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "tJtJtzB27EA",
-              "title": "3. GÜN | 3. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=tJtJtzB27EA",
-              "thumbnail": "https://i.ytimg.com/vi/tJtJtzB27EA/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "nHOsu4EGCe8",
-              "title": "4. GÜN | 4. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=nHOsu4EGCe8",
-              "thumbnail": "https://i.ytimg.com/vi/nHOsu4EGCe8/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "IoehRpXoKKE",
-              "title": "5. GÜN | 5. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=IoehRpXoKKE",
-              "thumbnail": "https://i.ytimg.com/vi/IoehRpXoKKE/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "HEHKvXKAyo4",
-              "title": "6. GÜN | 6. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=HEHKvXKAyo4",
-              "thumbnail": "https://i.ytimg.com/vi/HEHKvXKAyo4/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "ve4B6oFvw1Q",
-              "title": "7. GÜN | 7. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=ve4B6oFvw1Q",
-              "thumbnail": "https://i.ytimg.com/vi/ve4B6oFvw1Q/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "usuaXQrkgmg",
-              "title": "8. GÜN | 8. Fasikül | AYT Tekrar Soru Kampı",
-              "url": "https://www.youtube.com/watch?v=usuaXQrkgmg",
-              "thumbnail": "https://i.ytimg.com/vi/usuaXQrkgmg/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "pzpF1L64jOQ",
-              "title": "2026 AYT Kimya FULL TEKRAR (9. GÜN | 9. Fasikül | AYT Tekrar Soru Kampı)",
-              "url": "https://www.youtube.com/watch?v=pzpF1L64jOQ",
-              "thumbnail": "https://i.ytimg.com/vi/pzpF1L64jOQ/hqdefault.jpg",
-              "channel": "Ferrum"
-            },
-            {
-              "id": "LympR1UIzhw",
-              "title": "2026 AYT Kimya FULL TEKRAR (10. GÜN | 10. Fasikül | AYT Tekrar Soru Kampı)",
-              "url": "https://www.youtube.com/watch?v=LympR1UIzhw",
-              "thumbnail": "https://i.ytimg.com/vi/LympR1UIzhw/hqdefault.jpg",
-              "channel": "Ferrum"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "WmPfO5pgFfU",
+          "title": "TYT Kimya Kasım Ara Tatil Kampı | 5 Gün Tekrar + 2 Gün Deneme | 2027 Tayfa",
+          "url": "https://www.youtube.com/watch?v=WmPfO5pgFfU",
+          "thumbnail": "https://i.ytimg.com/vi/WmPfO5pgFfU/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
         {
           "id": "yDYTQM2iJSc",
           "title": "11. Sınıf Kimya 1. Dönem 1. Yazılı | OYSS Yazılı Provası ve Soru Çözümü | MAARİF",
@@ -4861,16 +4938,9 @@
           "url": "https://www.youtube.com/watch?v=cYHLkP3Egys",
           "thumbnail": "https://i.ytimg.com/vi/cYHLkP3Egys/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "yBx727j2RDk",
-          "title": "9. Sınıf Kimya 9. Ders | Atom Orbitalleri: s, p, d, f | Atomdan Periyodik Tabloya | MAARİF",
-          "url": "https://www.youtube.com/watch?v=yBx727j2RDk",
-          "thumbnail": "https://i.ytimg.com/vi/yBx727j2RDk/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-13T10:02:04.581Z"
+      "refreshedAt": "2026-11-13T12:08:03.834Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -5733,7 +5803,7 @@
               "title": "Nöron Yapısı ve İmpuls İletimi Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 1.GÜN",
               "url": "https://www.youtube.com/watch?v=y-yI0JBT1zA",
               "thumbnail": "https://i.ytimg.com/vi/y-yI0JBT1zA/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "C6HSM3oNx6c",
@@ -5810,7 +5880,7 @@
               "title": "Böbrek üstü - Pankreas Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 4.GÜN",
               "url": "https://www.youtube.com/watch?v=rVzZZPBTrdE",
               "thumbnail": "https://i.ytimg.com/vi/rVzZZPBTrdE/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "D55K0V2VeLg",
@@ -5957,7 +6027,7 @@
               "title": "Emilim Sindirim Hastalıkları | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 13.GÜN",
               "url": "https://www.youtube.com/watch?v=d1LRXqvPf04",
               "thumbnail": "https://i.ytimg.com/vi/d1LRXqvPf04/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "IRcZHRUYe9k",
@@ -5992,7 +6062,7 @@
               "title": "Kan Damarları Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 15.GÜN",
               "url": "https://www.youtube.com/watch?v=IOOh_xFPRZM",
               "thumbnail": "https://i.ytimg.com/vi/IOOh_xFPRZM/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "FH6H8-I0C9w",
@@ -6027,7 +6097,7 @@
               "title": "Dolaşım - Bağışıklık Sistemi Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 17.GÜN",
               "url": "https://www.youtube.com/watch?v=nCO8yLDJtTg",
               "thumbnail": "https://i.ytimg.com/vi/nCO8yLDJtTg/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "dzHKTJbQbJg",
@@ -6111,7 +6181,7 @@
               "title": "Embriyonik Gelişim | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 23.GÜN",
               "url": "https://www.youtube.com/watch?v=4Iox2kZNwCg",
               "thumbnail": "https://i.ytimg.com/vi/4Iox2kZNwCg/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "hKiVEFUuF14",
@@ -6146,14 +6216,14 @@
               "title": "Komünite Ekolojisi-2 Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 25.GÜN",
               "url": "https://www.youtube.com/watch?v=FHrRmO7lmoM",
               "thumbnail": "https://i.ytimg.com/vi/FHrRmO7lmoM/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "zK2W2vggrM4",
               "title": "Komünite Ekolojisi-2 Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 25.GÜN",
               "url": "https://www.youtube.com/watch?v=zK2W2vggrM4",
               "thumbnail": "https://i.ytimg.com/vi/zK2W2vggrM4/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "tfPW0RvZTAA",
@@ -6209,7 +6279,7 @@
               "title": "Biyoteknoloji ve Gen Mühendisliği | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 30.GÜN",
               "url": "https://www.youtube.com/watch?v=dNmAzT9xjoY",
               "thumbnail": "https://i.ytimg.com/vi/dNmAzT9xjoY/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "C9SMC82MSJ8",
@@ -6258,14 +6328,14 @@
               "title": "Hücresel solunum Fermantasyon Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 33.GÜN",
               "url": "https://www.youtube.com/watch?v=Ly2ECmDCbOE",
               "thumbnail": "https://i.ytimg.com/vi/Ly2ECmDCbOE/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "7HRudQ2owE8",
               "title": "Fotosentez Özet | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 34.GÜN",
               "url": "https://www.youtube.com/watch?v=7HRudQ2owE8",
               "thumbnail": "https://i.ytimg.com/vi/7HRudQ2owE8/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "VwoLSnwHQEo",
@@ -6286,7 +6356,7 @@
               "title": "Fotosentez Kemosentez | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 35.GÜN",
               "url": "https://www.youtube.com/watch?v=oxJO6ZBM45E",
               "thumbnail": "https://i.ytimg.com/vi/oxJO6ZBM45E/hqdefault.jpg",
-              "channel": "Biosem Biyoloji"
+              "channel": "Biosem"
             },
             {
               "id": "bsh-lkGfkxQ",
@@ -6335,7 +6405,7 @@
               "title": "Bitkide Taşıma | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 38.GÜN",
               "url": "https://www.youtube.com/watch?v=Cu8D1It1COo",
               "thumbnail": "https://i.ytimg.com/vi/Cu8D1It1COo/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "n6d1ThkRUbg",
@@ -6356,7 +6426,7 @@
               "title": "Bitkisel Hormonlar Soru Çözümü | 42 GÜNDE AYRINTILI AYT BİYOLOJİ KAMPI 2026-2027 | 39.GÜN",
               "url": "https://www.youtube.com/watch?v=Uyd7r3TbUWw",
               "thumbnail": "https://i.ytimg.com/vi/Uyd7r3TbUWw/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             },
             {
               "id": "U1nEblJS6R4",
@@ -6412,7 +6482,7 @@
               "title": "AYT Biyoloji Full Tekrar - Biosem Cep Kitabı | Zeduva",
               "url": "https://www.youtube.com/watch?v=oJ1z7spDyDs",
               "thumbnail": "https://i.ytimg.com/vi/oJ1z7spDyDs/hqdefault.jpg",
-              "channel": "Biosem"
+              "channel": "Biosem Biyoloji"
             }
           ],
           "contentComplete": true
@@ -7145,7 +7215,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-13T10:02:14.946Z"
+      "refreshedAt": "2026-11-13T12:08:12.153Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9664,7 +9734,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-13T10:02:27.310Z"
+      "refreshedAt": "2026-11-13T12:08:21.211Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -10533,7 +10603,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-13T10:02:36.764Z"
+      "refreshedAt": "2026-11-13T12:08:28.594Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -11362,7 +11432,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-13T10:02:39.539Z"
+      "refreshedAt": "2026-11-13T12:08:31.096Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -12364,7 +12434,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-13T10:03:19.401Z"
+      "refreshedAt": "2026-11-13T12:09:03.002Z"
     }
   }
 }
