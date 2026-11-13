@@ -30,12 +30,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Kaynak kodunu al
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: true
 
       - name: Python ve yt-dlp araçlarını hazırla
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: yt-dlp yükle
@@ -55,13 +55,13 @@ jobs:
           fi
 
       - name: GitHub Pages yapılandırması
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Hoca arşivi dahil koç panelini paketle
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: .
 
       - name: Medya arşivini ve koç panelini yayınla
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
