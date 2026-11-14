@@ -212,7 +212,9 @@ function startCoachShareRealtime(){
   coachReportRows.forEach(row=>{
     const stop=onSnapshot(doc(db,"coachingShares",row.studentUid),snap=>{
       const target=coachReportRows.find(item=>item.studentUid===row.studentUid);if(!target)return;
+      const before=target.share;
       target.share=snap.exists()?snap.data():null;scheduleCoachRealtimeRender();
+      coachTaskDoneNotify(target,before);
       coachV58ShareState.set(row.studentUid,{state:"live",at:Date.now()});coachV58RenderSync();
     },error=>{
       console.error("Öğrenci canlı paylaşımı",row.studentUid,error);
@@ -2653,6 +2655,12 @@ function coachV56Notify(snap){
     const row=coachReportRows.find(x=>x.studentUid===item.studentUid);if(!row)return;
     try{const note=new Notification(studentName(row),{body:String(item.text||"").slice(0,140),tag:"yks-coach-message-"+item.id});note.onclick=()=>{window.focus();openCoachMessageThread(item.studentUid,"");note.close()}}catch{}
   });
+}
+/* v73: öğrenci program görevini tamamlayınca, panel arka sekmedeyken aynı bildirim tercihiyle haber verir. */
+function coachTaskDoneNotify(row,before){
+  const items=window.CoachTaskDone?.newlyDoneTasks(before,row?.share,collectProgramDayTasks)||[];
+  if(!items.length||!coachV56NotifyOn()||!document.hidden)return;
+  try{const note=new Notification(studentName(row),{body:window.CoachTaskDone.taskDoneMessage(items),tag:"yks-coach-task-"+row.studentUid+"-"+items[0].week+"-"+items[0].id});note.onclick=()=>{window.focus();dashboardStudentOpen(row.studentUid);note.close()}}catch{}
 }
 function coachV56RenderNotifyButton(){
   const button=$("messageNotifyBtn");if(!button)return;
@@ -5407,7 +5415,7 @@ window.addEventListener("offline",coachV58RenderSync);
 function coachV58NotifyNote(){
   if(typeof Notification==="undefined")return"Bu tarayıcı bildirim desteklemiyor";
   if(Notification.permission==="denied")return"Bildirim tarayıcıda engelli; tarayıcının site ayarlarından izin ver";
-  return"Panel açıkken başka sekmedeysen";
+  return"Yeni mesaj ve tamamlanan görev · panel açıkken başka sekmedeysen";
 }
 function coachV58RenderNotify(){
   const supported=typeof Notification!=="undefined",on=coachV56NotifyOn(),locked=!supported||Notification.permission==="denied";
