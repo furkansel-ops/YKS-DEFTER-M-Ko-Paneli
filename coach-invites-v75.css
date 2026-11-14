@@ -1,0 +1,20 @@
+/* v75 · Ayarlar › Koç davetleri (yalnız yönetici) */
+#coachInvitesCategory[hidden]{display:none!important}
+.coach-v75-new{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.coach-v75-new label{font-weight:600}
+.coach-v75-new select{min-height:40px}
+.coach-v75-primary{min-height:40px;padding:0 16px;border:0;border-radius:10px;background:var(--k-accent);color:var(--k-on-accent);font:inherit;font-weight:600;cursor:pointer}
+.coach-v75-primary:disabled{opacity:.6;cursor:progress}
+.coach-v75-status{min-height:1.2em;margin:10px 0 0;font-size:.9rem}
+.coach-v75-status.err{color:var(--coach-danger)}
+.coach-v75-status.ok{color:var(--coach-success)}
+.coach-v75-list{display:grid;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.coach-v75-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
+.coach-v75-row:not([data-status="open"]){opacity:.7}
+.coach-v75-code{display:grid;gap:2px;min-width:0}
+.coach-v75-code code{font-size:.95rem;letter-spacing:.06em;overflow-wrap:anywhere}
+.coach-v75-code small,.coach-v75-empty,.coach-v75-note{color:var(--muted);font-size:.82rem}
+.coach-v75-empty,.coach-v75-note{margin:12px 0 0}
+.coach-v75-actions{display:flex;gap:6px}
+.coach-v75-btn{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:none;color:inherit;font:inherit;cursor:pointer}
+.coach-v75-btn.danger{color:var(--coach-danger)}

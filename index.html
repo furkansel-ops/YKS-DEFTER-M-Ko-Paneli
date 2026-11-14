@@ -77,6 +77,7 @@
   <link rel="stylesheet" href="./coach-motion-v68.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-exam-tasks-v70.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-weekly-v74.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-invites-v75.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.0.0"></script>
 </head>
 <body>
@@ -1249,6 +1250,11 @@
                 <span class="coach-settings-category-copy"><b>Hesap ve oturum</b><small>Giriş, e-posta doğrulama, çıkış</small></span>
                 <span class="coach-settings-chevron" aria-hidden="true">›</span>
               </button>
+              <button class="coach-settings-category" type="button" id="coachInvitesCategory" data-settings-tab="invites" data-settings-search="davet kod koç kayıt yönetici" hidden>
+                <span class="coach-settings-category-icon">✚</span>
+                <span class="coach-settings-category-copy"><b>Koç davetleri</b><small>Yeni koç için tek kullanımlık kayıt kodu</small></span>
+                <span class="coach-settings-chevron" aria-hidden="true">›</span>
+              </button>
             </div>
 
             <label class="coach-v58-notify-row" data-settings-search="bildirim yeni mesaj tarayıcı">
@@ -1398,6 +1404,17 @@
 
             <section class="settings-section hidden" data-settings-panel="sync">
               <div id="coachV58SyncDetail" class="coach-v58-sync-detail" aria-live="polite"></div>
+            </section>
+
+            <section class="settings-section hidden" data-settings-panel="invites">
+              <div class="coach-v75-new">
+                <label for="coachInviteDays">Geçerlilik</label>
+                <select id="coachInviteDays"><option value="7" selected>7 gün</option><option value="14">14 gün</option><option value="30">30 gün</option></select>
+                <button type="button" id="coachInviteCreate" class="coach-v75-primary">Davet kodu üret</button>
+              </div>
+              <p id="coachInviteStatus" class="coach-v75-status" role="status" aria-live="polite"></p>
+              <div id="coachInviteList"><p class="coach-v75-empty">Davetler yükleniyor.</p></div>
+              <p class="coach-v75-note">Kod tek kullanımlıktır. Yeni koç, Koç Paneli'nde "Koç hesabı oluştur" ekranındaki davet kodu alanına girer.</p>
             </section>
 
             <section class="settings-section hidden" data-settings-panel="account">
@@ -1579,6 +1596,6 @@
   </div>
   <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52-photos52-reports53-students54-topics55-messages56-pp57-settings58"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.5"></script>
-  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./coach-exam-tasks-v70.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script><script defer src="./coach-motion-v68.js?v=1.0.0"></script><script defer src="./coach-ics-v72.js?v=1.0.0"></script><script defer src="./coach-task-done-v73.js?v=1.0.0"></script><script defer src="./coach-weekly-v74.js?v=1.0.0"></script>
+  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./coach-exam-tasks-v70.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script><script defer src="./coach-motion-v68.js?v=1.0.0"></script><script defer src="./coach-ics-v72.js?v=1.0.0"></script><script defer src="./coach-task-done-v73.js?v=1.0.0"></script><script defer src="./coach-weekly-v74.js?v=1.0.0"></script><script defer src="./coach-invites-v75.js?v=1.0.0"></script>
 </body>
 </html>

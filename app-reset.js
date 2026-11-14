@@ -2818,6 +2818,7 @@ function updateSettingsPill(textValue,state=""){
 }
 function settingsInitials(name){return initials(name||"Koç")}
 function hydrateCoachSettings(profile,user){
+  void coachV75CheckAdmin(user);
   currentCoachProfile=profile;
   currentCoachUser=user;
   const name=String(profile?.displayName||user?.displayName||"Koç");
@@ -2848,7 +2849,8 @@ const COACH_SETTINGS_META={
   messaging:{title:"Mesajlar ve bildirim",description:"Mesaj yazma, hızlı mesaj ve tarayıcı bildirimi tercihleri."},
   appearance:{title:"Görünüm",description:"Öğrencideki temaların aynısı."},
   account:{title:"Hesap ve oturum",description:"Giriş yöntemin, e-postanın doğrulanması ve oturum."},
-  sync:{title:"Bağlantı ve eşitleme",description:"Panelin şu anki gerçek durumu."}
+  sync:{title:"Bağlantı ve eşitleme",description:"Panelin şu anki gerçek durumu."},
+  invites:{title:"Koç davetleri",description:"Yeni koç için tek kullanımlık kayıt kodu üret; açık davetleri iptal et."}
 };
 function openCoachSettingsOverview(){
   const page=$("settingsPage"),overview=$("coachSettingsOverview"),detail=$("coachSettingsDetail");
@@ -2873,10 +2875,50 @@ function openCoachSettingsTab(tab){
   if($("coachSettingsDetailTitle"))$("coachSettingsDetailTitle").textContent=meta.title;
   if($("coachSettingsDetailDescription"))$("coachSettingsDetailDescription").textContent=meta.description;
   if(tab==="sync")coachV58RenderSync();
+  if(tab==="invites")void coachV75Load();
   try{window.scrollTo({top:0,behavior:"instant"})}catch{}
 }
 document.querySelectorAll("[data-settings-tab]").forEach(button=>button.addEventListener("click",()=>openCoachSettingsTab(button.dataset.settingsTab)));
 $("coachSettingsBack")?.addEventListener("click",openCoachSettingsOverview);
+// v75 · Koç davetleri: yalnız admins/{uid} kaydı olan hesapta görünür; kural da yalnız ona üretme, listeleme ve iptal izni verir.
+let coachV75Admin=false,coachV75Uid="";
+async function coachV75CheckAdmin(user){
+  const uid=user?.uid||"";if(!uid||uid===coachV75Uid)return;coachV75Uid=uid;
+  try{coachV75Admin=(await getDoc(doc(db,"admins",uid))).exists()}catch{coachV75Admin=false}
+  const category=$("coachInvitesCategory");if(category)category.hidden=!coachV75Admin;
+}
+function coachV75Status(message,tone=""){const node=$("coachInviteStatus");if(node){node.textContent=message;node.className="coach-v75-status"+(tone?" "+tone:"")}}
+function coachV75Date(ms){return ms?new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(ms)):"—"}
+async function coachV75Load(){
+  const root=$("coachInviteList"),api=window.CoachInvites;if(!root||!api||!coachV75Admin)return;
+  try{
+    const snap=await getDocs(collection(db,"coachRegistrationInvites"));
+    root.innerHTML=api.invitesHtml(api.inviteRows(snap.docs.map(d=>({id:d.id,data:d.data()})),Date.now()),{esc:escHtml,fmtDate:coachV75Date});
+  }catch(error){console.error("Koç davetleri",error);root.innerHTML='<p class="coach-v75-empty">Davetler yüklenemedi. Bağlantını ya da yönetici yetkini kontrol et.</p>'}
+}
+async function coachV75Create(){
+  const api=window.CoachInvites,user=auth.currentUser,button=$("coachInviteCreate");if(!api||!user||!coachV75Admin)return;
+  const picked=Number($("coachInviteDays")?.value),days=[7,14,30].includes(picked)?picked:7;
+  const code=api.makeInviteCode(n=>crypto.getRandomValues(new Uint8Array(n)));
+  if(button)button.disabled=true;coachV75Status("Davet oluşturuluyor…");
+  try{
+    await setDoc(doc(db,"coachRegistrationInvites",code),{status:"open",expiresAt:new Date(Date.now()+days*864e5),createdAt:serverTimestamp(),updatedAt:serverTimestamp(),createdBy:user.uid});
+    let copied=false;try{await navigator.clipboard.writeText(code);copied=true}catch{}
+    coachV75Status("Davet kodu hazır"+(copied?" ve kopyalandı":"")+": "+code+" · "+days+" gün geçerli","ok");
+    await coachV75Load();
+  }catch(error){console.error("Davet oluşturma",error);coachV75Status("Davet oluşturulamadı: "+text(error?.code||error?.message||"bilinmeyen hata",80),"err")}
+  finally{if(button)button.disabled=false}
+}
+$("coachInviteCreate")?.addEventListener("click",()=>void coachV75Create());
+$("coachInviteList")?.addEventListener("click",async event=>{
+  const copy=event.target.closest?.("[data-v75-copy]"),cancel=event.target.closest?.("[data-v75-cancel]");
+  if(copy){try{await navigator.clipboard.writeText(copy.dataset.v75Copy);coachV75Status("Kopyalandı: "+copy.dataset.v75Copy,"ok")}catch{coachV75Status("Kopyalanamadı; kodu elle seç","err")}return}
+  if(!cancel)return;
+  const code=cancel.dataset.v75Cancel;
+  if(!confirm(code+" davetini iptal etmek istiyor musun? Bu kodla artık kayıt olunamaz."))return;
+  try{const batch=writeBatch(db);batch.delete(doc(db,"coachRegistrationInvites",code));await batch.commit();coachV75Status("Davet iptal edildi","ok");await coachV75Load()}
+  catch(error){console.error("Davet iptali",error);coachV75Status("Davet iptal edilemedi","err")}
+});
 $("coachSettingsSearch")?.addEventListener("input",event=>{
   const query=String(event.currentTarget.value||"").trim().toLocaleLowerCase("tr-TR");
   const buttons=[...document.querySelectorAll("[data-settings-search]")];

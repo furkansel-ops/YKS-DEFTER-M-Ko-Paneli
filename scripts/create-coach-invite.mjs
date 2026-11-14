@@ -1,7 +1,7 @@
 // v69 · Yeni koç için tek kullanımlık kayıt daveti oluşturur ve kodu yazdırır.
 // Kullanım: node scripts/create-coach-invite.mjs [gün=7]
 // Önce `firebase login` gerekir. Proje sahibi kimliğiyle (IAM) yazdığı için Firestore kurallarına takılmaz;
-// kurallar istemcinin davet oluşturmasını zaten yasaklar.
+// istemciden yalnız yönetici (admins/{uid}) davet üretebilir; bkz. scripts/make-admin.mjs.
 import {randomInt} from "node:crypto";
 import {readFileSync} from "node:fs";
 import {createRequire} from "node:module";
@@ -17,7 +17,7 @@ export function makeCode() {
   return Array.from({length: 24}, () => ALPHABET[randomInt(ALPHABET.length)]).join("");
 }
 
-async function accessToken() {
+export async function accessToken() {
   const {clientId, clientSecret} = createRequire(import.meta.url)(path.join(TOOLS, "lib/api.js"));
   const cfg = JSON.parse(readFileSync(path.join(homedir(), ".config/configstore/firebase-tools.json"), "utf8"));
   const refresh = cfg?.tokens?.refresh_token;
