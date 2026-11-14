@@ -1,0 +1,10 @@
+/* v74 · Pano › Geçen hafta */
+.coach-v74-list{display:grid;gap:6px;padding-top:12px}
+.coach-v74-empty{margin:0;padding:14px 4px;color:var(--muted);font-size:13px}
+.coach-v74-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.coach-v74-name{display:grid;gap:2px;min-width:0}
+.coach-v74-name small{color:var(--muted);font-size:12.5px;line-height:1.4}
+.coach-v74-min{display:grid;justify-items:end;gap:2px;white-space:nowrap}
+.coach-v74-trend{font-size:12px;font-weight:600}
+.coach-v74-trend.up{color:var(--coach-success)}
+.coach-v74-trend.down{color:var(--coach-danger)}

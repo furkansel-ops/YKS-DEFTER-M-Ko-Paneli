@@ -363,10 +363,19 @@ function renderCoachDashboard(){
 
   document.querySelectorAll("[data-dashboard-student]").forEach(button=>button.addEventListener("click",()=>dashboardStudentOpen(button.dataset.dashboardStudent)));
   renderCoachTodo();
+  renderDashboardWeek();
   renderDashboardAppointments();
   renderCoachMessageBadges();
 }
 
+// v74 · Geçen hafta: öğrenci başına geçen Pzt–Paz özeti; satıra dokununca öğrenci açılır.
+function renderDashboardWeek(){
+  const root=$("dashboardWeek"),api=window.CoachWeekly;if(!root||!api)return;
+  const start=programCurrentWeekStart(),last=api.addDays(start,-7);
+  if($("dashboardWeekRange"))$("dashboardWeekRange").textContent=formatProgramWeek(last)+" · önceki haftaya göre çalışma süresi";
+  root.innerHTML=api.weeklyHtml(api.weeklyRows(coachReportRows,start,collectProgramDayTasks),{esc:escHtml,name:studentName,fmtMinutes:reportMinutes});
+  root.querySelectorAll("[data-v74-student]").forEach(button=>button.addEventListener("click",()=>dashboardStudentOpen(button.dataset.v74Student)));
+}
 // v38 · Bugün yapılacaklar: cevap bekleyen mesajlar, takip edilecekler, gelecek haftası boş olanlar.
 function coachPendingReplies(studentUid){
   const actions=messageActionsFor(studentUid);
