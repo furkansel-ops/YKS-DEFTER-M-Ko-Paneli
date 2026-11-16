@@ -1,0 +1,25 @@
+/* v76 · Denemeler › Hafta hafta */
+.coach-v76-card{margin-top:16px}
+.coach-v76-form{display:grid;grid-template-columns:minmax(0,150px) minmax(0,110px) minmax(0,1fr) auto;gap:8px;align-items:end;padding:12px 18px 0}
+.coach-v76-form label{display:grid;gap:4px;font-size:12px;font-weight:600;color:var(--k-muted)}
+.coach-v76-form :is(input,select){min-height:40px;padding:0 10px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:inherit;font:inherit;font-size:14px}
+.coach-v76-form button{min-height:40px}
+.coach-v76-status{margin:8px 18px 0;font-size:13px;color:var(--k-ok)}
+.coach-v76-status.error{color:var(--k-bad)}
+.coach-v76-status:empty{display:none}
+.coach-v76-weeks{display:grid;gap:8px;padding:14px 18px 18px}
+.coach-v76-week{padding:10px 12px;border:1px solid var(--k-line);border-radius:12px}
+.coach-v76-week.is-now{border-color:var(--k-accent);box-shadow:inset 3px 0 0 var(--k-accent)}
+.coach-v76-week header{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.coach-v76-week header small,.coach-v76-none{color:var(--k-muted);font-size:12.5px}
+.coach-v76-none{margin:6px 0 0}
+.coach-v76-week ul{display:grid;gap:4px;margin:8px 0 0;padding:0;list-style:none}
+.coach-v76-week li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center}
+.coach-v76-type{min-width:44px;padding:2px 6px;border:1px solid var(--k-line);border-radius:7px;font-size:11.5px;font-weight:700;text-align:center}
+.coach-v76-name{display:grid;min-width:0}
+.coach-v76-name b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coach-v76-name small{color:var(--k-muted);font-size:12px}
+.coach-v76-week em{font-style:normal;font-size:12.5px;font-weight:700;white-space:nowrap}
+.coach-v76-week li.plan em{color:var(--k-muted)}
+.coach-v76-week li.miss em{color:var(--k-bad)}
+@media(max-width:720px){.coach-v76-form{grid-template-columns:1fr 1fr}.coach-v76-form label:nth-child(3),.coach-v76-form button{grid-column:1/-1}}

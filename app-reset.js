@@ -1656,6 +1656,7 @@ function examKpi(label,value,note,tone=""){
 }
 function examTypeValue(){return $("examTypeSelect")?.value||"all"}
 function renderExamAnalysis(scope){
+  try{renderExamWeeks(scope==="all"?null:coachReportRows.find(x=>x.studentUid===scope)||null)}catch(error){console.error("v76 hafta hafta",error)}
   if(!coachReportRows.length){setExamEmpty("Henüz bağlı öğrenci yok","Öğrenci bağlandığında ve deneme eklediğinde sonuçlar burada görünür.");return}
   const type=examTypeValue();
   if(scope==="all"){renderExamOverview(type);return}
@@ -1806,6 +1807,31 @@ function renderExamStudent(row,type){
   setExamState("examStudentDetail");
 }
 $("examStudentSelect")?.addEventListener("change",event=>renderExamAnalysis(event.currentTarget.value));
+/* v76 · Hafta hafta denemeler ve koçun deneme planı (coach-exam-weeks-v76.js); plan coach_note/exam_plan_add olarak gider. */
+let examWeeksUid="",examWeeksBusy=false,examWeeksStatus={text:"",error:false};
+function renderExamWeeks(row){
+  const card=$("examWeeksCard"),api=window.CoachExamWeeks;if(!card)return;
+  card.classList.toggle("hidden",!row||!api);if(!row||!api)return;
+  if(examWeeksUid!==row.studentUid){examWeeksUid=row.studentUid;examWeeksStatus={text:"",error:false}}
+  const today=examDayKey(),date=$("examPlanDate");
+  if(date){date.min=today;if(!date.value||date.value<today)date.value=api.addDays(today,(6-new Date().getDay()+7)%7)}// varsayılan: ilk Cumartesi
+  $("examWeeksList").innerHTML=api.examWeeksHtml(api.examWeeks(row.share,today),{esc:escHtml});
+  const status=$("examPlanStatus");if(status){status.textContent=examWeeksStatus.text;status.classList.toggle("error",examWeeksStatus.error)}
+  const button=$("examPlanAdd");if(button)button.disabled=examWeeksBusy;
+}
+async function examWeeksSend(){
+  const row=coachReportRows.find(x=>x.studentUid===examWeeksUid),user=auth.currentUser,api=window.CoachExamWeeks;if(!row||!user||!api||examWeeksBusy)return;
+  const result=api.planPayload({date:$("examPlanDate")?.value,type:$("examPlanType")?.value,name:$("examPlanName")?.value},examDayKey());
+  if(result.error){examWeeksStatus={text:result.error,error:true};renderExamWeeks(row);return}
+  examWeeksBusy=true;examWeeksStatus={text:"",error:false};renderExamWeeks(row);
+  try{
+    await addDoc(collection(db,"coachingActions"),{studentUid:row.studentUid,coachUid:user.uid,type:"coach_note",payload:result.payload,status:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    if($("examPlanName"))$("examPlanName").value="";
+    examWeeksStatus={text:"“"+result.payload.name+"” gönderildi ✓ Öğrenci uygulamayı açınca Deneme takvimine eklenir.",error:false};
+  }catch(error){console.error("v76 deneme planı",error);examWeeksStatus={text:"Gönderilemedi: "+String(error?.message||"Bilinmeyen hata"),error:true}}
+  finally{examWeeksBusy=false;renderExamWeeks(coachReportRows.find(x=>x.studentUid===examWeeksUid)||row)}
+}
+$("examPlanAdd")?.addEventListener("click",()=>void examWeeksSend());
 $("examTypeSelect")?.addEventListener("change",()=>renderExamAnalysis($("examStudentSelect")?.value||"all"));
 $("examPeriodSelect")?.addEventListener("change",()=>renderExamAnalysis($("examStudentSelect")?.value||"all"));
 $("examRefreshBtn")?.addEventListener("click",()=>{const user=auth.currentUser;if(user){setExamState("examLoading");void loadCoachReports(user.uid)}});
