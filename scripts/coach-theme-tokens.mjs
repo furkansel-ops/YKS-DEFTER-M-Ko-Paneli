@@ -108,11 +108,40 @@ function readable(rgba,base=([r,g,b,a])=>css([r,g,b],a)){
 }
 function parseCss(value){return value.startsWith("#")?parse(value).slice(0,3):value.match(/[\d.]+/g).slice(0,3).map(Number)}
 
+// v77: öğrencideki v143 temaları. Renk tonu değişir, bağıl parlaklık korunur; Sade Mavi/Gece'deki okunurluk aynen kalır.
+const relLum=([r,g,b])=>{const f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4};return .2126*f(r)+.7152*f(g)+.0722*f(b)};
+function sameLum(h,s,target){let lo=0,hi=1;for(let i=0;i<24;i++){const mid=(lo+hi)/2;if(relLum(fromHsl(h,s,mid))<target)lo=mid;else hi=mid}return fromHsl(h,s,(lo+hi)/2)}
+// Açık temalar: maviler accentHue'ya, açık nötrler lightHue tonuna, koyu nötrler darkHue tonuna döner.
+function tinted(accentHue,lightHue,darkHue){return([r,g,b,a])=>{
+  // Ana mavi Sade Mavi'de #2366dc'ye koyulaştırılır (readable); yeni tonlar o parlaklığı alır.
+  const [h,s,l]=toHsl(r,g,b),lum=relLum(keyOf([r,g,b,a])==="2873f0"?[0x23,0x66,0xdc]:[r,g,b]);
+  if(s<.25||l>=.97){
+    if(l>=.995)return css([r,g,b],a);
+    if(l>=.8)return css(sameLum(lightHue,Math.min(.55,s+.3),lum),a);
+    return css(sameLum(darkHue,Math.max(s,.16),lum),a);
+  }
+  if(h>=190&&h<=235)return css(sameLum(accentHue+(h-217)*.3,Math.min(1,s*1.05),lum),a);
+  return css([r,g,b],a);
+}}
+const okyanus=tinted(192,198,205),orman=tinted(142,120,150),gunbatimi=tinted(14,24,16);
+// Gece yarısı: Gece eşlemesinin üstüne; koyu yüzeyler simsiyaha yaklaşır, gece mavisi vurgular mora döner.
+function geceyarisi(rgba){
+  const out=night(rgba),[r,g,b]=parseCss(out),a=out.startsWith("rgba")?Number(out.match(/[\d.]+/g)[3]):1;
+  const [h,s,l]=toHsl(r,g,b);
+  if(l<.35)return css(fromHsl(255,Math.min(s,.18),l*.42),a);
+  if(h>=200&&h<=240&&s>.25)return css(sameLum(262+(h-222)*.3,Math.min(1,s),relLum([r,g,b])),a);
+  return out;
+}
+
 const sorted=[...keys.keys()].sort();
 const lines=map=>sorted.map(key=>{const value=map(keys.get(key));return value?"--kc-"+key+":"+value+";":""}).join("");
 fs.writeFileSync(path.join(root,OUT),
   "/* Üretildi: scripts/coach-theme-tokens.mjs — elle düzenleme. Sade Mavi = var() yedekleri + okunur griler. */\n"
   +":root:not([data-theme]){"+lines(rgba=>readable(rgba))+"}\n"
   +":root[data-theme=\"night\"]{color-scheme:dark;"+lines(night)+"}\n"
-  +":root[data-theme=\"vivid\"]{"+lines(rgba=>readable(rgba,vivid)||vivid(rgba))+"}\n");
+  +":root[data-theme=\"vivid\"]{"+lines(rgba=>readable(rgba,vivid)||vivid(rgba))+"}\n"
+  +":root[data-theme=\"okyanus\"]{"+lines(rgba=>readable(rgba,okyanus)||okyanus(rgba))+"}\n"
+  +":root[data-theme=\"orman\"]{"+lines(rgba=>readable(rgba,orman)||orman(rgba))+"}\n"
+  +":root[data-theme=\"gunbatimi\"]{"+lines(rgba=>readable(rgba,gunbatimi)||gunbatimi(rgba))+"}\n"
+  +":root[data-theme=\"geceyarisi\"]{color-scheme:dark;"+lines(geceyarisi)+"}\n");
 console.log(files.length+" dosya, "+wrapped+" yeni sarma, "+sorted.length+" renk anahtarı");

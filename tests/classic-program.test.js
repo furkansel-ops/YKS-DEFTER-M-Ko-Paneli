@@ -235,7 +235,9 @@ test('empty weeks keep the classic sections and accept a directly entered date',
   assert.equal(h.$('programMainEmpty').classList.contains('hidden'),true);
   assert.match(h.$('programWeekBoard').querySelector('.student-program-summary').textContent,/0 planlanan/);
   h.$('programAddTaskBtn').click();
-  assert.equal(h.$('programTaskDate').value,'2026-11-16');
+  // Seçili hafta bugünü içeriyorsa varsayılan tarih bugündür, yoksa haftanın ilk günü (test hangi gün koşarsa koşsun).
+  const now=new Date(),today=[now.getFullYear(),now.getMonth()+1,now.getDate()].map((n,i)=>i?String(n).padStart(2,'0'):n).join('-');
+  assert.equal(h.$('programTaskDate').value,today>='2026-11-16'&&today<='2026-11-22'?today:'2026-11-16');
   h.change('programTaskDate','2026-11-19');
   h.change('programTaskText','AYT Matematik · Türev · 30 soru');
   h.$('programTaskSend').click();

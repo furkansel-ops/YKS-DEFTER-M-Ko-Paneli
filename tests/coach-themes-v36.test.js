@@ -51,7 +51,7 @@ test("v36 tema dosyaları yüklenir; tema ilk boyamadan önce uygulanır",()=>{
   assert.match(head,/<script src="\.\/coach-theme-boot-v36\.js\?v=[^"]+"><\/script>/);
   const boot=read("coach-theme-boot-v36.js");
   assert.match(boot,/yks_coach_ui_preferences_v2/);
-  assert.match(boot,/theme==="night"\|\|theme==="vivid"/);
+  assert.match(boot,/\["night","vivid","okyanus","orman","gunbatimi","geceyarisi"\]\.indexOf\(theme\)>=0/);
 });
 
 test("v36 panel CSS'inde ham renk kalmaz; her renk anahtarının Gece ve Canlı karşılığı vardır",()=>{
@@ -99,8 +99,8 @@ test("v36 yan menü öğrenci uygulaması gibi gruplu: Takip, Analiz, İletişim
 
 test("v36 Ayarlar › Görünüm üç temayı seçer, kaydeder ve uygular",t=>{
   const {w,doc}=fixture(t),buttons=[...doc.querySelectorAll("[data-coach-theme]")];
-  assert.deepEqual(buttons.map(b=>b.dataset.coachTheme),["refined-blue","night","vivid"]);
-  assert.deepEqual(buttons.map(b=>b.querySelector("b").textContent),["Sade Mavi","Gece","Canlı"]);
+  assert.deepEqual(buttons.map(b=>b.dataset.coachTheme),["refined-blue","night","vivid","okyanus","orman","gunbatimi","geceyarisi"]);
+  assert.deepEqual(buttons.map(b=>b.querySelector("b").textContent),["Sade Mavi","Gece","Canlı","Okyanus","Orman","Gün batımı","Gece yarısı"]);
   buttons[1].click();
   assert.equal(doc.documentElement.dataset.theme,"night");
   assert.equal(JSON.parse(w.localStorage.getItem("yks_coach_ui_preferences_v2")).theme,"night");

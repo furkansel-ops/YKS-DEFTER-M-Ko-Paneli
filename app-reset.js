@@ -2811,7 +2811,7 @@ $("coachNotesInput")?.addEventListener("input",event=>{
   coachNotesState("Kaydediliyor…");
   coachNotesTimer=setTimeout(()=>void saveCoachNotes(value),800);
 });
-const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#192134"},vivid:{name:"Canlı",color:"#6a2cff"}};
+const COACH_THEMES={"refined-blue":{name:"Sade Mavi",color:"#0d1728"},night:{name:"Gece",color:"#192134"},vivid:{name:"Canlı",color:"#6a2cff"},okyanus:{name:"Okyanus",color:"#0e7490"},orman:{name:"Orman",color:"#15803d"},gunbatimi:{name:"Gün batımı",color:"#c2410c"},geceyarisi:{name:"Gece yarısı",color:"#000000"}};
 function coachThemeId(value){return COACH_THEMES[value]?value:"refined-blue"}
 function applyCoachTheme(value){
   const theme=coachThemeId(value),root=document.documentElement;
