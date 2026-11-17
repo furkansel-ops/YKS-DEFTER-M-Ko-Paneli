@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-16T10:14:24.655Z",
+  "generatedAt": "2026-11-17T11:10:36.705Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2314,6 +2314,13 @@
       ],
       "videos": [
         {
+          "id": "0H7tAthFJFY",
+          "title": "Eyüp B. TYT İlk 12 Konu Denemesi Çözümleri 3.Deneme",
+          "url": "https://www.youtube.com/watch?v=0H7tAthFJFY",
+          "thumbnail": "https://i.ytimg.com/vi/0H7tAthFJFY/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
           "id": "8NyJH9fedmE",
           "title": "Eyüp B. TYT İlk 12 Konu Denemesi Çözümleri 2.Deneme",
           "url": "https://www.youtube.com/watch?v=8NyJH9fedmE",
@@ -2389,16 +2396,9 @@
           "url": "https://www.youtube.com/watch?v=wECHlsp74vo",
           "thumbnail": "https://i.ytimg.com/vi/wECHlsp74vo/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "aayZWi4WRMg",
-          "title": "Güzel bir TYT-AYT İlk 10 Soru Örneği",
-          "url": "https://www.youtube.com/watch?v=aayZWi4WRMg",
-          "thumbnail": "https://i.ytimg.com/vi/aayZWi4WRMg/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-16T10:08:59.100Z"
+      "refreshedAt": "2026-11-17T11:05:03.964Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3302,7 +3302,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-16T10:13:00.853Z"
+      "refreshedAt": "2026-11-17T11:09:09.187Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4527,7 +4527,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-16T10:13:23.009Z"
+      "refreshedAt": "2026-11-17T11:09:32.610Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6753,7 +6753,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-16T10:13:31.630Z"
+      "refreshedAt": "2026-11-17T11:09:41.598Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9272,7 +9272,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-16T10:13:41.002Z"
+      "refreshedAt": "2026-11-17T11:09:51.583Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -10141,7 +10141,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-16T10:13:49.048Z"
+      "refreshedAt": "2026-11-17T11:10:00.245Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10970,7 +10970,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-16T10:13:51.387Z"
+      "refreshedAt": "2026-11-17T11:10:02.818Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10983,7 +10983,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2314,
+      "videoCount": 2315,
       "playlistCount": 53,
       "archiveComplete": true,
       "playlists": [
@@ -11070,8 +11070,15 @@
           "id": "PLP-Ft3R0zOwc",
           "title": "MEŞAKKAT DİL BİLGİSİ SORU ÇÖZÜMÜ",
           "url": "https://www.youtube.com/playlist?list=PLP-Ft3R0zOwc",
-          "videoCount": 1,
+          "videoCount": 2,
           "videos": [
+            {
+              "id": "C8968NKpbDE",
+              "title": "NOKTALAMA İŞARETLERİ SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
+              "url": "https://www.youtube.com/watch?v=C8968NKpbDE",
+              "thumbnail": "https://i.ytimg.com/vi/C8968NKpbDE/hqdefault.jpg",
+              "channel": "Deniz Hoca"
+            },
             {
               "id": "Ji9qtxf-qc8",
               "title": "YAZIM KURALLARI SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
@@ -11769,6 +11776,13 @@
       ],
       "videos": [
         {
+          "id": "C8968NKpbDE",
+          "title": "NOKTALAMA İŞARETLERİ SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
+          "url": "https://www.youtube.com/watch?v=C8968NKpbDE",
+          "thumbnail": "https://i.ytimg.com/vi/C8968NKpbDE/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "Ji9qtxf-qc8",
           "title": "YAZIM KURALLARI SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
           "url": "https://www.youtube.com/watch?v=Ji9qtxf-qc8",
@@ -11844,16 +11858,9 @@
           "url": "https://www.youtube.com/watch?v=AUNik_SckG4",
           "thumbnail": "https://i.ytimg.com/vi/AUNik_SckG4/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "DNYX3GbpnXk",
-          "title": "10.SINIF 1.DÖNEM 1.YAZILI SORULARI / ORTAK SINAV",
-          "url": "https://www.youtube.com/watch?v=DNYX3GbpnXk",
-          "thumbnail": "https://i.ytimg.com/vi/DNYX3GbpnXk/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-16T10:14:24.651Z"
+      "refreshedAt": "2026-11-17T11:10:36.700Z"
     }
   }
 }
