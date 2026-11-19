@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-18T10:46:18.356Z",
+  "generatedAt": "2026-11-19T10:49:45.756Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2314,6 +2314,13 @@
       ],
       "videos": [
         {
+          "id": "9zWiz5PiSXA",
+          "title": "Eyüp B. TYT İlk 12 Konu Denemesi Çözümleri 4.Deneme",
+          "url": "https://www.youtube.com/watch?v=9zWiz5PiSXA",
+          "thumbnail": "https://i.ytimg.com/vi/9zWiz5PiSXA/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
           "id": "0H7tAthFJFY",
           "title": "Eyüp B. TYT İlk 12 Konu Denemesi Çözümleri 3.Deneme",
           "url": "https://www.youtube.com/watch?v=0H7tAthFJFY",
@@ -2389,16 +2396,9 @@
           "url": "https://www.youtube.com/watch?v=77XMIKqbNTE",
           "thumbnail": "https://i.ytimg.com/vi/77XMIKqbNTE/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "wECHlsp74vo",
-          "title": "Fonksiyon 2 Soru Çözümü | Gelişiyorum",
-          "url": "https://www.youtube.com/watch?v=wECHlsp74vo",
-          "thumbnail": "https://i.ytimg.com/vi/wECHlsp74vo/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-18T10:40:58.841Z"
+      "refreshedAt": "2026-11-19T10:44:03.103Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3302,7 +3302,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-18T10:45:00.940Z"
+      "refreshedAt": "2026-11-19T10:48:10.126Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4527,7 +4527,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-18T10:45:21.582Z"
+      "refreshedAt": "2026-11-19T10:48:35.839Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6753,7 +6753,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-18T10:45:29.586Z"
+      "refreshedAt": "2026-11-19T10:48:45.525Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9272,7 +9272,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-18T10:45:38.485Z"
+      "refreshedAt": "2026-11-19T10:48:56.054Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -10141,7 +10141,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-18T10:45:46.210Z"
+      "refreshedAt": "2026-11-19T10:49:05.581Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10970,7 +10970,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-18T10:45:48.318Z"
+      "refreshedAt": "2026-11-19T10:49:08.541Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10983,7 +10983,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2315,
+      "videoCount": 2316,
       "playlistCount": 53,
       "archiveComplete": true,
       "playlists": [
@@ -11070,8 +11070,15 @@
           "id": "PLP-Ft3R0zOwc",
           "title": "MEŞAKKAT DİL BİLGİSİ SORU ÇÖZÜMÜ",
           "url": "https://www.youtube.com/playlist?list=PLP-Ft3R0zOwc",
-          "videoCount": 2,
+          "videoCount": 3,
           "videos": [
+            {
+              "id": "SZ2dL9hRu8I",
+              "title": "SES BİLGİSİ SORU ÇÖZÜMÜ 🔥 62 SORU | Meşakkat Dil Bilgisi",
+              "url": "https://www.youtube.com/watch?v=SZ2dL9hRu8I",
+              "thumbnail": "https://i.ytimg.com/vi/SZ2dL9hRu8I/hqdefault.jpg",
+              "channel": "Deniz Hoca"
+            },
             {
               "id": "C8968NKpbDE",
               "title": "NOKTALAMA İŞARETLERİ SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
@@ -11776,6 +11783,13 @@
       ],
       "videos": [
         {
+          "id": "SZ2dL9hRu8I",
+          "title": "SES BİLGİSİ SORU ÇÖZÜMÜ 🔥 62 SORU | Meşakkat Dil Bilgisi",
+          "url": "https://www.youtube.com/watch?v=SZ2dL9hRu8I",
+          "thumbnail": "https://i.ytimg.com/vi/SZ2dL9hRu8I/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "C8968NKpbDE",
           "title": "NOKTALAMA İŞARETLERİ SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
           "url": "https://www.youtube.com/watch?v=C8968NKpbDE",
@@ -11851,16 +11865,9 @@
           "url": "https://www.youtube.com/watch?v=UexT5bTZzm8",
           "thumbnail": "https://i.ytimg.com/vi/UexT5bTZzm8/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "AUNik_SckG4",
-          "title": "9.Sınıf 1.Dönem 1.Yazılı FULL TEKRAR / Maarif Modeli",
-          "url": "https://www.youtube.com/watch?v=AUNik_SckG4",
-          "thumbnail": "https://i.ytimg.com/vi/AUNik_SckG4/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-18T10:46:18.345Z"
+      "refreshedAt": "2026-11-19T10:49:45.752Z"
     }
   }
 }
