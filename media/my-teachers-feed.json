@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-20T10:32:21.401Z",
+  "generatedAt": "2026-11-21T10:16:09.704Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -16,7 +16,7 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/eyup-b/index.json",
-      "videoCount": 4185,
+      "videoCount": 4186,
       "playlistCount": 36,
       "archiveComplete": true,
       "playlists": [
@@ -2314,6 +2314,13 @@
       ],
       "videos": [
         {
+          "id": "GZxmh1Lrlw4",
+          "title": "güzel bir fonksiyon sorusunu yorumla",
+          "url": "https://www.youtube.com/watch?v=GZxmh1Lrlw4",
+          "thumbnail": "https://i.ytimg.com/vi/GZxmh1Lrlw4/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
           "id": "1iSZ20q0hEU",
           "title": "Eyüp B. TYT İlk 12 Konu Denemesi Çözümleri 5.Deneme",
           "url": "https://www.youtube.com/watch?v=1iSZ20q0hEU",
@@ -2389,16 +2396,9 @@
           "url": "https://www.youtube.com/watch?v=HYijU7y79zk",
           "thumbnail": "https://i.ytimg.com/vi/HYijU7y79zk/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "mkvg0flOsu8",
-          "title": "3 Fonksiyon Sorusuna Yorumlar",
-          "url": "https://www.youtube.com/watch?v=mkvg0flOsu8",
-          "thumbnail": "https://i.ytimg.com/vi/mkvg0flOsu8/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-20T10:26:35.881Z"
+      "refreshedAt": "2026-11-21T10:10:20.583Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3253,7 +3253,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-20T10:30:44.870Z"
+      "refreshedAt": "2026-11-21T10:14:30.455Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4478,7 +4478,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-20T10:31:10.125Z"
+      "refreshedAt": "2026-11-21T10:14:57.187Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6704,7 +6704,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-20T10:31:19.868Z"
+      "refreshedAt": "2026-11-21T10:15:07.240Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9223,7 +9223,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-20T10:31:31.820Z"
+      "refreshedAt": "2026-11-21T10:15:18.833Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -10092,7 +10092,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-20T10:31:41.272Z"
+      "refreshedAt": "2026-11-21T10:15:28.483Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10921,7 +10921,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-20T10:31:45.164Z"
+      "refreshedAt": "2026-11-21T10:15:30.958Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10934,7 +10934,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2317,
+      "videoCount": 2318,
       "playlistCount": 53,
       "archiveComplete": true,
       "playlists": [
@@ -11734,6 +11734,13 @@
       ],
       "videos": [
         {
+          "id": "ggO2gwIjVcA",
+          "title": "Çok Değil, Verimli Çalış!",
+          "url": "https://www.youtube.com/watch?v=ggO2gwIjVcA",
+          "thumbnail": "https://i.ytimg.com/vi/ggO2gwIjVcA/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "SZ2dL9hRu8I",
           "title": "SES BİLGİSİ SORU ÇÖZÜMÜ 🔥 62 SORU | Meşakkat Dil Bilgisi",
           "url": "https://www.youtube.com/watch?v=SZ2dL9hRu8I",
@@ -11809,16 +11816,9 @@
           "url": "https://www.youtube.com/watch?v=lIWVoykFdDk",
           "thumbnail": "https://i.ytimg.com/vi/lIWVoykFdDk/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "UexT5bTZzm8",
-          "title": "10.Sınıf Edebiyat 1.Dönem 1.Yazılı FULL TEKRAR | Maarif Modeli Sınava Hazırlık",
-          "url": "https://www.youtube.com/watch?v=UexT5bTZzm8",
-          "thumbnail": "https://i.ytimg.com/vi/UexT5bTZzm8/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-20T10:32:21.395Z"
+      "refreshedAt": "2026-11-21T10:16:09.700Z"
     }
   }
 }
