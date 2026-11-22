@@ -1,6 +1,6 @@
-import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,GoogleAuthProvider,signInWithPopup,updateProfile,EmailAuthProvider,reauthenticateWithCredential,reauthenticateWithPopup,deleteUser}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,runTransaction,serverTimestamp,collection,query,where,getDocs,deleteDoc,updateDoc,writeBatch}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,signOut,setPersistence,browserLocalPersistence,GoogleAuthProvider,signInWithPopup,updateProfile,EmailAuthProvider,reauthenticateWithCredential,reauthenticateWithPopup,deleteUser}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,runTransaction,serverTimestamp,collection,query,where,getDocs,deleteDoc,updateDoc,writeBatch}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 /* v34 · Koç girişi ve kaydı: e-posta/şifre + Google, şifre sıfırlama.

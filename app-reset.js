@@ -1,6 +1,6 @@
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot,writeBatch}from"./coach-firestore-v78.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot,writeBatch}from"./coach-firestore-v78.js?v=13.4.0";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG,"yks-coach-panel");
