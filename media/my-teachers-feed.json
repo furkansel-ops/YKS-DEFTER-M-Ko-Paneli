@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-21T10:16:09.704Z",
+  "generatedAt": "2026-11-22T10:20:58.261Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -16,7 +16,7 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/eyup-b/index.json",
-      "videoCount": 4186,
+      "videoCount": 4187,
       "playlistCount": 36,
       "archiveComplete": true,
       "playlists": [
@@ -159,7 +159,7 @@
           "id": "PLXH23KK5BEgk",
           "title": "2027 YKS REHBERLİK",
           "url": "https://www.youtube.com/playlist?list=PLXH23KK5BEgk",
-          "videoCount": 17,
+          "videoCount": 18,
           "videos": [
             {
               "id": "6-FykvTaYQo",
@@ -278,6 +278,13 @@
               "title": "2027 AYT Matematik Nasıl Çalışılır?",
               "url": "https://www.youtube.com/watch?v=x0tY38buhRg",
               "thumbnail": "https://i.ytimg.com/vi/x0tY38buhRg/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "1nuBIdjhECM",
+              "title": "Hızlanmanın Formülü | Sorular ,Arayışlar",
+              "url": "https://www.youtube.com/watch?v=1nuBIdjhECM",
+              "thumbnail": "https://i.ytimg.com/vi/1nuBIdjhECM/hqdefault.jpg",
               "channel": "Eyüp B. Matematik Geometri"
             }
           ],
@@ -2314,6 +2321,13 @@
       ],
       "videos": [
         {
+          "id": "1nuBIdjhECM",
+          "title": "Hızlanmanın Formülü | Sorular ,Arayışlar",
+          "url": "https://www.youtube.com/watch?v=1nuBIdjhECM",
+          "thumbnail": "https://i.ytimg.com/vi/1nuBIdjhECM/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
           "id": "GZxmh1Lrlw4",
           "title": "güzel bir fonksiyon sorusunu yorumla",
           "url": "https://www.youtube.com/watch?v=GZxmh1Lrlw4",
@@ -2389,16 +2403,9 @@
           "url": "https://www.youtube.com/watch?v=FD01AWO4uHw",
           "thumbnail": "https://i.ytimg.com/vi/FD01AWO4uHw/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "HYijU7y79zk",
-          "title": "Zorlanmaya Başlanılan Zamanlar ve Çareler",
-          "url": "https://www.youtube.com/watch?v=HYijU7y79zk",
-          "thumbnail": "https://i.ytimg.com/vi/HYijU7y79zk/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-21T10:10:20.583Z"
+      "refreshedAt": "2026-11-22T10:15:22.493Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3253,7 +3260,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-21T10:14:30.455Z"
+      "refreshedAt": "2026-11-22T10:19:27.993Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4478,7 +4485,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-21T10:14:57.187Z"
+      "refreshedAt": "2026-11-22T10:19:52.402Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6704,7 +6711,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-21T10:15:07.240Z"
+      "refreshedAt": "2026-11-22T10:20:02.164Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9223,7 +9230,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-21T10:15:18.833Z"
+      "refreshedAt": "2026-11-22T10:20:12.579Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -10092,7 +10099,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-21T10:15:28.483Z"
+      "refreshedAt": "2026-11-22T10:20:21.243Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10921,7 +10928,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-21T10:15:30.958Z"
+      "refreshedAt": "2026-11-22T10:20:23.481Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -10934,7 +10941,7 @@
         "Edebiyat"
       ],
       "archiveIndex": "media/my-teachers/deniz-hoca/index.json",
-      "videoCount": 2318,
+      "videoCount": 2319,
       "playlistCount": 53,
       "archiveComplete": true,
       "playlists": [
@@ -11021,13 +11028,20 @@
           "id": "PLP-Ft3R0zOwc",
           "title": "MEŞAKKAT DİL BİLGİSİ SORU ÇÖZÜMÜ",
           "url": "https://www.youtube.com/playlist?list=PLP-Ft3R0zOwc",
-          "videoCount": 3,
+          "videoCount": 4,
           "videos": [
             {
               "id": "SZ2dL9hRu8I",
               "title": "SES BİLGİSİ SORU ÇÖZÜMÜ 🔥 62 SORU | Meşakkat Dil Bilgisi",
               "url": "https://www.youtube.com/watch?v=SZ2dL9hRu8I",
               "thumbnail": "https://i.ytimg.com/vi/SZ2dL9hRu8I/hqdefault.jpg",
+              "channel": "Deniz Hoca"
+            },
+            {
+              "id": "Ji9qtxf-qc8",
+              "title": "YAZIM KURALLARI SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
+              "url": "https://www.youtube.com/watch?v=Ji9qtxf-qc8",
+              "thumbnail": "https://i.ytimg.com/vi/Ji9qtxf-qc8/hqdefault.jpg",
               "channel": "Deniz Hoca"
             },
             {
@@ -11038,10 +11052,10 @@
               "channel": "Deniz Hoca"
             },
             {
-              "id": "Ji9qtxf-qc8",
-              "title": "YAZIM KURALLARI SORU ÇÖZÜMÜ 🔥 90 SORU | Meşakkat Dil Bilgisi",
-              "url": "https://www.youtube.com/watch?v=Ji9qtxf-qc8",
-              "thumbnail": "https://i.ytimg.com/vi/Ji9qtxf-qc8/hqdefault.jpg",
+              "id": "oYqrGxrQQlo",
+              "title": "SÖZCÜKTE YAPI SORU ÇÖZÜMÜ 🔥 61 SORU | Meşakkat Dil Bilgisi",
+              "url": "https://www.youtube.com/watch?v=oYqrGxrQQlo",
+              "thumbnail": "https://i.ytimg.com/vi/oYqrGxrQQlo/hqdefault.jpg",
               "channel": "Deniz Hoca"
             }
           ],
@@ -11734,6 +11748,13 @@
       ],
       "videos": [
         {
+          "id": "oYqrGxrQQlo",
+          "title": "SÖZCÜKTE YAPI SORU ÇÖZÜMÜ 🔥 61 SORU | Meşakkat Dil Bilgisi",
+          "url": "https://www.youtube.com/watch?v=oYqrGxrQQlo",
+          "thumbnail": "https://i.ytimg.com/vi/oYqrGxrQQlo/hqdefault.jpg",
+          "channel": "Deniz Hoca"
+        },
+        {
           "id": "ggO2gwIjVcA",
           "title": "Çok Değil, Verimli Çalış!",
           "url": "https://www.youtube.com/watch?v=ggO2gwIjVcA",
@@ -11809,16 +11830,9 @@
           "url": "https://www.youtube.com/watch?v=-yBXIMNN66E",
           "thumbnail": "https://i.ytimg.com/vi/-yBXIMNN66E/hqdefault.jpg",
           "channel": "Deniz Hoca"
-        },
-        {
-          "id": "lIWVoykFdDk",
-          "title": "11.SINIF 1.DÖNEM 1.YAZILI SORULARI / 3.SENARYO / ORTAK SINAV",
-          "url": "https://www.youtube.com/watch?v=lIWVoykFdDk",
-          "thumbnail": "https://i.ytimg.com/vi/lIWVoykFdDk/hqdefault.jpg",
-          "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-21T10:16:09.700Z"
+      "refreshedAt": "2026-11-22T10:20:58.257Z"
     }
   }
 }
