@@ -98,12 +98,14 @@ function vivid([r,g,b,a]){
   return css([r,g,b],a);
 }
 // Açık temalar: açık gri yazılar (orta açıklıkta nötrler) beyaz zeminde 4.5:1'e ulaşacak kadar koyulaşır.
-function readable(rgba,base=([r,g,b,a])=>css([r,g,b],a)){
+function readable(rgba,base=([r,g,b,a])=>css([r,g,b],a),keepLum=false){
   const [r,g,b,a]=rgba,[h,s,l]=toHsl(r,g,b);
   // Panelin ana mavisi yazı ve beyaz yazılı düğme zemini olarak 4.5:1'in altında kalıyordu.
   if(keyOf(rgba)==="2873f0"&&base(rgba)==="#2873f0")return"#2366dc";
   if(a<1||s>=.3||l<.5||l>=.72)return null;
   const [h2,s2]=toHsl(...parseCss(base(rgba)));
+  // v78: yeşil/turuncu aynı açıklıkta daha parlak görünür; v77 temaları Sade Mavi'deki koyulaştırmanın parlaklığını alır.
+  if(keepLum)return css(sameLum(h2,s2,relLum(fromHsl(h,s,.44))),1);
   return css(fromHsl(h2,s2,.44),1);
 }
 function parseCss(value){return value.startsWith("#")?parse(value).slice(0,3):value.match(/[\d.]+/g).slice(0,3).map(Number)}
@@ -140,8 +142,8 @@ fs.writeFileSync(path.join(root,OUT),
   +":root:not([data-theme]){"+lines(rgba=>readable(rgba))+"}\n"
   +":root[data-theme=\"night\"]{color-scheme:dark;"+lines(night)+"}\n"
   +":root[data-theme=\"vivid\"]{"+lines(rgba=>readable(rgba,vivid)||vivid(rgba))+"}\n"
-  +":root[data-theme=\"okyanus\"]{"+lines(rgba=>readable(rgba,okyanus)||okyanus(rgba))+"}\n"
-  +":root[data-theme=\"orman\"]{"+lines(rgba=>readable(rgba,orman)||orman(rgba))+"}\n"
-  +":root[data-theme=\"gunbatimi\"]{"+lines(rgba=>readable(rgba,gunbatimi)||gunbatimi(rgba))+"}\n"
+  +":root[data-theme=\"okyanus\"]{"+lines(rgba=>readable(rgba,okyanus,true)||okyanus(rgba))+"}\n"
+  +":root[data-theme=\"orman\"]{"+lines(rgba=>readable(rgba,orman,true)||orman(rgba))+"}\n"
+  +":root[data-theme=\"gunbatimi\"]{"+lines(rgba=>readable(rgba,gunbatimi,true)||gunbatimi(rgba))+"}\n"
   +":root[data-theme=\"geceyarisi\"]{color-scheme:dark;"+lines(geceyarisi)+"}\n");
 console.log(files.length+" dosya, "+wrapped+" yeni sarma, "+sorted.length+" renk anahtarı");
