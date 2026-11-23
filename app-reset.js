@@ -1,6 +1,6 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
 import{getAuth,GoogleAuthProvider,onAuthStateChanged,signInWithPopup,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot,writeBatch}from"./coach-firestore-v78.js?v=13.4.0";
+import{getFirestore,doc,getDoc,collection,getDocs,query,where,addDoc,setDoc,updateDoc,serverTimestamp,onSnapshot,writeBatch}from"./coach-firestore-v78.js?v=13.4.0-cache80";
 import{FIREBASE_CONFIG,COLLECTIONS}from"./firebase-config.js";
 
 const firebaseApp=initializeApp(FIREBASE_CONFIG,"yks-coach-panel");
@@ -211,6 +211,8 @@ function startCoachShareRealtime(){
   stopCoachShareRealtime();
   coachReportRows.forEach(row=>{
     const stop=onSnapshot(doc(db,"coachingShares",row.studentUid),snap=>{
+      // v80: kalıcı önbellekteki eski kopya görev bildirimlerini yeniden tetiklemesin; yalnız sunucu verisi işlenir.
+      if(snap.metadata?.fromCache)return;
       const target=coachReportRows.find(item=>item.studentUid===row.studentUid);if(!target)return;
       const before=target.share;
       target.share=snap.exists()?snap.data():null;scheduleCoachRealtimeRender();

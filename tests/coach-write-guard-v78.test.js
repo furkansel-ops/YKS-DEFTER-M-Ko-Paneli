@@ -28,7 +28,7 @@ test("v78 hızlı yazmada uyarı çıkmaz; ulaşmayan yazma uyarı verir, ulaş�
   fire(SLOW_MS);
   const box=doc.querySelector("#coachWriteGuard");
   assert.equal(box.hidden,false);assert.match(box.className,/is-wait/);
-  assert.match(box.textContent,/1 gönderim sunucuya ulaşmadı/);assert.match(box.textContent,/sekmeyi kapatma/);
+  assert.match(box.textContent,/1 gönderim sunucuya ulaşmadı/);assert.match(box.textContent,/bu cihazda saklandı/);assert.match(box.textContent,/bir sonraki açılışta/);
   slow.resolve();await tick();
   assert.match(box.className,/is-ok/);assert.match(box.textContent,/ulaştı/);
   assert.equal(leave(w),false);
@@ -46,10 +46,16 @@ test("v78 reddedilen yazma da bekleyenden düşer; hata gösterimi çağıranda 
 
 test("v78 Firestore yazmaları bekçiden geçer; panel sarmalayıcıyı yükler",()=>{
   const app=read("app-reset.js"),html=read("index.html"),wrap=read("coach-firestore-v78.js");
-  assert.match(app.split("\n")[2],/addDoc,setDoc,updateDoc,.*writeBatch\}from"\.\/coach-firestore-v78\.js\?v=13\.4\.0";$/);
+  assert.match(app.split("\n")[2],/addDoc,setDoc,updateDoc,.*writeBatch\}from"\.\/coach-firestore-v78\.js\?v=13\.4\.0-cache80";$/);
   assert.match(wrap,/export\*from"https:\/\/www\.gstatic\.com\/firebasejs\/13\.4\.0\/firebase-firestore\.js"/);
   for(const name of ["addDoc","setDoc","updateDoc"])assert.match(wrap,new RegExp("export const "+name+"=\\(\\.\\.\\.args\\)=>guard\\(fs\\."+name+"\\(\\.\\.\\.args\\)\\)"));
   assert.match(wrap,/batch\.commit=\(\)=>guard\(commit\(\)\)/);
-  assert.match(html,/<script defer src="\.\/coach-write-guard-v78\.js\?v=1\.0\.0"><\/script>/);
+  assert.match(html,/<script defer src="\.\/coach-write-guard-v78\.js\?v=1\.1\.0"><\/script>/);
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-write-guard-v78\.css\?v=1\.0\.0">/);
+});
+
+test("v80 kalıcı önbellek: Firestore IndexedDB ile açılır; canlı paylaşım önbellekteki eski kopyayı işlemez",()=>{
+  const wrap=read("coach-firestore-v78.js"),app=read("app-reset.js");
+  assert.match(wrap,/export function getFirestore\(app\)\{\n  try\{return fs\.initializeFirestore\(app,\{localCache:fs\.persistentLocalCache\(\{tabManager:fs\.persistentMultipleTabManager\(\)\}\)\}\)\}\n  catch\{return fs\.getFirestore\(app\)\}/);
+  assert.match(app,/onSnapshot\(doc\(db,"coachingShares",row\.studentUid\),snap=>\{\n[^\n]*\n      if\(snap\.metadata\?\.fromCache\)return;/);
 });

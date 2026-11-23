@@ -1,6 +1,6 @@
 /* v78 · Gönderim bekçisi: Firestore kota dolunca ya da bağlantı yokken yazmayı hata vermeden sonsuza dek yeniden dener;
-   panel kalıcı önbellek kullanmadığı için sekme kapanınca bekleyen gönderim kaybolur (16 Kasım'da deneme planları böyle gitti).
-   Bir yazma SLOW_MS içinde sunucuya ulaşmazsa koça uyarı çıkar; bekleyen varken sekme kapatılırsa tarayıcı sorar.
+   v80: kalıcı önbellek açık; bekleyen gönderim cihazda saklanır, panel sonraki açılışta gönderir (IndexedDB yoksa bellek: sekme kapanınca kaybolur).
+   Bir yazma SLOW_MS içinde sunucuya ulaşmazsa koça uyarı çıkar; bekleyen varken sekme kapatılırsa (önbellek açılamadıysa diye) tarayıcı yine sorar.
    Elle "tekrar dene" yok: SDK zaten tekrar dener, ikinci gönderim aynı görevi iki kez yazar. */
 (function(root){
 "use strict";
@@ -19,7 +19,7 @@ function createWriteGuard(win,opts={}){
     const late=[...pending].filter(item=>item.late).length;
     if(late){
       warned=true;win.clearTimeout(doneTimer);
-      show("is-wait","<b>"+late+" gönderim sunucuya ulaşmadı</b><span>Bağlantı yok ya da günlük kota doldu. Bu sekmeyi kapatma; sunucu açılınca kendiliğinden gönderilir.</span>");
+      show("is-wait","<b>"+late+" gönderim sunucuya ulaşmadı</b><span>Bağlantı yok ya da günlük kota doldu. Gönderim bu cihazda saklandı; sunucu açılınca kendiliğinden gider. Paneli kapatırsan bir sonraki açılışta gönderilir.</span>");
     }else if(warned&&!pending.size){
       warned=false;show("is-ok","<b>Bekleyen gönderimler ulaştı</b>");
       doneTimer=win.setTimeout(()=>{if(node)node.hidden=true},5000);
