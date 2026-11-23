@@ -102,12 +102,16 @@ function readable(rgba,base=([r,g,b,a])=>css([r,g,b],a),keepLum=false){
   const [r,g,b,a]=rgba,[h,s,l]=toHsl(r,g,b);
   // Panelin ana mavisi yazı ve beyaz yazılı düğme zemini olarak 4.5:1'in altında kalıyordu.
   if(keyOf(rgba)==="2873f0"&&base(rgba)==="#2873f0")return"#2366dc";
+  // v81: yalnız yazı rengi olan bu tonlar (Hata Defteri kırmızısı, Program yeşilleri, Konular grisi) açık zeminde 4.5:1'e koyulaşır.
+  if(TEXT_KEYS.has(keyOf(rgba))){const c=parseCss(base(rgba)),[h2,s2]=toHsl(...c);return relLum(c)>TEXT_LUM?css(sameLum(h2,s2,TEXT_LUM),1):null}
   if(a<1||s>=.3||l<.5||l>=.72)return null;
   const [h2,s2]=toHsl(...parseCss(base(rgba)));
   // v78: yeşil/turuncu aynı açıklıkta daha parlak görünür; v77 temaları Sade Mavi'deki koyulaştırmanın parlaklığını alır.
   if(keepLum)return css(sameLum(h2,s2,relLum(fromHsl(h,s,.44))),1);
   return css(fromHsl(h2,s2,.44),1);
 }
+// Panel zemini (#f3f6fd) ve temaların renkli zeminlerinde 4.5:1 payı bırakan bağıl parlaklık.
+const TEXT_KEYS=new Set(["d25a58","c85b5b","c35b5b","339578","148b75","2d8a69","6b7a90","637596"]),TEXT_LUM=.145;
 function parseCss(value){return value.startsWith("#")?parse(value).slice(0,3):value.match(/[\d.]+/g).slice(0,3).map(Number)}
 
 // v77: öğrencideki v143 temaları. Renk tonu değişir, bağıl parlaklık korunur; Sade Mavi/Gece'deki okunurluk aynen kalır.

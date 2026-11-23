@@ -102,11 +102,11 @@ body,.coach-shell-reset,.coach-shell-reset .coach-reset-canvas{background:var(--
 /* Ana sayfa: özet kart + 4 sayı */
 .coach-v36-top{display:grid;gap:12px;margin-bottom:16px}
 .dashboard-head.coach-v36-hero{display:block;margin:0;padding:22px 24px;border:0;border-radius:18px;background:var(--k-hero);color:var(--k-hero-ink)}
-.coach-v36-hero .dashboard-eyebrow{color:inherit;opacity:.85;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.coach-v36-hero .dashboard-eyebrow{color:inherit;opacity:.95;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .coach-v36-hero h1{margin:6px 0 4px;color:inherit}
-.coach-v36-hero p{margin:0;color:inherit;opacity:.9;font-size:13px}
+.coach-v36-hero p{margin:0;color:inherit;opacity:.95;font-size:13px}
 .coach-v36-hero-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.coach-v36-hero-actions button{min-height:44px;padding:0 15px;border:0;border-radius:12px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.18);color:inherit}
+.coach-v36-hero-actions button{min-height:44px;padding:0 15px;border:0;border-radius:12px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;background:rgba(0,0,0,.16);color:inherit}
 .coach-v36-hero-actions button:first-child{background:var(--k-hero-btn);color:var(--k-hero-btn-ink)}
 .coach-v36-hero-actions button:focus-visible{outline:2px solid var(--k-hero-ink);outline-offset:2px}
 .coach-v36-top .dashboard-stats{margin:0;gap:10px}
@@ -188,9 +188,9 @@ textarea.coach-v38-notes:focus-visible{outline:2px solid var(--k-accent);outline
    Yalnız data-theme yokken (Sade Mavi); Gece ve Canlı değişmez. Yazı tipi ve simgeler admin-v65.css'te. */
 :root:not([data-theme]){
   --k-bg:#f3f6fd;--k-line:#e6ecf7;--k-accent:#2453e6;--k-muted:#5d6a8a;--k-ink:#101b3d;
-  --k-hero:linear-gradient(135deg,#3d73ff 0%,#2453e6 55%,#1a3fc0 100%);--k-hero-btn-ink:#1a3fc0;
+  --k-hero:linear-gradient(135deg,#2e63f0 0%,#2453e6 55%,#1a3fc0 100%);--k-hero-btn-ink:#1a3fc0;
   --k-side-ink:#4b5878;--k-side-on:#e9f0ff;--k-side-on-ink:#1e46c8;
-  --k65-grad:linear-gradient(135deg,#3d73ff 0%,#2453e6 55%,#1a3fc0 100%);
+  --k65-grad:linear-gradient(135deg,#2e63f0 0%,#2453e6 55%,#1a3fc0 100%);
   --k65-shadow:0 10px 30px -14px rgba(30,64,175,.22);
 }
 :root:not([data-theme]) body,:root:not([data-theme]) .coach-shell-reset .coach-reset-canvas{
