@@ -38,9 +38,26 @@ test("v74: süre farkı, sıralama ve güvenli HTML",()=>{
 test("v74 bağlantı: pano kartı, stil, betik ve canlı yenileme",()=>{
   const app=read("app-reset.js"),html=read("index.html");
   assert.match(html,/<section class="dash-panel coach-v74-week"[^>]*>[\s\S]*?id="dashboardWeek"/);
-  assert.match(html,/<link rel="stylesheet" href="\.\/coach-weekly-v74\.css\?v=1\.0\.0">/);
-  assert.match(html,/<script defer src="\.\/coach-weekly-v74\.js\?v=1\.0\.0"><\/script>/);
+  assert.match(html,/<link rel="stylesheet" href="\.\/coach-weekly-v74\.css\?v=1\.1\.0">/);
+  assert.match(html,/<script defer src="\.\/coach-weekly-v74\.js\?v=1\.1\.0"><\/script>/);
   assert.match(app,/renderCoachTodo\(\);\n  renderDashboardWeek\(\);/);
   assert.match(app,/dashboardStudentOpen\(button\.dataset\.v74Student\)/);
   assert.doesNotMatch(read("coach-weekly-v74.css"),/#[0-9a-f]{3,8}\b|rgb\(/i,"ham renk yok");
+});
+
+test("v82 geçen haftanın değerlendirmesi satırın altında, kaçışlı; yoksa 'yazılmadı'",()=>{
+  const {reviewFor}=require("../coach-weekly-v74.js");
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const withReview={progress:{weeklyReviews:[{week:"2026-11-02",good:"eski",hard:"",focus:"",at:1},{week:LAST,good:"<script>x</script>",hard:"Fizik zor",focus:"",at:2}]}};
+  assert.deepEqual(reviewFor(withReview,LAST),{good:"<script>x</script>",hard:"Fizik zor",focus:""});
+  for(const bad of [{},{progress:{weeklyReviews:"x"}},{progress:{weeklyReviews:[null,{week:LAST}]}},null])assert.equal(reviewFor(bad,LAST),null,JSON.stringify(bad));
+  const rows=weeklyRows([{studentUid:"a",share:withReview},{studentUid:"b",share:{progress:{}}}],THIS,collect);
+  assert.equal(rows.find(r=>r.row.studentUid==="a").review.hard,"Fizik zor");
+  const html=weeklyHtml(rows,{esc,name:r=>r.studentUid,fmtMinutes:m=>m+" dk"});
+  assert.match(html,/<\/button><div class="coach-v82-review"><dl><div><dt>İyi gitti<\/dt><dd>&lt;script&gt;x&lt;\/script&gt;<\/dd><\/div><div><dt>Zorladı<\/dt><dd>Fizik zor<\/dd><\/div><\/dl><\/div>/);
+  assert.doesNotMatch(html,/<dt>Odak<\/dt>/,"boş cevap satırı yok");
+  assert.doesNotMatch(html,/eski/,"başka haftanın değerlendirmesi gösterilmez");
+  assert.match(html,/<p class="coach-v82-review is-empty">Değerlendirme yazılmadı<\/p>/);
+  assert.doesNotMatch(html,/<script>/);
+  assert.match(read("coach-weekly-v74.css"),/\.coach-v82-review/);
 });

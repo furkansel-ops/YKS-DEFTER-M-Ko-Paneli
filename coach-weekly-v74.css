@@ -8,3 +8,10 @@
 .coach-v74-trend{font-size:12px;font-weight:600}
 .coach-v74-trend.up{color:var(--coach-success)}
 .coach-v74-trend.down{color:var(--coach-danger)}
+/* v82 · Haftalık değerlendirme (öğrencinin yazdığı) */
+.coach-v82-review{margin:-2px 0 4px;padding:8px 12px;border-left:3px solid var(--k-accent);border-radius:0 10px 10px 0;background:var(--k-soft);font-size:12.5px;line-height:1.45}
+.coach-v82-review dl{display:grid;gap:4px;margin:0}
+.coach-v82-review dl>div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px}
+.coach-v82-review dt{color:var(--muted);font-weight:600}
+.coach-v82-review dd{margin:0;color:var(--k-ink);overflow-wrap:anywhere;white-space:pre-line}
+.coach-v82-review.is-empty{border-left-color:var(--line);background:none;color:var(--muted)}

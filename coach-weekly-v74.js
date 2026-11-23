@@ -24,10 +24,18 @@ function weekSummary(share,weekStart,collect){
   return out;
 }
 
+/** v82: öğrencinin o hafta için yazdığı haftalık değerlendirme (progress.weeklyReviews); yoksa null. */
+function reviewFor(share,weekStart){
+  const item=list(share?.progress?.weeklyReviews).find(r=>r&&r.week===weekStart);
+  if(!item)return null;
+  const out={good:String(item.good||""),hard:String(item.hard||""),focus:String(item.focus||"")};
+  return out.good||out.hard||out.focus?out:null;
+}
+
 /** Öğrenci başına geçen hafta ve önceki hafta; en az çalışan en üstte (koçun önce bakması gereken). */
 function weeklyRows(rows,thisWeekStart,collect){
   const last=addDays(thisWeekStart,-7),prev=addDays(thisWeekStart,-14);
-  return list(rows).filter(r=>r?.share).map(row=>({row,last:weekSummary(row.share,last,collect),prev:weekSummary(row.share,prev,collect)}))
+  return list(rows).filter(r=>r?.share).map(row=>({row,last:weekSummary(row.share,last,collect),prev:weekSummary(row.share,prev,collect),review:reviewFor(row.share,last)}))
     .sort((a,b)=>a.last.minutes-b.last.minutes);
 }
 
@@ -37,18 +45,24 @@ function minutesChange(last,prev){
   return Math.round((last.minutes-prev.minutes)/prev.minutes*100);
 }
 
+const REVIEW_LABELS=[["good","İyi gitti"],["hard","Zorladı"],["focus","Odak"]];
+function reviewHtml(review,esc){
+  if(!review)return'<p class="coach-v82-review is-empty">Değerlendirme yazılmadı</p>';
+  return'<div class="coach-v82-review"><dl>'+REVIEW_LABELS.filter(([key])=>review[key]).map(([key,label])=>'<div><dt>'+label+'</dt><dd>'+esc(review[key])+'</dd></div>').join("")+'</dl></div>';
+}
+
 function weeklyHtml(items,{esc,name,fmtMinutes}){
   if(!items.length)return'<p class="coach-v74-empty">Öğrenci paylaşımı geldikçe geçen haftanın özeti burada görünür.</p>';
-  return'<div class="coach-v74-list">'+items.map(({row,last,prev})=>{
+  return'<div class="coach-v74-list">'+items.map(({row,last,prev,review})=>{
     const change=minutesChange(last,prev);
     const trend=change===null?"":'<span class="coach-v74-trend '+(change>=0?"up":"down")+'" title="Önceki haftaya göre çalışma süresi">'+(change>=0?"▲ %":"▼ %")+Math.abs(change)+'</span>';
     const tasks=last.tasksTotal?last.tasksDone+"/"+last.tasksTotal+" görev":"Program yok";
     const facts=[tasks,last.questions+" soru",last.exams?last.exams+" deneme · ort. "+String(last.avgNet).replace(".",",")+" net":"Deneme yok",last.wrongs?last.wrongs+" yanlış kaydı":""].filter(Boolean);
-    return'<button type="button" class="coach-v74-row" data-v74-student="'+esc(row.studentUid)+'"><span class="coach-v74-name"><b>'+esc(name(row))+'</b><small>'+esc(facts.join(" · "))+'</small></span><span class="coach-v74-min"><b>'+esc(fmtMinutes(last.minutes))+'</b>'+trend+'</span></button>';
+    return'<button type="button" class="coach-v74-row" data-v74-student="'+esc(row.studentUid)+'"><span class="coach-v74-name"><b>'+esc(name(row))+'</b><small>'+esc(facts.join(" · "))+'</small></span><span class="coach-v74-min"><b>'+esc(fmtMinutes(last.minutes))+'</b>'+trend+'</span></button>'+reviewHtml(review,esc);
   }).join("")+'</div>';
 }
 
-const api={addDays,weekSummary,weeklyRows,minutesChange,weeklyHtml};
+const api={addDays,weekSummary,reviewFor,weeklyRows,minutesChange,weeklyHtml};
 root.CoachWeekly=api;
 if(typeof module!=="undefined"&&module.exports)module.exports=api;
 })(typeof window!=="undefined"?window:globalThis);
