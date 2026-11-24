@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-23T11:18:24.706Z",
+  "generatedAt": "2026-11-24T13:00:22.463Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -16,8 +16,8 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/eyup-b/index.json",
-      "videoCount": 4224,
-      "playlistCount": 37,
+      "videoCount": 4252,
+      "playlistCount": 38,
       "archiveComplete": true,
       "playlists": [
         {
@@ -156,177 +156,221 @@
           "contentComplete": true
         },
         {
+          "id": "PLe8hYti248NU",
+          "title": "10.sınıf fav",
+          "url": "https://www.youtube.com/playlist?list=PLe8hYti248NU",
+          "videoCount": 28,
+          "videos": [
+            {
+              "id": "NSmUNs1SBr4",
+              "title": "İstatistiksel Araştırma Süreci 1.Test 10.sınıf Fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=NSmUNs1SBr4",
+              "thumbnail": "https://i.ytimg.com/vi/NSmUNs1SBr4/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "F6WlULj746M",
+              "title": "İstatistiksel Araştırma Süreci 2.Test 10.sınıf Fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=F6WlULj746M",
+              "thumbnail": "https://i.ytimg.com/vi/F6WlULj746M/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "N_LZFgR3rKc",
+              "title": "İstatistiksel Araştırma Süreci 3.Test 10.sınıf Fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=N_LZFgR3rKc",
+              "thumbnail": "https://i.ytimg.com/vi/N_LZFgR3rKc/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "gxQvhUxjGdg",
+              "title": "İstatistiksel Araştırma Süreci 4.Test 10.sınıf Fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=gxQvhUxjGdg",
+              "thumbnail": "https://i.ytimg.com/vi/gxQvhUxjGdg/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "iKcpwwk2XIo",
+              "title": "İstatistiksel Araştırma Süreci 5.Test 10.sınıf Fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=iKcpwwk2XIo",
+              "thumbnail": "https://i.ytimg.com/vi/iKcpwwk2XIo/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "xNrqhIWOGeo",
+              "title": "İstatistikselAraştırma Süreci 6.Test 10.sınıf Fav matematik",
+              "url": "https://www.youtube.com/watch?v=xNrqhIWOGeo",
+              "thumbnail": "https://i.ytimg.com/vi/xNrqhIWOGeo/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "Qf0Zi8h5vWc",
+              "title": "İstatistiksel Araştırma Süreci Beceri Temelli 1.Test 10.sınıf fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=Qf0Zi8h5vWc",
+              "thumbnail": "https://i.ytimg.com/vi/Qf0Zi8h5vWc/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "mDucNiqQOPc",
+              "title": "İstatistiksel Araştırma Süreci Beceri Temelli 2.Test 10.sınıf fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=mDucNiqQOPc",
+              "thumbnail": "https://i.ytimg.com/vi/mDucNiqQOPc/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "IBTN3zucVME",
+              "title": "İstatistiksel Araştırma Süreci Bağlam Temelli 1.Test 10.sınıf fav matematik maarif model",
+              "url": "https://www.youtube.com/watch?v=IBTN3zucVME",
+              "thumbnail": "https://i.ytimg.com/vi/IBTN3zucVME/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "sd9skPFXOZM",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=sd9skPFXOZM",
+              "thumbnail": "https://i.ytimg.com/vi/sd9skPFXOZM/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "Va9SmfZbYWg",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=Va9SmfZbYWg",
+              "thumbnail": "https://i.ytimg.com/vi/Va9SmfZbYWg/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "mhckYZyXLp4",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=mhckYZyXLp4",
+              "thumbnail": "https://i.ytimg.com/vi/mhckYZyXLp4/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "k-Z_voq0fpg",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=k-Z_voq0fpg",
+              "thumbnail": "https://i.ytimg.com/vi/k-Z_voq0fpg/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "G7eQM2JXgHk",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=G7eQM2JXgHk",
+              "thumbnail": "https://i.ytimg.com/vi/G7eQM2JXgHk/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "roBhm-8M_sM",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=roBhm-8M_sM",
+              "thumbnail": "https://i.ytimg.com/vi/roBhm-8M_sM/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "_6QRYqgh4C4",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=_6QRYqgh4C4",
+              "thumbnail": "https://i.ytimg.com/vi/_6QRYqgh4C4/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "5dbPGbYiXxU",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=5dbPGbYiXxU",
+              "thumbnail": "https://i.ytimg.com/vi/5dbPGbYiXxU/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "xkmtgDAINgc",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=xkmtgDAINgc",
+              "thumbnail": "https://i.ytimg.com/vi/xkmtgDAINgc/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "22fDrjl5U2E",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=22fDrjl5U2E",
+              "thumbnail": "https://i.ytimg.com/vi/22fDrjl5U2E/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "V2cARZ4LvxA",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=V2cARZ4LvxA",
+              "thumbnail": "https://i.ytimg.com/vi/V2cARZ4LvxA/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "DRmoyZwxBck",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=DRmoyZwxBck",
+              "thumbnail": "https://i.ytimg.com/vi/DRmoyZwxBck/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "rLkcybPLX20",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=rLkcybPLX20",
+              "thumbnail": "https://i.ytimg.com/vi/rLkcybPLX20/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "RUMm3tueCqk",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=RUMm3tueCqk",
+              "thumbnail": "https://i.ytimg.com/vi/RUMm3tueCqk/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "vUwPrd4qfBQ",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=vUwPrd4qfBQ",
+              "thumbnail": "https://i.ytimg.com/vi/vUwPrd4qfBQ/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "2Ky5mBs_blk",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=2Ky5mBs_blk",
+              "thumbnail": "https://i.ytimg.com/vi/2Ky5mBs_blk/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "NTG41r2vHnA",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=NTG41r2vHnA",
+              "thumbnail": "https://i.ytimg.com/vi/NTG41r2vHnA/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "Ol3xCctljoM",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=Ol3xCctljoM",
+              "thumbnail": "https://i.ytimg.com/vi/Ol3xCctljoM/hqdefault.jpg",
+              "channel": "Eyüp B."
+            },
+            {
+              "id": "bEkMSJPQwGY",
+              "title": "YouTube videosu",
+              "url": "https://www.youtube.com/watch?v=bEkMSJPQwGY",
+              "thumbnail": "https://i.ytimg.com/vi/bEkMSJPQwGY/hqdefault.jpg",
+              "channel": "Eyüp B."
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLR7iuCy64ZVQ",
           "title": "9.sınıf fav",
           "url": "https://www.youtube.com/playlist?list=PLR7iuCy64ZVQ",
           "videoCount": 36,
           "videos": [
             {
-              "id": "6HOStfhNUxk",
-              "title": "16nicelikler ve değişimler sabit fonksiyon 1 test",
-              "url": "https://www.youtube.com/watch?v=6HOStfhNUxk",
-              "thumbnail": "https://i.ytimg.com/vi/6HOStfhNUxk/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "e27N-Ys16I8",
-              "title": "24nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 9 test",
-              "url": "https://www.youtube.com/watch?v=e27N-Ys16I8",
-              "thumbnail": "https://i.ytimg.com/vi/e27N-Ys16I8/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "T46_5ERjusw",
-              "title": "19nicelikler ve değişimler mutlak değer fonksiyonu 4 test",
-              "url": "https://www.youtube.com/watch?v=T46_5ERjusw",
-              "thumbnail": "https://i.ytimg.com/vi/T46_5ERjusw/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "cEzIBiiXREw",
-              "title": "10nicelikler ve değişimler 9 test",
-              "url": "https://www.youtube.com/watch?v=cEzIBiiXREw",
-              "thumbnail": "https://i.ytimg.com/vi/cEzIBiiXREw/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "TWpY9U6AXbU",
-              "title": "18nicelikler ve değişimler parçalı fonksiyon 3 test",
-              "url": "https://www.youtube.com/watch?v=TWpY9U6AXbU",
-              "thumbnail": "https://i.ytimg.com/vi/TWpY9U6AXbU/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "4leNz2EG4-0",
-              "title": "17nicelikler ve değişimler parçalı fonksiyon 2 test",
-              "url": "https://www.youtube.com/watch?v=4leNz2EG4-0",
-              "thumbnail": "https://i.ytimg.com/vi/4leNz2EG4-0/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "JcnBXoLLZLE",
-              "title": "30nicelikler ve değişimler m değer fonk beceri temelli 3 test",
-              "url": "https://www.youtube.com/watch?v=JcnBXoLLZLE",
-              "thumbnail": "https://i.ytimg.com/vi/JcnBXoLLZLE/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "AUHnJQJFHf0",
-              "title": "12nicelikler ve değişimler beceri temelli 1 test",
-              "url": "https://www.youtube.com/watch?v=AUHnJQJFHf0",
-              "thumbnail": "https://i.ytimg.com/vi/AUHnJQJFHf0/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "l75olIZIbLQ",
-              "title": "7nicelikler ve değişimler y=axfonksiyonu 6 test",
-              "url": "https://www.youtube.com/watch?v=l75olIZIbLQ",
-              "thumbnail": "https://i.ytimg.com/vi/l75olIZIbLQ/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "BZT_Cf7lOpA",
-              "title": "11nicelikler ve değişimler 10 test",
-              "url": "https://www.youtube.com/watch?v=BZT_Cf7lOpA",
-              "thumbnail": "https://i.ytimg.com/vi/BZT_Cf7lOpA/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "01HrrR_PW70",
-              "title": "13nicelikler ve değişimler beceri temelli 2 test",
-              "url": "https://www.youtube.com/watch?v=01HrrR_PW70",
-              "thumbnail": "https://i.ytimg.com/vi/01HrrR_PW70/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "rc4o9KPKGpU",
-              "title": "22nicelikler ve değişimler y= mutlak ax+b fonksiyonu 7 test",
-              "url": "https://www.youtube.com/watch?v=rc4o9KPKGpU",
-              "thumbnail": "https://i.ytimg.com/vi/rc4o9KPKGpU/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "Cznjs4oFhR4",
-              "title": "35nicelikler ve değişimler fonksiyon problemleri beceri temelli 1 test",
-              "url": "https://www.youtube.com/watch?v=Cznjs4oFhR4",
-              "thumbnail": "https://i.ytimg.com/vi/Cznjs4oFhR4/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
               "id": "bVk58ZBSg-E",
               "title": "1nicelikler ve değişimler doğrusal ilişki 1 test fav yayınları 9.sınıf matematik",
               "url": "https://www.youtube.com/watch?v=bVk58ZBSg-E",
               "thumbnail": "https://i.ytimg.com/vi/bVk58ZBSg-E/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "8bmuPrrh_iE",
-              "title": "15nicelikler ve değişimler bağlam temelli 2 test",
-              "url": "https://www.youtube.com/watch?v=8bmuPrrh_iE",
-              "thumbnail": "https://i.ytimg.com/vi/8bmuPrrh_iE/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "JpMKUBFmN5U",
-              "title": "36nicelikler ve değişimler fonksiyon problemleri bağlam temelli 1 test",
-              "url": "https://www.youtube.com/watch?v=JpMKUBFmN5U",
-              "thumbnail": "https://i.ytimg.com/vi/JpMKUBFmN5U/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "EVphnst0zp4",
-              "title": "8nicelikler ve değişimler y=x+k fonksiyonu 7 test",
-              "url": "https://www.youtube.com/watch?v=EVphnst0zp4",
-              "thumbnail": "https://i.ytimg.com/vi/EVphnst0zp4/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "vz9jmIg9Evg",
-              "title": "34nicelikler ve değişimler fonksiyon problemleri 3 test",
-              "url": "https://www.youtube.com/watch?v=vz9jmIg9Evg",
-              "thumbnail": "https://i.ytimg.com/vi/vz9jmIg9Evg/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "cOtnaAHt6qA",
-              "title": "32nicelikler ve değişimler fonksiyon problemleri 1 test",
-              "url": "https://www.youtube.com/watch?v=cOtnaAHt6qA",
-              "thumbnail": "https://i.ytimg.com/vi/cOtnaAHt6qA/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "CtkDc2HscMI",
-              "title": "27nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 12 test",
-              "url": "https://www.youtube.com/watch?v=CtkDc2HscMI",
-              "thumbnail": "https://i.ytimg.com/vi/CtkDc2HscMI/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "_ENuBcLQ5nE",
-              "title": "29nicelikler ve değişimler m değer fonk beceri temelli 2 test",
-              "url": "https://www.youtube.com/watch?v=_ENuBcLQ5nE",
-              "thumbnail": "https://i.ytimg.com/vi/_ENuBcLQ5nE/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "2T2DeGI2BtE",
-              "title": "33nicelikler ve değişimler fonksiyon problemleri 2 test",
-              "url": "https://www.youtube.com/watch?v=2T2DeGI2BtE",
-              "thumbnail": "https://i.ytimg.com/vi/2T2DeGI2BtE/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "C3JzgMB6tfA",
-              "title": "31nicelikler ve değişimler m değer fonk bağlam temelli 1 test",
-              "url": "https://www.youtube.com/watch?v=C3JzgMB6tfA",
-              "thumbnail": "https://i.ytimg.com/vi/C3JzgMB6tfA/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "WcURTdE4UIU",
-              "title": "14nicelikler ve değişimler bağlam temelli 1 test",
-              "url": "https://www.youtube.com/watch?v=WcURTdE4UIU",
-              "thumbnail": "https://i.ytimg.com/vi/WcURTdE4UIU/hqdefault.jpg",
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
@@ -337,38 +381,10 @@
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
-              "id": "ll-xToIgNHo",
-              "title": "28nicelikler ve değişimler m değer fonk beceri temelli 1 test",
-              "url": "https://www.youtube.com/watch?v=ll-xToIgNHo",
-              "thumbnail": "https://i.ytimg.com/vi/ll-xToIgNHo/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "gtnrh4UM1g4",
-              "title": "5nicelikler ve değişimlerreferans fonksiyonu y=x 5 test 1",
-              "url": "https://www.youtube.com/watch?v=gtnrh4UM1g4",
-              "thumbnail": "https://i.ytimg.com/vi/gtnrh4UM1g4/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "pel7gw2xYRc",
-              "title": "21nicelikler ve değişimler y= mutlak ax+b fonksiyonu 6 test",
-              "url": "https://www.youtube.com/watch?v=pel7gw2xYRc",
-              "thumbnail": "https://i.ytimg.com/vi/pel7gw2xYRc/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "cuOIwU61QHw",
-              "title": "9nicelikler ve değişimlery=ax+b fonksiyonu 8 test",
-              "url": "https://www.youtube.com/watch?v=cuOIwU61QHw",
-              "thumbnail": "https://i.ytimg.com/vi/cuOIwU61QHw/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "BLg4SyLhLsU",
-              "title": "20nicelikler ve değişimler y= mutlakx fonksiyonu 5 test",
-              "url": "https://www.youtube.com/watch?v=BLg4SyLhLsU",
-              "thumbnail": "https://i.ytimg.com/vi/BLg4SyLhLsU/hqdefault.jpg",
+              "id": "PSOyhnohJsM",
+              "title": "3nicelikler ve değişimler 3 test",
+              "url": "https://www.youtube.com/watch?v=PSOyhnohJsM",
+              "thumbnail": "https://i.ytimg.com/vi/PSOyhnohJsM/hqdefault.jpg",
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
@@ -379,17 +395,10 @@
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
-              "id": "3zEjmQyb7qg",
-              "title": "26nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 11 test",
-              "url": "https://www.youtube.com/watch?v=3zEjmQyb7qg",
-              "thumbnail": "https://i.ytimg.com/vi/3zEjmQyb7qg/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "pk25FfakdWI",
-              "title": "25nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 10 test",
-              "url": "https://www.youtube.com/watch?v=pk25FfakdWI",
-              "thumbnail": "https://i.ytimg.com/vi/pk25FfakdWI/hqdefault.jpg",
+              "id": "gtnrh4UM1g4",
+              "title": "5nicelikler ve değişimlerreferans fonksiyonu y=x 5 test 1",
+              "url": "https://www.youtube.com/watch?v=gtnrh4UM1g4",
+              "thumbnail": "https://i.ytimg.com/vi/gtnrh4UM1g4/hqdefault.jpg",
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
@@ -400,6 +409,118 @@
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
+              "id": "l75olIZIbLQ",
+              "title": "7nicelikler ve değişimler y=axfonksiyonu 6 test",
+              "url": "https://www.youtube.com/watch?v=l75olIZIbLQ",
+              "thumbnail": "https://i.ytimg.com/vi/l75olIZIbLQ/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "EVphnst0zp4",
+              "title": "8nicelikler ve değişimler y=x+k fonksiyonu 7 test",
+              "url": "https://www.youtube.com/watch?v=EVphnst0zp4",
+              "thumbnail": "https://i.ytimg.com/vi/EVphnst0zp4/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "cuOIwU61QHw",
+              "title": "9nicelikler ve değişimlery=ax+b fonksiyonu 8 test",
+              "url": "https://www.youtube.com/watch?v=cuOIwU61QHw",
+              "thumbnail": "https://i.ytimg.com/vi/cuOIwU61QHw/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "cEzIBiiXREw",
+              "title": "10nicelikler ve değişimler 9 test",
+              "url": "https://www.youtube.com/watch?v=cEzIBiiXREw",
+              "thumbnail": "https://i.ytimg.com/vi/cEzIBiiXREw/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "BZT_Cf7lOpA",
+              "title": "11nicelikler ve değişimler 10 test",
+              "url": "https://www.youtube.com/watch?v=BZT_Cf7lOpA",
+              "thumbnail": "https://i.ytimg.com/vi/BZT_Cf7lOpA/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "AUHnJQJFHf0",
+              "title": "12nicelikler ve değişimler beceri temelli 1 test",
+              "url": "https://www.youtube.com/watch?v=AUHnJQJFHf0",
+              "thumbnail": "https://i.ytimg.com/vi/AUHnJQJFHf0/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "01HrrR_PW70",
+              "title": "13nicelikler ve değişimler beceri temelli 2 test",
+              "url": "https://www.youtube.com/watch?v=01HrrR_PW70",
+              "thumbnail": "https://i.ytimg.com/vi/01HrrR_PW70/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "WcURTdE4UIU",
+              "title": "14nicelikler ve değişimler bağlam temelli 1 test",
+              "url": "https://www.youtube.com/watch?v=WcURTdE4UIU",
+              "thumbnail": "https://i.ytimg.com/vi/WcURTdE4UIU/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "8bmuPrrh_iE",
+              "title": "15nicelikler ve değişimler bağlam temelli 2 test",
+              "url": "https://www.youtube.com/watch?v=8bmuPrrh_iE",
+              "thumbnail": "https://i.ytimg.com/vi/8bmuPrrh_iE/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "6HOStfhNUxk",
+              "title": "16nicelikler ve değişimler sabit fonksiyon 1 test",
+              "url": "https://www.youtube.com/watch?v=6HOStfhNUxk",
+              "thumbnail": "https://i.ytimg.com/vi/6HOStfhNUxk/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "4leNz2EG4-0",
+              "title": "17nicelikler ve değişimler parçalı fonksiyon 2 test",
+              "url": "https://www.youtube.com/watch?v=4leNz2EG4-0",
+              "thumbnail": "https://i.ytimg.com/vi/4leNz2EG4-0/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "TWpY9U6AXbU",
+              "title": "18nicelikler ve değişimler parçalı fonksiyon 3 test",
+              "url": "https://www.youtube.com/watch?v=TWpY9U6AXbU",
+              "thumbnail": "https://i.ytimg.com/vi/TWpY9U6AXbU/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "T46_5ERjusw",
+              "title": "19nicelikler ve değişimler mutlak değer fonksiyonu 4 test",
+              "url": "https://www.youtube.com/watch?v=T46_5ERjusw",
+              "thumbnail": "https://i.ytimg.com/vi/T46_5ERjusw/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "BLg4SyLhLsU",
+              "title": "20nicelikler ve değişimler y= mutlakx fonksiyonu 5 test",
+              "url": "https://www.youtube.com/watch?v=BLg4SyLhLsU",
+              "thumbnail": "https://i.ytimg.com/vi/BLg4SyLhLsU/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "pel7gw2xYRc",
+              "title": "21nicelikler ve değişimler y= mutlak ax+b fonksiyonu 6 test",
+              "url": "https://www.youtube.com/watch?v=pel7gw2xYRc",
+              "thumbnail": "https://i.ytimg.com/vi/pel7gw2xYRc/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "rc4o9KPKGpU",
+              "title": "22nicelikler ve değişimler y= mutlak ax+b fonksiyonu 7 test",
+              "url": "https://www.youtube.com/watch?v=rc4o9KPKGpU",
+              "thumbnail": "https://i.ytimg.com/vi/rc4o9KPKGpU/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
               "id": "pRjQGWXt9Uc",
               "title": "23nicelikler ve değişimler y= mutlak ax+b fonksiyonu 8 test",
               "url": "https://www.youtube.com/watch?v=pRjQGWXt9Uc",
@@ -407,10 +528,94 @@
               "channel": "Eyüp B. Matematik Geometri"
             },
             {
-              "id": "PSOyhnohJsM",
-              "title": "3nicelikler ve değişimler 3 test",
-              "url": "https://www.youtube.com/watch?v=PSOyhnohJsM",
-              "thumbnail": "https://i.ytimg.com/vi/PSOyhnohJsM/hqdefault.jpg",
+              "id": "e27N-Ys16I8",
+              "title": "24nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 9 test",
+              "url": "https://www.youtube.com/watch?v=e27N-Ys16I8",
+              "thumbnail": "https://i.ytimg.com/vi/e27N-Ys16I8/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "pk25FfakdWI",
+              "title": "25nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 10 test",
+              "url": "https://www.youtube.com/watch?v=pk25FfakdWI",
+              "thumbnail": "https://i.ytimg.com/vi/pk25FfakdWI/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "3zEjmQyb7qg",
+              "title": "26nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 11 test",
+              "url": "https://www.youtube.com/watch?v=3zEjmQyb7qg",
+              "thumbnail": "https://i.ytimg.com/vi/3zEjmQyb7qg/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "CtkDc2HscMI",
+              "title": "27nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 12 test",
+              "url": "https://www.youtube.com/watch?v=CtkDc2HscMI",
+              "thumbnail": "https://i.ytimg.com/vi/CtkDc2HscMI/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "ll-xToIgNHo",
+              "title": "28nicelikler ve değişimler m değer fonk beceri temelli 1 test",
+              "url": "https://www.youtube.com/watch?v=ll-xToIgNHo",
+              "thumbnail": "https://i.ytimg.com/vi/ll-xToIgNHo/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "_ENuBcLQ5nE",
+              "title": "29nicelikler ve değişimler m değer fonk beceri temelli 2 test",
+              "url": "https://www.youtube.com/watch?v=_ENuBcLQ5nE",
+              "thumbnail": "https://i.ytimg.com/vi/_ENuBcLQ5nE/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "JcnBXoLLZLE",
+              "title": "30nicelikler ve değişimler m değer fonk beceri temelli 3 test",
+              "url": "https://www.youtube.com/watch?v=JcnBXoLLZLE",
+              "thumbnail": "https://i.ytimg.com/vi/JcnBXoLLZLE/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "C3JzgMB6tfA",
+              "title": "31nicelikler ve değişimler m değer fonk bağlam temelli 1 test",
+              "url": "https://www.youtube.com/watch?v=C3JzgMB6tfA",
+              "thumbnail": "https://i.ytimg.com/vi/C3JzgMB6tfA/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "cOtnaAHt6qA",
+              "title": "32nicelikler ve değişimler fonksiyon problemleri 1 test",
+              "url": "https://www.youtube.com/watch?v=cOtnaAHt6qA",
+              "thumbnail": "https://i.ytimg.com/vi/cOtnaAHt6qA/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "2T2DeGI2BtE",
+              "title": "33nicelikler ve değişimler fonksiyon problemleri 2 test",
+              "url": "https://www.youtube.com/watch?v=2T2DeGI2BtE",
+              "thumbnail": "https://i.ytimg.com/vi/2T2DeGI2BtE/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "vz9jmIg9Evg",
+              "title": "34nicelikler ve değişimler fonksiyon problemleri 3 test",
+              "url": "https://www.youtube.com/watch?v=vz9jmIg9Evg",
+              "thumbnail": "https://i.ytimg.com/vi/vz9jmIg9Evg/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "Cznjs4oFhR4",
+              "title": "35nicelikler ve değişimler fonksiyon problemleri beceri temelli 1 test",
+              "url": "https://www.youtube.com/watch?v=Cznjs4oFhR4",
+              "thumbnail": "https://i.ytimg.com/vi/Cznjs4oFhR4/hqdefault.jpg",
+              "channel": "Eyüp B. Matematik Geometri"
+            },
+            {
+              "id": "JpMKUBFmN5U",
+              "title": "36nicelikler ve değişimler fonksiyon problemleri bağlam temelli 1 test",
+              "url": "https://www.youtube.com/watch?v=JpMKUBFmN5U",
+              "thumbnail": "https://i.ytimg.com/vi/JpMKUBFmN5U/hqdefault.jpg",
               "channel": "Eyüp B. Matematik Geometri"
             }
           ],
@@ -1825,32 +2030,79 @@
             }
           ],
           "contentComplete": true
-        },
-        {
-          "id": "PLto0Y-Oz3y1qUlL8FMt37UFsL0MfVl4qB",
-          "title": "KORHAY",
-          "url": "https://www.youtube.com/playlist?list=PLto0Y-Oz3y1qUlL8FMt37UFsL0MfVl4qB",
-          "videoCount": 2,
-          "videos": [
-            {
-              "id": "Q3P4-4nNJvQ",
-              "title": "Hatalı Bir Yorumlamayı Düzeltelim | KORHAY-1",
-              "url": "https://www.youtube.com/watch?v=Q3P4-4nNJvQ",
-              "thumbnail": "https://i.ytimg.com/vi/Q3P4-4nNJvQ/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            },
-            {
-              "id": "zGA-m4b_nM0",
-              "title": "Sorunun Verdiği Bilginin Sebebini Anlamak Üzerine Bir Soru",
-              "url": "https://www.youtube.com/watch?v=zGA-m4b_nM0",
-              "thumbnail": "https://i.ytimg.com/vi/zGA-m4b_nM0/hqdefault.jpg",
-              "channel": "Eyüp B. Matematik Geometri"
-            }
-          ],
-          "contentComplete": true
         }
       ],
       "videos": [
+        {
+          "id": "NSmUNs1SBr4",
+          "title": "İstatistiksel Araştırma Süreci 1.Test 10.sınıf Fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=NSmUNs1SBr4",
+          "thumbnail": "https://i.ytimg.com/vi/NSmUNs1SBr4/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "IBTN3zucVME",
+          "title": "İstatistiksel Araştırma Süreci Bağlam Temelli 1.Test 10.sınıf fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=IBTN3zucVME",
+          "thumbnail": "https://i.ytimg.com/vi/IBTN3zucVME/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "F6WlULj746M",
+          "title": "İstatistiksel Araştırma Süreci 2.Test 10.sınıf Fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=F6WlULj746M",
+          "thumbnail": "https://i.ytimg.com/vi/F6WlULj746M/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "N_LZFgR3rKc",
+          "title": "İstatistiksel Araştırma Süreci 3.Test 10.sınıf Fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=N_LZFgR3rKc",
+          "thumbnail": "https://i.ytimg.com/vi/N_LZFgR3rKc/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "gxQvhUxjGdg",
+          "title": "İstatistiksel Araştırma Süreci 4.Test 10.sınıf Fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=gxQvhUxjGdg",
+          "thumbnail": "https://i.ytimg.com/vi/gxQvhUxjGdg/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "iKcpwwk2XIo",
+          "title": "İstatistiksel Araştırma Süreci 5.Test 10.sınıf Fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=iKcpwwk2XIo",
+          "thumbnail": "https://i.ytimg.com/vi/iKcpwwk2XIo/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "xNrqhIWOGeo",
+          "title": "İstatistikselAraştırma Süreci 6.Test 10.sınıf Fav matematik",
+          "url": "https://www.youtube.com/watch?v=xNrqhIWOGeo",
+          "thumbnail": "https://i.ytimg.com/vi/xNrqhIWOGeo/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "Qf0Zi8h5vWc",
+          "title": "İstatistiksel Araştırma Süreci Beceri Temelli 1.Test 10.sınıf fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=Qf0Zi8h5vWc",
+          "thumbnail": "https://i.ytimg.com/vi/Qf0Zi8h5vWc/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "mDucNiqQOPc",
+          "title": "İstatistiksel Araştırma Süreci Beceri Temelli 2.Test 10.sınıf fav matematik maarif model",
+          "url": "https://www.youtube.com/watch?v=mDucNiqQOPc",
+          "thumbnail": "https://i.ytimg.com/vi/mDucNiqQOPc/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
+        {
+          "id": "O9ZArF5v3AA",
+          "title": "Güzel bir deneme yanılma sorusu",
+          "url": "https://www.youtube.com/watch?v=O9ZArF5v3AA",
+          "thumbnail": "https://i.ytimg.com/vi/O9ZArF5v3AA/hqdefault.jpg",
+          "channel": "Eyüp B."
+        },
         {
           "id": "e27N-Ys16I8",
           "title": "24nicelikler ve değişimler mutlak değer fonksiyonunda öteleme 9 test",
@@ -1864,79 +2116,9 @@
           "url": "https://www.youtube.com/watch?v=6HOStfhNUxk",
           "thumbnail": "https://i.ytimg.com/vi/6HOStfhNUxk/hqdefault.jpg",
           "channel": "Eyüp B."
-        },
-        {
-          "id": "T46_5ERjusw",
-          "title": "19nicelikler ve değişimler mutlak değer fonksiyonu 4 test",
-          "url": "https://www.youtube.com/watch?v=T46_5ERjusw",
-          "thumbnail": "https://i.ytimg.com/vi/T46_5ERjusw/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "cEzIBiiXREw",
-          "title": "10nicelikler ve değişimler 9 test",
-          "url": "https://www.youtube.com/watch?v=cEzIBiiXREw",
-          "thumbnail": "https://i.ytimg.com/vi/cEzIBiiXREw/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "TWpY9U6AXbU",
-          "title": "18nicelikler ve değişimler parçalı fonksiyon 3 test",
-          "url": "https://www.youtube.com/watch?v=TWpY9U6AXbU",
-          "thumbnail": "https://i.ytimg.com/vi/TWpY9U6AXbU/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "JcnBXoLLZLE",
-          "title": "30nicelikler ve değişimler m değer fonk beceri temelli 3 test",
-          "url": "https://www.youtube.com/watch?v=JcnBXoLLZLE",
-          "thumbnail": "https://i.ytimg.com/vi/JcnBXoLLZLE/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "4leNz2EG4-0",
-          "title": "17nicelikler ve değişimler parçalı fonksiyon 2 test",
-          "url": "https://www.youtube.com/watch?v=4leNz2EG4-0",
-          "thumbnail": "https://i.ytimg.com/vi/4leNz2EG4-0/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "AUHnJQJFHf0",
-          "title": "12nicelikler ve değişimler beceri temelli 1 test",
-          "url": "https://www.youtube.com/watch?v=AUHnJQJFHf0",
-          "thumbnail": "https://i.ytimg.com/vi/AUHnJQJFHf0/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "l75olIZIbLQ",
-          "title": "7nicelikler ve değişimler y=axfonksiyonu 6 test",
-          "url": "https://www.youtube.com/watch?v=l75olIZIbLQ",
-          "thumbnail": "https://i.ytimg.com/vi/l75olIZIbLQ/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "BZT_Cf7lOpA",
-          "title": "11nicelikler ve değişimler 10 test",
-          "url": "https://www.youtube.com/watch?v=BZT_Cf7lOpA",
-          "thumbnail": "https://i.ytimg.com/vi/BZT_Cf7lOpA/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "rc4o9KPKGpU",
-          "title": "22nicelikler ve değişimler y= mutlak ax+b fonksiyonu 7 test",
-          "url": "https://www.youtube.com/watch?v=rc4o9KPKGpU",
-          "thumbnail": "https://i.ytimg.com/vi/rc4o9KPKGpU/hqdefault.jpg",
-          "channel": "Eyüp B."
-        },
-        {
-          "id": "01HrrR_PW70",
-          "title": "13nicelikler ve değişimler beceri temelli 2 test",
-          "url": "https://www.youtube.com/watch?v=01HrrR_PW70",
-          "thumbnail": "https://i.ytimg.com/vi/01HrrR_PW70/hqdefault.jpg",
-          "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-23T11:12:48.099Z"
+      "refreshedAt": "2026-11-24T12:54:51.451Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -1949,8 +2131,8 @@
         "Geometri"
       ],
       "archiveIndex": "media/my-teachers/3d-yayinlari/index.json",
-      "videoCount": 6263,
-      "playlistCount": 133,
+      "videoCount": 6590,
+      "playlistCount": 147,
       "archiveComplete": false,
       "playlists": [
         {
@@ -2013,6 +2195,462 @@
               "title": "3D Türkiye Geneli Deneme Sınavı 1 - TYT B Kitapçığı Sosyal Bilimler Soru Çözümleri",
               "url": "https://www.youtube.com/watch?v=lXoJY1-9-Z0",
               "thumbnail": "https://i.ytimg.com/vi/lXoJY1-9-Z0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLeGK8hQJeYTI",
+          "title": "AYT 3'LÜ SAYISAL SİMÜLASYON DENEMELERİ 2027",
+          "url": "https://www.youtube.com/playlist?list=PLeGK8hQJeYTI",
+          "videoCount": 6,
+          "videos": [
+            {
+              "id": "7Q55IuPpE8U",
+              "title": "AYT 3'lü Sayısal Simülasyon Denemeleri Matematik Deneme 02 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=7Q55IuPpE8U",
+              "thumbnail": "https://i.ytimg.com/vi/7Q55IuPpE8U/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "eHTfH4hxerQ",
+              "title": "AYT 3'lü Sayısal Simülasyon Denemeleri Fen Bilimleri Deneme 02 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=eHTfH4hxerQ",
+              "thumbnail": "https://i.ytimg.com/vi/eHTfH4hxerQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "HpvZtobf0yA",
+              "title": "AYT 3'lü Sayısal Simülasyon Denemeleri Matematik Deneme 01 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=HpvZtobf0yA",
+              "thumbnail": "https://i.ytimg.com/vi/HpvZtobf0yA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "hsNR-wF7puc",
+              "title": "AYT 3'lü Sayısal Simülasyon Denemeleri Fen Bilimleri Deneme 01 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=hsNR-wF7puc",
+              "thumbnail": "https://i.ytimg.com/vi/hsNR-wF7puc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "51ZSVJBmGi8",
+              "title": "AYT 3'lü Sayısal Simülasyon Denemeleri Matematik Deneme 03 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=51ZSVJBmGi8",
+              "thumbnail": "https://i.ytimg.com/vi/51ZSVJBmGi8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "OsBN_nVOKXg",
+              "title": "AYT 3'lü Sayısal Simülasyon Denemeleri Fen Bilimleri Deneme 03 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=OsBN_nVOKXg",
+              "thumbnail": "https://i.ytimg.com/vi/OsBN_nVOKXg/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLSLw-SZGFKz8",
+          "title": "AYT 3'LÜ EŞİT AĞIRLIK SİMÜLASYON DENEMELERİ 2027",
+          "url": "https://www.youtube.com/playlist?list=PLSLw-SZGFKz8",
+          "videoCount": 6,
+          "videos": [
+            {
+              "id": "RipGUoN_6RA",
+              "title": "AYT 3'lü Eşit Ağırlık Simülasyon Denemeleri Matematik Deneme 02 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=RipGUoN_6RA",
+              "thumbnail": "https://i.ytimg.com/vi/RipGUoN_6RA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "xLnSn3J-yAk",
+              "title": "AYT 3'lü Eşit Ağırlık Simülasyon Denemeleri Matematik Deneme 01 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=xLnSn3J-yAk",
+              "thumbnail": "https://i.ytimg.com/vi/xLnSn3J-yAk/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "LxbtcWTn5YE",
+              "title": "AYT 3'lü Eşit Ağırlık Simülasyon Denemeleri Edebiyat - Sosyal Bilimler Deneme 01 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=LxbtcWTn5YE",
+              "thumbnail": "https://i.ytimg.com/vi/LxbtcWTn5YE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "zQfH_Gwa-5I",
+              "title": "AYT 3'lü Eşit Ağırlık Simülasyon Denemeleri Edebiyat - Sosyal Bilimler Deneme 02 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=zQfH_Gwa-5I",
+              "thumbnail": "https://i.ytimg.com/vi/zQfH_Gwa-5I/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "g7KE2LFzu0I",
+              "title": "AYT 3'lü Eşit Ağırlık Simülasyon Denemeleri Matematik Deneme 03 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=g7KE2LFzu0I",
+              "thumbnail": "https://i.ytimg.com/vi/g7KE2LFzu0I/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Jxw_1nk9diY",
+              "title": "AYT 3'lü Eşit Ağırlık Simülasyon Denemeleri Edebiyat - Sosyal Bilimler Deneme 03 Soru Çözümleri",
+              "url": "https://www.youtube.com/watch?v=Jxw_1nk9diY",
+              "thumbnail": "https://i.ytimg.com/vi/Jxw_1nk9diY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLPQMMzDKAa7M",
+          "title": "AYT BİYOLOJİ SİMÜLASYON DENEMELERİ 2027 | SILA ERBATUR",
+          "url": "https://www.youtube.com/playlist?list=PLPQMMzDKAa7M",
+          "videoCount": 24,
+          "videos": [
+            {
+              "id": "SO8OIaHmVEo",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 12 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=SO8OIaHmVEo",
+              "thumbnail": "https://i.ytimg.com/vi/SO8OIaHmVEo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "aTtE6Srncuc",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 22 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=aTtE6Srncuc",
+              "thumbnail": "https://i.ytimg.com/vi/aTtE6Srncuc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "x24j4lKzHzE",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 23 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=x24j4lKzHzE",
+              "thumbnail": "https://i.ytimg.com/vi/x24j4lKzHzE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "r_6fcK4aV5I",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 24 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=r_6fcK4aV5I",
+              "thumbnail": "https://i.ytimg.com/vi/r_6fcK4aV5I/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "mfygEiSYpsY",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 11 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=mfygEiSYpsY",
+              "thumbnail": "https://i.ytimg.com/vi/mfygEiSYpsY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "gocmxiABBwo",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 13 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=gocmxiABBwo",
+              "thumbnail": "https://i.ytimg.com/vi/gocmxiABBwo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "x_DHUVi7STk",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 14 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=x_DHUVi7STk",
+              "thumbnail": "https://i.ytimg.com/vi/x_DHUVi7STk/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "W-DM2Gsu0Pw",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 15 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=W-DM2Gsu0Pw",
+              "thumbnail": "https://i.ytimg.com/vi/W-DM2Gsu0Pw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "xQG-xzziVRk",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 16 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=xQG-xzziVRk",
+              "thumbnail": "https://i.ytimg.com/vi/xQG-xzziVRk/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "e3gCzmNIAuo",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 17 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=e3gCzmNIAuo",
+              "thumbnail": "https://i.ytimg.com/vi/e3gCzmNIAuo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "QyC191iRkU8",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 18 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=QyC191iRkU8",
+              "thumbnail": "https://i.ytimg.com/vi/QyC191iRkU8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "qid3C4AN8qY",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 19 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=qid3C4AN8qY",
+              "thumbnail": "https://i.ytimg.com/vi/qid3C4AN8qY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "gL52mEO3eLo",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 20 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=gL52mEO3eLo",
+              "thumbnail": "https://i.ytimg.com/vi/gL52mEO3eLo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "gh-BYgnKQtU",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 21 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=gh-BYgnKQtU",
+              "thumbnail": "https://i.ytimg.com/vi/gh-BYgnKQtU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "nrKeSShujwI",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=nrKeSShujwI",
+              "thumbnail": "https://i.ytimg.com/vi/nrKeSShujwI/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "jQ5FFgwtnkY",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=jQ5FFgwtnkY",
+              "thumbnail": "https://i.ytimg.com/vi/jQ5FFgwtnkY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "XZx87mjFAC0",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=XZx87mjFAC0",
+              "thumbnail": "https://i.ytimg.com/vi/XZx87mjFAC0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "td_SEhZMiFM",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=td_SEhZMiFM",
+              "thumbnail": "https://i.ytimg.com/vi/td_SEhZMiFM/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "4k6MuOxDdlA",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=4k6MuOxDdlA",
+              "thumbnail": "https://i.ytimg.com/vi/4k6MuOxDdlA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "GXZaSvi3cTY",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=GXZaSvi3cTY",
+              "thumbnail": "https://i.ytimg.com/vi/GXZaSvi3cTY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "HTSEi73NZ6Y",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=HTSEi73NZ6Y",
+              "thumbnail": "https://i.ytimg.com/vi/HTSEi73NZ6Y/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "necnsD4IbGQ",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=necnsD4IbGQ",
+              "thumbnail": "https://i.ytimg.com/vi/necnsD4IbGQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "HDVhmaTPMdU",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=HDVhmaTPMdU",
+              "thumbnail": "https://i.ytimg.com/vi/HDVhmaTPMdU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "z_qcpISjw_Q",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Sıla Erbatur",
+              "url": "https://www.youtube.com/watch?v=z_qcpISjw_Q",
+              "thumbnail": "https://i.ytimg.com/vi/z_qcpISjw_Q/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
+          "id": "PLLTOqm5IMrvk",
+          "title": "AYT BİYOLOJİ SİMÜLASYON DENEMELERİ 2027 | HASAN BASRİ ÖKSÜZ",
+          "url": "https://www.youtube.com/playlist?list=PLLTOqm5IMrvk",
+          "videoCount": 24,
+          "videos": [
+            {
+              "id": "zg_bP74AbQA",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 18 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=zg_bP74AbQA",
+              "thumbnail": "https://i.ytimg.com/vi/zg_bP74AbQA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "sQwquYrGWYs",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 11 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=sQwquYrGWYs",
+              "thumbnail": "https://i.ytimg.com/vi/sQwquYrGWYs/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "xW0dCqP5o0U",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 19 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=xW0dCqP5o0U",
+              "thumbnail": "https://i.ytimg.com/vi/xW0dCqP5o0U/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "q01vhdNtlQ0",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 14 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=q01vhdNtlQ0",
+              "thumbnail": "https://i.ytimg.com/vi/q01vhdNtlQ0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Zla28T3hyBQ",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=Zla28T3hyBQ",
+              "thumbnail": "https://i.ytimg.com/vi/Zla28T3hyBQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "cyn34qa90sA",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=cyn34qa90sA",
+              "thumbnail": "https://i.ytimg.com/vi/cyn34qa90sA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "eIbZpzpDNow",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=eIbZpzpDNow",
+              "thumbnail": "https://i.ytimg.com/vi/eIbZpzpDNow/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "V_arY_jPUaw",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=V_arY_jPUaw",
+              "thumbnail": "https://i.ytimg.com/vi/V_arY_jPUaw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "dADCf7r_SLc",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=dADCf7r_SLc",
+              "thumbnail": "https://i.ytimg.com/vi/dADCf7r_SLc/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "jsnIIkY-9oo",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=jsnIIkY-9oo",
+              "thumbnail": "https://i.ytimg.com/vi/jsnIIkY-9oo/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ek_52ylgPT8",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=ek_52ylgPT8",
+              "thumbnail": "https://i.ytimg.com/vi/ek_52ylgPT8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "_8H5DD19NuA",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 13 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=_8H5DD19NuA",
+              "thumbnail": "https://i.ytimg.com/vi/_8H5DD19NuA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "WQjHg3570Yw",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 17 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=WQjHg3570Yw",
+              "thumbnail": "https://i.ytimg.com/vi/WQjHg3570Yw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "hiO7TIk_58E",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 21 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=hiO7TIk_58E",
+              "thumbnail": "https://i.ytimg.com/vi/hiO7TIk_58E/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "4AUgm_jnuu4",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=4AUgm_jnuu4",
+              "thumbnail": "https://i.ytimg.com/vi/4AUgm_jnuu4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "-C2DGHGJ-AE",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=-C2DGHGJ-AE",
+              "thumbnail": "https://i.ytimg.com/vi/-C2DGHGJ-AE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "EaeFeMGhgOU",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=EaeFeMGhgOU",
+              "thumbnail": "https://i.ytimg.com/vi/EaeFeMGhgOU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Kwk1MiLg81g",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 15 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=Kwk1MiLg81g",
+              "thumbnail": "https://i.ytimg.com/vi/Kwk1MiLg81g/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "3R_nyIu1i5k",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 16 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=3R_nyIu1i5k",
+              "thumbnail": "https://i.ytimg.com/vi/3R_nyIu1i5k/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "SzGG-erfEeU",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 20 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=SzGG-erfEeU",
+              "thumbnail": "https://i.ytimg.com/vi/SzGG-erfEeU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "KQULPDYufqg",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 22 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=KQULPDYufqg",
+              "thumbnail": "https://i.ytimg.com/vi/KQULPDYufqg/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "4qMhjsg0O4k",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 23 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=4qMhjsg0O4k",
+              "thumbnail": "https://i.ytimg.com/vi/4qMhjsg0O4k/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "0kCHErgQ6OY",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 24 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=0kCHErgQ6OY",
+              "thumbnail": "https://i.ytimg.com/vi/0kCHErgQ6OY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "QHuOCIj3OLQ",
+              "title": "AYT 3D Biyoloji Simülasyon Denemeleri Deneme 12 Soru Çözümleri | Hasan Basri Öksüz",
+              "url": "https://www.youtube.com/watch?v=QHuOCIj3OLQ",
+              "thumbnail": "https://i.ytimg.com/vi/QHuOCIj3OLQ/hqdefault.jpg",
               "channel": "3D Yayınları"
             }
           ],
@@ -2098,6 +2736,183 @@
           "contentComplete": true
         },
         {
+          "id": "PLNdWDmeVhIuk",
+          "title": "AYT FİZİK SİMÜLASYON DENEMELERİ 2027 | MÜCAHİT AKGÜN",
+          "url": "https://www.youtube.com/playlist?list=PLNdWDmeVhIuk",
+          "videoCount": 24,
+          "videos": [
+            {
+              "id": "9HiCDXADSfQ",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 11 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=9HiCDXADSfQ",
+              "thumbnail": "https://i.ytimg.com/vi/9HiCDXADSfQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Ka_T96MJlHE",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=Ka_T96MJlHE",
+              "thumbnail": "https://i.ytimg.com/vi/Ka_T96MJlHE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "Liv3RbWiySA",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=Liv3RbWiySA",
+              "thumbnail": "https://i.ytimg.com/vi/Liv3RbWiySA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "MUWygSj98k4",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 23 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=MUWygSj98k4",
+              "thumbnail": "https://i.ytimg.com/vi/MUWygSj98k4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "XG7k_tb6RPM",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=XG7k_tb6RPM",
+              "thumbnail": "https://i.ytimg.com/vi/XG7k_tb6RPM/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "YkuxLnmk0hw",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=YkuxLnmk0hw",
+              "thumbnail": "https://i.ytimg.com/vi/YkuxLnmk0hw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "_Q_IhDrt58E",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 24 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=_Q_IhDrt58E",
+              "thumbnail": "https://i.ytimg.com/vi/_Q_IhDrt58E/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "mQRKPLrbPMk",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=mQRKPLrbPMk",
+              "thumbnail": "https://i.ytimg.com/vi/mQRKPLrbPMk/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "yX1wrptfKr8",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 22 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=yX1wrptfKr8",
+              "thumbnail": "https://i.ytimg.com/vi/yX1wrptfKr8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "-mLZzCimNCU",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 14 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=-mLZzCimNCU",
+              "thumbnail": "https://i.ytimg.com/vi/-mLZzCimNCU/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "DqNNasb79DY",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 16 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=DqNNasb79DY",
+              "thumbnail": "https://i.ytimg.com/vi/DqNNasb79DY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "UF-HRiSa4Uw",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=UF-HRiSa4Uw",
+              "thumbnail": "https://i.ytimg.com/vi/UF-HRiSa4Uw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "XjOB9MYnNzY",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=XjOB9MYnNzY",
+              "thumbnail": "https://i.ytimg.com/vi/XjOB9MYnNzY/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "YQ5X8eUs5c0",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 12 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=YQ5X8eUs5c0",
+              "thumbnail": "https://i.ytimg.com/vi/YQ5X8eUs5c0/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "ZoXOy-GIrPQ",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 15 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=ZoXOy-GIrPQ",
+              "thumbnail": "https://i.ytimg.com/vi/ZoXOy-GIrPQ/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "bmzvL1w3bco",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 13 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=bmzvL1w3bco",
+              "thumbnail": "https://i.ytimg.com/vi/bmzvL1w3bco/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "fv9aY0yPcaE",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 18 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=fv9aY0yPcaE",
+              "thumbnail": "https://i.ytimg.com/vi/fv9aY0yPcaE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "mPQjhADe-Ho",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=mPQjhADe-Ho",
+              "thumbnail": "https://i.ytimg.com/vi/mPQjhADe-Ho/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "o2WbgJFoaTA",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 19 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=o2WbgJFoaTA",
+              "thumbnail": "https://i.ytimg.com/vi/o2WbgJFoaTA/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "qv3fsp3vBy8",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 17 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=qv3fsp3vBy8",
+              "thumbnail": "https://i.ytimg.com/vi/qv3fsp3vBy8/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "w9t_cHcGFLI",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 20 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=w9t_cHcGFLI",
+              "thumbnail": "https://i.ytimg.com/vi/w9t_cHcGFLI/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "PzFiG_eyhk4",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=PzFiG_eyhk4",
+              "thumbnail": "https://i.ytimg.com/vi/PzFiG_eyhk4/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "8noD6qoUqNw",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=8noD6qoUqNw",
+              "thumbnail": "https://i.ytimg.com/vi/8noD6qoUqNw/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            },
+            {
+              "id": "L_yiOvZxDnE",
+              "title": "AYT 3D Fizik Simülasyon Denemeleri Deneme 21 Soru Çözümleri | Mücahit Akgün",
+              "url": "https://www.youtube.com/watch?v=L_yiOvZxDnE",
+              "thumbnail": "https://i.ytimg.com/vi/L_yiOvZxDnE/hqdefault.jpg",
+              "channel": "3D Yayınları"
+            }
+          ],
+          "contentComplete": true
+        },
+        {
           "id": "PLHKFDO2DXqMo",
           "title": "AYT MATEMATİK SİMÜLASYON DENEMELERİ 2027 | FATİH DEMİRKAYA",
           "url": "https://www.youtube.com/playlist?list=PLHKFDO2DXqMo",
@@ -2171,534 +2986,6 @@
               "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Fatih Demirkaya",
               "url": "https://www.youtube.com/watch?v=7r_BFe68cDM",
               "thumbnail": "https://i.ytimg.com/vi/7r_BFe68cDM/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLUmpmUm4thyM",
-          "title": "AYT MATEMATİK SİMÜLASYON DENEMELERİ 2027 | EYÜP BONCUK",
-          "url": "https://www.youtube.com/playlist?list=PLUmpmUm4thyM",
-          "videoCount": 10,
-          "videos": [
-            {
-              "id": "8uK9DORkR3E",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=8uK9DORkR3E",
-              "thumbnail": "https://i.ytimg.com/vi/8uK9DORkR3E/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "fWKnwTLhQ7Y",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=fWKnwTLhQ7Y",
-              "thumbnail": "https://i.ytimg.com/vi/fWKnwTLhQ7Y/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "dKIHzqdiDRA",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=dKIHzqdiDRA",
-              "thumbnail": "https://i.ytimg.com/vi/dKIHzqdiDRA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "nXDckZALC-Y",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=nXDckZALC-Y",
-              "thumbnail": "https://i.ytimg.com/vi/nXDckZALC-Y/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "8_f5sI3lm04",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=8_f5sI3lm04",
-              "thumbnail": "https://i.ytimg.com/vi/8_f5sI3lm04/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "9E4FjBG5EHg",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=9E4FjBG5EHg",
-              "thumbnail": "https://i.ytimg.com/vi/9E4FjBG5EHg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "tDkKlfNwmdw",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=tDkKlfNwmdw",
-              "thumbnail": "https://i.ytimg.com/vi/tDkKlfNwmdw/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "5IHzhk2Fm1k",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=5IHzhk2Fm1k",
-              "thumbnail": "https://i.ytimg.com/vi/5IHzhk2Fm1k/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "asWmgEMXJ-g",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=asWmgEMXJ-g",
-              "thumbnail": "https://i.ytimg.com/vi/asWmgEMXJ-g/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "wIAgJgYsArg",
-              "title": "AYT 3D Matematik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Eyüp Boncuk",
-              "url": "https://www.youtube.com/watch?v=wIAgJgYsArg",
-              "thumbnail": "https://i.ytimg.com/vi/wIAgJgYsArg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLBNk0CZAVYcE",
-          "title": "AYT KİMYA SİMÜLASYON DENEMELERİ 2026 | CENGİZ DİREK",
-          "url": "https://www.youtube.com/playlist?list=PLBNk0CZAVYcE",
-          "videoCount": 24,
-          "videos": [
-            {
-              "id": "xSah8RxrQ5M",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=xSah8RxrQ5M",
-              "thumbnail": "https://i.ytimg.com/vi/xSah8RxrQ5M/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "zt_ICtWTlYU",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=zt_ICtWTlYU",
-              "thumbnail": "https://i.ytimg.com/vi/zt_ICtWTlYU/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "dQQjc0Hba_8",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=dQQjc0Hba_8",
-              "thumbnail": "https://i.ytimg.com/vi/dQQjc0Hba_8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "dGrqxKOkQ_U",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=dGrqxKOkQ_U",
-              "thumbnail": "https://i.ytimg.com/vi/dGrqxKOkQ_U/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "qd0OAc5AEVo",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=qd0OAc5AEVo",
-              "thumbnail": "https://i.ytimg.com/vi/qd0OAc5AEVo/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "R7A-THjezN8",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=R7A-THjezN8",
-              "thumbnail": "https://i.ytimg.com/vi/R7A-THjezN8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "NYAMNpFZCIY",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=NYAMNpFZCIY",
-              "thumbnail": "https://i.ytimg.com/vi/NYAMNpFZCIY/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "b4USTRgjKRI",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=b4USTRgjKRI",
-              "thumbnail": "https://i.ytimg.com/vi/b4USTRgjKRI/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "YcK8YnIakm8",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=YcK8YnIakm8",
-              "thumbnail": "https://i.ytimg.com/vi/YcK8YnIakm8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "1ky_-odBoR0",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=1ky_-odBoR0",
-              "thumbnail": "https://i.ytimg.com/vi/1ky_-odBoR0/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "pxvjtVpiEbM",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 11 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=pxvjtVpiEbM",
-              "thumbnail": "https://i.ytimg.com/vi/pxvjtVpiEbM/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "9lfzDbfWJuk",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 12 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=9lfzDbfWJuk",
-              "thumbnail": "https://i.ytimg.com/vi/9lfzDbfWJuk/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "k3iHhWS1Buk",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 13 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=k3iHhWS1Buk",
-              "thumbnail": "https://i.ytimg.com/vi/k3iHhWS1Buk/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "q-EZj32LgJY",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 14 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=q-EZj32LgJY",
-              "thumbnail": "https://i.ytimg.com/vi/q-EZj32LgJY/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "7WzCZSsLxHQ",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 15 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=7WzCZSsLxHQ",
-              "thumbnail": "https://i.ytimg.com/vi/7WzCZSsLxHQ/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "Ii0JWi6kYe8",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 16 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=Ii0JWi6kYe8",
-              "thumbnail": "https://i.ytimg.com/vi/Ii0JWi6kYe8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "OuJbTnvIGR8",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 17 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=OuJbTnvIGR8",
-              "thumbnail": "https://i.ytimg.com/vi/OuJbTnvIGR8/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "FxikOyey9ww",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 18 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=FxikOyey9ww",
-              "thumbnail": "https://i.ytimg.com/vi/FxikOyey9ww/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "XVCNMeZ0UWc",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 19 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=XVCNMeZ0UWc",
-              "thumbnail": "https://i.ytimg.com/vi/XVCNMeZ0UWc/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "6pMGMSBSQoc",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 20 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=6pMGMSBSQoc",
-              "thumbnail": "https://i.ytimg.com/vi/6pMGMSBSQoc/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "QnZsEaHJiRQ",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 21 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=QnZsEaHJiRQ",
-              "thumbnail": "https://i.ytimg.com/vi/QnZsEaHJiRQ/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "2Fft4FMI-UQ",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 22 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=2Fft4FMI-UQ",
-              "thumbnail": "https://i.ytimg.com/vi/2Fft4FMI-UQ/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "A3BRmRl9YSU",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 23 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=A3BRmRl9YSU",
-              "thumbnail": "https://i.ytimg.com/vi/A3BRmRl9YSU/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "87DBsCTYkAg",
-              "title": "AYT 3D Kimya Simülasyon Denemeleri Deneme 24 Soru Çözümleri | Cengiz Direk",
-              "url": "https://www.youtube.com/watch?v=87DBsCTYkAg",
-              "thumbnail": "https://i.ytimg.com/vi/87DBsCTYkAg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLMeY7G--jUtM",
-          "title": "TYT SOSYAL BİLİMLER SİMÜLASYON DENEMELERİ / 2027 Aycan Söylemez - İbrahim Can Ertuğrul - Uzay Arslantürk - Mürsel Odabaş",
-          "url": "https://www.youtube.com/playlist?list=PLMeY7G--jUtM",
-          "videoCount": 15,
-          "videos": [
-            {
-              "id": "LVKOObzu1jY",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 12 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=LVKOObzu1jY",
-              "thumbnail": "https://i.ytimg.com/vi/LVKOObzu1jY/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "O-y2GhmAJ_M",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 13 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=O-y2GhmAJ_M",
-              "thumbnail": "https://i.ytimg.com/vi/O-y2GhmAJ_M/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "OkbvOvOvv3g",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 15 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=OkbvOvOvv3g",
-              "thumbnail": "https://i.ytimg.com/vi/OkbvOvOvv3g/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "158nrwzD-Ys",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 11 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=158nrwzD-Ys",
-              "thumbnail": "https://i.ytimg.com/vi/158nrwzD-Ys/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "ymgSNvBGZn4",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 14 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=ymgSNvBGZn4",
-              "thumbnail": "https://i.ytimg.com/vi/ymgSNvBGZn4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "9cBDxuSkHNE",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 08 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=9cBDxuSkHNE",
-              "thumbnail": "https://i.ytimg.com/vi/9cBDxuSkHNE/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "pFD9j4OJ4ag",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 02 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=pFD9j4OJ4ag",
-              "thumbnail": "https://i.ytimg.com/vi/pFD9j4OJ4ag/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "u-C3BlLDgy4",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 03 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=u-C3BlLDgy4",
-              "thumbnail": "https://i.ytimg.com/vi/u-C3BlLDgy4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "MLGLi_hc15Q",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 04 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=MLGLi_hc15Q",
-              "thumbnail": "https://i.ytimg.com/vi/MLGLi_hc15Q/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "Y1QbwPkzVL0",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 05 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=Y1QbwPkzVL0",
-              "thumbnail": "https://i.ytimg.com/vi/Y1QbwPkzVL0/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "Xh9pMqln3GY",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 07 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=Xh9pMqln3GY",
-              "thumbnail": "https://i.ytimg.com/vi/Xh9pMqln3GY/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "T_jiyV9kU6A",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 09 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=T_jiyV9kU6A",
-              "thumbnail": "https://i.ytimg.com/vi/T_jiyV9kU6A/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "SjtPFxLMhsc",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 10 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=SjtPFxLMhsc",
-              "thumbnail": "https://i.ytimg.com/vi/SjtPFxLMhsc/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "FZ5U0FQpx4A",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 01 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=FZ5U0FQpx4A",
-              "thumbnail": "https://i.ytimg.com/vi/FZ5U0FQpx4A/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "FMQ-hz0Fw4Q",
-              "title": "TYT 3D Sosyal Simülasyon Denemeleri - 2 Deneme 06 Soru Çözümleri",
-              "url": "https://www.youtube.com/watch?v=FMQ-hz0Fw4Q",
-              "thumbnail": "https://i.ytimg.com/vi/FMQ-hz0Fw4Q/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLUO8fjfFTSLY",
-          "title": "TYT TÜRKÇE SİMÜLASYON DENEMELERİ 2027 | ÖZNUR SAAT YILDIRIM",
-          "url": "https://www.youtube.com/playlist?list=PLUO8fjfFTSLY",
-          "videoCount": 10,
-          "videos": [
-            {
-              "id": "-O4Wu3t_ax4",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=-O4Wu3t_ax4",
-              "thumbnail": "https://i.ytimg.com/vi/-O4Wu3t_ax4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "xSLWW9_4ZJI",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=xSLWW9_4ZJI",
-              "thumbnail": "https://i.ytimg.com/vi/xSLWW9_4ZJI/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "yK3cgRQcjfw",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=yK3cgRQcjfw",
-              "thumbnail": "https://i.ytimg.com/vi/yK3cgRQcjfw/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "hWQgT-K4o6E",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=hWQgT-K4o6E",
-              "thumbnail": "https://i.ytimg.com/vi/hWQgT-K4o6E/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "534uHVvjtXU",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=534uHVvjtXU",
-              "thumbnail": "https://i.ytimg.com/vi/534uHVvjtXU/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "_Zf7vEu23yg",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=_Zf7vEu23yg",
-              "thumbnail": "https://i.ytimg.com/vi/_Zf7vEu23yg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "yVsw_ounA24",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=yVsw_ounA24",
-              "thumbnail": "https://i.ytimg.com/vi/yVsw_ounA24/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "k88HNjrvDBA",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=k88HNjrvDBA",
-              "thumbnail": "https://i.ytimg.com/vi/k88HNjrvDBA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "lOuBt4OSnzw",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=lOuBt4OSnzw",
-              "thumbnail": "https://i.ytimg.com/vi/lOuBt4OSnzw/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "CI6kd039OBc",
-              "title": "TYT 3D Türkçe Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Öznur Saat Yıldırım",
-              "url": "https://www.youtube.com/watch?v=CI6kd039OBc",
-              "thumbnail": "https://i.ytimg.com/vi/CI6kd039OBc/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            }
-          ],
-          "contentComplete": true
-        },
-        {
-          "id": "PLf7yEuxEs51E",
-          "title": "TYT MATEMATİK SİMÜLASYON DENEMELERİ 2027 | FATİH DEMİRKAYA",
-          "url": "https://www.youtube.com/playlist?list=PLf7yEuxEs51E",
-          "videoCount": 10,
-          "videos": [
-            {
-              "id": "iG47wYIVS98",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 10 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=iG47wYIVS98",
-              "thumbnail": "https://i.ytimg.com/vi/iG47wYIVS98/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "q_xLGeOJ2wk",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 09 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=q_xLGeOJ2wk",
-              "thumbnail": "https://i.ytimg.com/vi/q_xLGeOJ2wk/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "FGTCpbqU0pA",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 08 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=FGTCpbqU0pA",
-              "thumbnail": "https://i.ytimg.com/vi/FGTCpbqU0pA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "Pfqn4a0wi9k",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 07 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=Pfqn4a0wi9k",
-              "thumbnail": "https://i.ytimg.com/vi/Pfqn4a0wi9k/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "yQepO0IE6_4",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 06 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=yQepO0IE6_4",
-              "thumbnail": "https://i.ytimg.com/vi/yQepO0IE6_4/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "aTwr9HUEOxA",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 05 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=aTwr9HUEOxA",
-              "thumbnail": "https://i.ytimg.com/vi/aTwr9HUEOxA/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "pkFjS5olDqo",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 04 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=pkFjS5olDqo",
-              "thumbnail": "https://i.ytimg.com/vi/pkFjS5olDqo/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "5fA0zm9ayMg",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 03 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=5fA0zm9ayMg",
-              "thumbnail": "https://i.ytimg.com/vi/5fA0zm9ayMg/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "EemNem5OGwI",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 02 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=EemNem5OGwI",
-              "thumbnail": "https://i.ytimg.com/vi/EemNem5OGwI/hqdefault.jpg",
-              "channel": "3D Yayınları"
-            },
-            {
-              "id": "bSMXjjg7M4A",
-              "title": "TYT 3D Matematik Simülasyon Denemeleri Deneme 01 Soru Çözümleri | Fatih Demirkaya",
-              "url": "https://www.youtube.com/watch?v=bSMXjjg7M4A",
-              "thumbnail": "https://i.ytimg.com/vi/bSMXjjg7M4A/hqdefault.jpg",
               "channel": "3D Yayınları"
             }
           ],
@@ -2791,7 +3078,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-23T11:16:56.074Z"
+      "refreshedAt": "2026-11-24T12:58:58.250Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -4016,7 +4303,7 @@
           "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-23T11:17:19.867Z"
+      "refreshedAt": "2026-11-24T12:59:20.041Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6242,7 +6529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-23T11:17:28.858Z"
+      "refreshedAt": "2026-11-24T12:59:29.668Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -8761,7 +9048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-23T11:17:38.750Z"
+      "refreshedAt": "2026-11-24T12:59:39.100Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -9630,7 +9917,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-23T11:17:47.659Z"
+      "refreshedAt": "2026-11-24T12:59:47.012Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10459,7 +10746,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-23T11:17:49.959Z"
+      "refreshedAt": "2026-11-24T12:59:49.335Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -11370,7 +11657,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-23T11:18:24.701Z"
+      "refreshedAt": "2026-11-24T13:00:22.459Z"
     }
   }
 }
