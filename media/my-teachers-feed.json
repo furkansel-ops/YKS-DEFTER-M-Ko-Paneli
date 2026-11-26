@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-25T11:46:33.363Z",
+  "generatedAt": "2026-11-26T11:33:56.965Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2118,7 +2118,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-25T11:41:12.322Z"
+      "refreshedAt": "2026-11-26T11:28:02.726Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3078,7 +3078,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-25T11:45:16.282Z"
+      "refreshedAt": "2026-11-26T11:32:17.366Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3090,7 +3090,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1186,
+      "videoCount": 1188,
       "playlistCount": 46,
       "archiveComplete": true,
       "playlists": [
@@ -4219,6 +4219,20 @@
       ],
       "videos": [
         {
+          "id": "2b3Z0vRl8Ro",
+          "title": "11. Sınıf Kimya 12. Ders | Tepkime Hızı: Sıcaklık, Katalizör ve Temas Yüzeyi | MAARİF",
+          "url": "https://www.youtube.com/watch?v=2b3Z0vRl8Ro",
+          "thumbnail": "https://i.ytimg.com/vi/2b3Z0vRl8Ro/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "OSUNbEpHTUQ",
+          "title": "11. Sınıf Kimya 11. Ders | Tepkime Hızı: Madde Cinsi, Fiziksel Hâl ve Derişim | MAARİF",
+          "url": "https://www.youtube.com/watch?v=OSUNbEpHTUQ",
+          "thumbnail": "https://i.ytimg.com/vi/OSUNbEpHTUQ/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "WmPfO5pgFfU",
           "title": "TYT Kimya Kasım Ara Tatil Kampı | 5 Gün Tekrar + 2 Gün Deneme | 2027 Tayfa",
           "url": "https://www.youtube.com/watch?v=WmPfO5pgFfU",
@@ -4287,23 +4301,9 @@
           "url": "https://www.youtube.com/watch?v=cdDIGFZmZvM",
           "thumbnail": "https://i.ytimg.com/vi/cdDIGFZmZvM/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "YE5z728gskk",
-          "title": "9. Sınıf Kimya 11. Ders | Değerlik Elektronu ve Küresel Simetri | Atomdan Periyodik Tabloya | MAARİF",
-          "url": "https://www.youtube.com/watch?v=YE5z728gskk",
-          "thumbnail": "https://i.ytimg.com/vi/YE5z728gskk/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "cYHLkP3Egys",
-          "title": "9. Sınıf Kimya 10. Ders | Elektron Dizilimi - 1 | Atomdan Periyodik Tabloya | MAARİF",
-          "url": "https://www.youtube.com/watch?v=cYHLkP3Egys",
-          "thumbnail": "https://i.ytimg.com/vi/cYHLkP3Egys/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-25T11:45:37.178Z"
+      "refreshedAt": "2026-11-26T11:32:44.126Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6529,7 +6529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-25T11:45:44.930Z"
+      "refreshedAt": "2026-11-26T11:32:54.160Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9048,7 +9048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-25T11:45:54.035Z"
+      "refreshedAt": "2026-11-26T11:33:05.318Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -9917,7 +9917,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-25T11:46:01.387Z"
+      "refreshedAt": "2026-11-26T11:33:15.441Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10746,7 +10746,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-25T11:46:03.718Z"
+      "refreshedAt": "2026-11-26T11:33:18.088Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -11664,7 +11664,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-25T11:46:33.360Z"
+      "refreshedAt": "2026-11-26T11:33:56.960Z"
     }
   }
 }
