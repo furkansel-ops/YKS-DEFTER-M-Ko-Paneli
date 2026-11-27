@@ -161,13 +161,11 @@ test('sayfa yenilenirken giriş ekranı parlamaz',()=>{
 
 test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()=>{
   const html=read('index.html'),js=read('app-reset.js'),css=read('dashboard-v21.css');
-  assert.match(html,/id="dashboardDayReviews"/);
-  assert.match(html,/Gün Sonu Notları/);
+  // v83: gün sonu notu ayrı panelde değil, Öğrencilerim'de öğrencinin satırının altında.
+  assert.match(html,/id="dashboardStudentStatus"/);
   assert.match(js,/function studentDayReview/);
   assert.match(js,/progress\?\.dayReview\?\.entries/);
-  assert.match(js,/function renderDashboardDayReviews/);
-  assert.match(js,/dayReviewMoodMeta/);
-  assert.match(js,/renderCoachRealtimeViews\(\)[\s\S]*renderDashboardDayReviews/);
+  assert.match(js,/function homeNotes[\s\S]*studentDayReview\(row,todayIsoLocal\(\)\)[\s\S]*dayReviewMoodMeta/);
   assert.match(css,/dashboard-day-review-row/);
   assert.match(html,/dashboard-v21\.css\?v=1\.3\.0/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70/);
@@ -176,10 +174,8 @@ test('koç ana ekranı öğrencilerin gün sonu notlarını canlı gösterir',()
 
 test('gün sonu entegrasyonu ana özet ve öğrenci geçmişi içerir',()=>{
   const html=read('index.html'),js=read('app-reset.js'),dash=read('dashboard-v21.css'),reports=read('reports-v21.css');
-  assert.match(html,/id="dashboardDayReviewSummary"/);
   assert.match(html,/id="reportDayReviewHistory"/);
   assert.match(js,/function studentDayReviews/);
-  assert.match(js,/data-day-review-student/);
   assert.match(js,/showCoachPage\("reports"\)/);
   assert.match(js,/studentDayReviews\(row\)\.slice\(0,7\)/);
   assert.match(js,/reportDayReviewLatest/);

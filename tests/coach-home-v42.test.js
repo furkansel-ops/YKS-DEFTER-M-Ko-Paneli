@@ -17,7 +17,7 @@ const DEMO=`
     {studentUid:"a",link,share:share("Ayşe Yılmaz",{["r-0-"+day]:1,["r-1-"+day]:1,["r-2-"+day]:1})},
     {studentUid:"b",link,share:share("Mehmet Kaya",{["r-0-"+day]:1})}
   ];
-  renderCoachDashboard();renderDashboardDayReviews();
+  renderCoachDashboard();
 `;
 
 function fixture(t,extra="",wide=false){
@@ -47,7 +47,7 @@ test("v42 stil dosyası yüklenir; app-reset önbellek etiketi yenilendi",()=>{
   const html=read("index.html");
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-home-v42\.css\?v=1\.0\.0">/);
   assert.match(html,/app-reset\.js\?v=1\.0\.70-[^"]*-appt41-r4-home42[^"]*"/);
-  for(const short of ["öğrenci","tamamlanan","kontrol","haftalık"])assert.ok(html.includes('data-short="'+short+'"'),short);
+  for(const short of ["çalışan","bugün","mesaj","boş hafta"])assert.ok(html.includes('data-short="'+short+'"'),short);
 });
 
 test("v42 3: satırın düğme dışına dokunmak ikinci işi (Programı aç) açar; tek düğmeli işte ana işi",t=>{
@@ -56,19 +56,6 @@ test("v42 3: satırın düğme dışına dokunmak ikinci işi (Programı aç) a�
   assert.ok(warn,"Mehmet'in kalan görevi listede");
   warn.querySelector(".coach-v38-task-copy").click();
   assert.equal(doc.querySelector("#programsPage").classList.contains("hidden"),false,"ikinci iş: program açılır");
-});
-
-test("v42 4: öğrenci satırı Bugünün Akışı'ndaki son 7 gün süresini taşır",t=>{
-  const {doc}=fixture(t,DEMO);
-  const rows=[...doc.querySelectorAll(".dashboard-student-row small")].map(node=>node.textContent);
-  assert.ok(rows.length>=2);
-  for(const row of rows)assert.match(row,/ · 7 günde /);
-});
-
-test("v42 6: gün sonu notu yokken panel tek satıra iner",t=>{
-  const {doc}=fixture(t,DEMO);
-  assert.equal(doc.querySelector(".day-review-panel").classList.contains("is-empty"),true);
-  assert.match(css,/\.day-review-panel\.is-empty :is\(\.panel-title p,\.panel-title button,#dashboardDayReviewSummary\)\{display:none\}/);
 });
 
 test("v42 7: koç notları telefonda kapalı, geniş ekranda açık başlar; kapalıyken ilk satır başlıkta",t=>{

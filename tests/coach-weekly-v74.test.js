@@ -37,11 +37,9 @@ test("v74: süre farkı, sıralama ve güvenli HTML",()=>{
 
 test("v74 bağlantı: pano kartı, stil, betik ve canlı yenileme",()=>{
   const app=read("app-reset.js"),html=read("index.html");
-  assert.match(html,/<section class="dash-panel coach-v74-week"[^>]*>[\s\S]*?id="dashboardWeek"/);
   assert.match(html,/<link rel="stylesheet" href="\.\/coach-weekly-v74\.css\?v=1\.1\.0">/);
   assert.match(html,/<script defer src="\.\/coach-weekly-v74\.js\?v=1\.1\.0"><\/script>/);
-  assert.match(app,/renderCoachTodo\(\);\n  renderDashboardWeek\(\);/);
-  assert.match(app,/dashboardStudentOpen\(button\.dataset\.v74Student\)/);
+  assert.match(app,/window\.CoachWeekly\?\.reviewFor\?\.\(row\.share,lastWeek\)/,"v83: değerlendirme Öğrencilerim satırının altında");
   assert.doesNotMatch(read("coach-weekly-v74.css"),/#[0-9a-f]{3,8}\b|rgb\(/i,"ham renk yok");
 });
 

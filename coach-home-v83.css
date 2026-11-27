@@ -1,0 +1,62 @@
+/* Koç Paneli · v83 Ana Sayfa 1+3 — tek satır karşılama, tıklanan dört sayı, "Öğrencilerim" tablosu.
+   Renkler yalnız tema değişkenlerinden (--k-*), yazılar en az 11px. */
+
+/* Karşılama tek satır, dört sayı altında yan yana */
+@media(min-width:760px){
+  #homePage .coach-v36-top{grid-template-columns:minmax(0,1fr)}
+  #homePage .coach-v36-hero>div{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;align-items:center}
+  #homePage .coach-v36-hero>div>:not(.coach-v36-hero-actions){grid-column:1}
+  #homePage .coach-v36-hero-actions{grid-column:2;grid-row:1 / span 3;margin:0;flex-wrap:nowrap}
+  #homePage .coach-v36-top .dashboard-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #homePage .coach-v36-top .stat-card .stat-icon{display:none}
+  #homePage .coach-v36-top button.stat-card{text-align:left}
+}
+
+/* Sayı kartları düğme: ilgili yere götürür; dikkat isteyen turuncu */
+#homePage .coach-v36-top button.stat-card{width:100%;margin:0;font:inherit;color:inherit;cursor:pointer;transition:border-color .18s ease}
+#homePage .coach-v36-top button.stat-card:hover{border-color:var(--k-accent)}
+#homePage .coach-v36-top button.stat-card:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+#homePage .coach-v36-top .stat-card strong{white-space:nowrap;font-variant-numeric:tabular-nums}
+#homePage .coach-v36-top .stat-card em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#homePage .coach-v36-top .stat-card.is-warn{border-color:color-mix(in srgb,var(--k-warn) 45%,var(--k-line))}
+#homePage .coach-v36-top .stat-card.is-warn strong{color:var(--k-warn)}
+
+/* Öğrencilerim: öğrenci başına tek satır */
+#homePage .coach-v83-head,#homePage .coach-v83-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(130px,.9fr) minmax(100px,1fr) minmax(84px,.7fr) 136px;column-gap:14px;align-items:center}
+#homePage .coach-v83-head{padding:0 10px 6px;color:var(--k-muted);font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+#homePage .coach-v36-status .dashboard-student-list{gap:0}
+#homePage .coach-v83-row{row-gap:6px;padding:12px 10px;border-top:1px solid var(--k-line)}
+#homePage .coach-v83-row:first-child{border-top:0}
+#homePage .coach-v83-row .dashboard-student-row{display:flex;align-items:center;gap:10px;min-width:0;padding:0;border:0;background:none;box-shadow:none}
+#homePage .coach-v83-row .dashboard-student-row:hover{background:none;transform:none}
+#homePage .coach-v83-row .dashboard-student-row:hover b{color:var(--k-accent)}
+#homePage .coach-v83-row .dashboard-student-row:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+#homePage .coach-v83-name{display:grid;justify-items:start;gap:4px;min-width:0}
+#homePage .coach-v83-name b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px;color:var(--k-ink)}
+#homePage .coach-v83-name .dashboard-student-pill{padding:2px 8px;font-size:11px}
+#homePage .coach-v83-facts{display:contents}
+#homePage .coach-v83-cell{min-width:0}
+#homePage .coach-v83-cell b{display:block;font-size:13px;color:var(--k-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+#homePage .coach-v83-cell small{display:block;margin-top:2px;font-size:11.5px;color:var(--k-muted);white-space:nowrap}
+#homePage .coach-v83-cell small.up{color:var(--k-ok)}
+#homePage .coach-v83-cell small.down{color:var(--k-bad)}
+#homePage .coach-v83-tasks{display:flex;align-items:center;gap:8px}
+#homePage .coach-v83-tasks .dashboard-progress{flex:1;min-width:40px;margin:0}
+#homePage .coach-v83-act{justify-self:end;min-height:38px;padding:0 12px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-accent);font:inherit;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer}
+#homePage .coach-v83-act.primary{border-color:var(--k-accent);background:var(--k-accent);color:var(--k-on-accent)}
+#homePage .coach-v83-act:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+#homePage .coach-v83-note{grid-column:1 / -1;margin:0;padding-left:48px;font-size:12px;line-height:1.45;color:var(--k-muted)}
+
+/* Dar ekran: ad ve düğme üstte, sayılar altında tek satır */
+@media(max-width:760px){
+  #homePage .coach-v83-head{display:none}
+  #homePage .coach-v83-row{grid-template-columns:minmax(0,1fr) auto;padding:10px 4px}
+  #homePage .coach-v83-facts{display:flex;grid-column:1 / -1;flex-wrap:wrap;gap:6px 16px;padding-left:48px}
+  #homePage .coach-v83-tasks{min-width:110px}
+  #homePage .coach-v83-act{grid-column:2;grid-row:1}
+}
+@media(max-width:600px){
+  #homePage .coach-v36-top .stat-card strong{font-size:15px}
+  #homePage .coach-v83-note{padding-left:0}
+  #homePage .coach-v83-facts{padding-left:0}
+}
