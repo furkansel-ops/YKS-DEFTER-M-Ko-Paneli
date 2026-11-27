@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-26T11:33:56.965Z",
+  "generatedAt": "2026-11-27T11:28:34.158Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2118,7 +2118,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-26T11:28:02.726Z"
+      "refreshedAt": "2026-11-27T11:22:56.067Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3078,7 +3078,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-26T11:32:17.366Z"
+      "refreshedAt": "2026-11-27T11:27:06.037Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3090,7 +3090,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1188,
+      "videoCount": 1191,
       "playlistCount": 46,
       "archiveComplete": true,
       "playlists": [
@@ -4219,6 +4219,27 @@
       ],
       "videos": [
         {
+          "id": "5dBKlT8fwuY",
+          "title": "11. Sınıf Kimya 15. Ders | Deneysel Verilerden Hız Denklemi ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=5dBKlT8fwuY",
+          "thumbnail": "https://i.ytimg.com/vi/5dBKlT8fwuY/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "oeGPgncMgMk",
+          "title": "11. Sınıf Kimya 14. Ders | Çok Basamaklı Tepkimelerde Hız Denklemi ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=oeGPgncMgMk",
+          "thumbnail": "https://i.ytimg.com/vi/oeGPgncMgMk/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "MHNy8WDcvq8",
+          "title": "11. Sınıf Kimya 13. Ders | Tek Basamaklı Tepkimelerde Hız Denklemi ve Soru Çözümü | MAARİF",
+          "url": "https://www.youtube.com/watch?v=MHNy8WDcvq8",
+          "thumbnail": "https://i.ytimg.com/vi/MHNy8WDcvq8/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "2b3Z0vRl8Ro",
           "title": "11. Sınıf Kimya 12. Ders | Tepkime Hızı: Sıcaklık, Katalizör ve Temas Yüzeyi | MAARİF",
           "url": "https://www.youtube.com/watch?v=2b3Z0vRl8Ro",
@@ -4280,30 +4301,9 @@
           "url": "https://www.youtube.com/watch?v=w2qop_4VEjQ",
           "thumbnail": "https://i.ytimg.com/vi/w2qop_4VEjQ/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "xYAmgjRiZx0",
-          "title": "10. Sınıf Kimya 8. Ders | Mol–Kütle İlişkisi ve Mol Kütlesi Hesaplama | Mol Kavramı | MAARİF",
-          "url": "https://www.youtube.com/watch?v=xYAmgjRiZx0",
-          "thumbnail": "https://i.ytimg.com/vi/xYAmgjRiZx0/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "YsaW6ie6NgI",
-          "title": "10. Sınıf Kimya 7. Ders | Mol–Atom ve Mol–Tanecik İlişkisi | Mol Kavramı | MAARİF",
-          "url": "https://www.youtube.com/watch?v=YsaW6ie6NgI",
-          "thumbnail": "https://i.ytimg.com/vi/YsaW6ie6NgI/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "cdDIGFZmZvM",
-          "title": "10. Sınıf Kimya 6. Ders | Mol Nedir? Avogadro Sayısı ve AKB | Mol Kavramı | MAARİF",
-          "url": "https://www.youtube.com/watch?v=cdDIGFZmZvM",
-          "thumbnail": "https://i.ytimg.com/vi/cdDIGFZmZvM/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-26T11:32:44.126Z"
+      "refreshedAt": "2026-11-27T11:27:30.021Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6529,7 +6529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-26T11:32:54.160Z"
+      "refreshedAt": "2026-11-27T11:27:38.892Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9048,7 +9048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-26T11:33:05.318Z"
+      "refreshedAt": "2026-11-27T11:27:48.502Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -9917,7 +9917,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-26T11:33:15.441Z"
+      "refreshedAt": "2026-11-27T11:27:58.054Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10746,7 +10746,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-26T11:33:18.088Z"
+      "refreshedAt": "2026-11-27T11:28:00.183Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -11664,7 +11664,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-26T11:33:56.960Z"
+      "refreshedAt": "2026-11-27T11:28:34.154Z"
     }
   }
 }
