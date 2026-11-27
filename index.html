@@ -84,6 +84,10 @@
   <link rel="stylesheet" href="./coach-students-v84.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-drawer-v85.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-programs-v86.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-composer-v87.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-templates-v88.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-video-picker-v89.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-bulk-v90.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.1.0"></script>
 </head>
 <body>
@@ -390,16 +394,15 @@
           </section>
         </section>
 
-        <div class="program-template-popover hidden" id="programTemplatePopover">
-          <div class="program-template-head">
-            <div><span>HAZIR ŞABLONLAR</span><b>Hızlı görev ekle</b></div>
-            <button type="button" id="programTemplateClose">×</button>
-          </div>
-          <div class="program-template-list">
-            <button type="button" data-program-template="Bugünkü eksik konularını tamamla ve gün sonunda kısa tekrar yap."><b>Günlük tamamlama</b><small>Eksik konu + tekrar</small></button>
-            <button type="button" data-program-template="40 soru paragraf çöz ve yanlışlarını Hata Defteri'ne ekle."><b>Paragraf çalışması</b><small>40 soru + yanlış analizi</small></button>
-            <button type="button" data-program-template="Son denemendeki yanlış yaptığın konulardan 30 soru çöz."><b>Deneme sonrası</b><small>Yanlış konu odaklı</small></button>
-            <button type="button" data-program-template="Bu haftanın eksik kalan görevlerini tamamla ve bitenleri işaretle."><b>Hafta toparlama</b><small>Eksik görev kontrolü</small></button>
+        <div class="program-template-popover coach-v88-templates hidden" id="programTemplatePopover" role="dialog" aria-modal="true" aria-labelledby="coachV88Title">
+          <div class="coach-v88-sheet">
+            <div class="program-template-head">
+              <div><span>PROGRAM HAZIRLA</span><b id="coachV88Title">Şablondan ekle</b><small id="coachV88Meta"></small></div>
+              <button type="button" id="programTemplateClose" aria-label="Kapat">×</button>
+            </div>
+            <div class="coach-v88-tabs" role="group" aria-label="Şablon türü"><button type="button" data-v88-tab="ready" aria-pressed="true">Hazır şablonlar</button><button type="button" data-v88-tab="mine" aria-pressed="false">Kendi şablonlarım <i id="coachV88MineCount"></i></button></div>
+            <div class="coach-v88-grid" id="coachV88Grid"></div>
+            <p class="coach-v88-status" id="coachV88Status" role="status" aria-live="polite"></p>
           </div>
         </div>
 
@@ -1550,12 +1553,14 @@
           </div>
           <div class="coach-fast-day-grid" id="programTaskDayGrid" role="group" aria-label="Haftanın günleri"></div>
           <div class="coach-fast-shortcuts">
+            <button type="button" id="programDaysEmpty">Boş günler</button>
             <button type="button" id="programDaysWeekdays">Hafta içi</button>
             <button type="button" id="programDaysAll">Her gün</button>
             <button type="button" id="programDaysClear">Temizle</button>
           </div>
           <p id="programTaskDayHint" class="coach-fast-hint">Seçilen günler aynı çalışmayı alır.</p>
         </section>
+        <section class="coach-v87-preview" id="coachV87Preview" aria-label="Öğrencinin göreceği ve haftası" aria-live="polite"></section>
         <details class="coach-v18-quick"><summary>Hazır çalışma örnekleri <span>İsteğe bağlı</span></summary><div id="coachV8ModalPicker" class="coach-v8-modal-host"></div></details>
         <label class="coach-v18-task-text"><span>Görev metni <em>Düzenlenebilir</em></span><textarea id="programTaskText" maxlength="600" placeholder="Örn. Matematik · Problemler 40 soru çöz"></textarea><small><b id="programTaskCharCount">0</b>/600</small></label>
         <section class="coach-v59-book-box" id="coachV59BookBox" aria-labelledby="coachV63BookTitle" hidden><div class="coach-v63-head"><b id="coachV63BookTitle">📚 Kitap seç</b><small>İsteğe bağlı · öğrencinin kitapları</small></div><div id="coachV59BookHost" class="coach-v59-book-host"></div></section>
@@ -1605,6 +1610,6 @@
   </div>
   <script type="module" data-coach-app src="./app-reset.js?v=1.0.70-r28-r29-v30-live-mobile32-boot33-defter34-bulk36-theme36-r2-todo38-notes39-appt41-r4-home42-students43-programs44-composer45-video46-appts47-multi48-subj49-bulk50-read51-exams52-photos52-reports53-students54-topics55-messages56-pp57-settings58"></script>
   <script type="module" src="./coach-auth-v34.js?v=1.1.6"></script>
-  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./coach-exam-tasks-v70.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script><script defer src="./coach-motion-v68.js?v=1.0.0"></script><script defer src="./coach-ics-v72.js?v=1.0.0"></script><script defer src="./coach-task-done-v73.js?v=1.0.0"></script><script defer src="./coach-weekly-v74.js?v=1.1.0"></script><script defer src="./coach-exam-weeks-v76.js?v=1.0.0"></script><script defer src="./coach-invites-v75.js?v=1.0.0"></script><script defer src="./coach-write-guard-v78.js?v=1.1.0"></script>
+  <script src="./coach-startup-v33.js?v=1.0.0"></script><script defer src="./coach-exam-tasks-v70.js?v=1.0.0"></script><script defer src="./program-videos-v1.js?v=1.9.6"></script><script defer src="./coach-video-lists-v89.js?v=1.0.0"></script><script defer src="./coach-motion-v68.js?v=1.0.0"></script><script defer src="./coach-ics-v72.js?v=1.0.0"></script><script defer src="./coach-task-done-v73.js?v=1.0.0"></script><script defer src="./coach-weekly-v74.js?v=1.1.0"></script><script defer src="./coach-exam-weeks-v76.js?v=1.0.0"></script><script defer src="./coach-invites-v75.js?v=1.0.0"></script><script defer src="./coach-write-guard-v78.js?v=1.1.0"></script>
 </body>
 </html>

@@ -1,0 +1,70 @@
+/* Koç Paneli · v87 Çalışma ekle — numaralı adımlar, eksik konu ve hazır sayı seçenekleri, günlerde görev sayısı,
+   sağ sütunda öğrencinin göreceği kart ve haftanın çubukları. Renkler tema değişkenlerinden; ders renkleri v11 kartlarıyla aynı. */
+
+/* Yerleşim: önizleme günlerin altında */
+#programTaskBackdrop:not([data-editing]) .coach-v19-left>.program-task-body{grid-template-areas:"builder days" "builder preview" "builder task" "builder book" "keep link" "info info" "status status"}
+#programTaskBackdrop .coach-v87-preview{grid-area:preview;display:grid;gap:10px;padding:14px;border:1px solid var(--k-line);border-radius:16px;background:color-mix(in srgb,var(--k-accent) 4%,var(--k-surface))}
+#programTaskBackdrop[data-editing] .coach-v87-preview,#programTaskBackdrop .coach-v87-preview:empty{display:none}
+@media(max-width:730px){
+  #programTaskBackdrop:not([data-editing]) .coach-v19-left>.program-task-body{grid-template-areas:"builder" "days" "preview" "task" "book" "link" "keep" "info" "status"}
+}
+
+/* Adım numaraları ve alan sırası: ders, tür, konu (+ eksik konular), soru ve süre yan yana */
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderSubject)>span::before,
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderActivity)>span::before,
+#programTaskBackdrop .coach-fast-days-heading b::before,
+#programTaskBackdrop #coachV63BookTitle::before{display:inline-grid;place-items:center;width:20px;height:20px;margin-right:7px;border-radius:7px;background:var(--k-accent);color:var(--k-on-accent);font-size:11.5px;font-weight:850;vertical-align:1px}
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderSubject)>span::before{content:"1"}
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderActivity)>span::before{content:"2"}
+#programTaskBackdrop .coach-fast-days-heading b::before{content:"3"}
+#programTaskBackdrop #coachV63BookTitle::before{content:"4"}
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderTopic){order:5;grid-column:1 / -1}
+#programTaskBackdrop .coach-v18-fields>#coachV87Weak{order:5;grid-column:1 / -1}
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderCount){order:6}
+#programTaskBackdrop .coach-v18-fields>label:has(#programBuilderMinutes){order:7}
+
+/* Eksik konular ve hazır sayılar */
+#programTaskBackdrop .coach-v87-weak{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:-4px}
+#programTaskBackdrop .coach-v87-weak[hidden]{display:none}
+#programTaskBackdrop .coach-v87-weak>span{color:var(--k-muted);font-size:11.5px;font-weight:700}
+#programTaskBackdrop :is(.coach-v87-weak,.coach-v87-quick) button{min-height:30px;padding:0 10px;border:1px solid var(--k-line);border-radius:9px;background:var(--k-surface);color:var(--k-ink);font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+#programTaskBackdrop .coach-v87-weak button{border-color:color-mix(in srgb,var(--k-warn) 35%,var(--k-line));background:color-mix(in srgb,var(--k-warn) 9%,var(--k-surface));color:var(--k-warn)}
+#programTaskBackdrop .coach-v87-quick{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+#programTaskBackdrop :is(.coach-v87-weak,.coach-v87-quick) button:hover{border-color:var(--k-accent)}
+#programTaskBackdrop :is(.coach-v87-weak,.coach-v87-quick) button:focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+
+/* Günlerde mevcut görev sayısı; 3+ turuncu */
+#programTaskBackdrop #programTaskDayGrid .coach-v87-load{display:block;margin-top:2px;color:var(--k-muted);font-size:11px;font-style:normal;font-weight:700}
+#programTaskBackdrop #programTaskDayGrid button.is-busy .coach-v87-load{color:var(--k-warn)}
+#programTaskBackdrop #programTaskDayGrid button[aria-pressed="true"] .coach-v87-load{color:inherit;opacity:.85}
+
+/* Önizleme: kart, hafta çubukları, özet */
+#programTaskBackdrop .coach-v87-preview section{display:grid;gap:8px}
+#programTaskBackdrop .coach-v87-preview h3{display:flex;align-items:baseline;gap:8px;margin:0;color:var(--k-ink);font-size:12.5px;font-weight:850}
+#programTaskBackdrop .coach-v87-preview h3 small{margin-left:auto;color:var(--k-muted);font-size:11px;font-weight:700}
+#programTaskBackdrop .coach-v87-card{--cw-sub:var(--k-muted);display:grid;gap:2px;padding:9px 11px;border:1px solid color-mix(in srgb,var(--cw-sub) 24%,var(--k-surface));border-radius:11px;background:color-mix(in srgb,var(--cw-sub) 8%,var(--k-surface));box-shadow:inset 3px 0 0 var(--cw-sub)}
+#programTaskBackdrop .coach-v87-card b{color:var(--cw-sub);font-size:11px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+#programTaskBackdrop .coach-v87-card span{color:var(--k-ink);font-size:13px;font-weight:750;line-height:1.35;overflow-wrap:break-word}
+#programTaskBackdrop .coach-v87-empty{margin:0;color:var(--k-muted);font-size:12px;font-weight:650}
+#programTaskBackdrop .coach-v87-pips{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+#programTaskBackdrop .coach-v87-pips>div{display:grid;gap:3px;align-content:start;min-height:74px;padding:6px 5px;border-radius:10px;background:var(--k-surface)}
+#programTaskBackdrop .coach-v87-pips>div.is-picked{box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--k-accent) 45%,var(--k-surface))}
+#programTaskBackdrop .coach-v87-pips small{color:var(--k-muted);font-size:11px;font-weight:700}
+#programTaskBackdrop .coach-v87-pips b{margin-bottom:2px;color:var(--k-ink);font-size:14px;font-weight:850;line-height:1}
+#programTaskBackdrop .coach-v87-pips i{--cw-sub:var(--k-muted);display:block;height:9px;border-radius:4px;background:var(--cw-sub)}
+#programTaskBackdrop .coach-v87-pips i.is-new{border:1.5px dashed var(--cw-sub);background:color-mix(in srgb,var(--cw-sub) 18%,var(--k-surface))}
+#programTaskBackdrop .coach-v87-summary{margin:0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--k-accent) 10%,var(--k-surface));color:var(--k-accent);font-size:12px;font-weight:800}
+#programTaskBackdrop .coach-v87-summary.is-warn{background:color-mix(in srgb,var(--k-warn) 11%,var(--k-surface));color:var(--k-warn)}
+#programTaskBackdrop .coach-v87-preview [data-subject="reading"]{--cw-sub:var(--kc-e54e6a,#e54e6a)}
+#programTaskBackdrop .coach-v87-preview [data-subject="math"]{--cw-sub:var(--kc-266fe6,#266fe6)}
+#programTaskBackdrop .coach-v87-preview [data-subject="physics"]{--cw-sub:var(--kc-347bdf,#347bdf)}
+#programTaskBackdrop .coach-v87-preview [data-subject="chemistry"]{--cw-sub:var(--kc-e98922,#e98922)}
+#programTaskBackdrop .coach-v87-preview [data-subject="biology"]{--cw-sub:var(--kc-22a379,#22a379)}
+#programTaskBackdrop .coach-v87-preview [data-subject="geometry"]{--cw-sub:var(--kc-9955dd,#9955dd)}
+#programTaskBackdrop .coach-v87-preview [data-subject="history"]{--cw-sub:var(--kc-d66064,#d66064)}
+#programTaskBackdrop .coach-v87-preview [data-subject="geography"]{--cw-sub:var(--kc-16a5bf,#16a5bf)}
+#programTaskBackdrop .coach-v87-preview [data-subject="literature"]{--cw-sub:var(--kc-b54b85,#b54b85)}
+#programTaskBackdrop .coach-v87-preview [data-subject="religion"]{--cw-sub:var(--kc-c17a46,#c17a46)}
+#programTaskBackdrop .coach-v87-preview [data-subject="english"]{--cw-sub:var(--kc-3486e4,#3486e4)}
+#programTaskBackdrop .coach-v87-preview [data-subject="philosophy"]{--cw-sub:var(--kc-864aaa,#864aaa)}
+#programTaskBackdrop .coach-v87-preview [data-subject="exam"]{--cw-sub:var(--kc-6957e8,#6957e8)}

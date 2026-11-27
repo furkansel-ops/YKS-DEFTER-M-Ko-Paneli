@@ -1,0 +1,60 @@
+/* Koç Paneli · v89 Video ekle — solda seçimler görünür listeler (ders renkli, hoca baş harfli, konu kaydırmalı),
+   sağda büyük video kartları (başlık tam, Seç ve Öğrenciye öner yazılı), altta koyu seçim şeridi.
+   Listeler yalnız bu pencerede; Çalışma ekle'deki video bölmesinde açılır menüler kalır. Renkler tema değişkenlerinden. */
+.coach-v89-list{display:none}
+#coachVideoPickerBackdrop .coach-v89-list{display:grid;gap:4px;margin-top:6px}
+#coachVideoPickerBackdrop .coach-v89-list[hidden]{display:none}
+#coachVideoPickerBackdrop .coach-video-filters label:has(.coach-v89-list:not([hidden]))>select{display:none}
+#coachVideoPickerBackdrop .coach-v89-list button{display:flex;align-items:center;gap:8px;min-width:0;min-height:34px;padding:5px 9px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--k-ink);font:inherit;font-size:12.5px;font-weight:750;text-align:left;cursor:pointer}
+#coachVideoPickerBackdrop .coach-v89-list button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#coachVideoPickerBackdrop .coach-v89-list button:hover{background:var(--k-soft)}
+#coachVideoPickerBackdrop .coach-v89-list button[aria-pressed="true"]{border-color:color-mix(in srgb,var(--k-accent) 35%,var(--k-line));background:color-mix(in srgb,var(--k-accent) 10%,var(--k-surface));color:var(--k-accent);font-weight:850}
+#coachVideoPickerBackdrop .coach-v89-list button:focus-visible{outline:2px solid var(--k-accent);outline-offset:1px}
+
+/* Ders: iki sütun renkli düğme */
+#coachVideoPickerBackdrop .coach-v89-list.is-subject{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button{--cw-sub:var(--k-muted);border-color:color-mix(in srgb,var(--cw-sub) 28%,var(--k-surface));background:color-mix(in srgb,var(--cw-sub) 7%,var(--k-surface));color:color-mix(in srgb,var(--cw-sub) 80%,var(--k-ink))}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--cw-sub)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[aria-pressed="true"]{border-color:var(--cw-sub);background:var(--cw-sub);color:var(--k-on-accent)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[aria-pressed="true"] i{background:var(--k-on-accent)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="reading"]{--cw-sub:var(--kc-e54e6a,#e54e6a)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="math"]{--cw-sub:var(--kc-266fe6,#266fe6)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="physics"]{--cw-sub:var(--kc-347bdf,#347bdf)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="chemistry"]{--cw-sub:var(--kc-e98922,#e98922)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="biology"]{--cw-sub:var(--kc-22a379,#22a379)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="geometry"]{--cw-sub:var(--kc-9955dd,#9955dd)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="history"]{--cw-sub:var(--kc-d66064,#d66064)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="geography"]{--cw-sub:var(--kc-16a5bf,#16a5bf)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="literature"]{--cw-sub:var(--kc-b54b85,#b54b85)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="religion"]{--cw-sub:var(--kc-c17a46,#c17a46)}
+#coachVideoPickerBackdrop .coach-v89-list.is-subject button[data-subject="philosophy"]{--cw-sub:var(--kc-864aaa,#864aaa)}
+
+/* Hoca: baş harfli satırlar · Konu: kaydırılan liste */
+#coachVideoPickerBackdrop .coach-v89-list.is-teacher button i{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--k-hero);color:var(--k-hero-ink);font-size:11px;font-style:normal;font-weight:850}
+#coachVideoPickerBackdrop .coach-v89-list.is-teacher{max-height:176px;overflow-y:auto}
+#coachVideoPickerBackdrop .coach-v89-list.is-topic{max-height:220px;gap:1px;overflow-y:auto;padding:4px;border:1px solid var(--k-line);border-radius:12px;background:var(--k-surface)}
+#coachVideoPickerBackdrop .coach-v89-list.is-topic button{min-height:30px;font-weight:700}
+
+/* Sağda büyük video kartları (geniş ekranda) */
+@media(min-width:1001px){
+  #coachVideoPickerBackdrop .coach-video-card:not(.skeleton){grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;align-items:stretch;gap:8px;padding:0 0 10px;overflow:hidden;border-radius:14px}
+  #coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-thumb{grid-column:1;grid-row:1;width:100%;height:auto;min-height:0;aspect-ratio:16 / 9;border-radius:0}
+  #coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-thumb img{width:100%;height:100%;object-fit:cover}
+  #coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-card-body{grid-column:1;grid-row:2;padding:0 12px}
+  #coachVideoPickerBackdrop .coach-video-card-body b{-webkit-line-clamp:3;font-size:13.5px;line-height:1.35}
+  #coachVideoPickerBackdrop .coach-video-card-body small{font-size:11.5px}
+  #coachVideoPickerBackdrop .coach-video-card:not(.skeleton) .coach-video-card-actions{grid-column:1;grid-row:3;flex-direction:row;align-items:center;justify-content:flex-start;gap:6px;padding:0 12px}
+  #coachVideoPickerBackdrop .coach-video-card-actions .primary{order:-1;height:34px;min-height:34px;padding:0 14px}
+  #coachVideoPickerBackdrop .coach-video-card-actions .recommend{width:auto;height:34px;min-height:34px;padding:0 11px;text-indent:0;overflow:visible}
+  #coachVideoPickerBackdrop .coach-video-card-actions .recommend::before{content:"✉ "}
+  #coachVideoPickerBackdrop .coach-video-card-actions .recommend::after{content:none}
+  #coachVideoPickerBackdrop .coach-video-card.is-picked{box-shadow:0 0 0 2px var(--k-ok)}
+  #coachVideoPickerBackdrop .coach-video-card.is-picked .coach-video-thumb::after{left:8px;top:8px;width:24px;height:24px}
+}
+
+/* Alt seçim şeridi: seçim varken koyu */
+#coachVideoPickerBackdrop .coach-video-picker-footer:has(.coach-video-picker-selection.has-pick){background:var(--k-ink)}
+#coachVideoPickerBackdrop .coach-video-picker-footer:has(.has-pick) .coach-video-picker-selection b{color:var(--k-surface)}
+#coachVideoPickerBackdrop .coach-video-picker-footer:has(.has-pick) :is(.coach-video-picker-selection small,.coach-v48-keep){color:color-mix(in srgb,var(--k-surface) 75%,var(--k-ink))}
+#coachVideoPickerBackdrop .coach-video-picker-footer:has(.has-pick) .coach-v48-clear{color:var(--k-surface)}
+#coachVideoPickerBackdrop .coach-video-picker-footer:has(.has-pick) #coachVideoPickerSave{border-color:var(--k-surface);background:var(--k-surface);color:var(--k-ink)}
