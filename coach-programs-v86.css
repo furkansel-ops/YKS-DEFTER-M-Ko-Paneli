@@ -1,0 +1,60 @@
+/* Koç Paneli · v86 Programlar "kartlı hafta" — dört sayı kartı yerine tek şerit, gün başlığında büyük tarih,
+   görev kartı dersin renginde (biten soluk, üstü çizili, yeşil nokta). Ders renkleri v11 görev kartlarıyla aynı (--kc-*),
+   diğer renkler tema değişkenlerinden (--k-*). Kaydırma, sürükleme ve menüler değişmez. */
+
+/* Üst şerit */
+#programsPage .coach-v15-overview{display:none}
+#programsPage .coach-v86-strip:empty{display:none}
+#programsPage .coach-v86-strip{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:20px;margin:0 0 12px;padding:16px 20px;border:1px solid var(--k-line);border-radius:18px;background:var(--k-surface)}
+#programsPage .coach-v86-total b{display:block;color:var(--k-ink);font-size:30px;font-weight:850;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+#programsPage .coach-v86-total b small{color:var(--k-muted);font-size:16px;font-weight:800}
+#programsPage .coach-v86-total span{display:block;margin-top:4px;color:var(--k-muted);font-size:12px;font-weight:700}
+#programsPage .coach-v86-main{display:grid;gap:10px;min-width:0}
+#programsPage .coach-v86-bar{display:block;height:10px;border-radius:9px;background:color-mix(in srgb,var(--k-accent) 12%,var(--k-surface));overflow:hidden}
+#programsPage .coach-v86-bar i{display:block;height:100%;border-radius:inherit;background:var(--k-accent)}
+#programsPage .coach-v86-chips{display:flex;flex-wrap:wrap;gap:6px}
+#programsPage .coach-v86-chip{--cw-sub:var(--k-muted);display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:10px;background:color-mix(in srgb,var(--cw-sub) 10%,var(--k-surface));color:color-mix(in srgb,var(--cw-sub) 78%,var(--k-ink));font-size:12px;font-weight:800}
+#programsPage .coach-v86-chip i{width:8px;height:8px;border-radius:50%;background:var(--cw-sub)}
+#programsPage .coach-v86-chip em{color:var(--k-muted);font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
+#programsPage .coach-v86-empty{margin:0;color:var(--k-muted);font-size:13px;font-weight:650}
+#programsPage .coach-v86-chip[data-subject="reading"]{--cw-sub:var(--kc-e54e6a,#e54e6a)}
+#programsPage .coach-v86-chip[data-subject="math"]{--cw-sub:var(--kc-266fe6,#266fe6)}
+#programsPage .coach-v86-chip[data-subject="physics"]{--cw-sub:var(--kc-347bdf,#347bdf)}
+#programsPage .coach-v86-chip[data-subject="chemistry"]{--cw-sub:var(--kc-e98922,#e98922)}
+#programsPage .coach-v86-chip[data-subject="biology"]{--cw-sub:var(--kc-22a379,#22a379)}
+#programsPage .coach-v86-chip[data-subject="geometry"]{--cw-sub:var(--kc-9955dd,#9955dd)}
+#programsPage .coach-v86-chip[data-subject="history"]{--cw-sub:var(--kc-d66064,#d66064)}
+#programsPage .coach-v86-chip[data-subject="geography"]{--cw-sub:var(--kc-16a5bf,#16a5bf)}
+#programsPage .coach-v86-chip[data-subject="literature"]{--cw-sub:var(--kc-b54b85,#b54b85)}
+#programsPage .coach-v86-chip[data-subject="religion"]{--cw-sub:var(--kc-c17a46,#c17a46)}
+#programsPage .coach-v86-chip[data-subject="english"]{--cw-sub:var(--kc-3486e4,#3486e4)}
+#programsPage .coach-v86-chip[data-subject="philosophy"]{--cw-sub:var(--kc-864aaa,#864aaa)}
+#programsPage .coach-v86-chip[data-subject="exam"]{--cw-sub:var(--kc-6957e8,#6957e8)}
+
+/* Gün başlığı: büyük tarih, kısa gün adı, bitti ve soru */
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;text-align:left;justify-items:start;column-gap:6px;row-gap:2px;padding:10px 8px 8px}
+#programsPage #coachVisualWeekBoard .coach-v6-day-head .coach-v86-dn{grid-row:1;color:var(--k-ink);font-size:22px;font-weight:850;line-height:1;font-variant-numeric:tabular-nums}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head strong{grid-row:1;justify-self:start;text-align:left;color:var(--k-muted);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head>span{display:none}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head :is(.coach-v27-day-status,.coach-v86-q,.coach-v14-progress){grid-column:1 / -1}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v14-week:not([data-layout="list"]) .coach-v6-day-head small{color:var(--k-muted);font-size:11.5px;font-weight:700}
+#programsPage #coachVisualWeekBoard .coach-v14-day.is-today .coach-v27-day-status::before{content:"Bugün · ";color:var(--k-accent);font-weight:850}
+#programsPage #coachVisualWeekBoard .coach-v14-week .coach-v14-day.is-today{background:color-mix(in srgb,var(--k-accent) 5%,var(--k-surface))}
+
+/* Görev kartı: dersin renginde; simge yerine ders adı üstte, durum sağ üstte nokta */
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task{grid-template-columns:minmax(0,1fr) 20px;min-height:0;padding:9px 8px 9px 11px!important;border:1px solid color-mix(in srgb,var(--cw-sub) 24%,var(--k-surface));border-radius:11px;background:color-mix(in srgb,var(--cw-sub) 8%,var(--k-surface));box-shadow:inset 3px 0 0 var(--cw-sub)}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v6-task-symbol{display:none}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v6-task-copy{grid-column:1;grid-row:1;gap:2px}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v6-task-copy strong{padding-right:14px}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task>.coach-v11-task-menu:not([open]){grid-column:2;grid-row:1}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v6-task-copy strong{color:var(--cw-sub);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v6-task-copy>span{color:var(--k-ink);font-size:12.5px;font-weight:750;line-height:1.35;overflow-wrap:break-word}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v27-task-status{grid-column:auto;grid-row:auto;position:absolute;top:9px;right:28px;width:13px;height:13px;min-height:0;padding:0;border:1.5px solid color-mix(in srgb,var(--k-muted) 45%,var(--k-surface));border-radius:50%;background:var(--k-surface);font-size:0;overflow:hidden}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task .coach-v27-task-status.is-complete{border-color:var(--k-ok);background:var(--k-ok)}
+/* Biten görev: ders rengi kalır, kart sadeleşir, metin üstü çizili (v27'nin yeşil kartını geçersiz kılar) */
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task[data-task-completed="true"]{opacity:1!important;border:1px solid var(--k-line)!important;background:var(--k-surface)!important;box-shadow:inset 3px 0 0 color-mix(in srgb,var(--cw-sub) 55%,var(--k-surface))}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task[data-task-completed="true"] .coach-v6-task-copy strong{color:color-mix(in srgb,var(--cw-sub) 70%,var(--k-muted))}
+#programsPage #coachFutureProgramTable #coachVisualWeekBoard .coach-v12-week-table.coach-v14-week .coach-v11-task.coach-v6-task[data-task-completed="true"] .coach-v6-task-copy>span{color:var(--k-muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--k-muted) 60%,transparent)}
+
+/* Günlerin altındaki "+ Ekle" kalktı; çalışma üstteki "Çalışma Ekle" ve "Toplu Görev Yaz" ile eklenir. */
+#programsPage #coachVisualWeekBoard .coach-v11-day-footer{display:none!important}

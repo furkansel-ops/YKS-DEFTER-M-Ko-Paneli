@@ -3698,8 +3698,9 @@ function hydrateProgramStudents(){
   if(coachProgramModalStudentUid&&coachProgramModalStudentUid!==selectedProgramStudentUid)closeProgramTaskModal();
   if(coachVideoPickerStudentUid&&coachVideoPickerStudentUid!==selectedProgramStudentUid)closeCoachVideoPicker();
   select.innerHTML=coachReportRows.map(row=>{
-    const name=studentName(row),stats=weekStats(row.share?.program);
-    const suffix=stats.total?" · "+stats.ratio+"% uyum":"";
+    const name=studentName(row),current=programWeeks(row).find(item=>item?.week===programCurrentWeekStart());
+    const stats=current?coachV6WeekStats(row.share?.program||{},current):null;
+    const suffix=stats?.total?" · bu hafta "+stats.done+"/"+stats.total:" · bu hafta boş";
     return '<option value="'+escHtml(row.studentUid)+'">'+escHtml(name+suffix)+'</option>';
   }).join("");
   select.value=selectedProgramStudentUid;
@@ -4444,8 +4445,9 @@ function renderCoachVisualWeek(program,week,row){
     const totalCards=item.tasks.length+drafts.filter(task=>task.day===day).length;
     const completion=item.tasks.length?Math.round(item.done/item.tasks.length*100):0;
     return '<section class="coach-v6-day coach-v11-day coach-v14-day'+(isToday?' is-today':'')+(day===picked?' is-picked':'')+'" data-day="'+day+'">'
-      +'<header class="coach-v6-day-head"><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span>'
+      +'<header class="coach-v6-day-head"><b class="coach-v86-dn" aria-hidden="true">'+Number(date.slice(8,10))+'</b><strong>'+names[day]+'</strong><span>'+escHtml(dateLabel)+'</span>'
       +'<small class="coach-v27-day-status" data-all-done="'+Boolean(item.tasks.length&&item.done===item.tasks.length)+'">'+(item.tasks.length&&item.done===item.tasks.length?'✓ Gün tamamlandı':item.done+'/'+item.tasks.length+' tamamlandı')+'</small>'
+      +(coachV86Questions(item.tasks)?'<small class="coach-v86-q">'+coachV86Questions(item.tasks)+' soru</small>':'')
       +'<div class="coach-v14-progress" role="progressbar" aria-label="'+names[day]+' tamamlanma oranı" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+completion+'"><span style="width:'+completion+'%"></span></div></header>'
       +'<div class="coach-v6-day-tasks coach-v12-card-stack" tabindex="0" role="region" aria-label="'+names[day]+' çalışmaları" data-task-count="'+totalCards+'">'
       +taskCards+draftCards
@@ -4629,9 +4631,27 @@ $("coachWeekVisualMode")?.addEventListener("click",()=>coachSetWeekView("visual"
 
 /* Preview upper region v15. Does not modify or rearrange any weekly table data.
    All displayed numbers are derived from the selected student's selected week. */
+/* v86 · Programlar "kartlı hafta": dört sayı kartının yerine tek şerit (bitti/toplam, çubuk, ders ders bitti/toplam);
+   gün başlığında büyük tarih ve soru toplamı; görev kartı dersin renginde kalır, biten soluk ve üstü çizili (coach-programs-v86.css). */
+function coachV86Subjects(program,week){
+  const map=new Map(),data=week?.data||{};
+  for(let day=0;day<7;day++)for(const task of collectProgramDayTasks(program,week,day)){
+    const lesson=coachV6Subject(task),item=map.get(lesson.key)||{...lesson,done:0,total:0};
+    item.total++;if(programTaskDone(data,task,day))item.done++;map.set(lesson.key,item);
+  }
+  return[...map.values()].sort((a,b)=>b.total-a.total||a.title.localeCompare(b.title,"tr"));
+}
+function coachV86Questions(tasks){return tasks.reduce((sum,task)=>sum+(Number(String(task?.text||"").match(/(\d+)\s*soru/i)?.[1])||0),0)}
+function coachV86StripHtml(program,week,stats){
+  if(!stats.total)return'<div class="coach-v86-total"><b>0</b><span>görev</span></div><p class="coach-v86-empty">Bu hafta henüz görev yok. Çalışma ekle ya da Toplu yaz ile başla.</p>';
+  return'<div class="coach-v86-total"><b>'+stats.done+'<small>/'+stats.total+'</small></b><span>görev bitti</span></div>'
+    +'<div class="coach-v86-main"><span class="coach-v86-bar" role="progressbar" aria-label="Haftanın tamamlanması" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+stats.percent+'"><i style="width:'+stats.percent+'%"></i></span>'
+    +'<div class="coach-v86-chips">'+coachV86Subjects(program,week).map(item=>'<span class="coach-v86-chip" data-subject="'+escHtml(item.key)+'"><i></i>'+escHtml(item.title)+' <em>'+item.done+'/'+item.total+'</em></span>').join("")+'</div></div>';
+}
 function coachV15RenderTop(row,program,week){
-  const host=$("coachV15Overview"),subtitle=$("coachV15Subtitle");
+  const host=$("coachV15Overview"),subtitle=$("coachV15Subtitle"),strip=$("coachV86Strip");
   if(!host)return;
+  if(strip)strip.innerHTML=row&&week?coachV86StripHtml(program,week,coachV6WeekStats(program,week)):"";
   if(!row||!week){
     host.innerHTML='<div class="coach-v15-empty"><span aria-hidden="true">▦</span><div><strong>Haftalık özet hazır</strong><small>Öğrenci seçildiğinde gerçek program verileri burada görünecek.</small></div></div>';
     if(subtitle)subtitle.textContent="Öğrencinin haftalık programını oluştur, düzenle ve gönder.";
