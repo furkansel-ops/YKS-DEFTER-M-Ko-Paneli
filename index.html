@@ -81,6 +81,8 @@
   <link rel="stylesheet" href="./coach-invites-v75.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-write-guard-v78.css?v=1.0.0">
   <link rel="stylesheet" href="./coach-home-v83.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-students-v84.css?v=1.0.0">
+  <link rel="stylesheet" href="./coach-drawer-v85.css?v=1.0.0">
   <script src="./coach-theme-boot-v36.js?v=1.1.0"></script>
 </head>
 <body>
@@ -140,6 +142,7 @@
       <div class="brand coach-brand-v20">
         <div class="brand-mark">YK</div>
         <div class="brand-copy"><b>YKS Defterim</b><span>Koç Paneli</span></div>
+        <button type="button" class="coach-v85-close" id="sidebarCloseBtn" aria-label="Menüyü kapat">✕</button>
       </div>
 
       <nav class="coach-nav-v20" id="coachNav" aria-label="Koç paneli">
@@ -227,12 +230,6 @@
           <button class="students-add" type="button" id="addStudentBtn" aria-label="Öğrenci ekle">＋ <span class="students-v43-wide">Öğrenci </span>Ekle</button>
         </header>
 
-        <section class="students-summary">
-          <div><small>Toplam Öğrenci</small><strong id="studentsTotal">0</strong><span>Aktif bağlantı</span></div>
-          <div><small>Bugün Aktif</small><strong id="studentsActive">0</strong><span>Bugün veri gönderen</span></div>
-          <div><small>Takip Gereken</small><strong id="studentsAttention">0</strong><span>Geciken konusu olan</span></div>
-        </section>
-
         <section class="students-card">
           <div class="students-toolbar">
             <label class="student-search"><span>⌕</span><input id="studentSearch" type="search" placeholder="Öğrenci ara..."></label>
@@ -248,7 +245,7 @@
             </div>
           </div>
 
-          <div class="students-table-head"><span>Öğrenci</span><span>Çalışma durumu</span><span>Program</span><span>Son çalışma · eşitleme</span><span></span></div>
+          <div class="students-table-head"><span>Öğrenci</span><span>Son 7 gün</span><span>Bu hafta program</span><span>Son deneme</span><span>Kitap</span><span></span></div>
 
           <div class="student-v54-modal" id="studentCardModal" hidden role="dialog" aria-modal="true" aria-labelledby="studentCardName">
             <div class="student-v54-sheet">

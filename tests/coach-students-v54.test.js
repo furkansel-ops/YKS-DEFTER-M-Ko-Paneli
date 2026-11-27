@@ -35,10 +35,14 @@ const text=node=>{const parts=[];const walk=n=>{for(const c of n?.childNodes||[]
 
 test("v54 son çalışma ve eşitleme ayrı; 2 günden eski eşitleme 'Veri eski'",t=>{
   const {doc,errors}=fixture(t);
-  assert.match(text(doc.querySelector('[data-student-row="x"] .student-last')),/^Bugün 1 sa 10 dk · 30 soru Son eşitleme az önce$/);
+  // v84: durum adın altında; eşitleme yalnız eskiyse yazılır.
+  assert.equal(text(doc.querySelector('[data-student-row="x"] .coach-v84-status')),"Bugün 1 sa 10 dk · 30 soru");
+  assert.equal(doc.querySelector('[data-student-row="x"] .student-v54-sync'),null);
   const stale=doc.querySelector('[data-student-row="y"] .student-v54-sync');
   assert.equal(stale.textContent,"Veri eski · son eşitleme 3 gün önce");assert.ok(stale.classList.contains("is-stale"));
-  assert.match(text(doc.querySelector('[data-student-row="x"] .students-v43-line')),/^TYT Platin III · Seviye 12 · 7 günde 7 sa · Son TYT 78,75 ▲ 8,75 · Program yok/);
+  assert.equal(text(doc.querySelector('[data-student-row="x"] .student-cell-main small')),"SAY · TYT Platin III");
+  assert.equal(text(doc.querySelectorAll('[data-student-row="x"] .coach-v84-fact')[0]),"TYT 78,75 ▲ 8,75");
+  assert.equal(text(doc.querySelector('[data-student-row="x"] .coach-v84-program')),"Program yok");
   assert.deepEqual(errors,[]);
 });
 

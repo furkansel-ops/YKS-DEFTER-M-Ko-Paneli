@@ -67,19 +67,12 @@ test("v43 2 · 6: sayılar filtrelerde ve başlıkta; ilgilenilmesi gereken öğ
   assert.deepEqual(names(doc),["Mehmet Kaya","Ayşe Yılmaz"],"filtre sırayı bozmaz");
 });
 
-test("v43 4: telefon satırı hafta, 7 gün ve son hareketi tek satırda taşır; eski tarih gün olarak yazılır",t=>{
-  const {w,doc}=fixture(t,DEMO+`
+// v84: telefon satırı (students-v43-line) kalktı; satır kartı coach-students-v84.test.js'te.
+test("v43 4: eski tarih gün olarak yazılır",t=>{
+  const {w}=fixture(t,DEMO+`
     const y=new Date();y.setDate(y.getDate()-1);y.setHours(0,0,0,0);
     window.__dun=studentLastActivity({share:{updatedAt:y.toISOString()}});
   `);
-  const lines=[...doc.querySelectorAll("#studentsList .students-v43-line>span:first-child")].map(node=>node.textContent);
-  assert.deepEqual(lines,[
-    "7 günde 0 dk · Deneme yok · Bu hafta %0",
-    "7 günde 1 sa · Deneme yok · Bu hafta %0",
-    "7 günde 4 sa · Deneme yok · Bu hafta %33",
-    "7 günde 9 sa · Deneme yok · Bu hafta %100"
-  ]);
-  assert.equal(doc.querySelector('[data-student-row="b"] .students-v43-bar>i').getAttribute("style"),"width:33%");
   assert.equal(w.__dun,"Dün");
 });
 
@@ -90,23 +83,22 @@ test("v43 5: ⋯ menüsü açılır, dışarı dokunmak ve Esc kapatır; işler 
   assert.equal(menu.hidden,true);
   more.click();
   assert.equal(menu.hidden,false);assert.equal(more.getAttribute("aria-expanded"),"true");
-  assert.equal(doc.activeElement.dataset.studentAct,"report","menü açılınca ilk işe odaklanır");
+  assert.equal(doc.activeElement.dataset.openStudent,"b","menü açılınca ilk işe (öğrenci kartı) odaklanır");
   doc.querySelector("#studentsPage h1").click();
   assert.equal(menu.hidden,true,"dışarı dokunmak kapatır");
   more.click();doc.dispatchEvent(new w.KeyboardEvent("keydown",{key:"Escape",bubbles:true}));
   assert.equal(menu.hidden,true,"Esc kapatır");assert.equal(doc.activeElement,more);
 
-  more.click();menu.querySelector('[data-student-act="program"]').click();
+  // v84: Rapor · Program · Mesaj satırda; menüde öğrenci kartı ve kaldırma kalır.
+  row("b").querySelector('.student-actions [data-student-act="program"]').click();
   assert.ok(visible(doc,"programsPage"));assert.equal(doc.getElementById("programStudentSelect").value,"b");
 
   doc.querySelector('[data-coach-page="students"]').click();
-  row("a").querySelector("[data-student-menu]").click();
-  row("a").querySelector('[data-student-act="message"]').click();
+  row("a").querySelector('.student-actions [data-student-act="message"]').click();
   assert.ok(visible(doc,"messagesPage"));
 
   doc.querySelector('[data-coach-page="students"]').click();
-  row("c").querySelector("[data-student-menu]").click();
-  row("c").querySelector('[data-student-act="report"]').click();
+  row("c").querySelector('.student-actions [data-student-act="report"]').click();
   assert.ok(visible(doc,"reportsPage"));assert.equal(doc.getElementById("reportStudentSelect").value,"c");
 });
 
@@ -115,7 +107,7 @@ test("v43 5 → v54: satıra dokunmak öğrenci kartını açar; karttan rapor; 
   doc.querySelector('[data-coach-page="students"]').click();
   doc.querySelector('[data-student-row="d"] [data-student-menu]').click();
   assert.ok(visible(doc,"studentsPage"),"⋯ yalnız menüyü açar");
-  doc.querySelector('[data-student-row="d"] .students-v43-line').click();
+  doc.querySelector('[data-student-row="d"] .coach-v84-week').click();
   assert.equal(doc.getElementById("studentCardModal").hidden,false);assert.equal(doc.getElementById("studentCardName").textContent,"Ali Can");
   doc.querySelector('[data-student-card-act="report"]').click();
   assert.ok(visible(doc,"reportsPage"));assert.equal(doc.getElementById("studentCardModal").hidden,true);assert.equal(doc.getElementById("reportStudentSelect").value,"d");

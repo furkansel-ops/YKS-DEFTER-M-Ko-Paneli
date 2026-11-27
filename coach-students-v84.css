@@ -1,0 +1,84 @@
+/* Koç Paneli · v84 Öğrenciler 1+2 — her öğrenci bir satır kartı; araç çubuğu ayrı kart, sayı kutuları kalktı.
+   Renkler yalnız tema değişkenlerinden (--k-*), yazılar en az 11px. Hareket v68 katmanına bağlı: sayfa açılırken
+   satırlar sırayla belirir, çubuklar dolar; "Azaltılmış hareket" açıkken hiçbiri oynamaz (settings-v21.css). */
+
+/* Araç çubuğu kendi kartında, seçimler tek satırda */
+#studentsPage .students-card{overflow:visible;border:0;border-radius:0;background:none;box-shadow:none}
+#studentsPage .students-toolbar{flex-wrap:wrap;margin-bottom:4px;border:1px solid var(--k-line);border-radius:18px;background:var(--k-surface)}
+#studentsPage .students-v54-selects{flex-wrap:nowrap}
+#studentsPage .students-toolbar .student-search{width:min(260px,100%)}
+#studentsPage .students-v54-selects label{min-width:130px}
+
+/* Satır kartı */
+#studentsPage .students-table-head,#studentsPage .coach-v84-row{grid-template-columns:minmax(0,1.4fr) 150px 120px 92px 72px 232px;column-gap:18px}
+#studentsPage .students-table-head{min-height:0;padding:14px 21px 4px;border:0;background:none;color:var(--k-muted);font-size:11px;letter-spacing:.07em}
+#studentsPage .students-list{display:grid;gap:10px}
+#studentsPage .coach-v84-row{position:relative;row-gap:0;min-height:0;padding:14px 20px;border:1px solid var(--k-line);border-radius:18px;background:var(--k-surface);box-shadow:0 1px 3px color-mix(in srgb,var(--k-ink) 5%,transparent);transition:border-color .2s var(--mv-std),box-shadow .2s var(--mv-std),translate .2s var(--mv-std)}
+#studentsPage .coach-v84-row:last-child{border-bottom:1px solid var(--k-line)}
+#studentsPage .coach-v84-row:hover{background:var(--k-surface);border-color:color-mix(in srgb,var(--k-accent) 35%,var(--k-line));box-shadow:0 10px 24px color-mix(in srgb,var(--k-ink) 9%,transparent);translate:0 -1px}
+#studentsPage .coach-v84-row.is-attention::before{content:"";position:absolute;left:-1px;top:14px;bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--k-warn)}
+
+/* Ad, alan · rank, durum */
+#studentsPage .coach-v84-row .student-cell-main{gap:12px}
+#studentsPage .coach-v84-row .student-cell-main>i{width:40px;height:40px;border-radius:13px;background:color-mix(in srgb,var(--k-accent) 12%,var(--k-surface));color:var(--k-accent);font-size:14px}
+#studentsPage .coach-v84-row.is-attention .student-cell-main>i{background:color-mix(in srgb,var(--k-warn) 14%,var(--k-surface));color:var(--k-warn)}
+#studentsPage .coach-v84-row .student-cell-main>span{display:grid;gap:2px;min-width:0}
+#studentsPage .coach-v84-row .student-cell-main b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--k-ink);font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+#studentsPage .coach-v84-row .student-cell-main small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--k-muted);font-size:12px;font-weight:600}
+#studentsPage .coach-v84-status{display:flex;align-items:center;gap:6px;margin-top:3px;overflow:hidden;color:var(--k-muted);font-size:12px;font-style:normal;font-weight:750;white-space:nowrap;text-overflow:ellipsis}
+#studentsPage .coach-v84-status::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+#studentsPage .coach-v84-status.active{color:var(--k-ok)}
+#studentsPage .coach-v84-status.attention{color:var(--k-bad)}
+#studentsPage .coach-v84-row .student-cell-main small.student-v54-sync{color:var(--k-warn);font-size:11.5px;font-weight:700}
+
+/* Sayılar */
+#studentsPage :is(.coach-v84-week,.coach-v84-program,.coach-v84-fact){min-width:0}
+#studentsPage :is(.coach-v84-week,.coach-v84-program,.coach-v84-fact) b{display:block;color:var(--k-ink);font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+#studentsPage :is(.coach-v84-week,.coach-v84-program,.coach-v84-fact) small{display:block;margin-top:2px;color:var(--k-muted);font-size:11.5px;font-weight:600;white-space:nowrap}
+#studentsPage .coach-v84-row small.up{color:var(--k-ok)}
+#studentsPage .coach-v84-row small.down{color:var(--k-bad)}
+#studentsPage .coach-v84-spark{display:flex;align-items:flex-end;gap:3px;height:22px;margin-bottom:5px}
+#studentsPage .coach-v84-spark i{flex:1;height:var(--h);border-radius:3px;background:var(--k-accent)}
+#studentsPage .coach-v84-spark i.is-zero{height:3px;background:color-mix(in srgb,var(--k-muted) 28%,var(--k-surface))}
+#studentsPage .coach-v84-program{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px}
+#studentsPage .coach-v84-program small{grid-column:1 / -1}
+#studentsPage .coach-v84-bar{display:block;height:7px;border-radius:9px;background:color-mix(in srgb,var(--k-accent) 12%,var(--k-surface));overflow:hidden}
+#studentsPage .coach-v84-bar i{display:block;height:100%;border-radius:inherit;background:var(--k-accent)}
+#studentsPage .coach-v84-none{justify-self:start;padding:4px 9px;border-radius:9px;background:color-mix(in srgb,var(--k-warn) 13%,var(--k-surface));color:var(--k-warn);font-size:11.5px;font-style:normal;font-weight:800;white-space:nowrap}
+
+/* Düğmeler */
+#studentsPage .coach-v84-row .student-actions{gap:6px;justify-self:end}
+#studentsPage .coach-v84-act{min-height:34px;padding:0 11px;border:1px solid var(--k-line);border-radius:10px;background:var(--k-surface);color:var(--k-accent);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;transition:background-color .16s var(--mv-std),border-color .16s var(--mv-std)}
+#studentsPage .coach-v84-act:hover{border-color:var(--k-accent);background:color-mix(in srgb,var(--k-accent) 8%,var(--k-surface))}
+#studentsPage :is(.coach-v84-act,.students-v43-more):focus-visible{outline:2px solid var(--k-accent);outline-offset:2px}
+#studentsPage .coach-v84-row .students-v43-menu{margin:10px 0 0}
+
+/* Hareket: sayfa açılırken çubuklar alttan dolar (satırlar v68 ile sırayla belirir) */
+@keyframes coach-v84-up{from{scale:1 0}}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i{animation:coach-v84-up .6s var(--mv-out) .2s backwards;transform-origin:50% 100%}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i:nth-child(2){animation-delay:.24s}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i:nth-child(3){animation-delay:.28s}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i:nth-child(4){animation-delay:.32s}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i:nth-child(5){animation-delay:.36s}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i:nth-child(6){animation-delay:.4s}
+.coach-shell-reset #studentsPage[data-motion-enter] .coach-v84-spark i:nth-child(7){animation-delay:.44s}
+
+/* Orta genişlik: kitap sütunu düşer */
+@media(max-width:1180px){
+  #studentsPage .students-table-head,#studentsPage .coach-v84-row{grid-template-columns:minmax(0,1.4fr) 140px 116px 88px 232px}
+  #studentsPage .students-table-head>:nth-child(5),#studentsPage .coach-v84-fact:nth-of-type(5){display:none}
+}
+
+/* Telefon: ad üstte, dört bilgi iki sütunda, düğmeler altta */
+@media(max-width:700px){
+  #studentsPage .students-v54-selects{flex-wrap:wrap}
+  #studentsPage .students-table-head{display:none}
+  #studentsPage .coach-v84-row{grid-template-columns:1fr 1fr;grid-template-areas:none;gap:12px 14px;padding:14px}
+  #studentsPage .coach-v84-row .student-cell-main{display:flex;grid-column:1 / -1}
+  #studentsPage .coach-v84-row .student-cell-main>span{grid-area:auto}
+  #studentsPage .coach-v84-row .student-cell-main small{display:block}
+  #studentsPage .coach-v84-row .coach-v84-fact:nth-of-type(5){display:block}
+  #studentsPage .coach-v84-row .student-actions{grid-area:auto;grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr 1fr 40px;justify-self:stretch}
+  #studentsPage .coach-v84-act{min-height:38px}
+  #studentsPage .coach-v84-row .students-v43-menu{grid-column:1 / -1;grid-row:auto}
+}
