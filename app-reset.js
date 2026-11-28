@@ -5198,7 +5198,7 @@ $("programBuilderSubject")?.addEventListener("change",()=>{if(!$("coachV59BookBo
 /* v64 · Öğrenci kartında "Kitap ekle": koç öğrenci uygulamasının kitap kataloğundan seçer ya da adını yazar.
    Kitap coach_note/book_add olarak gider (Firestore kuralı değişmez); öğrenci uygulaması Kitaplarım'a ekler,
    eski öğrenci sürümü "Kitap önerisi" notu olarak kaydeder. */
-const COACH_V64_CATALOG="https://furkansel-ops.github.io/YKS-DEFTER-M-/book-catalog-v92.json",COACH_V64_LIMIT=20;
+const COACH_V64_CATALOG="https://furkansel-ops.github.io/YKS-DEFTERIM/book-catalog-v92.json",COACH_V64_LIMIT=20;
 const COACH_V64_SUBJECTS=["Matematik","Geometri","Türkçe","Fizik","Kimya","Biyoloji","Edebiyat","Tarih","Coğrafya","Deneme"];
 let coachV64Catalog=null,coachV64Loading=null,coachV64Failed=false,coachV64Open=false,coachV64Query="",coachV64Draft=null,coachV64Busy=false,coachV64Status={text:"",error:false};
 function coachV64Words(v){return String(v||"").toLocaleLowerCase("tr-TR").replace(/[^a-zçğıöşü0-9 ]/gu," ").split(/\s+/).filter(Boolean)}

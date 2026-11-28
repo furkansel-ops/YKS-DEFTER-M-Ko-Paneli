@@ -2,8 +2,8 @@
   "use strict";
 
   const ROOT_ID="programVideoLibrary";
-  const MEDIA_REPO_PATH="/YKS-DEFTER-M-/";
-  const MEDIA_FALLBACK_BASE="https://furkansel-ops.github.io/YKS-DEFTER-M-/";
+  const MEDIA_REPO_PATH="/YKS-DEFTERIM/";
+  const MEDIA_FALLBACK_BASE="https://furkansel-ops.github.io/YKS-DEFTERIM/";
   const USER_TEACHERS_FEED="media/my-teachers-feed.json";
   let feedCache=null;
   let feedBase="";
