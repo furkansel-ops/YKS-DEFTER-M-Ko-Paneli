@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "user-selected-official-channels",
-  "generatedAt": "2026-11-27T11:28:34.158Z",
+  "generatedAt": "2026-11-28T10:56:35.206Z",
   "teacherCount": 8,
   "refreshedCount": 8,
   "teachers": {
@@ -2118,7 +2118,7 @@
           "channel": "Eyüp B."
         }
       ],
-      "refreshedAt": "2026-11-27T11:22:56.067Z"
+      "refreshedAt": "2026-11-28T10:51:04.294Z"
     },
     "3D Yayınları": {
       "name": "3D Yayınları",
@@ -3078,7 +3078,7 @@
           "channel": "3D Yayınları"
         }
       ],
-      "refreshedAt": "2026-11-27T11:27:06.037Z"
+      "refreshedAt": "2026-11-28T10:55:10.974Z"
     },
     "Ferrum": {
       "name": "Ferrum",
@@ -3090,7 +3090,7 @@
         "Kimya"
       ],
       "archiveIndex": "media/my-teachers/ferrum/index.json",
-      "videoCount": 1191,
+      "videoCount": 1193,
       "playlistCount": 46,
       "archiveComplete": true,
       "playlists": [
@@ -4219,6 +4219,20 @@
       ],
       "videos": [
         {
+          "id": "ACIWyAj0C8s",
+          "title": "10. Sınıf Kimya 11. Ders | Stokiyometrik Hesaplamalar | Kimyasal Tepkimeler ve Hesaplamalar | MAARİF",
+          "url": "https://www.youtube.com/watch?v=ACIWyAj0C8s",
+          "thumbnail": "https://i.ytimg.com/vi/ACIWyAj0C8s/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
+          "id": "UsnuSJ9rrrM",
+          "title": "10. Sınıf Kimya 10. Ders | Tepkime Denkleştirme | Kimyasal Tepkimeler ve Hesaplamalar | MAARİF",
+          "url": "https://www.youtube.com/watch?v=UsnuSJ9rrrM",
+          "thumbnail": "https://i.ytimg.com/vi/UsnuSJ9rrrM/hqdefault.jpg",
+          "channel": "Ferrum"
+        },
+        {
           "id": "5dBKlT8fwuY",
           "title": "11. Sınıf Kimya 15. Ders | Deneysel Verilerden Hız Denklemi ve Soru Çözümü | MAARİF",
           "url": "https://www.youtube.com/watch?v=5dBKlT8fwuY",
@@ -4287,23 +4301,9 @@
           "url": "https://www.youtube.com/watch?v=H30R9do-Ptc",
           "thumbnail": "https://i.ytimg.com/vi/H30R9do-Ptc/hqdefault.jpg",
           "channel": "Ferrum"
-        },
-        {
-          "id": "aGO23EnWfb8",
-          "title": "11. Sınıf Kimya 1. Dönem 1. Yazılıya Hazırlık | OYSS Konu Tekrarı ve Soru Çözümü | MAARİF",
-          "url": "https://www.youtube.com/watch?v=aGO23EnWfb8",
-          "thumbnail": "https://i.ytimg.com/vi/aGO23EnWfb8/hqdefault.jpg",
-          "channel": "Ferrum"
-        },
-        {
-          "id": "w2qop_4VEjQ",
-          "title": "10. Sınıf Kimya 9. Ders | Mol Soru Çözümü: Rutin Olmayan Sorular | Mol Kavramı | MAARİF",
-          "url": "https://www.youtube.com/watch?v=w2qop_4VEjQ",
-          "thumbnail": "https://i.ytimg.com/vi/w2qop_4VEjQ/hqdefault.jpg",
-          "channel": "Ferrum"
         }
       ],
-      "refreshedAt": "2026-11-27T11:27:30.021Z"
+      "refreshedAt": "2026-11-28T10:55:33.616Z"
     },
     "Biosem": {
       "name": "Biosem",
@@ -6529,7 +6529,7 @@
           "channel": "Biosem"
         }
       ],
-      "refreshedAt": "2026-11-27T11:27:38.892Z"
+      "refreshedAt": "2026-11-28T10:55:42.371Z"
     },
     "Özcan Aykın": {
       "name": "Özcan Aykın",
@@ -9048,7 +9048,7 @@
           "channel": "Özcan Aykın"
         }
       ],
-      "refreshedAt": "2026-11-27T11:27:48.502Z"
+      "refreshedAt": "2026-11-28T10:55:52.070Z"
     },
     "Kadir Gümüş": {
       "name": "Kadir Gümüş",
@@ -9917,7 +9917,7 @@
           "channel": "Kadir Gümüş"
         }
       ],
-      "refreshedAt": "2026-11-27T11:27:58.054Z"
+      "refreshedAt": "2026-11-28T10:56:00.490Z"
     },
     "Aker Kartal": {
       "name": "Aker Kartal",
@@ -10746,7 +10746,7 @@
           "channel": "Aker Kartal"
         }
       ],
-      "refreshedAt": "2026-11-27T11:28:00.183Z"
+      "refreshedAt": "2026-11-28T10:56:02.697Z"
     },
     "Deniz Hoca": {
       "name": "Deniz Hoca",
@@ -11664,7 +11664,7 @@
           "channel": "Deniz Hoca"
         }
       ],
-      "refreshedAt": "2026-11-27T11:28:34.154Z"
+      "refreshedAt": "2026-11-28T10:56:35.202Z"
     }
   }
 }
